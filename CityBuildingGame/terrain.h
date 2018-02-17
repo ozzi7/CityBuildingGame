@@ -10,7 +10,6 @@
 
 #include "common.h"
 #include <math.h>
-#include "fast_noise.h"
 
 using std::vector;
 
