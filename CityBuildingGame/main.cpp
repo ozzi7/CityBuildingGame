@@ -44,6 +44,7 @@ bool firstMouse = true;
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
+int main(int argc, char* argv[])
 {
 	// store path for resources
 	exe_path = std::string(argv[0]);
