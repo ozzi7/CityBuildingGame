@@ -17,7 +17,7 @@ extern Shader ourShader;
 
 extern std::string exe_path;
 
-static class Common {
+class Common {
 public:
 	static unsigned int loadTexture(std::string filename);
 };
