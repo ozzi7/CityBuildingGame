@@ -20,7 +20,9 @@ enum Camera_Movement {
 // Default camera values
 const float SPEED = 40.0f;
 const float SENSITIVTY = 0.1f;
-const float ZOOM = 45.0f;
+const float ZOOM_DEFAULT = 40.0f;
+const float ZOOM_MAX = 60.0f;
+const float ZOOM_MIN = 5.0f;
 
 
 // An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
@@ -40,7 +42,7 @@ public:
 	Camera(glm::vec3 position) 
 	{
 		Position = position;
-		Zoom = ZOOM;
+		Zoom = ZOOM_DEFAULT;
 		MovementSpeed = SPEED;
 		Up = glm::vec3(0.0f, 1.0f, 0.0f);
 		Right = glm::vec3(1.0f, 0.0f, 0.0f);
@@ -70,8 +72,12 @@ public:
 	// Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
 	void ProcessMouseScroll(float yoffset)
 	{
-		if (Zoom >= 1.0f && Zoom <= 50.0f)
+		if (Zoom >= ZOOM_MIN && Zoom <= ZOOM_MAX)
 			Zoom -= yoffset;
+		if (Zoom <= ZOOM_MIN)
+			Zoom = ZOOM_MIN;
+		if (Zoom >= ZOOM_MAX)
+			Zoom = ZOOM_MAX;
 	}
 };
 #endif
