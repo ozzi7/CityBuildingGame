@@ -35,7 +35,7 @@ private:
 
 	GLuint VBO, VAO, EBO;
 	unsigned int texture1;
-	std::string texture_grass_path = exe_path + "\\textures\\Grass.bmp";//"C:\\Users\\Admin\\Desktop\\Synology\\GitHub Projects\\CityBuildingGame\\x64\\Debug\\Grass.bmp");
+	std::string texture_grass_path = exe_path + "\\textures\\Grass.bmp";
 
 	vector<vector<float>> heightMap;
 	int height;

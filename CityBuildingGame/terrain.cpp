@@ -173,7 +173,7 @@ void Terrain::CreateGeometry()
 		{
 			terrainVector.push_back(j);
 			terrainVector.push_back(i); 
-			terrainVector.push_back(heightMap[j][i]* max_height);
+			terrainVector.push_back(heightMap[i][j]* max_height);
 
 			// texture 
 			terrainVector.push_back(0.0f);
@@ -181,35 +181,35 @@ void Terrain::CreateGeometry()
 
 			terrainVector.push_back(j + 1);
 			terrainVector.push_back(i);
-			terrainVector.push_back(heightMap[j + 1][i]* max_height);
+			terrainVector.push_back(heightMap[i][j + 1]* max_height);
 
 			terrainVector.push_back(1.0f);
 			terrainVector.push_back(0.0f);
 
 			terrainVector.push_back(j);
 			terrainVector.push_back(i + 1);
-			terrainVector.push_back(heightMap[j][i + 1]* max_height);
+			terrainVector.push_back(heightMap[i+1][j]* max_height);
 
 			terrainVector.push_back(0.0f);
 			terrainVector.push_back(1.0f);
 
 			terrainVector.push_back(j); 
 			terrainVector.push_back(i + 1); 
-			terrainVector.push_back(heightMap[j][i + 1]* max_height);
+			terrainVector.push_back(heightMap[i+1][j]* max_height);
 
 			terrainVector.push_back(0.0f);
 			terrainVector.push_back(1.0f);
 
 			terrainVector.push_back(j + 1);
 			terrainVector.push_back(i);
-			terrainVector.push_back(heightMap[j + 1][i]* max_height);
+			terrainVector.push_back(heightMap[i][j+1]* max_height);
 
 			terrainVector.push_back(1.0f);
 			terrainVector.push_back(0.0f);
 
 			terrainVector.push_back(j+1);
 			terrainVector.push_back(i+1);
-			terrainVector.push_back(heightMap[j + 1][i + 1]* max_height);
+			terrainVector.push_back(heightMap[i + 1][j + 1]* max_height);
 
 			terrainVector.push_back(1.0f);
 			terrainVector.push_back(1.0f);
