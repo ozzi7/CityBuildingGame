@@ -14,7 +14,6 @@ GameClass::~GameClass()
 
 void GameClass::Draw()
 {	
-	//InitCamera();
 	terrain.Draw();
 }
 
