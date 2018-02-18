@@ -8,6 +8,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BA1CC948-9E99-4878-A1AB-C9BD999267F3}"
 	ProjectSection(SolutionItems) = preProject
 		CityBuildingGame\fragment_shader.frag = CityBuildingGame\fragment_shader.frag
+		light_casters.vert = light_casters.vert
+		lighting_shader.frag = lighting_shader.frag
 		CityBuildingGame\vertex_shader.vert = CityBuildingGame\vertex_shader.vert
 	EndProjectSection
 EndProject

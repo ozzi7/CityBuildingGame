@@ -1,5 +1,9 @@
 #pragma once
 #include <string>
+#include <algorithm>
+
+// Include GLEW, used to detect supported openGL extensions
+#include <GL\glew.h>
 
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
@@ -12,3 +16,8 @@ extern GLFWwindow* window;
 extern Shader ourShader;
 
 extern std::string exe_path;
+
+static class Common {
+public:
+	static unsigned int loadTexture(std::string filename);
+};

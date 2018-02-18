@@ -12,7 +12,7 @@
 #include "common.h"
 #include "heightmap.h"
 
-using std::vector;
+using namespace std;
 
 /* Represents a grid subunit */
 class Unit
@@ -47,8 +47,8 @@ private:
 	void PopulateGridWithObjects();
 
 	GLuint VBO, VAO, EBO;
-	unsigned int texture1;
-	std::string texture_grass_path = exe_path + "\\textures\\Grass.bmp";
+	unsigned int texture_id_grass;
+	string texture_grass = "Grass.bmp";
 	
 	int gridHeight;
 	int gridWidth;
