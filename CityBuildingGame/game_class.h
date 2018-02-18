@@ -21,8 +21,6 @@ public:
 	// Called by the application class when the window need to be redrawn.
 	void Draw();
 
-	void InitCamera();
-
 private:
 	// The terrain
 	Terrain terrain;

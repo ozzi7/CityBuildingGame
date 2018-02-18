@@ -1,12 +1,4 @@
-/* 
-Keep a grid of squares of the complete terrain
-Create VBO of visible part of terrain, send to GPU on load (resend if terrain changes or siginificant scrolling).
-
-*/
 #include "terrain.h"
-
-const unsigned int shaderAttribute = 0;
-GLuint VBO;
 
 Terrain::Terrain() {}
 
@@ -15,7 +7,7 @@ void Terrain::Initialize(int aWidth, int aHeight)
 	height = aHeight;
 	width = aWidth;
 
-	for(int i = 0; i < height; i++) // Create new array
+	for(int i = 0; i < height; i++)
 	{
 		heightMap.push_back(vector<float>(width));
 		for(int j = 0; j < width; j++)
@@ -23,13 +15,12 @@ void Terrain::Initialize(int aWidth, int aHeight)
 			heightMap.back().at(j) = 0;
 		}
 	}
-
+	heightMap = vector<vector<float>>(height, vector<float>(width, 0));
 	// Fill array with noise
 	GenerateWhiteNoise();
 	GeneratePerlinNoise(6);
 
-	// Create VBO for faster rendering
-	//LoadTextures();
+	LoadTextures();
 	CreateGeometry();
 }
 Terrain::~Terrain()
@@ -94,10 +85,6 @@ vector<vector<float>> Terrain::GenerateSmoothNoise(vector<vector<float>> baseNoi
     }
 	return smoothNoise;
 }
-float Terrain::Interpolate(float x0, float x1, float alpha)
-{
-   return x0 * (1 - alpha) + alpha * x1;
-}
 void Terrain::GeneratePerlinNoise(int octaveCount)
 {
 	vector<vector<vector<float>>> smoothNoiseList; //an array of 2D arrays containing
@@ -141,6 +128,10 @@ void Terrain::GeneratePerlinNoise(int octaveCount)
       }
    }
 }
+float Terrain::Interpolate(float x0, float x1, float alpha)
+{
+   return x0 * (1 - alpha) + alpha * x1;
+}
 float Terrain::GetHeight(int argX, int argY)
 {
 	return heightMap[argY][argX];
@@ -152,15 +143,15 @@ void Terrain::Draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// bind textures on corresponding texture units
-	/*glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture1);*/
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture1);
 
 	glBindVertexArray(VAO);
 
 	// calculate the model matrix for each object and pass it to shader before drawing
 	glm::mat4 model = glm::mat4(1.0f);
 	ourShader.setMat4("model", model);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, width*height*6);
 }
 void Terrain::CreateGeometry()
@@ -177,7 +168,7 @@ void Terrain::CreateGeometry()
 		{
 			terrainVector.push_back(j);
 			terrainVector.push_back(i); 
-			terrainVector.push_back(heightMap[j][i]* max_height);
+			terrainVector.push_back(heightMap[i][j]* max_height);
 
 			// texture 
 			terrainVector.push_back(0.0f);
@@ -185,35 +176,35 @@ void Terrain::CreateGeometry()
 
 			terrainVector.push_back(j + 1);
 			terrainVector.push_back(i);
-			terrainVector.push_back(heightMap[j + 1][i]* max_height);
+			terrainVector.push_back(heightMap[i][j + 1]* max_height);
 
 			terrainVector.push_back(1.0f);
 			terrainVector.push_back(0.0f);
 
 			terrainVector.push_back(j);
 			terrainVector.push_back(i + 1);
-			terrainVector.push_back(heightMap[j][i + 1]* max_height);
+			terrainVector.push_back(heightMap[i+1][j]* max_height);
 
 			terrainVector.push_back(0.0f);
 			terrainVector.push_back(1.0f);
 
 			terrainVector.push_back(j); 
 			terrainVector.push_back(i + 1); 
-			terrainVector.push_back(heightMap[j][i + 1]* max_height);
+			terrainVector.push_back(heightMap[i+1][j]* max_height);
 
 			terrainVector.push_back(0.0f);
 			terrainVector.push_back(1.0f);
 
 			terrainVector.push_back(j + 1);
 			terrainVector.push_back(i);
-			terrainVector.push_back(heightMap[j + 1][i]* max_height);
+			terrainVector.push_back(heightMap[i][j+1]* max_height);
 
 			terrainVector.push_back(1.0f);
 			terrainVector.push_back(0.0f);
 
 			terrainVector.push_back(j+1);
 			terrainVector.push_back(i+1);
-			terrainVector.push_back(heightMap[j + 1][i + 1]* max_height);
+			terrainVector.push_back(heightMap[i + 1][j + 1]* max_height);
 
 			terrainVector.push_back(1.0f);
 			terrainVector.push_back(1.0f);
@@ -265,6 +256,7 @@ void Terrain::LoadTextures()
 	// load image, create texture and generate mipmaps
 	int tex_width, tex_height, nrChannels;
 	stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+	std::replace(texture_grass_path.begin(), texture_grass_path.end(), '\\', '/');
 	unsigned char *data = stbi_load(texture_grass_path.c_str(), &tex_width, &tex_height, &nrChannels, 0);
 	if (data)
 	{
@@ -279,6 +271,5 @@ void Terrain::LoadTextures()
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	// -------------------------------------------------------------------------------------------
-	ourShader.use();
 	ourShader.setInt("texture1", 0);
 }

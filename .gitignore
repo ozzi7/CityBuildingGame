@@ -276,3 +276,6 @@ CityBuildingGame/x64/Debug/vc141.idb
 *.idb
 *.db-wal
 *.db-shm
+*.idb
+*.idb
+*.enc
