@@ -21,7 +21,7 @@ enum Camera_Movement {
 };
 
 // Default camera values
-const float SCROLL_SPEED = 0.01f;
+const float SCROLL_SPEED = 0.02f;
 const float ZOOM_DEFAULT = 40.0f;
 const float ZOOM_MAX = 60.0f;
 const float ZOOM_MIN = 5.0f;
@@ -120,6 +120,10 @@ public:
 		int top;
 		int right;
 		int bottom;
+
+		if (!glfwGetWindowAttrib(Window, GLFW_FOCUSED)) {
+			return;
+		}
 
 		glfwGetWindowPos(Window, &xpos, &ypos);
 		glfwGetWindowSize(Window, &width, &height);
