@@ -87,11 +87,9 @@ int main(int argc, char* argv[])
 
 	// render loop
 	// -----------
-<<<<<<< HEAD
-	GameClass gameClass(SCR_WIDTH, SCR_HEIGHT, 100, 200);
-=======
+
 	GameClass gameClass((float)SCR_WIDTH, (float)SCR_HEIGHT, 150, 100);
->>>>>>> 3eaaeecc05ba8ddcd99e87976c5dcc976afdff44
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// per-frame time logic

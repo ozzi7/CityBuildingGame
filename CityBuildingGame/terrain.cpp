@@ -1,10 +1,8 @@
-<<<<<<< HEAD
-=======
 /* 
 Keep a grid of squares of the complete terrain
 Create VBO of visible part of terrain, send to GPU on load (resend if terrain changes or siginificant scrolling).
 */
->>>>>>> 3eaaeecc05ba8ddcd99e87976c5dcc976afdff44
+
 #include "terrain.h"
 
 Terrain::Terrain() {}
@@ -27,10 +25,7 @@ void Terrain::Initialize(int aWidth, int aHeight)
 	GenerateWhiteNoise();
 	GeneratePerlinNoise(6);
 
-<<<<<<< HEAD
-=======
 	// Create VBO for faster rendering
->>>>>>> 3eaaeecc05ba8ddcd99e87976c5dcc976afdff44
 	LoadTextures();
 	CreateGeometry();
 }
