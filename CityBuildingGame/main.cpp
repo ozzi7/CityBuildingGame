@@ -35,7 +35,7 @@ const unsigned int SCR_HEIGHT = 1200;
 std::string exe_path;
 
 // camera
-Camera camera(glm::vec3(1.0f, 5.0f, 3.0f));
+Camera camera(glm::vec3(5.0f, 5.0f, 50.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -92,11 +92,7 @@ int main(int argc, char* argv[])
 
 	// render loop
 	// -----------
-<<<<<<< HEAD
-	GameClass gameClass((float)SCR_WIDTH, (float)SCR_HEIGHT, 100, 100);
-=======
-	GameClass gameClass(SCR_WIDTH, SCR_HEIGHT, 20, 40);
->>>>>>> 2d1ef4fe25359ab23a371958c00b65266ea7e545
+	GameClass gameClass(SCR_WIDTH, SCR_HEIGHT, 150, 100);
 	while (!glfwWindowShouldClose(window))
 	{
 		// per-frame time logic

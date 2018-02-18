@@ -18,7 +18,7 @@ enum Camera_Movement {
 };
 
 // Default camera values
-const float SPEED = 30.0f;
+const float SPEED = 40.0f;
 const float SENSITIVTY = 0.1f;
 const float ZOOM = 45.0f;
 
@@ -31,32 +31,26 @@ public:
 	glm::vec3 Position;
 	glm::vec3 Up;
 	glm::vec3 Right;
+	glm::vec3 Lookat;
 	// Camera options
 	float MovementSpeed;
-	//float MouseSensitivity;
 	float Zoom;
 
-	// Constructor with vectors
-	Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f)) 
-		:MovementSpeed(SPEED), Zoom(ZOOM)
+	// Constructor with position vector
+	Camera(glm::vec3 position) 
 	{
 		Position = position;
-		Up = up;
+		Zoom = ZOOM;
+		MovementSpeed = SPEED;
+		Up = glm::vec3(0.0f, 1.0f, 0.0f);
 		Right = glm::vec3(1.0f, 0.0f, 0.0f);
-	}
-	// Constructor with scalar values
-	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ) 
-		:MovementSpeed(SPEED), Zoom(ZOOM)
-	{
-		Position = glm::vec3(posX, posY, posZ);
-		Up = glm::vec3(upX, upY, upZ);
-		Right = glm::vec3(1.0f, 0.0f, 0.0f);
+		Lookat = glm::vec3(0.0f, 20.0f, -30.0f);
 	}
 
-	// Returns the view matrix calculated using Eular Angles and the LookAt Matrix
+	// Returns the view matrix calculated using LookAt Matrix
 	glm::mat4 GetViewMatrix()
 	{
-		return glm::lookAt(Position, Position + Right, Up);
+		return glm::lookAt(Position, Position + Lookat, Up);
 	}
 
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
