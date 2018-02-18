@@ -1,12 +1,8 @@
 /* 
 Keep a grid of squares of the complete terrain
 Create VBO of visible part of terrain, send to GPU on load (resend if terrain changes or siginificant scrolling).
-
 */
 #include "terrain.h"
-
-const unsigned int shaderAttribute = 0;
-GLuint VBO;
 
 Terrain::Terrain() {}
 
@@ -29,7 +25,7 @@ void Terrain::Initialize(int aWidth, int aHeight)
 	GeneratePerlinNoise(6);
 
 	// Create VBO for faster rendering
-	//LoadTextures();
+	LoadTextures();
 	CreateGeometry();
 }
 Terrain::~Terrain()
@@ -152,15 +148,15 @@ void Terrain::Draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// bind textures on corresponding texture units
-	/*glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture1);*/
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture1);
 
 	glBindVertexArray(VAO);
 
 	// calculate the model matrix for each object and pass it to shader before drawing
 	glm::mat4 model = glm::mat4(1.0f);
 	ourShader.setMat4("model", model);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, width*height*6);
 }
 void Terrain::CreateGeometry()
@@ -265,6 +261,7 @@ void Terrain::LoadTextures()
 	// load image, create texture and generate mipmaps
 	int tex_width, tex_height, nrChannels;
 	stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+	std::replace(texture_grass_path.begin(), texture_grass_path.end(), '\\', '/');
 	unsigned char *data = stbi_load(texture_grass_path.c_str(), &tex_width, &tex_height, &nrChannels, 0);
 	if (data)
 	{
@@ -279,6 +276,5 @@ void Terrain::LoadTextures()
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	// -------------------------------------------------------------------------------------------
-	ourShader.use();
 	ourShader.setInt("texture1", 0);
 }

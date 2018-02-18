@@ -1,15 +1,16 @@
 # pragma once
 #include <vector>
+#include <algorithm>
 #include <time.h>
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
 // Include GLM, math library
 #include "glm/glm.hpp"
+#include <math.h>
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "common.h"
-#include <math.h>
 
 using std::vector;
 
@@ -34,7 +35,7 @@ private:
 
 	GLuint VBO, VAO, EBO;
 	unsigned int texture1;
-	std::string texture_grass_path = std::string("C:\\Users\\Admin\\Desktop\\Synology\\GitHub Projects\\CityBuildingGame\\x64\\Debug\\Grass.bmp");
+	std::string texture_grass_path = exe_path + "\\textures\\Grass.bmp";//"C:\\Users\\Admin\\Desktop\\Synology\\GitHub Projects\\CityBuildingGame\\x64\\Debug\\Grass.bmp");
 
 	vector<vector<float>> heightMap;
 	int height;
