@@ -25,12 +25,13 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
+void window_focus_callback(GLFWwindow* window, int focused);
 
 Shader ourShader;
 
 // settings
 const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1200;
+const unsigned int SCR_HEIGHT = 1080;
 const unsigned int MAP_WIDTH = 150;
 const unsigned int MAP_HEIGHT = 100;
 std::string exe_path;
@@ -66,6 +67,7 @@ int main(int argc, char* argv[])
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetWindowFocusCallback(window, window_focus_callback);
 
 	camera = Camera(glm::vec3(20.0f, 20.0f, 50.0f), window);
 
@@ -106,6 +108,7 @@ int main(int argc, char* argv[])
 		// -----
 		processInput(window);
 
+		camera.lock_cursor_to_window();
 		camera.mouse_scroll();
 		
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -143,13 +146,13 @@ void processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 		camera.keyboard_scroll(UP, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		camera.keyboard_scroll(DOWN, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		camera.keyboard_scroll(LEFT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		camera.keyboard_scroll(RIGHT, deltaTime);
 }
 
@@ -160,7 +163,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	// make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
-	camera.lock_cursor_to_window();
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
@@ -168,4 +170,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	camera.mouse_zoom((float)yoffset);
+}
+
+// glfw: whenever the window receives focus, camera gets locked
+void window_focus_callback(GLFWwindow *window, int focused)
+{
+	if (focused) {
+		camera.lock_cursor_to_window();
+	}
 }
