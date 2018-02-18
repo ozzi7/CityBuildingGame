@@ -47,7 +47,6 @@
 *.vspx
 *.sap
 *.e2e
-*.idb
 
 # TFS 2012 Local Workspace
 $tf/
@@ -268,17 +267,10 @@ ipch/
 **/*.Server/GeneratedArtifacts
 **/*.Server/ModelManifest.xml
 _Pvt_Extensions
-*.idb
-*.idb
-*.idb
-*.idb
-CityBuildingGame/x64/Debug/vc141.idb
-*.idb
+
+vc141.idb
 *.db-wal
 *.db-shm
 *.idb
-<<<<<<< HEAD
-*.idb
 *.enc
-=======
->>>>>>> 3eaaeecc05ba8ddcd99e87976c5dcc976afdff44
+
