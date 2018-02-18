@@ -31,14 +31,16 @@ Shader ourShader;
 // settings
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1200;
+const unsigned int MAP_WIDTH = 150;
+const unsigned int MAP_HEIGHT = 100;
 std::string exe_path;
-
-// camera
-Camera camera(glm::vec3(5.0f, 5.0f, 50.0f));
 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
+
+// camera
+Camera camera = Camera();
 
 int main(int argc, char* argv[])
 {
@@ -65,6 +67,8 @@ int main(int argc, char* argv[])
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
+	camera = Camera(glm::vec3(20.0f, 20.0f, 50.0f), window);
+
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
@@ -88,7 +92,7 @@ int main(int argc, char* argv[])
 	// render loop
 	// -----------
 
-	GameClass gameClass((float)SCR_WIDTH, (float)SCR_HEIGHT, 150, 100);
+	GameClass gameClass((float)SCR_WIDTH, (float)SCR_HEIGHT, MAP_WIDTH, MAP_HEIGHT);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -101,6 +105,8 @@ int main(int argc, char* argv[])
 		// input
 		// -----
 		processInput(window);
+
+		camera.mouse_scroll();
 		
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -138,13 +144,13 @@ void processInput(GLFWwindow *window)
 		glfwSetWindowShouldClose(window, true);
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera.ProcessKeyboard(UP, deltaTime);
+		camera.keyboard_scroll(UP, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera.ProcessKeyboard(DOWN, deltaTime);
+		camera.keyboard_scroll(DOWN, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera.ProcessKeyboard(LEFT, deltaTime);
+		camera.keyboard_scroll(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera.ProcessKeyboard(RIGHT, deltaTime);
+		camera.keyboard_scroll(RIGHT, deltaTime);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -154,11 +160,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	// make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
+	camera.lock_cursor_to_window();
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	camera.ProcessMouseScroll((float)yoffset);
+	camera.mouse_zoom((float)yoffset);
 }

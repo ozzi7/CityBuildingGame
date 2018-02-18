@@ -157,7 +157,7 @@ void Terrain::Draw()
 	// calculate the model matrix for each object and pass it to shader before drawing
 	glm::mat4 model = glm::mat4(1.0f);
 	ourShader.setMat4("model", model);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, width*height*6);
 }
 void Terrain::CreateGeometry()
