@@ -5,8 +5,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <iostream>
-
-#include "shader.h"
+#include <string>
 
 // Include GLEW, used to detect supported openGL extensions
 #include <GL\glew.h>
@@ -18,6 +17,7 @@
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
 
+#include "shader.h"
 #include "common.h"
 #include "camera.h"
 #include "game_class.h"
@@ -32,6 +32,7 @@ Shader ourShader;
 // settings
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1200;
+std::string exe_path;
 
 // camera
 Camera camera(glm::vec3(1.0f, 5.0f, 3.0f));
@@ -43,8 +44,10 @@ bool firstMouse = true;
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
-int main()
 {
+	// store path for resources
+	exe_path = std::string(argv[0]);
+	exe_path = exe_path.substr(0, exe_path.find_last_of("\\/"));
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();
@@ -84,10 +87,15 @@ int main()
 	// build and compile our shader program
 	// ------------------------------------
 	Shader ourShader("vertexShader.vert", "fragmentShader.frag"); // you can name your shader files however you like
+	ourShader.use(); // note: we only call this once since only this shader exists
 
 	// render loop
 	// -----------
+<<<<<<< HEAD
 	GameClass gameClass((float)SCR_WIDTH, (float)SCR_HEIGHT, 100, 100);
+=======
+	GameClass gameClass(SCR_WIDTH, SCR_HEIGHT, 20, 40);
+>>>>>>> 2d1ef4fe25359ab23a371958c00b65266ea7e545
 	while (!glfwWindowShouldClose(window))
 	{
 		// per-frame time logic
@@ -102,8 +110,6 @@ int main()
 		
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		ourShader.use();
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 		ourShader.setMat4("projection", projection);
