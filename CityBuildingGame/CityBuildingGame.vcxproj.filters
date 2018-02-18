@@ -24,6 +24,9 @@
     <ClCompile Include="game_class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="heightmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="terrain.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game_class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="heightmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

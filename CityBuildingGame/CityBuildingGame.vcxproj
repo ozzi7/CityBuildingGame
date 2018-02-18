@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="game_class.cpp" />
+    <ClCompile Include="heightmap.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="terrain.cpp" />
   </ItemGroup>
@@ -147,6 +148,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="game_class.h" />
+    <ClInclude Include="heightmap.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="terrain.h" />

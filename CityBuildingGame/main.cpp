@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
 
 	// build and compile our shader program
 	// ------------------------------------
-	Shader ourShader("vertexShader.vert", "fragmentShader.frag"); // you can name your shader files however you like
+	Shader ourShader("vertex_shader.vert", "fragment_shader.frag"); // you can name your shader files however you like
 	ourShader.use(); // note: we only call this once since only this shader exists
 
 	// render loop

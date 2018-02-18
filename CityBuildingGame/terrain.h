@@ -1,4 +1,3 @@
-# pragma once
 #include <vector>
 #include <algorithm>
 #include <time.h>
@@ -11,33 +10,49 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "common.h"
+#include "heightmap.h"
 
 using std::vector;
+
+/* Represents a grid subunit */
+class Unit
+{
+public:
+	bool occupied = false;
+	float averageHeight = 0;
+	
+	Unit(float pAverageHeight);
+	~Unit();
+};
 
 class Terrain
 {
 public:
 	Terrain();
 	~Terrain();
+
 	void Initialize(int argWidth, int argHeight);
-	float Terrain::GetHeight(int argX, int argY);
+	float GetHeight(int argX, int argY);
 	void Draw();
 
+	vector<vector<Unit>> grid;
+	vector<vector<float>> heightmap;
 
 private:
-	void GenerateWhiteNoise();
-	vector<vector<float>> GenerateSmoothNoise(vector<vector<float>> baseNoise, int octave);
-	void GeneratePerlinNoise(int octaveCount);
-	float Interpolate(float x0, float x1, float alpha);
-
 	void CreateGeometry();
+	void CreateGeometry(int startX, int endX, int startY, int endY);
 	void LoadTextures();
+	void CreateGrid();
+	void AddTexturesToGrid();
+	void PopulateGridWithObjects();
 
 	GLuint VBO, VAO, EBO;
 	unsigned int texture1;
 	std::string texture_grass_path = exe_path + "\\textures\\Grass.bmp";
+	
+	int gridHeight;
+	int gridWidth;
 
-	vector<vector<float>> heightMap;
-	int height;
-	int width;
+	int visibleHeight;
+	int visibleWidth;
 };
