@@ -2,8 +2,8 @@
 
 GameClass::GameClass(float aScreenWidth, float aScreenHeight, int aMapWidth, int aMapHeight)
 {
-	screenWidth = aScreenHeight;
-	screenHeight = aMapWidth;
+	screenWidth = aScreenWidth;
+	screenHeight = aScreenHeight;
 
 	//// Generate terrain with random noise
 	terrain.Initialize(aMapWidth, aMapHeight);
