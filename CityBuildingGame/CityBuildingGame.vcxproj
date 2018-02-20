@@ -71,14 +71,13 @@
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>$(SolutionDir)\external\SFML-2.4.2\lib;$(SolutionDir)\external\glew-2.1.0\lib\Release\x64;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\lib-vc2015;$(SolutionDir)\external\DevIL Windows SDK\lib\x64\Release;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\external\SFML-2.4.2\lib;$(SolutionDir)\external\glew-2.1.0\lib\Release\x64;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\lib-vc2015;$(SolutionDir)\external\DevIL Windows SDK\lib\x64\Release;$(SolutionDir)\external\assimp-4.1.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>$(SolutionDir)\external\DevIL Windows SDK\lib\x64\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>$(SolutionDir)\external\SFML-2.4.2\lib;$(SolutionDir)\external\glew-2.1.0\lib\Release\x64;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\lib-vc2015;$(SolutionDir)\external\DevIL Windows SDK\lib\x64\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\external\SFML-2.4.2\lib;$(SolutionDir)\external\glew-2.1.0\lib\Release\x64;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\lib-vc2015;$(SolutionDir)\external\DevIL Windows SDK\lib\x64\Release;$(SolutionDir)\external\assimp-4.1.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -97,14 +96,15 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ShowIncludes>false</ShowIncludes>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glew32s.lib;glew32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;User32.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glew32s.lib;glew32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;User32.lib;assimp-vc140-mt.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -129,7 +129,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -137,7 +137,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glew32s.lib;glew32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;User32.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;glew32s.lib;glew32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;User32.lib;assimp-vc140-mt.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -145,6 +146,7 @@
     <ClCompile Include="game_class.cpp" />
     <ClCompile Include="heightmap.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mesh.h" />
     <ClCompile Include="terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +154,7 @@
     <ClInclude Include="common.h" />
     <ClInclude Include="game_class.h" />
     <ClInclude Include="heightmap.h" />
+    <ClInclude Include="model.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="terrain.h" />
