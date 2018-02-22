@@ -32,8 +32,8 @@ Shader ourShader;
 // settings
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
-const unsigned int MAP_WIDTH = 150;
-const unsigned int MAP_HEIGHT = 100;
+const unsigned int MAP_WIDTH = 100;
+const unsigned int MAP_HEIGHT = 800;
 std::string exe_path;
 
 // timing
@@ -90,9 +90,9 @@ int main(int argc, char* argv[])
 	// ------------------------------------
 	//Shader ourShader("basic_lighting.vert", "basic_lighting.frag"); // you can name your shader files however you like
 	//Shader ourShader("vertex_shader.vert", "fragment_shader.frag");
-	Shader ourShader("materials.vert", "materials.frag");
-	//unsigned int diffuseMap = Common::loadTexture("container2.png");
-	unsigned int specularMap = Common::loadTexture("container2_specular.png");
+	Shader ourShader("basic_lighting.vert", "basic_lighting.frag");
+	//unsigned int diffuseMap = Common::loadTexture("Grass.bmp");
+	//unsigned int specularMap = Common::loadTexture("container2_specular.png");
 	//ourShader.setInt("material.diffuse", 0);
 	//ourShader.setInt("material.specular", 1);
 	ourShader.use(); // note: we only call this once since only this shader exists
@@ -122,22 +122,22 @@ int main(int argc, char* argv[])
 
 		// light properties
 		glm::vec3 lightColor;
-		lightColor.x = sin(glfwGetTime() * 2.0f);
-		lightColor.y = sin(glfwGetTime() * 0.7f);
-		lightColor.z = sin(glfwGetTime() * 1.3f);
+		lightColor.x = 1.0f;//sin(glfwGetTime() * 2.0f);
+		lightColor.y = 1.0f;// sin(glfwGetTime() * 0.7f);
+		lightColor.z = 1.0f;// sin(glfwGetTime() * 1.3f);
 		glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); // decrease the influence
 		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
 		ourShader.setVec3("light.ambient", ambientColor);
 		ourShader.setVec3("light.diffuse", diffuseColor);
-		ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		//ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 		ourShader.setVec3("light.position", camera.Position);
 		ourShader.setVec3("viewPos", camera.Position);
 
 		// material properties
-		ourShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-		ourShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-		ourShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f); // specular lighting doesn't have full effect on this object's material
-		ourShader.setFloat("material.shininess", 32.0f);
+		//ourShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+		//ourShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+		//ourShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f); // specular lighting doesn't have full effect on this object's material
+		//ourShader.setFloat("material.shininess", 32.0f);
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 		ourShader.setMat4("projection", projection);
