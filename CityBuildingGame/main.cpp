@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 // Include GLEW, used to detect supported openGL extensions
 #include <GL\glew.h>
@@ -33,8 +34,8 @@ Shader ourShader;
 // settings
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
-const unsigned int MAP_WIDTH = 100;
-const unsigned int MAP_HEIGHT = 800;
+const unsigned int MAP_WIDTH = 50;
+const unsigned int MAP_HEIGHT = 50;
 std::string exe_path;
 
 // timing
@@ -44,8 +45,6 @@ float lastFrame = 0.0f;
 // camera
 Camera camera = Camera();
 
-// nanosuit test model
-//Model ourModel(FileSystem::getPath("C:\Users\willyfisch\CloudStation\Workspace C++\CityBuildingGame\CityBuildingGame\nanosuit.obj"));
 
 
 int main(int argc, char* argv[])
@@ -94,7 +93,7 @@ int main(int argc, char* argv[])
 	// build and compile our shader program
 	// ------------------------------------
 	//Shader ourShader("basic_lighting.vert", "basic_lighting.frag"); // you can name your shader files however you like
-	//Shader ourShader("vertex_shader.vert", "fragment_shader.frag");
+	Shader ourShader2("vertex_shader.vert", "fragment_shader.frag");
 	Shader ourShader("basic_lighting.vert", "basic_lighting.frag");
 	//unsigned int diffuseMap = Common::loadTexture("Grass.bmp");
 	//unsigned int specularMap = Common::loadTexture("container2_specular.png");
@@ -106,6 +105,11 @@ int main(int argc, char* argv[])
 	// -----------
 
 	GameClass gameClass((float)SCR_WIDTH, (float)SCR_HEIGHT, MAP_WIDTH, MAP_HEIGHT);
+
+	// nanosuit test model
+	std::string texture_path = exe_path + "\\nanosuit\\nanosuit.obj";
+	std::replace(texture_path.begin(), texture_path.end(), '\\', '/');
+	Model ourModel(texture_path.c_str());
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -156,6 +160,10 @@ int main(int argc, char* argv[])
 		ourShader.setMat4("model", model);
 
 		gameClass.Draw();
+
+
+		ourShader2.setMat4("model", model);
+		ourModel.Draw(ourShader2);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
