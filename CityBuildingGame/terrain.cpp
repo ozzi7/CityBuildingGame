@@ -55,8 +55,8 @@ void Terrain::Draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// bind textures on corresponding texture units
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, texture_id_grass);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture_id_grass);
 
 	glBindVertexArray(VAO);
 
