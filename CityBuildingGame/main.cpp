@@ -17,10 +17,11 @@
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
 
-#include "shader.h"
+//#include "shader.h"
 #include "common.h"
 #include "camera.h"
 #include "game_class.h"
+#include "model.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -42,6 +43,10 @@ float lastFrame = 0.0f;
 
 // camera
 Camera camera = Camera();
+
+// nanosuit test model
+//Model ourModel(FileSystem::getPath("C:\Users\willyfisch\CloudStation\Workspace C++\CityBuildingGame\CityBuildingGame\nanosuit.obj"));
+
 
 int main(int argc, char* argv[])
 {

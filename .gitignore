@@ -274,3 +274,6 @@ vc141.idb
 *.idb
 *.enc
 
+*.iobj
+
+*.ipdb

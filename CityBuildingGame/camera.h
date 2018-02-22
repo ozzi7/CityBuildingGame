@@ -21,9 +21,9 @@ enum Camera_Movement {
 };
 
 // Default camera values
-const float SCROLL_SPEED = 0.02f;
+const float SCROLL_SPEED = 0.03f;
 const float ZOOM_DEFAULT = 40.0f;
-const float ZOOM_MAX = 60.0f;
+const float ZOOM_MAX = 70.0f;
 const float ZOOM_MIN = 5.0f;
 
 
@@ -112,8 +112,6 @@ public:
 	void lock_cursor_to_window()
 	{
 		RECT WindowEdges;
-		int xpos;
-		int ypos;
 		int width;
 		int height;
 		int left;
@@ -125,12 +123,10 @@ public:
 			return;
 		}
 
-		glfwGetWindowPos(Window, &xpos, &ypos);
+		glfwGetWindowPos(Window, &left, &top);
 		glfwGetWindowSize(Window, &width, &height);
-		left = xpos;
-		top = ypos;
-		right = xpos + width;
-		bottom = ypos + height;
+		right = left + width;
+		bottom = top + height;
 
 		WindowEdges.left = left;
 		WindowEdges.top = top;

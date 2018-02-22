@@ -1,9 +1,9 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include <GL\glew.h> // holds all OpenGL type declarations
+//#include <GL\glew.h> // holds all OpenGL type declarations
 
-#include <glm/glm.hpp>
+//#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "shader.h"
@@ -16,16 +16,11 @@
 using namespace std;
 
 struct Vertex {
-	// position
 	glm::vec3 Position;
-	// normal
 	glm::vec3 Normal;
-	// texCoords
 	glm::vec2 TexCoords;
-	// tangent
-	glm::vec3 Tangent;
-	// bitangent
-	glm::vec3 Bitangent;
+	//glm::vec3 Tangent;
+	//glm::vec3 Bitangent;
 };
 
 struct Texture {
@@ -36,13 +31,11 @@ struct Texture {
 
 class Mesh {
 public:
-	/*  Mesh Data  */
 	vector<Vertex> vertices;
 	vector<unsigned int> indices;
 	vector<Texture> textures;
 	unsigned int VAO;
 
-	/*  Functions  */
 	// constructor
 	Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures)
 	{
@@ -50,7 +43,6 @@ public:
 		this->indices = indices;
 		this->textures = textures;
 
-		// now that we have all the required data, set the vertex buffers and its attribute pointers.
 		setupMesh();
 	}
 
@@ -74,10 +66,10 @@ public:
 				number = std::to_string(specularNr++); // transfer unsigned int to stream
 			else if (name == "texture_normal")
 				number = std::to_string(normalNr++); // transfer unsigned int to stream
-			else if (name == "texture_height")
-				number = std::to_string(heightNr++); // transfer unsigned int to stream
+			//else if (name == "texture_height")
+			//	number = std::to_string(heightNr++); // transfer unsigned int to stream
 
-													 // now set the sampler to the correct texture unit
+			// now set the sampler to the correct texture unit
 			glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
 			// and finally bind the texture
 			glBindTexture(GL_TEXTURE_2D, textures[i].id);
@@ -127,11 +119,11 @@ private:
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 		// vertex tangent
-		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+		//glEnableVertexAttribArray(3);
+		//glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
 		// vertex bitangent
-		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
+		//glEnableVertexAttribArray(4);
+		//glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
 
 		glBindVertexArray(0);
 	}
