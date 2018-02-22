@@ -20,7 +20,8 @@ private:
 	vector<vector<vector<float>>> smoothNoiseList; //an array of 2D arrays containing
 
 	void GenerateWhiteNoise(vector<vector<float>> &pHeightmap);
-	vector<vector<float>> GenerateSmoothNoise(vector<vector<float>> baseNoise, int octave);
+	void GenerateSmoothNoise(vector<vector<float>> &baseNoise,
+		vector<vector<float>> &smoothNoise, int octave);
 
 	float Interpolate(float x0, float x1, float alpha);
 	void Rescale(vector<vector<float>> &pHeightmap,float maxHeight);

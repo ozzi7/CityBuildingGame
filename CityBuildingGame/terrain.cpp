@@ -66,11 +66,11 @@ void Terrain::Draw()
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, visibleWidth*visibleHeight*6);
 }
-void Terrain::CreateGeometry()
+void Terrain::LoadVisibleGeometry()
 {
-	Terrain::CreateGeometry(0, gridWidth, 0, gridHeight);
+	LoadVisibleGeometry(0, gridWidth, 0, gridHeight);
 }
-void Terrain::CreateGeometry(int startX, int endX, int startY, int endY)
+void Terrain::LoadVisibleGeometry(int startX, int endX, int startY, int endY)
 {
 	startX = max(0, startX);
 	endX = min(gridWidth, endX);
@@ -81,7 +81,9 @@ void Terrain::CreateGeometry(int startX, int endX, int startY, int endY)
 	/* Create vertices of triangles */
 	visibleHeight = endY - startY;
 	visibleWidth = endX - startX;
-
+}
+void Terrain::CreateGeometry()
+{
 	// TODO: reuse vertices
 	/* 2*3*8: 2 triangles per grid unit, 3 vertices per triangle, each vertex has 3 coordinates, 
 	2 texture cooordinates and 3 normal coordinates */
@@ -89,81 +91,79 @@ void Terrain::CreateGeometry(int startX, int endX, int startY, int endY)
 	vector<GLfloat> completeTerrain = vector<GLfloat>();
 	vector<unsigned int> indices;
 
-	for(int i = startY; i < endY; ++i)
+	for(int i = 0; i < gridHeight; ++i)
 	{
-		for(int j = startX; j < endX; ++j)
+		for(int j = 0; j < gridWidth; ++j)
 		{
-			if (i >= startY && i < endY && j >= startX && j < endX)
-			{
-				// X, Y, Z of first vertex
-				terrainVector.push_back(j);
-				terrainVector.push_back(i);
-				terrainVector.push_back(heightmap[i][j]);
+			// X, Y, Z of first vertex
+			terrainVector.push_back(j);
+			terrainVector.push_back(i);
+			terrainVector.push_back(heightmap[i][j]);
 
-				// normals placeholder
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(0.0f);
+			// normals placeholder
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
 
-				// texture coord X, Y of first vertex
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(0.0f);
+			// texture coord X, Y of first vertex
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
 
-				terrainVector.push_back(j + 1);
-				terrainVector.push_back(i);
-				terrainVector.push_back(heightmap[i][j + 1]);
+			terrainVector.push_back(j + 1);
+			terrainVector.push_back(i);
+			terrainVector.push_back(heightmap[i][j + 1]);
 
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
 
-				terrainVector.push_back(1.0f);
-				terrainVector.push_back(0.0f);
+			terrainVector.push_back(1.0f);
+			terrainVector.push_back(0.0f);
 
-				terrainVector.push_back(j);
-				terrainVector.push_back(i + 1);
-				terrainVector.push_back(heightmap[i + 1][j]);
+			terrainVector.push_back(j);
+			terrainVector.push_back(i + 1);
+			terrainVector.push_back(heightmap[i + 1][j]);
 
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
 
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(1.0f);
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(1.0f);
 
-				terrainVector.push_back(j);
-				terrainVector.push_back(i + 1);
-				terrainVector.push_back(heightmap[i + 1][j]);
+			terrainVector.push_back(j);
+			terrainVector.push_back(i + 1);
+			terrainVector.push_back(heightmap[i + 1][j]);
 
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
 
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(1.0f);
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(1.0f);
 
-				terrainVector.push_back(j + 1);
-				terrainVector.push_back(i);
-				terrainVector.push_back(heightmap[i][j + 1]);
+			terrainVector.push_back(j + 1);
+			terrainVector.push_back(i);
+			terrainVector.push_back(heightmap[i][j + 1]);
 
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
 
-				terrainVector.push_back(1.0f);
-				terrainVector.push_back(0.0f);
+			terrainVector.push_back(1.0f);
+			terrainVector.push_back(0.0f);
 
-				terrainVector.push_back(j + 1);
-				terrainVector.push_back(i + 1);
-				terrainVector.push_back(heightmap[i + 1][j + 1]);
+			terrainVector.push_back(j + 1);
+			terrainVector.push_back(i + 1);
+			terrainVector.push_back(heightmap[i + 1][j + 1]);
 
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(0.0f);
-				terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
+			terrainVector.push_back(0.0f);
 
-				terrainVector.push_back(1.0f);
-				terrainVector.push_back(1.0f);
-			}
+			terrainVector.push_back(1.0f);
+			terrainVector.push_back(1.0f);
+
 			// X, Y, Z of first vertex
 			completeTerrain.push_back(j);
 			completeTerrain.push_back(i);
@@ -237,9 +237,9 @@ void Terrain::CreateGeometry(int startX, int endX, int startY, int endY)
 
 	/* Create indices for vertices*/
 	int index = 0;
-	for (int i = startY; i < endY; ++i)
+	for (int i = 0; i < gridHeight; ++i)
 	{
-		for (int j = startX; j < endX; ++j)
+		for (int j = 0; j < gridWidth; ++j)
 		{
 			for (int k = 0; k < 6; ++k)
 			{
@@ -376,12 +376,14 @@ void Terrain::CreateGeometry(int startX, int endX, int startY, int endY)
 
 		}
 	}
-	for (int i = startY; i < endY; ++i)
+	visibleWidth = gridWidth;
+	visibleHeight = gridHeight;
+	for (int i = 0; i < gridHeight; ++i)
 	{
-		for (int j = startX; j < endX; ++j)
+		for (int j = 0; j < gridWidth; ++j)
 		{
-			int globalY = i - startY;
-			int globalX = j - startX;
+			int globalY = i - 0;
+			int globalX = j - 0;
 			
 			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 3] = vertexNormals[globalY*(gridWidth + 1) + globalX].x;
 			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 4] = vertexNormals[globalY*(gridWidth + 1) + globalX].y;
@@ -436,7 +438,6 @@ void Terrain::CreateGeometry(int startX, int endX, int startY, int endY)
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 }
-
 void Terrain::LoadTextures()
 {
 	texture_id_grass = Common::loadTexture(texture_grass);

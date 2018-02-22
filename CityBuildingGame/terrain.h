@@ -40,7 +40,8 @@ public:
 
 private:
 	void CreateGeometry();
-	void CreateGeometry(int startX, int endX, int startY, int endY);
+	void LoadVisibleGeometry();
+	void LoadVisibleGeometry(int startX, int endX, int startY, int endY);
 	void LoadTextures();
 	void CreateGrid();
 	void AddTexturesToGrid();
