@@ -35,8 +35,8 @@ Shader ourShader;
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 // render time, admin machine 16 sek from pressing debug to show render at 300x300 (for reference)
-const unsigned int MAP_WIDTH = 50;
-const unsigned int MAP_HEIGHT = 50;
+const unsigned int MAP_WIDTH = 300;
+const unsigned int MAP_HEIGHT = 300;
 std::string exe_path;
 
 // timing
@@ -144,13 +144,13 @@ int main(int argc, char* argv[])
 		lightColor.x = 1.0f;//sin(glfwGetTime() * 2.0f);
 		lightColor.y = 1.0f;// sin(glfwGetTime() * 0.7f);
 		lightColor.z = 1.0f;// sin(glfwGetTime() * 1.3f);
-		glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); // decrease the influence
-		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+		glm::vec3 diffuseColor = lightColor   * glm::vec3(0.8f); // decrease the influence
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.8f); // low influence
 		ourShader.setVec3("light.ambient", ambientColor);
 		ourShader.setVec3("light.diffuse", diffuseColor);
 		//ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		ourShader.setVec3("light.position", camera.Position);
-		ourShader.setVec3("viewPos", camera.Position);
+		ourShader.setVec3("light.position", glm::vec3(40.0f,40.0f,40.0f));
+		ourShader.setVec3("viewPos", glm::vec3(40.0f, 40.0f, -40.0f));
 
 		// material properties
 		//ourShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);

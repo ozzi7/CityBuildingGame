@@ -84,9 +84,6 @@ void Terrain::LoadVisibleGeometry(int startX, int endX, int startY, int endY)
 }
 void Terrain::CreateGeometry()
 {
-	// TODO: reuse vertices
-	/* 2*3*8: 2 triangles per grid unit, 3 vertices per triangle, each vertex has 3 coordinates, 
-	2 texture cooordinates and 3 normal coordinates */
 	vector<GLfloat> renderData = vector<GLfloat>();
 	vector<unsigned int> indices;
 
@@ -162,75 +159,6 @@ void Terrain::CreateGeometry()
 
 			renderData.push_back(1.0f);
 			renderData.push_back(1.0f);
-
-			//// X, Y, Z of first vertex
-			//completeTerrain.push_back(j);
-			//completeTerrain.push_back(i);
-			//completeTerrain.push_back(heightmap[i][j]);
-
-			//// normals placeholder
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(0.0f);
-
-			//// texture coord X, Y of first vertex
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(0.0f);
-
-			//completeTerrain.push_back(j + 1);
-			//completeTerrain.push_back(i);
-			//completeTerrain.push_back(heightmap[i][j + 1]);
-
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(0.0f);
-
-			//completeTerrain.push_back(1.0f);
-			//completeTerrain.push_back(0.0f);
-
-			//completeTerrain.push_back(j);
-			//completeTerrain.push_back(i + 1);
-			//completeTerrain.push_back(heightmap[i + 1][j]);
-
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(0.0f);
-
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(1.0f);
-
-			//completeTerrain.push_back(j);
-			//completeTerrain.push_back(i + 1);
-			//completeTerrain.push_back(heightmap[i + 1][j]);
-
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(0.0f);
-
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(1.0f);
-
-			//completeTerrain.push_back(j + 1);
-			//completeTerrain.push_back(i);
-			//completeTerrain.push_back(heightmap[i][j + 1]);
-
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(0.0f);
-
-			//completeTerrain.push_back(1.0f);
-			//completeTerrain.push_back(0.0f);
-
-			//completeTerrain.push_back(j + 1);
-			//completeTerrain.push_back(i + 1);
-			//completeTerrain.push_back(heightmap[i + 1][j + 1]);
-
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(0.0f);
-			//completeTerrain.push_back(0.0f);
-
-			//completeTerrain.push_back(1.0f);
-			//completeTerrain.push_back(1.0f);
 		}
 	}
 
@@ -248,33 +176,33 @@ void Terrain::CreateGeometry()
 	}
 
 	/* Create normals, areas for triangles using explicit cross product formula*/
-	vector<glm::vec3> triangleNormals = vector<glm::vec3>(gridWidth*gridHeight*2);
-	vector<float> triangleArea = vector<float>(gridWidth*gridHeight*2);
+	vector<glm::vec3> triangleNormals = vector<glm::vec3>(gridWidth*gridHeight * 2);
+	vector<float> triangleArea = vector<float>(gridWidth*gridHeight * 2);
 	for (int i = 0; i < gridHeight; ++i)
 	{
 		for (int j = 0; j < gridWidth; ++j)
 		{
 			/* Left triangle */
-			glm::vec3 crossProduct = glm::vec3(-(heightmap[i][j+1]-heightmap[i][j]),
-				heightmap[i+1][j] - heightmap[i][j],
+			glm::highp_vec3 crossProduct = glm::highp_vec3(-(heightmap[i][j + 1] - heightmap[i][j]),
+				heightmap[i + 1][j] - heightmap[i][j],
 				1);
 
-			triangleArea[(i*gridWidth+j)*2] = glm::length(crossProduct)/2.0f;
-			triangleNormals[(i*gridWidth+j)*2] = glm::normalize(crossProduct);
+			triangleArea[(i*gridWidth + j) * 2] = glm::length(crossProduct) / 2.0f;
+			triangleNormals[(i*gridWidth + j) * 2] = glm::normalize(crossProduct);
 
 			/* Right triangle*/
-			crossProduct = glm::vec3(-(heightmap[i + 1][j + 1] - heightmap[i][j + 1])-
+			crossProduct = glm::highp_vec3(-(heightmap[i + 1][j + 1] - heightmap[i][j + 1]) -
 				(heightmap[i][j + 1] - heightmap[i + 1][j]),
 				-(heightmap[i + 1][j + 1] - heightmap[i][j + 1]),
 				1);
 
-			triangleArea[(i*gridWidth + j)*2+1] = glm::length(crossProduct) / 2.0f;
-			triangleNormals[(i*gridWidth + j)*2+1] = glm::normalize(crossProduct);
+			triangleArea[(i*gridWidth + j) * 2 + 1] = glm::length(crossProduct) / 2.0f;
+			triangleNormals[(i*gridWidth + j) * 2 + 1] = glm::normalize(crossProduct);
 		}
 	}
 
 	/* Create vertex normals, currently weighted by area of neighbor triangle not angle (should be similar in this case)*/
-	vector<glm::vec3> vertexNormals = vector<glm::vec3>();
+	vector<glm::vec3> vertexNormals = vector<glm::vec3>((gridWidth+1)*(gridHeight+1));
 	for (int i = 0; i < gridHeight + 1; ++i)
 	{
 		for (int j = 0; j < gridWidth + 1; ++j)
@@ -284,56 +212,56 @@ void Terrain::CreateGeometry()
 				// bottom row
 				if (j == 0) {
 					// bottom left vertex
-					vertexNormals.push_back(triangleNormals[0]);
+					vertexNormals[i*(gridWidth+1)+j] = triangleNormals[0];
 				} else if (j == gridHeight) {
 					// bottom right
-					vertexNormals.push_back(normalize(triangleArea[(j - 1) * 2] * triangleNormals[(j - 1) * 2] +
-						triangleArea[(j - 1) * 2 + 1] * triangleNormals[(j - 1) * 2 + 1]));
+					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(j - 1) * 2] * triangleNormals[(j - 1) * 2] +
+						triangleArea[(j - 1) * 2 + 1] * triangleNormals[(j - 1) * 2 + 1]);
 				}
 				else {
 					// bottom middle
-					vertexNormals.push_back(normalize(triangleArea[(j - 1) * 2]*triangleNormals[(j-1)*2] +
+					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(j - 1) * 2]*triangleNormals[(j-1)*2] +
 						triangleArea[(j - 1) * 2 + 1] * triangleNormals[(j - 1) * 2 + 1])+
-						triangleArea[(j - 1) * 2 + 2] * triangleNormals[(j - 1) * 2 + 2]);
+						triangleArea[(j - 1) * 2 + 2] * triangleNormals[(j - 1) * 2 + 2];
 				}
 			}
 			else {
 				if (j == 0 && i < gridHeight) {
 					// left column, except bottomn left and top left
-					vertexNormals.push_back(normalize(triangleArea[(i-1)*gridWidth*2] * triangleNormals[(i - 1)*gridWidth * 2] +
+					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(i-1)*gridWidth*2] * triangleNormals[(i - 1)*gridWidth * 2] +
 						triangleArea[(i - 1)*gridWidth * 2+1] * triangleNormals[(i - 1)*gridWidth * 2+1] +
-						triangleArea[i*gridWidth * 2] * triangleNormals[i * gridWidth*2]));
+						triangleArea[i*gridWidth * 2] * triangleNormals[i * gridWidth*2]);
 				}
 				else if(j == 0) {
 					// top left
-					vertexNormals.push_back(normalize(triangleArea[(i - 1)*gridWidth * 2] * triangleNormals[(i - 1)*gridWidth * 2] +
-						triangleArea[(i - 1)*gridWidth * 2 + 1] * triangleNormals[(i - 1)*gridWidth * 2 + 1]));
+					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(i - 1)*gridWidth * 2] * triangleNormals[(i - 1)*gridWidth * 2] +
+						triangleArea[(i - 1)*gridWidth * 2 + 1] * triangleNormals[(i - 1)*gridWidth * 2 + 1]);
 				}
 				else if (j == gridWidth && i != gridHeight) {
 					// right side, middle 
-					vertexNormals.push_back(normalize(triangleArea[(i - 1)*gridWidth * 2 +j*2 - 1] * triangleNormals[(i - 1)*gridWidth * 2 + j * 2 - 1] +
+					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(i - 1)*gridWidth * 2 +j*2 - 1] * triangleNormals[(i - 1)*gridWidth * 2 + j * 2 - 1] +
 						triangleArea[i *gridWidth * 2 + j * 2 - 2] * triangleNormals[i *gridWidth * 2 + j * 2 - 2] +
-						triangleArea[i *gridWidth * 2 + j * 2 - 1] * triangleNormals[i *gridWidth * 2 + j * 2 - 1]));
+						triangleArea[i *gridWidth * 2 + j * 2 - 1] * triangleNormals[i *gridWidth * 2 + j * 2 - 1]);
 				}
 				else if (j == gridWidth && i == gridHeight) {
 					// right top 
-					vertexNormals.push_back(triangleNormals[gridWidth*gridHeight-1]);
+					vertexNormals[i*(gridWidth + 1) + j] = triangleNormals[gridWidth*gridHeight-1];
 				}
 				else if (i == gridHeight) {
 					// top row, except left and right 
-					vertexNormals.push_back(normalize(triangleArea[(i - 1)*gridWidth * 2 + (j*2)-1] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2) - 1] +
+					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(i - 1)*gridWidth * 2 + (j*2)-1] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2) - 1] +
 						triangleArea[(i - 1)*gridWidth * 2 + (j * 2)] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2)] +
-						triangleArea[(i - 1)*gridWidth * 2 + (j * 2)+1] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2) + 1]));
+						triangleArea[(i - 1)*gridWidth * 2 + (j * 2)+1] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2) + 1]);
 				}
 				else
 				{
 					// rest, all in the middle with 6 surrounding triangles
-					vertexNormals.push_back(normalize(triangleArea[(i - 1)*gridWidth * 2 + (j * 2) - 1] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2) - 1] +
+					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(i - 1)*gridWidth * 2 + (j * 2) - 1] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2) - 1] +
 						triangleArea[(i - 1)*gridWidth * 2 + (j * 2)] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2)] +
 						triangleArea[(i - 1)*gridWidth * 2 + (j * 2) + 1] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2) + 1]+
 						triangleArea[i*gridWidth * 2 + (j * 2) - 2] * triangleNormals[i*gridWidth * 2 + (j * 2) - 2] +
 						triangleArea[i*gridWidth * 2 + (j * 2) - 1] * triangleNormals[i*gridWidth * 2 + (j * 2) - 1] +
-						triangleArea[i*gridWidth * 2 + (j * 2)]  * triangleNormals[i*gridWidth * 2 + (j * 2) + 1]));
+						triangleArea[i*gridWidth * 2 + (j * 2)]  * triangleNormals[i*gridWidth * 2 + (j * 2) + 1]);
 				}
 			}
 
