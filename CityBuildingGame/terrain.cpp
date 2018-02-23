@@ -16,8 +16,8 @@ void Terrain::Initialize(int aWidth, int aHeight)
 	gridHeight = aHeight;
 	gridWidth = aWidth;
 
-	heightmap = vector<vector<float>>(gridHeight+1, vector<float>(gridWidth+1, 0));
 	Heightmap heightmap_obj;
+	heightmap = vector<vector<float>>(gridHeight+1, vector<float>(gridWidth+1, 0));
 	heightmap_obj.GeneratePerlinNoise(heightmap, gridWidth+1, gridHeight+1, 20, 6);
 
 	CreateGrid();
@@ -87,8 +87,7 @@ void Terrain::CreateGeometry()
 	// TODO: reuse vertices
 	/* 2*3*8: 2 triangles per grid unit, 3 vertices per triangle, each vertex has 3 coordinates, 
 	2 texture cooordinates and 3 normal coordinates */
-	vector<GLfloat> terrainVector = vector<GLfloat>();
-	vector<GLfloat> completeTerrain = vector<GLfloat>();
+	vector<GLfloat> renderData = vector<GLfloat>();
 	vector<unsigned int> indices;
 
 	for(int i = 0; i < gridHeight; ++i)
@@ -96,142 +95,142 @@ void Terrain::CreateGeometry()
 		for(int j = 0; j < gridWidth; ++j)
 		{
 			// X, Y, Z of first vertex
-			terrainVector.push_back(j);
-			terrainVector.push_back(i);
-			terrainVector.push_back(heightmap[i][j]);
+			renderData.push_back(j);
+			renderData.push_back(i);
+			renderData.push_back(heightmap[i][j]);
 
 			// normals placeholder
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(0.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(0.0f);
 
 			// texture coord X, Y of first vertex
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(0.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(0.0f);
 
-			terrainVector.push_back(j + 1);
-			terrainVector.push_back(i);
-			terrainVector.push_back(heightmap[i][j + 1]);
+			renderData.push_back(j + 1);
+			renderData.push_back(i);
+			renderData.push_back(heightmap[i][j + 1]);
 
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(0.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(0.0f);
 
-			terrainVector.push_back(1.0f);
-			terrainVector.push_back(0.0f);
+			renderData.push_back(1.0f);
+			renderData.push_back(0.0f);
 
-			terrainVector.push_back(j);
-			terrainVector.push_back(i + 1);
-			terrainVector.push_back(heightmap[i + 1][j]);
+			renderData.push_back(j);
+			renderData.push_back(i + 1);
+			renderData.push_back(heightmap[i + 1][j]);
 
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(0.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(0.0f);
 
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(1.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(1.0f);
 
-			terrainVector.push_back(j);
-			terrainVector.push_back(i + 1);
-			terrainVector.push_back(heightmap[i + 1][j]);
+			renderData.push_back(j);
+			renderData.push_back(i + 1);
+			renderData.push_back(heightmap[i + 1][j]);
 
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(0.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(0.0f);
 
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(1.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(1.0f);
 
-			terrainVector.push_back(j + 1);
-			terrainVector.push_back(i);
-			terrainVector.push_back(heightmap[i][j + 1]);
+			renderData.push_back(j + 1);
+			renderData.push_back(i);
+			renderData.push_back(heightmap[i][j + 1]);
 
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(0.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(0.0f);
 
-			terrainVector.push_back(1.0f);
-			terrainVector.push_back(0.0f);
+			renderData.push_back(1.0f);
+			renderData.push_back(0.0f);
 
-			terrainVector.push_back(j + 1);
-			terrainVector.push_back(i + 1);
-			terrainVector.push_back(heightmap[i + 1][j + 1]);
+			renderData.push_back(j + 1);
+			renderData.push_back(i + 1);
+			renderData.push_back(heightmap[i + 1][j + 1]);
 
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(0.0f);
-			terrainVector.push_back(0.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(0.0f);
+			renderData.push_back(0.0f);
 
-			terrainVector.push_back(1.0f);
-			terrainVector.push_back(1.0f);
+			renderData.push_back(1.0f);
+			renderData.push_back(1.0f);
 
-			// X, Y, Z of first vertex
-			completeTerrain.push_back(j);
-			completeTerrain.push_back(i);
-			completeTerrain.push_back(heightmap[i][j]);
+			//// X, Y, Z of first vertex
+			//completeTerrain.push_back(j);
+			//completeTerrain.push_back(i);
+			//completeTerrain.push_back(heightmap[i][j]);
 
-			// normals placeholder
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(0.0f);
+			//// normals placeholder
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
 
-			// texture coord X, Y of first vertex
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(0.0f);
+			//// texture coord X, Y of first vertex
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
 
-			completeTerrain.push_back(j + 1);
-			completeTerrain.push_back(i);
-			completeTerrain.push_back(heightmap[i][j + 1]);
+			//completeTerrain.push_back(j + 1);
+			//completeTerrain.push_back(i);
+			//completeTerrain.push_back(heightmap[i][j + 1]);
 
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
 
-			completeTerrain.push_back(1.0f);
-			completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(1.0f);
+			//completeTerrain.push_back(0.0f);
 
-			completeTerrain.push_back(j);
-			completeTerrain.push_back(i + 1);
-			completeTerrain.push_back(heightmap[i + 1][j]);
+			//completeTerrain.push_back(j);
+			//completeTerrain.push_back(i + 1);
+			//completeTerrain.push_back(heightmap[i + 1][j]);
 
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
 
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(1.0f);
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(1.0f);
 
-			completeTerrain.push_back(j);
-			completeTerrain.push_back(i + 1);
-			completeTerrain.push_back(heightmap[i + 1][j]);
+			//completeTerrain.push_back(j);
+			//completeTerrain.push_back(i + 1);
+			//completeTerrain.push_back(heightmap[i + 1][j]);
 
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
 
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(1.0f);
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(1.0f);
 
-			completeTerrain.push_back(j + 1);
-			completeTerrain.push_back(i);
-			completeTerrain.push_back(heightmap[i][j + 1]);
+			//completeTerrain.push_back(j + 1);
+			//completeTerrain.push_back(i);
+			//completeTerrain.push_back(heightmap[i][j + 1]);
 
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
 
-			completeTerrain.push_back(1.0f);
-			completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(1.0f);
+			//completeTerrain.push_back(0.0f);
 
-			completeTerrain.push_back(j + 1);
-			completeTerrain.push_back(i + 1);
-			completeTerrain.push_back(heightmap[i + 1][j + 1]);
+			//completeTerrain.push_back(j + 1);
+			//completeTerrain.push_back(i + 1);
+			//completeTerrain.push_back(heightmap[i + 1][j + 1]);
 
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(0.0f);
-			completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
+			//completeTerrain.push_back(0.0f);
 
-			completeTerrain.push_back(1.0f);
-			completeTerrain.push_back(1.0f);
+			//completeTerrain.push_back(1.0f);
+			//completeTerrain.push_back(1.0f);
 		}
 	}
 
@@ -248,65 +247,29 @@ void Terrain::CreateGeometry()
 		}
 	}
 
-	/* Create normals for triangles*/
-	vector<glm::vec3> triangleNormals = vector<glm::vec3>();
-	vector<float> triangleArea = vector<float>();
+	/* Create normals, areas for triangles using explicit cross product formula*/
+	vector<glm::vec3> triangleNormals = vector<glm::vec3>(gridWidth*gridHeight*2);
+	vector<float> triangleArea = vector<float>(gridWidth*gridHeight*2);
 	for (int i = 0; i < gridHeight; ++i)
 	{
 		for (int j = 0; j < gridWidth; ++j)
 		{
-			glm::highp_vec3 crossProduct = glm::cross(glm::vec3(completeTerrain[gridWidth*i * 48+8],
-				completeTerrain[gridWidth*i * 48 + j * 48 + 9],
-				completeTerrain[gridWidth*i * 48 + j * 48 + 10]) - 
-				glm::vec3(completeTerrain[gridWidth*i * 48],
-				completeTerrain[gridWidth*i * 48 + j*48 + 1],
-				completeTerrain[gridWidth*i * 48 + j * 48+ 2]),
-				glm::vec3(completeTerrain[gridWidth*i * 48 + j * 48 + 16],
-					completeTerrain[gridWidth*i * 48 + j * 48 + 17],
-					completeTerrain[gridWidth*i * 48 + j * 48 + 18]) -
-				glm::vec3(completeTerrain[gridWidth*i * 48 + j * 48 + 8],
-					completeTerrain[gridWidth*i * 48 + j * 48 + 9],
-					completeTerrain[gridWidth*i * 48 + j * 48 + 10]));
+			/* Left triangle */
+			glm::vec3 crossProduct = glm::vec3(-(heightmap[i][j+1]-heightmap[i][j]),
+				heightmap[i+1][j] - heightmap[i][j],
+				1);
 
-			triangleArea.push_back(glm::length(crossProduct)/2.0f);
-			triangleNormals.push_back(glm::normalize(crossProduct));
+			triangleArea[(i*gridWidth+j)*2] = glm::length(crossProduct)/2.0f;
+			triangleNormals[(i*gridWidth+j)*2] = glm::normalize(crossProduct);
 
-			crossProduct = glm::cross(glm::vec3(completeTerrain[gridWidth*i * 48 + j * 48 + 32],
-				completeTerrain[gridWidth*i * 48 + j * 48 + 33],
-				completeTerrain[gridWidth*i * 48 + j * 48 + 34])-
-				glm::vec3(completeTerrain[gridWidth*i * 48 + j * 48 + 24],
-				completeTerrain[gridWidth*i* 48 + j * 48 + 25],
-				completeTerrain[gridWidth*i * 48 + j * 48 + 26]),
-				glm::vec3(completeTerrain[gridWidth*i * 48 + j * 48 + 40],
-					completeTerrain[gridWidth*i * 48 + j * 48 + 41],
-					completeTerrain[gridWidth*i * 48 + j * 48 + 42]) -
-				glm::vec3(completeTerrain[gridWidth*i * 48 + j * 48 + 24],
-					completeTerrain[gridWidth*i * 48 + j * 48 + 25],
-					completeTerrain[gridWidth*i * 48 + j * 48 + 26]));
+			/* Right triangle*/
+			crossProduct = glm::vec3(-(heightmap[i + 1][j + 1] - heightmap[i][j + 1])-
+				(heightmap[i][j + 1] - heightmap[i + 1][j]),
+				-(heightmap[i + 1][j + 1] - heightmap[i][j + 1]),
+				1);
 
-			triangleArea.push_back(glm::length(crossProduct) / 2.0f);
-			triangleNormals.push_back(glm::normalize(crossProduct));
-
-			/* for only visible area (startY..endY) and (startX to endX), for simplicity we calculate all for now*/
-			/*triangleNormals.push_back(glm::triangleNormal(glm::vec3(terrainVector[visibleWidth*(i - startY) * 48],
-				terrainVector[visibleWidth*(i - startY) * 48 + 1],
-				terrainVector[visibleWidth*(i - startY) * 48 + 2]),
-				glm::vec3(terrainVector[visibleWidth*(i - startY) * 48 + 8],
-					terrainVector[visibleWidth*(i - startY) * 48 + 9],
-					terrainVector[visibleWidth*(i - startY) * 48 + 10]),
-				glm::vec3(terrainVector[visibleWidth*(i - startY) * 48 + 16],
-					terrainVector[visibleWidth*(i - startY) * 48 + 17],
-					terrainVector[visibleWidth*(i - startY) * 48 + 18])));
-
-			triangleNormals.push_back(glm::triangleNormal(glm::vec3(terrainVector[visibleWidth*(i - startY) * 48 + 24],
-				terrainVector[visibleWidth*(i - startY) * 48 + 25],
-				terrainVector[visibleWidth*(i - startY) * 48 + 26]),
-				glm::vec3(terrainVector[visibleWidth*(i - startY) * 48 + 32],
-					terrainVector[visibleWidth*(i - startY) * 48 + 33],
-					terrainVector[visibleWidth*(i - startY) * 48 + 34]),
-				glm::vec3(terrainVector[visibleWidth*(i - startY) * 48 + 40],
-					terrainVector[visibleWidth*(i - startY) * 48 + 41],
-					terrainVector[visibleWidth*(i - startY) * 48 + 42])));*/
+			triangleArea[(i*gridWidth + j)*2+1] = glm::length(crossProduct) / 2.0f;
+			triangleNormals[(i*gridWidth + j)*2+1] = glm::normalize(crossProduct);
 		}
 	}
 
@@ -385,29 +348,29 @@ void Terrain::CreateGeometry()
 			int globalY = i - 0;
 			int globalX = j - 0;
 			
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 3] = vertexNormals[globalY*(gridWidth + 1) + globalX].x;
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 4] = vertexNormals[globalY*(gridWidth + 1) + globalX].y;
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 5] = vertexNormals[globalY*(gridWidth + 1) + globalX].z;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 3] = vertexNormals[globalY*(gridWidth + 1) + globalX].x;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 4] = vertexNormals[globalY*(gridWidth + 1) + globalX].y;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 5] = vertexNormals[globalY*(gridWidth + 1) + globalX].z;
 
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 11] = vertexNormals[globalY*(gridWidth + 1) + globalX+1].x;
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 12] = vertexNormals[globalY*(gridWidth + 1) + globalX+1].y;
-			terrainVector[visibleWidth*globalY* 48 + globalX * 48 + 13] = vertexNormals[globalY*(gridWidth + 1) + globalX+1].z;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 11] = vertexNormals[globalY*(gridWidth + 1) + globalX+1].x;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 12] = vertexNormals[globalY*(gridWidth + 1) + globalX+1].y;
+			renderData[visibleWidth*globalY* 48 + globalX * 48 + 13] = vertexNormals[globalY*(gridWidth + 1) + globalX+1].z;
 
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 19] = vertexNormals[(globalY+1)*(gridWidth + 1) + globalX].x;
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 20] = vertexNormals[(globalY+1)*(gridWidth + 1) + globalX].y;
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 21] = vertexNormals[(globalY+1)*(gridWidth + 1) + globalX].z;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 19] = vertexNormals[(globalY+1)*(gridWidth + 1) + globalX].x;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 20] = vertexNormals[(globalY+1)*(gridWidth + 1) + globalX].y;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 21] = vertexNormals[(globalY+1)*(gridWidth + 1) + globalX].z;
 
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 27] = vertexNormals[(globalY + 1)*(gridWidth + 1) + globalX].x;
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 28] = vertexNormals[(globalY + 1)*(gridWidth + 1) + globalX].y;
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 29] = vertexNormals[(globalY + 1)*(gridWidth + 1) + globalX].z;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 27] = vertexNormals[(globalY + 1)*(gridWidth + 1) + globalX].x;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 28] = vertexNormals[(globalY + 1)*(gridWidth + 1) + globalX].y;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 29] = vertexNormals[(globalY + 1)*(gridWidth + 1) + globalX].z;
 
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 35] = vertexNormals[globalY*(gridWidth + 1) + globalX + 1].x;
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 36] = vertexNormals[globalY*(gridWidth + 1) + globalX + 1].y;
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 37] = vertexNormals[globalY*(gridWidth + 1) + globalX + 1].z;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 35] = vertexNormals[globalY*(gridWidth + 1) + globalX + 1].x;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 36] = vertexNormals[globalY*(gridWidth + 1) + globalX + 1].y;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 37] = vertexNormals[globalY*(gridWidth + 1) + globalX + 1].z;
 
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 43] = vertexNormals[(globalY + 1)*(gridWidth + 1) + globalX+1].x;
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 44] = vertexNormals[(globalY + 1)*(gridWidth + 1) + globalX+1].y;
-			terrainVector[visibleWidth*globalY * 48 + globalX * 48 + 45] = vertexNormals[(globalY + 1)*(gridWidth + 1) + globalX+1].z;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 43] = vertexNormals[(globalY + 1)*(gridWidth + 1) + globalX+1].x;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 44] = vertexNormals[(globalY + 1)*(gridWidth + 1) + globalX+1].y;
+			renderData[visibleWidth*globalY * 48 + globalX * 48 + 45] = vertexNormals[(globalY + 1)*(gridWidth + 1) + globalX+1].z;
 		}
 	}
 			
@@ -421,7 +384,7 @@ void Terrain::CreateGeometry()
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * terrainVector.size(), &terrainVector[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderData.size(), &renderData[0], GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices[0], GL_STATIC_DRAW);
