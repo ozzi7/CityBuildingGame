@@ -95,21 +95,28 @@ int main(int argc, char* argv[])
 	//Shader ourShader("basic_lighting.vert", "basic_lighting.frag"); // you can name your shader files however you like
 	Shader ourShader2("vertex_shader.vert", "fragment_shader.frag");
 	Shader ourShader("basic_lighting.vert", "basic_lighting.frag");
+	Shader shaderTree("vertex_shader.vert", "fragment_shader.frag");
 	//unsigned int diffuseMap = Common::loadTexture("Grass.bmp");
 	//unsigned int specularMap = Common::loadTexture("container2_specular.png");
 	//ourShader.setInt("material.diffuse", 0);
 	//ourShader.setInt("material.specular", 1);
-	ourShader.use(); // note: we only call this once since only this shader exists
+	// note: we only call this once since only this shader exists
 
 	// render loop
 	// -----------
 
 	GameClass gameClass((float)SCR_WIDTH, (float)SCR_HEIGHT, MAP_WIDTH, MAP_HEIGHT);
 
+	std::string texture_path;
 	// nanosuit test model
-	std::string texture_path = exe_path + "\\nanosuit\\nanosuit.obj";
+	//texture_path = exe_path + "\\nanosuit\\nanosuit.obj";
+	//std::replace(texture_path.begin(), texture_path.end(), '\\', '/');
+	//Model ourModel(texture_path.c_str());
+	
+	// tree test model
+	texture_path = exe_path + "\\tree2_3ds\\Tree2.3ds";
 	std::replace(texture_path.begin(), texture_path.end(), '\\', '/');
-	Model ourModel(texture_path.c_str());
+	Model tree(texture_path.c_str());
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -118,6 +125,8 @@ int main(int argc, char* argv[])
 		float currentFrame = (float)glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+
+		ourShader.use();
 
 		// input
 		// -----
@@ -159,11 +168,30 @@ int main(int argc, char* argv[])
 		glm::mat4 model = glm::mat4(1.0f);
 		ourShader.setMat4("model", model);
 
+		shaderTree.use();
+
+		glm::mat4 projection2 = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
+		shaderTree.setMat4("projection", projection2);
+
+		// camera/view transformation
+		glm::mat4 view2 = camera.GetViewMatrix();
+		shaderTree.setMat4("view", view2);
+
+		// calculate the model matrix for each object and pass it to shader before drawing
+		glm::mat4 model2 = glm::mat4(1.0f);
+		model2 = glm::translate(model2, glm::vec3(20.0f, 20.0f, 20.0f));
+		shaderTree.setMat4("model", model2);
+
+		tree.Draw(shaderTree);
+
+		ourShader.use();
+
 		gameClass.Draw();
 
 
-		ourShader2.setMat4("model", model);
-		ourModel.Draw(ourShader2);
+		//ourShader2.setMat4("model", model);
+		//ourModel.Draw(ourShader2);
+
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
