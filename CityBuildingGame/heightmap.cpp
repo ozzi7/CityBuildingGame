@@ -17,7 +17,13 @@ void Heightmap::GeneratePerlinNoise(vector<vector<float>> &pHeightmap, int pWidt
 
 		//generate smooth noise
 		for (int i = 0; i < octaveCount; i++)
-			smoothNoiseList.push_back(GenerateSmoothNoise(pHeightmap, i));
+		{
+			vector<vector<float>> smoothNoise = vector<vector<float>>(pHeight, vector<float>(pWidth, 0));
+			for (auto &j : smoothNoise)
+				std::fill(j.begin(), j.end(), 0);
+			GenerateSmoothNoise(pHeightmap, smoothNoise, i);
+			smoothNoiseList.push_back(smoothNoise);
+		}
 
 		CombineNoiseMaps(pHeightmap, octaveCount);
 
@@ -62,19 +68,9 @@ void Heightmap::GenerateWhiteNoise(vector<vector<float>> &pHeightmap)
 		}
 	}
 }
-vector<vector<float>> Heightmap::GenerateSmoothNoise(vector<vector<float>> baseNoise, int octave)
+void Heightmap::GenerateSmoothNoise(vector<vector<float>> &baseNoise,
+	vector<vector<float>> &smoothNoise, int octave)
 {
-	// start with empty array
-	vector<vector<float>> smoothNoise;
-	for (int i = 0; i < height; i++)
-	{
-		smoothNoise.push_back(vector<float>(width));
-		for (int j = 0; j < width; j++)
-		{
-			smoothNoise.back().at(j) = 0;
-		}
-	}
-
 	int samplePeriod = 1 << octave; // calculates 2 ^ k
 	float sampleFrequency = 1.0f / samplePeriod;
 
@@ -104,7 +100,6 @@ vector<vector<float>> Heightmap::GenerateSmoothNoise(vector<vector<float>> baseN
 			smoothNoise[i][j] = Interpolate(top, bottom, horizontal_blend);
 		}
 	}
-	return smoothNoise;
 }
 
 float Heightmap::Interpolate(float x0, float x1, float alpha)
