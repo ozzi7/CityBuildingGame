@@ -277,3 +277,4 @@ vc141.idb
 *.iobj
 
 *.ipdb
+!/x64/Debug/nanosuit/*
