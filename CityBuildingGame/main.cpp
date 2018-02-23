@@ -168,6 +168,8 @@ int main(int argc, char* argv[])
 		glm::mat4 model = glm::mat4(1.0f);
 		ourShader.setMat4("model", model);
 
+		gameClass.Draw();
+
 		shaderTree.use();
 
 		glm::mat4 projection2 = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
@@ -185,8 +187,6 @@ int main(int argc, char* argv[])
 		tree.Draw(shaderTree);
 
 		ourShader.use();
-
-		gameClass.Draw();
 
 
 		//ourShader2.setMat4("model", model);
