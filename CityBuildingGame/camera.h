@@ -50,10 +50,10 @@ public:
 		Position = position;
 		Zoom = ZOOM_DEFAULT;
 		Window = window;
-		Up = glm::vec3(0.0f, 1.0f, 0.0f);
-		Right = glm::vec3(1.0f, 0.0f, 0.0f);
-		Lookat = glm::vec3(0.0f, 20.0f, -30.0f);
-		
+		Up = glm::vec3(-1.0f, 1.0f, 0.0f);
+		Right = glm::vec3(1.0f, 1.0f, 0.0f);
+		Lookat = glm::vec3(-50.0f, 50.0f, -50.0f);
+
 		lock_cursor_to_window();
 	}
 

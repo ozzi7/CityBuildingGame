@@ -37,8 +37,13 @@ const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 const float SCREEN_RATIO = (float)SCR_WIDTH / (float)SCR_HEIGHT;
 // render time, admin machine 16 sek from pressing debug to show render at 300x300 (for reference)
+<<<<<<< HEAD
 const unsigned int MAP_WIDTH = 300;
 const unsigned int MAP_HEIGHT = 400;
+=======
+const unsigned int MAP_WIDTH = 120;
+const unsigned int MAP_HEIGHT = 80;
+>>>>>>> 1d9d83a5e4428b0a569d982194f503e11c64dd58
 std::string exe_path;
 
 // timing
@@ -75,7 +80,7 @@ int main(int argc, char* argv[])
 	glfwSetScrollCallback(window, scroll_callback);
 	glfwSetWindowFocusCallback(window, window_focus_callback);
 
-	camera = Camera(glm::vec3(20.0f, 20.0f, 50.0f), window);
+	camera = Camera(glm::vec3(20.0f, 0.0f, 50.0f), window);
 
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
