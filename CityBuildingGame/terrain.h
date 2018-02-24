@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <algorithm>
 #include <time.h>
@@ -14,6 +16,7 @@
 
 #include "common.h"
 #include "heightmap.h"
+#include "game_class.h"
 
 using namespace std;
 
@@ -69,8 +72,8 @@ private:
 	int visibleWidth;
 	int currStartX, currEndX, currStartY, currEndY = 0;
 
-	std::mutex renderDataMutex;
-	std::atomic_bool reloadGPUData = false;
+	mutex renderDataMutex;
+	atomic_bool reloadGPUData = false;
 	vector<GLfloat> renderData; /* Gets sent to GPU */
 	vector<unsigned int> indices;
 };

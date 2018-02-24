@@ -1,4 +1,4 @@
-# pragma once
+#pragma once
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
@@ -6,8 +6,6 @@
 #include <string>
 #include <algorithm>
 #include <thread>
-
-#include "terrain.h"
 
 // Include GLM, math library
 #include <glm/glm.hpp>
@@ -17,6 +15,7 @@
 #include "model.h"
 #include "camera.h"
 #include "shader.h"
+#include "terrain.h"
 
 class GameClass
 {

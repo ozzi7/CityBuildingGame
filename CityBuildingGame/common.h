@@ -15,8 +15,6 @@
 extern GLFWwindow* window;
 
 /* This is a handle to the shader program */
-extern Shader ourShader;
-extern Shader shaderTree;
 extern Camera camera;
 extern Model tree;
 extern std::string exe_path;
