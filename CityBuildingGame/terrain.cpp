@@ -101,7 +101,7 @@ void Terrain::LoadVisibleGeometry(int startX, int endX, int startY, int endY)
 	visibleHeight = endY - startY;
 	visibleWidth = endX - startX;
 
-	/* We could initialize this only once if not implementing zoom and over edge scrolling*/
+	///* We could initialize this only once if not implementing zoom and over edge scrolling*/
 	renderData = vector<GLfloat>((visibleHeight + 1)*(visibleWidth + 1)*(48));
 
 	/* Load GPU data for visible area */
@@ -119,7 +119,7 @@ void Terrain::LoadVisibleGeometry(int startX, int endX, int startY, int endY)
 			renderData[(i*visibleWidth+j)*48+2] = heightmap[global_i][global_j];
 
 			// x/y/z of normal vector
-			renderData[(i*visibleWidth + j) * 48+3] = vertexNormals[global_i*(gridWidth + 1)+global_j].x;
+			renderData[(i*visibleWidth + j) * 48+3] = vertexNormals[global_i*(gridWidth + 1) + global_j].x;
 			renderData[(i*visibleWidth + j) * 48+4] = vertexNormals[global_i*(gridWidth + 1) + global_j].y;
 			renderData[(i*visibleWidth + j) * 48+5] = vertexNormals[global_i*(gridWidth + 1) + global_j].z;
 
