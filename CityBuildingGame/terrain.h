@@ -11,6 +11,7 @@
 
 #include "common.h"
 #include "heightmap.h"
+#include "shader.h"
 
 using namespace std;
 
@@ -54,6 +55,15 @@ private:
 	int gridHeight;
 	int gridWidth;
 
+	vector<glm::vec3> vertexNormals;
+	vector<glm::vec3> triangleNormals;
+	vector<float> triangleArea;
+
+	/* Defines what is rendered of the terrain*/
 	int visibleHeight;
 	int visibleWidth;
+	int currStartX, currEndX, currStartY, currEndY = 0;
+
+	vector<GLfloat> renderData; /* Gets sent to GPU */
+	vector<unsigned int> indices;
 };
