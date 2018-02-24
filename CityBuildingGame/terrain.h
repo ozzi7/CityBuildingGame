@@ -14,7 +14,6 @@
 
 #include "common.h"
 #include "heightmap.h"
-#include "shader.h"
 
 using namespace std;
 

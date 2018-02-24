@@ -28,7 +28,6 @@
 Camera camera = Camera();
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void window_focus_callback(GLFWwindow *window, int focused);
 

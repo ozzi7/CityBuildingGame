@@ -16,6 +16,7 @@
 #include "common.h"
 #include "model.h"
 #include "camera.h"
+#include "shader.h"
 
 class GameClass
 {
@@ -33,6 +34,9 @@ public:
 	void RenderLoop();
 
 	float screenWidth, screenHeight;
+
+	Shader ourShader;
+	Shader shaderTree;
 
 private:
 	// The terrain

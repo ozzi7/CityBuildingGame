@@ -17,8 +17,8 @@ void GameClass::StartGame()
 
 	glEnable(GL_DEPTH_TEST);
 
-	Shader ourShader("basic_lighting.vert", "basic_lighting.frag");
-	Shader shaderTree("vertex_shader.vert", "fragment_shader.frag");
+	ourShader = Shader("basic_lighting.vert", "basic_lighting.frag");
+	shaderTree = Shader("vertex_shader.vert", "fragment_shader.frag");
 
 	std::string texture_path;
 
@@ -27,10 +27,10 @@ void GameClass::StartGame()
 	std::replace(texture_path.begin(), texture_path.end(), '\\', '/');
 	Model tree(texture_path.c_str());
 
-	//std::thread threadGameLoop(&GameClass::GameLoop);
-	//std::thread threadRenderLoop(&GameClass::RenderLoop);
-	//threadGameLoop.join();
-	//threadRenderLoop.join();
+	std::thread threadGameLoop(&GameClass::GameLoop, this);
+	std::thread threadRenderLoop(&GameClass::RenderLoop, this);
+	threadGameLoop.join();
+	threadRenderLoop.join();
 }
 void GameClass::RenderLoop()
 {	
