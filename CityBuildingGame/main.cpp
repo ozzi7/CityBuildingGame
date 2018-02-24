@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <thread>
 
 // Include GLEW, used to detect supported openGL extensions
 #include <GL\glew.h>
@@ -36,8 +37,8 @@ const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 const float SCREEN_RATIO = (float)SCR_WIDTH / (float)SCR_HEIGHT;
 // render time, admin machine 16 sek from pressing debug to show render at 300x300 (for reference)
-const unsigned int MAP_WIDTH = 80;
-const unsigned int MAP_HEIGHT = 80;
+const unsigned int MAP_WIDTH = 300;
+const unsigned int MAP_HEIGHT = 400;
 std::string exe_path;
 
 // timing
@@ -119,13 +120,24 @@ int main(int argc, char* argv[])
 	std::replace(texture_path.begin(), texture_path.end(), '\\', '/');
 	Model tree(texture_path.c_str());
 
+
+	const int TICKS_PER_SECOND = 25;
+	const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
+	const int MAX_FRAMESKIP = 5;
+
+	DWORD next_game_tick = GetTickCount();
+	int loops;
+	float interpolation;
 	while (!glfwWindowShouldClose(window))
 	{
-		// per-frame time logic
-		// --------------------
-		float currentFrame = (float)glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
+		loops = 0;
+		while (GetTickCount() > next_game_tick && loops < MAX_FRAMESKIP) {
+			std::thread t(GameClass.UpdateWorld(), &gameClass);
+			gameClass.UpdateWorld();
+
+			next_game_tick += SKIP_TICKS;
+			loops++;
+		}
 
 		ourShader.use();
 
@@ -170,7 +182,13 @@ int main(int argc, char* argv[])
 		glm::mat4 model = glm::mat4(1.0f);
 		ourShader.setMat4("model", model);
 
-		gameClass.Draw();
+
+
+		interpolation = float(GetTickCount() + SKIP_TICKS - next_game_tick)
+			/ float(SKIP_TICKS);
+		gameClass.Draw(interpolation);
+
+
 
 		shaderTree.use();
 		// calculate the model matrix for each object and pass it to shader before drawing

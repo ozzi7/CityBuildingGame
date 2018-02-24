@@ -1,6 +1,9 @@
 #include <vector>
 #include <algorithm>
 #include <time.h>
+#include <mutex> 
+#include <atomic>
+
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
@@ -33,6 +36,7 @@ public:
 	~Terrain();
 
 	void Initialize(int argWidth, int argHeight);
+	void Update();
 	float GetHeight(int argX, int argY);
 	void Draw();
 
@@ -47,6 +51,8 @@ private:
 	void CreateGrid();
 	void AddTexturesToGrid();
 	void PopulateGridWithObjects();
+	void ReloadGPUData();
+	void GenerateBuffers();
 
 	GLuint VBO, VAO, EBO;
 	unsigned int texture_id_grass;
@@ -64,6 +70,8 @@ private:
 	int visibleWidth;
 	int currStartX, currEndX, currStartY, currEndY = 0;
 
+	std::mutex renderDataMutex;
+	std::atomic_bool reloadGPUData = false;
 	vector<GLfloat> renderData; /* Gets sent to GPU */
 	vector<unsigned int> indices;
 };

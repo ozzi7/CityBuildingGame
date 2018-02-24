@@ -1,6 +1,7 @@
 # pragma once
 #include <stdlib.h>
 #include <stdio.h>
+#include <thread>
 
 #include "terrain.h"
 
@@ -15,11 +16,15 @@ public:
 	GameClass(float aScreenWidth, float aScreenHeight, int aMapWidth, int aMapHeight);
 	~GameClass();
 
+	// Entry point to the game
+	void StartGame();
+
 	// Called by the application class to update the game logic
-	void UpdateWorld();
+	void GameLoop();
 
 	// Called by the application class when the window need to be redrawn.
-	void Draw();
+	void RenderLoop();
+	void RenderLoop(float interpolation);
 
 private:
 	// The terrain

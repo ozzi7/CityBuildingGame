@@ -16,7 +16,11 @@ void GameClass::Draw()
 {	
 	terrain.Draw();
 }
-
+void GameClass::Draw(float interpolation)
+{
+	terrain.Draw();
+}
 void GameClass::UpdateWorld()
 {
+	terrain.Update();
 }

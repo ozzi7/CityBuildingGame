@@ -19,7 +19,25 @@ void Terrain::Initialize(int aWidth, int aHeight)
 
 	LoadTextures();
 	CreateGeometry();
+	GenerateBuffers();
 	LoadVisibleGeometry();
+}
+void Terrain::Update()
+{
+	/* Check if terrain must be reloaded to GPU (after scrolling)*/
+	int startX = camera.Position.x - 30.0f;
+	int endX = camera.Position.x + 30.0f;
+	int startY = camera.Position.y - 30.0f;
+	int endY = camera.Position.y + 30.0f;
+
+	if (currStartX != startX || currEndX != endX || currStartY != startY || currEndY != endY)
+	{
+		currStartX = startX;
+		currEndX = endX;
+		currStartY = startY;
+		currEndY = endY;
+		LoadVisibleGeometry(startX, endX, startY, endY);
+	}
 }
 float Terrain::GetHeight(int argX, int argY)
 {
@@ -44,12 +62,11 @@ void Terrain::PopulateGridWithObjects()
 }
 void Terrain::Draw()
 {
-	int startX = camera.Position.x - 30.0f;
-	int endX = camera.Position.x + 30.0f;
-	int startY = camera.Position.y - 30.0f;
-	int endY = camera.Position.y + 30.0f;
-
-	LoadVisibleGeometry(startX, endX, startY, endY);
+	if (reloadGPUData.load())
+	{
+		reloadGPUData.store(false);
+		ReloadGPUData();
+	}
 
 	// render
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -67,128 +84,15 @@ void Terrain::Draw()
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, visibleWidth*visibleHeight*6);
 }
-void Terrain::LoadVisibleGeometry()
+void Terrain::ReloadGPUData()
 {
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-
-	int startX = camera.Position.x - 30.0f;
-	int endX = camera.Position.x + 30.0f;
-	int startY = camera.Position.y - 30.0f;
-	int endY = camera.Position.y + 30.0f;
-	
-	LoadVisibleGeometry(startX, endX, startY, endY);
-}
-/* Create geometry data for visible area */
-void Terrain::LoadVisibleGeometry(int startX, int endX, int startY, int endY)
-{	
-	if (currStartX != startX || currEndX != endX || currStartY != startY || currEndY != endY)
-	{
-		currStartX = startX;
-		currEndX = endX;
-		currStartY = startY;
-		currEndY = endY;
-	}
-	else return;
-
-	startX = max(0, startX);
-	endX = min(gridWidth, endX);
-
-	startY = max(0, startY);
-	endY = min(gridHeight, endY);
-
-	/* Create vertices of triangles */
-	visibleHeight = endY - startY;
-	visibleWidth = endX - startX;
-
-	///* We could initialize this only once if not implementing zoom and over edge scrolling*/
-	renderData = vector<GLfloat>((visibleHeight + 1)*(visibleWidth + 1)*(48));
-
-	/* Load GPU data for visible area */
-	float global_i, global_j = 0.0f;
-	for (int i = 0; i < visibleHeight; ++i)
-	{
-		for (int j = 0; j < visibleWidth; ++j)
-		{
-			global_i = (float)startY + i;
-			global_j = (float)startX + j;
-
-			// x/y/z of first vertex
-			renderData[(i*visibleWidth+j)*48] = global_j;
-			renderData[(i*visibleWidth+j)*48+1] = global_i;
-			renderData[(i*visibleWidth+j)*48+2] = heightmap[global_i][global_j];
-
-			// x/y/z of normal vector
-			renderData[(i*visibleWidth + j) * 48+3] = vertexNormals[global_i*(gridWidth + 1) + global_j].x;
-			renderData[(i*visibleWidth + j) * 48+4] = vertexNormals[global_i*(gridWidth + 1) + global_j].y;
-			renderData[(i*visibleWidth + j) * 48+5] = vertexNormals[global_i*(gridWidth + 1) + global_j].z;
-
-			// texture coord X, Y of first vertex
-			renderData[(i*visibleWidth+j)*48+6] = 0.0f;
-			renderData[(i*visibleWidth+j)*48+7] = 0.0f;
-
-			renderData[(i*visibleWidth+j)*48+8] = global_j + 1;
-			renderData[(i*visibleWidth+j)*48+9] = global_i;
-			renderData[(i*visibleWidth+j)*48+10] = heightmap[global_i][global_j + 1];
-
-			// x/y/z of normal vector
-			renderData[(i*visibleWidth + j) * 48 + 11] = vertexNormals[global_i*(gridWidth + 1) + global_j+1].x;
-			renderData[(i*visibleWidth + j) * 48 + 12] = vertexNormals[global_i*(gridWidth + 1) + global_j+1].y;
-			renderData[(i*visibleWidth + j) * 48 + 13] = vertexNormals[global_i*(gridWidth + 1) + global_j+1].z;
-
-			renderData[(i*visibleWidth+j)*48+14] = 1.0f;
-			renderData[(i*visibleWidth+j)*48+15] = 0.0f;
-
-			renderData[(i*visibleWidth+j)*48+16] = global_j;
-			renderData[(i*visibleWidth+j)*48+17] = global_i + 1;
-			renderData[(i*visibleWidth+j)*48+18] = heightmap[global_i + 1][global_j];
-
-			renderData[(i*visibleWidth + j) * 48 + 19] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j].x;
-			renderData[(i*visibleWidth + j) * 48 + 20] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j].y;
-			renderData[(i*visibleWidth + j) * 48 + 21] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j].z;
-
-			renderData[(i*visibleWidth+j)*48+22] = 0.0f;
-			renderData[(i*visibleWidth+j)*48+23] = 1.0f;
-
-			renderData[(i*visibleWidth+j)*48+24] = global_j;
-			renderData[(i*visibleWidth+j)*48+25] = global_i + 1;
-			renderData[(i*visibleWidth+j)*48+26] = heightmap[global_i + 1][global_j];
-
-			renderData[(i*visibleWidth + j) * 48 + 27] = vertexNormals[(global_i + 1)*(gridWidth + 1) + global_j].x;
-			renderData[(i*visibleWidth + j) * 48 + 28] = vertexNormals[(global_i + 1)*(gridWidth + 1) + global_j].y;
-			renderData[(i*visibleWidth + j) * 48 + 29] = vertexNormals[(global_i + 1)*(gridWidth + 1) + global_j].z;
-
-			renderData[(i*visibleWidth+j)*48+30] = 0.0f;
-			renderData[(i*visibleWidth+j)*48+31] = 1.0f;
-
-			renderData[(i*visibleWidth+j)*48+32] = global_j + 1;
-			renderData[(i*visibleWidth+j)*48+33] = global_i;
-			renderData[(i*visibleWidth+j)*48+34] = heightmap[global_i][global_j + 1];
-
-			renderData[(i*visibleWidth + j) * 48 + 35] = vertexNormals[global_i*(gridWidth + 1) + global_j + 1].x;
-			renderData[(i*visibleWidth + j) * 48 + 36] = vertexNormals[global_i*(gridWidth + 1) + global_j + 1].y;
-			renderData[(i*visibleWidth + j) * 48 + 37] = vertexNormals[global_i*(gridWidth + 1) + global_j + 1].z;
-
-			renderData[(i*visibleWidth+j)*48+38] = 1.0f;
-			renderData[(i*visibleWidth+j)*48+39] = 0.0f;
-
-			renderData[(i*visibleWidth+j)*48+40] = global_j + 1;
-			renderData[(i*visibleWidth+j)*48+41] = global_i + 1;
-			renderData[(i*visibleWidth+j)*48+42] = heightmap[global_i + 1][global_j + 1];
-
-			renderData[(i*visibleWidth + j) * 48 + 43] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j + 1].x;
-			renderData[(i*visibleWidth + j) * 48 + 44] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j + 1].y;
-			renderData[(i*visibleWidth + j) * 48 + 45] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j + 1].z;
-
-			renderData[(i*visibleWidth+j)*48+46] = 1.0f;
-			renderData[(i*visibleWidth+j)*48+47] = 1.0f;
-		}
-	}
-
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	renderDataMutex.lock();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderData.size(), &renderData[0], GL_STATIC_DRAW);
+	renderDataMutex.unlock();
 
 	// position attribute, 5th attribute can be 0 for tightly packed, its equal to 3*sizeof(float)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -201,6 +105,116 @@ void Terrain::LoadVisibleGeometry(int startX, int endX, int startY, int endY)
 	// texture coord attribute
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
+}
+void Terrain::LoadVisibleGeometry()
+{
+	/* Check if terrain must be reloaded to GPU (after scrolling)*/
+	int startX = camera.Position.x - 30.0f;
+	int endX = camera.Position.x + 30.0f;
+	int startY = camera.Position.y - 30.0f;
+	int endY = camera.Position.y + 30.0f;
+	LoadVisibleGeometry(startX, endX, startY, endY);
+}
+void Terrain::LoadVisibleGeometry(int startX, int endX, int startY, int endY)
+{	
+	/* Create geometry data for visible area */
+	startX = max(0, startX);
+	endX = min(gridWidth, endX);
+
+	startY = max(0, startY);
+	endY = min(gridHeight, endY);
+
+	/* Create vertices of triangles */
+	visibleHeight = endY - startY;
+	visibleWidth = endX - startX;
+
+	///* We could initialize this only once if not implementing zoom and over edge scrolling*/
+	vector<GLfloat> renderDataTemp = vector<GLfloat>((visibleHeight + 1)*(visibleWidth + 1)*(48));
+
+	/* Load GPU data for visible area */
+	float global_i, global_j = 0.0f;
+	for (int i = 0; i < visibleHeight; ++i)
+	{
+		for (int j = 0; j < visibleWidth; ++j)
+		{
+			global_i = (float)startY + i;
+			global_j = (float)startX + j;
+
+			// x/y/z of first vertex
+			renderDataTemp[(i*visibleWidth+j)*48] = global_j;
+			renderDataTemp[(i*visibleWidth+j)*48+1] = global_i;
+			renderDataTemp[(i*visibleWidth+j)*48+2] = heightmap[global_i][global_j];
+
+			// x/y/z of normal vector
+			renderDataTemp[(i*visibleWidth + j) * 48+3] = vertexNormals[global_i*(gridWidth + 1) + global_j].x;
+			renderDataTemp[(i*visibleWidth + j) * 48+4] = vertexNormals[global_i*(gridWidth + 1) + global_j].y;
+			renderDataTemp[(i*visibleWidth + j) * 48+5] = vertexNormals[global_i*(gridWidth + 1) + global_j].z;
+
+			// texture coord X, Y of first vertex
+			renderDataTemp[(i*visibleWidth+j)*48+6] = 0.0f;
+			renderDataTemp[(i*visibleWidth+j)*48+7] = 0.0f;
+
+			renderDataTemp[(i*visibleWidth+j)*48+8] = global_j + 1;
+			renderDataTemp[(i*visibleWidth+j)*48+9] = global_i;
+			renderDataTemp[(i*visibleWidth+j)*48+10] = heightmap[global_i][global_j + 1];
+
+			// x/y/z of normal vector
+			renderDataTemp[(i*visibleWidth + j) * 48 + 11] = vertexNormals[global_i*(gridWidth + 1) + global_j+1].x;
+			renderDataTemp[(i*visibleWidth + j) * 48 + 12] = vertexNormals[global_i*(gridWidth + 1) + global_j+1].y;
+			renderDataTemp[(i*visibleWidth + j) * 48 + 13] = vertexNormals[global_i*(gridWidth + 1) + global_j+1].z;
+
+			renderDataTemp[(i*visibleWidth+j)*48+14] = 1.0f;
+			renderDataTemp[(i*visibleWidth+j)*48+15] = 0.0f;
+
+			renderDataTemp[(i*visibleWidth+j)*48+16] = global_j;
+			renderDataTemp[(i*visibleWidth+j)*48+17] = global_i + 1;
+			renderDataTemp[(i*visibleWidth+j)*48+18] = heightmap[global_i + 1][global_j];
+
+			renderDataTemp[(i*visibleWidth + j) * 48 + 19] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j].x;
+			renderDataTemp[(i*visibleWidth + j) * 48 + 20] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j].y;
+			renderDataTemp[(i*visibleWidth + j) * 48 + 21] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j].z;
+
+			renderDataTemp[(i*visibleWidth+j)*48+22] = 0.0f;
+			renderDataTemp[(i*visibleWidth+j)*48+23] = 1.0f;
+
+			renderDataTemp[(i*visibleWidth+j)*48+24] = global_j;
+			renderDataTemp[(i*visibleWidth+j)*48+25] = global_i + 1;
+			renderDataTemp[(i*visibleWidth+j)*48+26] = heightmap[global_i + 1][global_j];
+
+			renderDataTemp[(i*visibleWidth + j) * 48 + 27] = vertexNormals[(global_i + 1)*(gridWidth + 1) + global_j].x;
+			renderDataTemp[(i*visibleWidth + j) * 48 + 28] = vertexNormals[(global_i + 1)*(gridWidth + 1) + global_j].y;
+			renderDataTemp[(i*visibleWidth + j) * 48 + 29] = vertexNormals[(global_i + 1)*(gridWidth + 1) + global_j].z;
+
+			renderDataTemp[(i*visibleWidth+j)*48+30] = 0.0f;
+			renderDataTemp[(i*visibleWidth+j)*48+31] = 1.0f;
+
+			renderDataTemp[(i*visibleWidth+j)*48+32] = global_j + 1;
+			renderDataTemp[(i*visibleWidth+j)*48+33] = global_i;
+			renderDataTemp[(i*visibleWidth+j)*48+34] = heightmap[global_i][global_j + 1];
+
+			renderDataTemp[(i*visibleWidth + j) * 48 + 35] = vertexNormals[global_i*(gridWidth + 1) + global_j + 1].x;
+			renderDataTemp[(i*visibleWidth + j) * 48 + 36] = vertexNormals[global_i*(gridWidth + 1) + global_j + 1].y;
+			renderDataTemp[(i*visibleWidth + j) * 48 + 37] = vertexNormals[global_i*(gridWidth + 1) + global_j + 1].z;
+
+			renderDataTemp[(i*visibleWidth+j)*48+38] = 1.0f;
+			renderDataTemp[(i*visibleWidth+j)*48+39] = 0.0f;
+
+			renderDataTemp[(i*visibleWidth+j)*48+40] = global_j + 1;
+			renderDataTemp[(i*visibleWidth+j)*48+41] = global_i + 1;
+			renderDataTemp[(i*visibleWidth+j)*48+42] = heightmap[global_i + 1][global_j + 1];
+
+			renderDataTemp[(i*visibleWidth + j) * 48 + 43] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j + 1].x;
+			renderDataTemp[(i*visibleWidth + j) * 48 + 44] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j + 1].y;
+			renderDataTemp[(i*visibleWidth + j) * 48 + 45] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j + 1].z;
+
+			renderDataTemp[(i*visibleWidth+j)*48+46] = 1.0f;
+			renderDataTemp[(i*visibleWidth+j)*48+47] = 1.0f;
+		}
+	}
+	renderDataMutex.lock();
+	renderData = renderDataTemp;
+	renderDataMutex.unlock();
+	reloadGPUData.store(true);
 }
 void Terrain::CreateGeometry()
 {
@@ -304,6 +318,11 @@ void Terrain::LoadTextures()
 	// -------------------------------------------------------------------------------------------
 
 	ourShader.setInt("texture1", 0);
+}
+void Terrain::GenerateBuffers()
+{
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
 }
 Terrain::~Terrain()
 {
