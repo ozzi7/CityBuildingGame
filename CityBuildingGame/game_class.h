@@ -1,6 +1,10 @@
 # pragma once
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <vector>
+#include <iostream>
+#include <string>
+#include <algorithm>
 #include <thread>
 
 #include "terrain.h"
@@ -8,7 +12,10 @@
 // Include GLM, math library
 #include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
+
 #include "common.h"
+#include "model.h"
+#include "camera.h"
 
 class GameClass
 {
@@ -24,13 +31,18 @@ public:
 
 	// Called by the application class when the window need to be redrawn.
 	void RenderLoop();
-	void RenderLoop(float interpolation);
+
+	float screenWidth, screenHeight;
 
 private:
 	// The terrain
 	Terrain terrain;
 
-	float screenWidth, screenHeight;
-
 	GLuint mvp_handle;
+
+	// timing
+	float deltaTime = 0.0f;	// time between current frame and last frame
+	float lastFrame = 0.0f;
+
+	void ProcessInput(GLFWwindow * window);
 };
