@@ -22,9 +22,9 @@ enum Camera_Movement {
 
 // Default camera values
 const float SCROLL_SPEED = 0.03f;
-const float ZOOM_DEFAULT = 40.0f;
-const float ZOOM_MAX = 200.0f;
-const float ZOOM_MIN = 5.0f;
+const float ZOOM_DEFAULT = 5.0f;
+const float ZOOM_MAX = 100.0f;
+const float ZOOM_MIN = 0.2f;
 
 
 // An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL

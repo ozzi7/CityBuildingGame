@@ -34,9 +34,10 @@ Shader ourShader;
 // settings
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
+const float SCREEN_RATIO = (float)SCR_WIDTH / (float)SCR_HEIGHT;
 // render time, admin machine 16 sek from pressing debug to show render at 300x300 (for reference)
-const unsigned int MAP_WIDTH = 300;
-const unsigned int MAP_HEIGHT = 300;
+const unsigned int MAP_WIDTH = 80;
+const unsigned int MAP_HEIGHT = 80;
 std::string exe_path;
 
 // timing
@@ -50,6 +51,7 @@ Camera camera = Camera();
 
 int main(int argc, char* argv[])
 {
+
 	// store path for resources
 	exe_path = std::string(argv[0]);
 	exe_path = exe_path.substr(0, exe_path.find_last_of("\\/"));
@@ -157,8 +159,9 @@ int main(int argc, char* argv[])
 		//ourShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
 		//ourShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f); // specular lighting doesn't have full effect on this object's material
 		//ourShader.setFloat("material.shininess", 32.0f);
-
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
+		
+		//glm::mat4 projection = glm::ortho(-1.77777f * camera.Zoom, 1.77777f * camera.Zoom, -1 * camera.Zoom, 1 * camera.Zoom, 1.0f, 1000.0f);
+		glm::mat4 projection = glm::ortho(-SCREEN_RATIO * camera.Zoom, SCREEN_RATIO * camera.Zoom, -1 * camera.Zoom, 1 * camera.Zoom, 1.0f, 1000.0f);
 		ourShader.setMat4("projection", projection);
 
 		// camera/view transformation
@@ -172,26 +175,14 @@ int main(int argc, char* argv[])
 		gameClass.Draw();
 
 		shaderTree.use();
-
-		glm::mat4 projection2 = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
-		shaderTree.setMat4("projection", projection2);
-
-		// camera/view transformation
-		glm::mat4 view2 = camera.GetViewMatrix();
-		shaderTree.setMat4("view", view2);
-
 		// calculate the model matrix for each object and pass it to shader before drawing
 		glm::mat4 model2 = glm::mat4(1.0f);
 		model2 = glm::translate(model2, glm::vec3(20.0f, 20.0f, 20.0f));
+		shaderTree.setMat4("projection", projection);
+		shaderTree.setMat4("view", view);
 		shaderTree.setMat4("model", model2);
 
 		tree.Draw(shaderTree);
-
-		ourShader.use();
-
-
-		//ourShader2.setMat4("model", model);
-		//ourModel.Draw(ourShader2);
 
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
