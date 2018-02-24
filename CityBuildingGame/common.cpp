@@ -4,7 +4,6 @@
 // ---------------------------------------------------
 unsigned int Common::loadTexture(std::string filename)
 {
-
 	std::string texture_path = exe_path + "\\textures\\" + filename;
 	std::replace(texture_path.begin(), texture_path.end(), '\\', '/');
 
