@@ -13,8 +13,13 @@
 
 #include "common.h"
 #include "camera.h"
+<<<<<<< HEAD
 #include "terrain.h"
 #include "renderer.h"
+=======
+#include "shader.h"
+#include "terrain.h"
+>>>>>>> d39f37e8ae3b1739f46da43eabe70a82a57c04fe
 
 class GameClass
 {
