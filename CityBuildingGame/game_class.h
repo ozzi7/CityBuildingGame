@@ -38,8 +38,8 @@ public:
 	/* This is a handle to the shader program */
 	Model tree;
 
-	Shader shaderTree = Shader("vertex_shader.vert", "fragment_shader.frag");
-	Shader terrainShader = Shader("basic_lighting.vert", "basic_lighting.frag");
+	Shader shaderTree;
+	Shader terrainShader;
 
 	float screenRatio;
 
@@ -57,5 +57,5 @@ private:
 	float deltaTime = 0.0f;	// time between current frame and last frame
 	float lastFrame = 0.0f;
 
-	void ProcessInput(GLFWwindow * window);
+	void ProcessInput();
 };

@@ -23,6 +23,9 @@ void GameClass::StartGame()
 	treeModel = Model(texture_path.c_str());
 	terrainModel = Model(texture_path.c_str());
 
+	shaderTree = Shader("vertex_shader.vert", "fragment_shader.frag");
+	terrainShader = Shader("basic_lighting.vert", "basic_lighting.frag");
+
 	std::thread threadGameLoop(&GameClass::GameLoop, this);
 	std::thread threadRenderLoop(&GameClass::RenderLoop, this);
 	threadGameLoop.join();
@@ -77,17 +80,17 @@ void GameClass::GameLoop()
 	}
 }
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-void GameClass::ProcessInput(GLFWwindow *window)
+void GameClass::ProcessInput()
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		camera->keyboard_scroll(UP, deltaTime);
+		camera->keyboard_scroll(UP);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		camera->keyboard_scroll(DOWN, deltaTime);
+		camera->keyboard_scroll(DOWN);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		camera->keyboard_scroll(LEFT, deltaTime);
+		camera->keyboard_scroll(LEFT);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		camera->keyboard_scroll(RIGHT, deltaTime);
+		camera->keyboard_scroll(RIGHT);
 }

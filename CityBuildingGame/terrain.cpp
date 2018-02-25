@@ -329,14 +329,14 @@ void Terrain::LoadTextures()
 }
 void Terrain::GenerateBuffers()
 {
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
+	//glGenVertexArrays(1, &VAO);
+	//glGenBuffers(1, &VBO);
 }
 Terrain::~Terrain()
 {
 	// Properly de-allocate all resources once they've outlived their purpose
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
+	//glDeleteVertexArrays(1, &VAO);
+	//glDeleteBuffers(1, &VBO);
 }
 Unit::Unit(float pAverageHeight)
 {

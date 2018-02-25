@@ -63,7 +63,7 @@ public:
 	}
 
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
-	void keyboard_scroll(Camera_Movement direction, float deltaTime)
+	void keyboard_scroll(Camera_Movement direction)
 	{
 		if (direction == UP)
 			Position += Up * SCROLL_SPEED;
