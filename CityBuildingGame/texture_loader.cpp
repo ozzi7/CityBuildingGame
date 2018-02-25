@@ -3,7 +3,7 @@
 // utility function for loading a 2D texture from file
 unsigned int TextureLoader::loadTexture(std::string filename)
 {
-	std::string texture_path = exe_path + "\\textures\\" + filename;
+	std::string texture_path = "bla";//exe_path + "\\textures\\" + filename;
 	std::replace(texture_path.begin(), texture_path.end(), '\\', '/');
 
 	unsigned int textureID;

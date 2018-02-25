@@ -2,9 +2,7 @@
 
 using namespace std;
 
-Terrain::Terrain(GameClass & aGameClass) {
-	gameClass = & aGameClass;
-}
+Terrain::Terrain() {}
 
 void Terrain::Initialize(int aWidth, int aHeight)
 {

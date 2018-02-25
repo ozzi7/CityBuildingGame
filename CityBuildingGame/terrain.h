@@ -15,7 +15,6 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "heightmap.h"
-#include "game_class.h"
 #include "shader.h"
 #include "texture_loader.h"
 
@@ -35,7 +34,7 @@ public:
 class Terrain
 {
 public:
-	Terrain(GameClass & aGameClass);
+	Terrain();
 	~Terrain();
 
 	void Initialize(int argWidth, int argHeight);
@@ -57,13 +56,10 @@ private:
 	void ReloadGPUData();
 	void GenerateBuffers();
 
-	GameClass * gameClass;
-
 	GLuint VBO, VAO, EBO;
 	unsigned int texture_id_grass;
 	string texture_grass = "Grass.bmp";
-	Shader terrainShader = Shader("basic_lighting.vert", "basic_lighting.frag");
-	
+
 	int gridHeight;
 	int gridWidth;
 

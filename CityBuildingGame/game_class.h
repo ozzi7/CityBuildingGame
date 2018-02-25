@@ -20,7 +20,6 @@ class GameClass
 public:
 	GameClass::GameClass(int, int, float, string, Camera &);
 	~GameClass();
-	
 
 	// Entry point to the game
 	void StartGame();
@@ -32,19 +31,20 @@ public:
 	void RenderLoop();
 	
 	string exe_path;
-	Camera * camera;
+	Camera *camera;
 
-	GLFWwindow * window;
+	GLFWwindow *window;
 
 	/* This is a handle to the shader program */
 	Model tree;
 
 	Shader shaderTree = Shader("vertex_shader.vert", "fragment_shader.frag");
+	Shader terrainShader = Shader("basic_lighting.vert", "basic_lighting.frag");
 
 	float screenRatio;
 
 private:
-	Terrain * terrain;
+	Terrain *terrain;
 
 	Model treeModel;
 

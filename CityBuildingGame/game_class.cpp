@@ -5,7 +5,7 @@ GameClass::GameClass(int aMapWidth, int aMapHeight, float aScreenRatio, string a
 	exe_path = aExePath;
 	camera = & aCamera;
 
-	terrain = & Terrain(*this);
+	terrain = &Terrain();
 
 	terrain->Initialize(aMapWidth, aMapHeight);
 }
@@ -29,8 +29,6 @@ void GameClass::StartGame()
 }
 void GameClass::RenderLoop()
 {	
-	// input
-	// -----
 	ProcessInput(window);
 
 	camera->lock_cursor_to_window();
@@ -54,7 +52,6 @@ void GameClass::RenderLoop()
 
 		treeModel.Draw(shaderTree);
 	}
-
 
 	// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 	glfwSwapBuffers(window);

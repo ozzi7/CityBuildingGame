@@ -19,9 +19,6 @@
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
 
-//#include "shader.h"
-#include "common.h"
-
 #include "game_class.h"
 
 // settings
