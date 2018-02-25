@@ -320,7 +320,7 @@ void Terrain::CreateGeometry()
 }
 void Terrain::LoadTextures()
 {
-	texture_id_grass = TextureLoader::loadTexture(texture_grass);
+	//texture_id_grass = TextureLoader::LoadTexture(texture_grass);
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	// -------------------------------------------------------------------------------------------

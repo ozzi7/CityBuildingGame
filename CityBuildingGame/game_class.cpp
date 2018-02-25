@@ -21,6 +21,7 @@ void GameClass::StartGame()
 	std::string texture_path = exe_path + "\\tree2_3ds\\Tree2.3ds";
 	std::replace(texture_path.begin(), texture_path.end(), '\\', '/');
 	treeModel = Model(texture_path.c_str());
+	terrainModel = Model(texture_path.c_str());
 
 	std::thread threadGameLoop(&GameClass::GameLoop, this);
 	std::thread threadRenderLoop(&GameClass::RenderLoop, this);

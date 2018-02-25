@@ -16,8 +16,6 @@
 
 #include "heightmap.h"
 #include "shader.h"
-#include "texture_loader.h"
-
 
 /* Represents a grid subunit */
 class Unit

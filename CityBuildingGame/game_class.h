@@ -47,6 +47,7 @@ private:
 	Terrain *terrain;
 
 	Model treeModel;
+	Model terrainModel;
 
 	vector<Tree> trees;
 
