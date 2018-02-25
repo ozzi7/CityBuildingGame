@@ -1,18 +1,18 @@
 #include "game_class.h"
 
-GameClass::GameClass() {}
-GameClass::~GameClass() {}
-void GameClass::Init(float aScreenWidth, float aScreenHeight, int aMapWidth, int aMapHeight)
-{
-	screenWidth = aScreenWidth;
-	screenHeight = aScreenHeight;
+GameClass::GameClass(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, Camera & aCamera) {
+	screenRatio = aScreenRatio;
+	exe_path = aExePath;
+	camera = & aCamera;
 
-	terrain.Initialize(aMapWidth, aMapHeight);
+	terrain = & Terrain(*this);
+
+	terrain->Initialize(aMapWidth, aMapHeight);
 }
+GameClass::~GameClass() {}
+
 void GameClass::StartGame()
-{
-	camera = Camera(glm::vec3(20.0f, 0.0f, 50.0f), window);
-	
+{	
 	glEnable(GL_DEPTH_TEST);
 
 	// Spawning a tree,
@@ -33,18 +33,17 @@ void GameClass::RenderLoop()
 	// -----
 	ProcessInput(window);
 
-	camera.lock_cursor_to_window();
-	camera.mouse_scroll();
+	camera->lock_cursor_to_window();
+	camera->mouse_scroll();
 
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	shaderTree.use();
-
-	glm::mat4 projection = glm::ortho(-SCREEN_RATIO * camera.Zoom, SCREEN_RATIO * camera.Zoom, -1 * camera.Zoom, 1 * camera.Zoom, 1.0f, 1000.0f);
+	glm::mat4 projection = glm::ortho(-screenRatio * camera->Zoom, screenRatio * camera->Zoom, -camera->Zoom, camera->Zoom, 1.0f, 1000.0f);
 	shaderTree.setMat4("projection", projection);
 
-	glm::mat4 view = camera.GetViewMatrix();
+	glm::mat4 view = camera->GetViewMatrix();
 	shaderTree.setMat4("view", view);
 
 	for (int i = 0; trees.size(); i++) {
@@ -73,7 +72,7 @@ void GameClass::GameLoop()
 		DWORD next_game_tick = GetTickCount();
 		int loops = 0;
 		while (GetTickCount() > next_game_tick && loops < MAX_FRAMESKIP) {
-			terrain.Update();
+			terrain->Update();
 
 			next_game_tick += SKIP_TICKS;
 			loops++;
@@ -87,11 +86,11 @@ void GameClass::ProcessInput(GLFWwindow *window)
 		glfwSetWindowShouldClose(window, true);
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		camera.keyboard_scroll(UP, deltaTime);
+		camera->keyboard_scroll(UP, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		camera.keyboard_scroll(DOWN, deltaTime);
+		camera->keyboard_scroll(DOWN, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		camera.keyboard_scroll(LEFT, deltaTime);
+		camera->keyboard_scroll(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		camera.keyboard_scroll(RIGHT, deltaTime);
+		camera->keyboard_scroll(RIGHT, deltaTime);
 }

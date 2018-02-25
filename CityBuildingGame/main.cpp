@@ -24,9 +24,14 @@
 
 #include "game_class.h"
 
-// camera
-Camera camera = Camera();
-Common common = Common();
+// settings
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
+// render time, admin machine 16 sek from pressing debug to show render at 300x300 (for reference)
+const unsigned int MAP_WIDTH = 300;
+const unsigned int MAP_HEIGHT = 400;
+
+Camera camera;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -34,11 +39,10 @@ void window_focus_callback(GLFWwindow *window, int focused);
 
 int main(int argc, char* argv[])
 {
-	common.SCREEN_RATIO = (float)common.SCR_WIDTH / (float)common.SCR_HEIGHT;
-
+	float SCREEN_RATIO = (float)SCR_WIDTH / (float)SCR_HEIGHT;
 	// store path for resources
-	common.exe_path = std::string(argv[0]);
-	common.exe_path = common.exe_path.substr(0, common.exe_path.find_last_of("\\/"));
+	std::string exe_path = std::string(argv[0]);
+	exe_path = exe_path.substr(0, exe_path.find_last_of("\\/"));
 
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -46,15 +50,17 @@ int main(int argc, char* argv[])
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// glfw window creation
-	GLFWwindow* window = glfwCreateWindow(common.SCR_WIDTH, common.SCR_HEIGHT, "CityBuildingGame", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "CityBuildingGame", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
-	//GameClass gameClass((float)SCR_WIDTH, (float)SCR_HEIGHT, MAP_WIDTH, MAP_HEIGHT);
-	//gameClass = GameClass((float)SCR_WIDTH, (float)SCR_HEIGHT, MAP_WIDTH, MAP_HEIGHT);
+
+	Camera camera = Camera(glm::vec3(20.0f, 0.0f, 50.0f), window);
+
+	GameClass gameClass(MAP_WIDTH, MAP_HEIGHT, SCREEN_RATIO, exe_path, camera);
 
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -73,10 +79,8 @@ int main(int argc, char* argv[])
 		exit(EXIT_FAILURE);
 	}
 
+	gameClass.StartGame();
 
-	common.gameClass.Init((float)common.SCR_WIDTH, (float)common.SCR_HEIGHT, common.MAP_WIDTH, common.MAP_HEIGHT);
-	common.gameClass.StartGame();
-	common.camera = camera;
 	glfwTerminate();
 	return 0;
 }

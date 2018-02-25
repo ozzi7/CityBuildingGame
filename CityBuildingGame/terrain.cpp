@@ -2,7 +2,9 @@
 
 using namespace std;
 
-Terrain::Terrain() {}
+Terrain::Terrain(GameClass & aGameClass) {
+	gameClass = & aGameClass;
+}
 
 void Terrain::Initialize(int aWidth, int aHeight)
 {
@@ -25,10 +27,10 @@ void Terrain::Initialize(int aWidth, int aHeight)
 void Terrain::Update()
 {
 	/* Check if terrain must be reloaded to GPU (after scrolling)*/
-	int startX = common.gameClass.camera.Position.x - 30.0f;
-	int endX = gameClass.camera.Position.x + 30.0f;
-	int startY = gameClass.camera.Position.y - 30.0f;
-	int endY = gameClass.camera.Position.y + 30.0f;
+	int startX = gameClass->camera->Position.x - 30.0f;
+	int endX = gameClass->camera->Position.x + 30.0f;
+	int startY = gameClass->camera->Position.y - 30.0f;
+	int endY = gameClass->camera->Position.y + 30.0f;
 
 	if (currStartX != startX || currEndX != endX || currStartY != startY || currEndY != endY)
 	{
@@ -74,15 +76,15 @@ void Terrain::Draw()
 	terrainShader.setVec3("light.ambient", ambientColor);
 	terrainShader.setVec3("light.diffuse", diffuseColor);
 	//ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-	terrainShader.setVec3("light.position", common.gameClass.camera.Position);
-	terrainShader.setVec3("viewPos", gameClass.camera.Position);
+	terrainShader.setVec3("light.position", gameClass->camera->Position);
+	terrainShader.setVec3("viewPos", gameClass->camera->Position);
 
-	//glm::mat4 projection = glm::ortho(-1.77777f * camera.Zoom, 1.77777f * camera.Zoom, -1 * camera.Zoom, 1 * camera.Zoom, 1.0f, 1000.0f);
-	glm::mat4 projection = glm::ortho(-SCREEN_RATIO * gameClass.camera.Zoom, SCREEN_RATIO * gameClass.camera.Zoom, -1 * gameClass.camera.Zoom, 1 * gameClass.camera.Zoom, 1.0f, 1000.0f);
+	//glm::mat4 projection = glm::ortho(-1.77777f * camera->Zoom, 1.77777f * camera->Zoom, -1 * camera->Zoom, 1 * camera->Zoom, 1.0f, 1000.0f);
+	glm::mat4 projection = glm::ortho(-gameClass->screenRatio * gameClass->camera->Zoom, gameClass->screenRatio * gameClass->camera->Zoom, -1 * gameClass->camera->Zoom, 1 * gameClass->camera->Zoom, 1.0f, 1000.0f);
 	terrainShader.setMat4("projection", projection);
 
 	// camera/view transformation
-	glm::mat4 view = gameClass.camera.GetViewMatrix();
+	glm::mat4 view = gameClass->camera->GetViewMatrix();
 	terrainShader.setMat4("view", view);
 
 	// calculate the model matrix for each object and pass it to shader before drawing
@@ -134,10 +136,10 @@ void Terrain::ReloadGPUData()
 void Terrain::LoadVisibleGeometry()
 {
 	/* Check if terrain must be reloaded to GPU (after scrolling)*/
-	int startX = gameClass.camera.Position.x - 30.0f;
-	int endX = gameClass.camera.Position.x + 30.0f;
-	int startY = gameClass.camera.Position.y - 30.0f;
-	int endY = gameClass.camera.Position.y + 30.0f;
+	int startX = gameClass->camera->Position.x - 30.0f;
+	int endX = gameClass->camera->Position.x + 30.0f;
+	int startY = gameClass->camera->Position.y - 30.0f;
+	int endY = gameClass->camera->Position.y + 30.0f;
 	LoadVisibleGeometry(startX, endX, startY, endY);
 }
 void Terrain::LoadVisibleGeometry(int startX, int endX, int startY, int endY)
@@ -337,7 +339,7 @@ void Terrain::CreateGeometry()
 }
 void Terrain::LoadTextures()
 {
-	texture_id_grass = texture_loader.loadTexture(texture_grass);
+	texture_id_grass = TextureLoader::loadTexture(texture_grass);
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	// -------------------------------------------------------------------------------------------

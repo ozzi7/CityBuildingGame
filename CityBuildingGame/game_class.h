@@ -10,8 +10,7 @@
 // Include GLM, math library
 #include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
-
-#include "common.h"
+#include "model.h"
 #include "camera.h"
 #include "terrain.h"
 #include "tree.h"
@@ -19,10 +18,9 @@
 class GameClass
 {
 public:
-	GameClass();
+	GameClass::GameClass(int, int, float, string, Camera &);
 	~GameClass();
 	
-	void Init(float aScreenWidth, float aScreenHeight, int aMapWidth, int aMapHeight);
 
 	// Entry point to the game
 	void StartGame();
@@ -32,25 +30,25 @@ public:
 
 	// Called by the application class when the window need to be redrawn.
 	void RenderLoop();
+	
+	string exe_path;
+	Camera * camera;
 
-	float screenWidth, screenHeight;
-
-	GLFWwindow* window;
+	GLFWwindow * window;
 
 	/* This is a handle to the shader program */
-	Camera camera;
 	Model tree;
 
 	Shader shaderTree = Shader("vertex_shader.vert", "fragment_shader.frag");
 
+	float screenRatio;
 
 private:
-	// The terrain
-	Terrain & terrain;
+	Terrain * terrain;
 
-	Model & treeModel;
+	Model treeModel;
 
-	vector<Tree &> trees;
+	vector<Tree> trees;
 
 	GLuint mvp_handle;
 

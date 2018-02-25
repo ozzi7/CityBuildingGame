@@ -14,10 +14,10 @@
 #include <math.h>
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "common.h"
 #include "heightmap.h"
 #include "game_class.h"
 #include "shader.h"
+#include "texture_loader.h"
 
 using namespace std;
 
@@ -35,7 +35,7 @@ public:
 class Terrain
 {
 public:
-	Terrain();
+	Terrain(GameClass & aGameClass);
 	~Terrain();
 
 	void Initialize(int argWidth, int argHeight);
@@ -56,6 +56,8 @@ private:
 	void PopulateGridWithObjects();
 	void ReloadGPUData();
 	void GenerateBuffers();
+
+	GameClass * gameClass;
 
 	GLuint VBO, VAO, EBO;
 	unsigned int texture_id_grass;
