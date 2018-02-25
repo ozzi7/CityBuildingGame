@@ -18,7 +18,6 @@
 #include "shader.h"
 #include "texture_loader.h"
 
-using namespace std;
 
 /* Represents a grid subunit */
 class Unit
@@ -38,7 +37,7 @@ public:
 	~Terrain();
 
 	void Initialize(int argWidth, int argHeight);
-	void Update();
+	void SetRenderWindow(int startX, int endX, int startY, int endY);
 	float GetHeight(int argX, int argY);
 	void Draw();
 
@@ -47,7 +46,6 @@ public:
 
 private:
 	void CreateGeometry();
-	void LoadVisibleGeometry();
 	void LoadVisibleGeometry(int startX, int endX, int startY, int endY);
 	void LoadTextures();
 	void CreateGrid();

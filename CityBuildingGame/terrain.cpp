@@ -1,7 +1,5 @@
 #include "terrain.h"
 
-using namespace std;
-
 Terrain::Terrain() {}
 
 void Terrain::Initialize(int aWidth, int aHeight)
@@ -20,16 +18,10 @@ void Terrain::Initialize(int aWidth, int aHeight)
 	LoadTextures();
 	CreateGeometry();
 	GenerateBuffers();
-	LoadVisibleGeometry();
 }
-void Terrain::Update()
+void Terrain::SetRenderWindow(int startX, int endX, int startY, int endY)
 {
 	/* Check if terrain must be reloaded to GPU (after scrolling)*/
-	int startX = gameClass->camera->Position.x - 30.0f;
-	int endX = gameClass->camera->Position.x + 30.0f;
-	int startY = gameClass->camera->Position.y - 30.0f;
-	int endY = gameClass->camera->Position.y + 30.0f;
-
 	if (currStartX != startX || currEndX != endX || currStartY != startY || currEndY != endY)
 	{
 		currStartX = startX;
@@ -62,52 +54,52 @@ void Terrain::PopulateGridWithObjects()
 }
 void Terrain::Draw()
 {
-	terrainShader.use();
-
-	// light properties
-	glm::vec3 lightColor;
-	lightColor.x = 1.0f;//sin(glfwGetTime() * 2.0f);
-	lightColor.y = 1.0f;// sin(glfwGetTime() * 0.7f);
-	lightColor.z = 1.0f;// sin(glfwGetTime() * 1.3f);
-	glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
-	glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
-	terrainShader.setVec3("light.ambient", ambientColor);
-	terrainShader.setVec3("light.diffuse", diffuseColor);
-	//ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-	terrainShader.setVec3("light.position", gameClass->camera->Position);
-	terrainShader.setVec3("viewPos", gameClass->camera->Position);
-
-	//glm::mat4 projection = glm::ortho(-1.77777f * camera->Zoom, 1.77777f * camera->Zoom, -1 * camera->Zoom, 1 * camera->Zoom, 1.0f, 1000.0f);
-	glm::mat4 projection = glm::ortho(-gameClass->screenRatio * gameClass->camera->Zoom, gameClass->screenRatio * gameClass->camera->Zoom, -1 * gameClass->camera->Zoom, 1 * gameClass->camera->Zoom, 1.0f, 1000.0f);
-	terrainShader.setMat4("projection", projection);
-
-	// camera/view transformation
-	glm::mat4 view = gameClass->camera->GetViewMatrix();
-	terrainShader.setMat4("view", view);
-
-	// calculate the model matrix for each object and pass it to shader before drawing
-	glm::mat4 model = glm::mat4(1.0f);
-	terrainShader.setMat4("model", model);
-
-
-	if (reloadGPUData.load())
-	{
-		reloadGPUData.store(false);
-		ReloadGPUData();
-	}
-
-	// render
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	// bind textures on corresponding texture units
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture_id_grass);
-
-	glBindVertexArray(VAO);
-
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glDrawArrays(GL_TRIANGLES, 0, visibleWidth*visibleHeight*6);
+//	terrainShader.use();
+//
+//	// light properties
+//	glm::vec3 lightColor;
+//	lightColor.x = 1.0f;//sin(glfwGetTime() * 2.0f);
+//	lightColor.y = 1.0f;// sin(glfwGetTime() * 0.7f);
+//	lightColor.z = 1.0f;// sin(glfwGetTime() * 1.3f);
+//	glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
+//	glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+//	terrainShader.setVec3("light.ambient", ambientColor);
+//	terrainShader.setVec3("light.diffuse", diffuseColor);
+//	//ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+//	terrainShader.setVec3("light.position", gameClass->camera->Position);
+//	terrainShader.setVec3("viewPos", gameClass->camera->Position);
+//
+//	//glm::mat4 projection = glm::ortho(-1.77777f * camera->Zoom, 1.77777f * camera->Zoom, -1 * camera->Zoom, 1 * camera->Zoom, 1.0f, 1000.0f);
+//	glm::mat4 projection = glm::ortho(-gameClass->screenRatio * gameClass->camera->Zoom, gameClass->screenRatio * gameClass->camera->Zoom, -1 * gameClass->camera->Zoom, 1 * gameClass->camera->Zoom, 1.0f, 1000.0f);
+//	terrainShader.setMat4("projection", projection);
+//
+//	// camera/view transformation
+//	glm::mat4 view = gameClass->camera->GetViewMatrix();
+//	terrainShader.setMat4("view", view);
+//
+//	// calculate the model matrix for each object and pass it to shader before drawing
+//	glm::mat4 model = glm::mat4(1.0f);
+//	terrainShader.setMat4("model", model);
+//
+//
+//	if (reloadGPUData.load())
+//	{
+//		reloadGPUData.store(false);
+//		ReloadGPUData();
+//	}
+//
+//	// render
+//	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//
+//	// bind textures on corresponding texture units
+//	glActiveTexture(GL_TEXTURE0);
+//	glBindTexture(GL_TEXTURE_2D, texture_id_grass);
+//
+//	glBindVertexArray(VAO);
+//
+//	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//	glDrawArrays(GL_TRIANGLES, 0, visibleWidth*visibleHeight*6);
 }
 void Terrain::ReloadGPUData()
 {
@@ -130,15 +122,6 @@ void Terrain::ReloadGPUData()
 	// texture coord attribute
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
-}
-void Terrain::LoadVisibleGeometry()
-{
-	/* Check if terrain must be reloaded to GPU (after scrolling)*/
-	int startX = gameClass->camera->Position.x - 30.0f;
-	int endX = gameClass->camera->Position.x + 30.0f;
-	int startY = gameClass->camera->Position.y - 30.0f;
-	int endY = gameClass->camera->Position.y + 30.0f;
-	LoadVisibleGeometry(startX, endX, startY, endY);
 }
 void Terrain::LoadVisibleGeometry(int startX, int endX, int startY, int endY)
 {	
@@ -342,7 +325,7 @@ void Terrain::LoadTextures()
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	// -------------------------------------------------------------------------------------------
 
-	terrainShader.setInt("texture1", 0);
+	//terrainShader.setInt("texture1", 0);
 }
 void Terrain::GenerateBuffers()
 {

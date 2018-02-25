@@ -69,7 +69,6 @@ void GameClass::GameLoop()
 		DWORD next_game_tick = GetTickCount();
 		int loops = 0;
 		while (GetTickCount() > next_game_tick && loops < MAX_FRAMESKIP) {
-			terrain->Update();
 
 			next_game_tick += SKIP_TICKS;
 			loops++;
