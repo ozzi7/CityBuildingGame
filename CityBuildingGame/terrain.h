@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <algorithm>
 #include <time.h>
@@ -14,6 +16,8 @@
 
 #include "common.h"
 #include "heightmap.h"
+#include "game_class.h"
+#include "shader.h"
 
 using namespace std;
 
@@ -56,6 +60,7 @@ private:
 	GLuint VBO, VAO, EBO;
 	unsigned int texture_id_grass;
 	string texture_grass = "Grass.bmp";
+	Shader terrainShader;
 	
 	int gridHeight;
 	int gridWidth;
@@ -69,8 +74,8 @@ private:
 	int visibleWidth;
 	int currStartX, currEndX, currStartY, currEndY = 0;
 
-	std::mutex renderDataMutex;
-	std::atomic_bool reloadGPUData = false;
+	mutex renderDataMutex;
+	atomic_bool reloadGPUData = false;
 	vector<GLfloat> renderData; /* Gets sent to GPU */
 	vector<unsigned int> indices;
 };

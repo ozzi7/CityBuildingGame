@@ -149,7 +149,9 @@
     <ClCompile Include="heightmap.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh.h" />
+    <ClCompile Include="renderer.cpp" />
     <ClCompile Include="terrain.cpp" />
+    <ClCompile Include="tree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
@@ -157,9 +159,11 @@
     <ClInclude Include="game_class.h" />
     <ClInclude Include="heightmap.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="renderer.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="terrain.h" />
+    <ClInclude Include="tree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

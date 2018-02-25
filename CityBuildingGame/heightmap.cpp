@@ -1,6 +1,4 @@
 #pragma once
-#include <vector>
-#include <time.h>
 #include "heightmap.h"
 
 using namespace std;

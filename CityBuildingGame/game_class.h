@@ -1,4 +1,4 @@
-# pragma once
+#pragma once
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
@@ -7,16 +7,14 @@
 #include <algorithm>
 #include <thread>
 
-#include "terrain.h"
-
 // Include GLM, math library
 #include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "common.h"
-#include "model.h"
 #include "camera.h"
-#include "shader.h"
+#include "terrain.h"
+#include "renderer.h"
 
 class GameClass
 {
@@ -35,12 +33,11 @@ public:
 
 	float screenWidth, screenHeight;
 
-	Shader ourShader;
-	Shader shaderTree;
 
 private:
 	// The terrain
 	Terrain terrain;
+	Renderer renderer; 
 
 	GLuint mvp_handle;
 
@@ -49,4 +46,20 @@ private:
 	float lastFrame = 0.0f;
 
 	void ProcessInput(GLFWwindow * window);
+	extern GLFWwindow* window;
+
+	/* This is a handle to the shader program */
+	extern Camera camera;
+	extern Model tree;
+
+	extern std::string exe_path;
+
+	// settings
+	const unsigned int SCR_WIDTH = 1920;
+	const unsigned int SCR_HEIGHT = 1080;
+	const float SCREEN_RATIO = (float)SCR_WIDTH / (float)SCR_HEIGHT;
+	// render time, admin machine 16 sek from pressing debug to show render at 300x300 (for reference)
+
+	const unsigned int MAP_WIDTH = 300;
+	const unsigned int MAP_HEIGHT = 400;
 };

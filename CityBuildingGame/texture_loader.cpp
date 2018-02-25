@@ -1,8 +1,7 @@
-#include "common.h"
+#include "texture_loader.h"
 
 // utility function for loading a 2D texture from file
-// ---------------------------------------------------
-unsigned int Common::loadTexture(std::string filename)
+unsigned int TextureLoader::loadTexture(std::string filename)
 {
 	std::string texture_path = exe_path + "\\textures\\" + filename;
 	std::replace(texture_path.begin(), texture_path.end(), '\\', '/');

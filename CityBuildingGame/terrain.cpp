@@ -62,6 +62,34 @@ void Terrain::PopulateGridWithObjects()
 }
 void Terrain::Draw()
 {
+	terrainShader.use();
+
+	// light properties
+	glm::vec3 lightColor;
+	lightColor.x = 1.0f;//sin(glfwGetTime() * 2.0f);
+	lightColor.y = 1.0f;// sin(glfwGetTime() * 0.7f);
+	lightColor.z = 1.0f;// sin(glfwGetTime() * 1.3f);
+	glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
+	glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+	terrainShader.setVec3("light.ambient", ambientColor);
+	terrainShader.setVec3("light.diffuse", diffuseColor);
+	//ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+	terrainShader.setVec3("light.position", camera.Position);
+	terrainShader.setVec3("viewPos", camera.Position);
+
+	//glm::mat4 projection = glm::ortho(-1.77777f * camera.Zoom, 1.77777f * camera.Zoom, -1 * camera.Zoom, 1 * camera.Zoom, 1.0f, 1000.0f);
+	glm::mat4 projection = glm::ortho(-SCREEN_RATIO * camera.Zoom, SCREEN_RATIO * camera.Zoom, -1 * camera.Zoom, 1 * camera.Zoom, 1.0f, 1000.0f);
+	terrainShader.setMat4("projection", projection);
+
+	// camera/view transformation
+	glm::mat4 view = camera.GetViewMatrix();
+	terrainShader.setMat4("view", view);
+
+	// calculate the model matrix for each object and pass it to shader before drawing
+	glm::mat4 model = glm::mat4(1.0f);
+	terrainShader.setMat4("model", model);
+
+
 	if (reloadGPUData.load())
 	{
 		reloadGPUData.store(false);
@@ -78,9 +106,6 @@ void Terrain::Draw()
 
 	glBindVertexArray(VAO);
 
-	// calculate the model matrix for each object and pass it to shader before drawing
-	glm::mat4 model = glm::mat4(1.0f);
-	ourShader.setMat4("model", model);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, visibleWidth*visibleHeight*6);
 }
@@ -317,7 +342,7 @@ void Terrain::LoadTextures()
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	// -------------------------------------------------------------------------------------------
 
-	ourShader.setInt("texture1", 0);
+	terrainShader.setInt("texture1", 0);
 }
 void Terrain::GenerateBuffers()
 {
