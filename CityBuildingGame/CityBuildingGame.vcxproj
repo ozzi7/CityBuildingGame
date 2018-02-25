@@ -148,6 +148,7 @@
     <ClCompile Include="heightmap.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh.h" />
+    <ClCompile Include="model.cpp" />
     <ClCompile Include="terrain.cpp" />
     <ClCompile Include="tree.cpp" />
   </ItemGroup>

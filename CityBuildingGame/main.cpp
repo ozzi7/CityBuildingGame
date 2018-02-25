@@ -1,5 +1,3 @@
-#define STB_IMAGE_IMPLEMENTATION
-
 // Include standard headers
 #include <stdio.h>
 #include <stdlib.h>
