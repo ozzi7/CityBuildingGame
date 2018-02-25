@@ -14,18 +14,15 @@ GameClass::~GameClass()
 void GameClass::StartGame()
 {
 	camera = Camera(glm::vec3(20.0f, 0.0f, 50.0f), window);
-
+	
 	glEnable(GL_DEPTH_TEST);
 
-	ourShader = Shader("basic_lighting.vert", "basic_lighting.frag");
-	shaderTree = Shader("vertex_shader.vert", "fragment_shader.frag");
-
-	std::string texture_path;
-
-	// tree test model
-	texture_path = exe_path + "\\tree2_3ds\\Tree2.3ds";
+	// Spawning a tree,
+	Tree tree(glm::vec3(10.0f, 10.0f, 5.0f));
+	trees.push_back(tree);
+	std::string texture_path = Common::exe_path + "\\tree2_3ds\\Tree2.3ds";
 	std::replace(texture_path.begin(), texture_path.end(), '\\', '/');
-	Model tree(texture_path.c_str());
+	treeModel = Model(texture_path.c_str());
 
 	std::thread threadGameLoop(&GameClass::GameLoop, this);
 	std::thread threadRenderLoop(&GameClass::RenderLoop, this);
@@ -34,7 +31,6 @@ void GameClass::StartGame()
 }
 void GameClass::RenderLoop()
 {	
-
 	// input
 	// -----
 	ProcessInput(window);
@@ -47,14 +43,21 @@ void GameClass::RenderLoop()
 
 	shaderTree.use();
 
-	// calculate the model matrix for each object and pass it to shader before drawing
-	glm::mat4 model2 = glm::mat4(1.0f);
-	model2 = glm::translate(model2, glm::vec3(20.0f, 20.0f, 20.0f));
+	glm::mat4 projection = glm::ortho(-Common::SCREEN_RATIO * camera.Zoom, Common::SCREEN_RATIO * camera.Zoom, -1 * camera.Zoom, 1 * camera.Zoom, 1.0f, 1000.0f);
 	shaderTree.setMat4("projection", projection);
-	shaderTree.setMat4("view", view);
-	shaderTree.setMat4("model", model2);
 
-	tree.Draw(shaderTree);
+	glm::mat4 view = camera.GetViewMatrix();
+	shaderTree.setMat4("view", view);
+
+	for (int i = 0; trees.size; i++) {
+		glm::mat4 model2 = glm::mat4(1.0f);
+		model2 = glm::translate(model2, trees[i].Position);
+		
+		shaderTree.setMat4("model", model2);
+
+		treeModel.Draw(shaderTree);
+	}
+
 
 	// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 	glfwSwapBuffers(window);

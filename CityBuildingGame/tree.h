@@ -1,10 +1,11 @@
 #pragma once
-#include "renderer.h"
+#include <glm/glm.hpp>
 
 class Tree
 {
-public:
-	void Tree::Initialize();
-	void Tree::ChangeSize();
-	void Tree::Render(Renderer renderer);
+	public:
+		glm::vec3 Position;
+
+		Tree(glm::vec3);
+	void ChangeSize();
 };

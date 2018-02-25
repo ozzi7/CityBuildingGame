@@ -2,15 +2,11 @@
 
 using namespace std;
 
-void Tree::Initialize()
-{
 
+Tree::Tree(glm::vec3 position) {
+	Position = position;
 }
 void Tree::ChangeSize()
 {
 
-}
-void Tree::Render(Renderer renderer)
-{
-	renderer.Render(this);
 }

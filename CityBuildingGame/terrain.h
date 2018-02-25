@@ -60,7 +60,7 @@ private:
 	GLuint VBO, VAO, EBO;
 	unsigned int texture_id_grass;
 	string texture_grass = "Grass.bmp";
-	Shader terrainShader;
+	Shader terrainShader = Shader("basic_lighting.vert", "basic_lighting.frag");
 	
 	int gridHeight;
 	int gridWidth;

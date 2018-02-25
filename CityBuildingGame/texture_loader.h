@@ -11,6 +11,7 @@
 #include "stb_image.h"
 #include "camera.h"
 #include "model.h"
+#include "common.h"
 
 class TextureLoader {
 public:

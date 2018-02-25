@@ -13,20 +13,15 @@
 
 #include "common.h"
 #include "camera.h"
-<<<<<<< HEAD
 #include "terrain.h"
-#include "renderer.h"
-=======
-#include "shader.h"
-#include "terrain.h"
->>>>>>> d39f37e8ae3b1739f46da43eabe70a82a57c04fe
+#include "tree.h"
 
 class GameClass
 {
 public:
 	GameClass(float aScreenWidth, float aScreenHeight, int aMapWidth, int aMapHeight);
 	~GameClass();
-
+	
 	// Entry point to the game
 	void StartGame();
 
@@ -38,11 +33,22 @@ public:
 
 	float screenWidth, screenHeight;
 
+	GLFWwindow* window;
+
+	/* This is a handle to the shader program */
+	Camera camera;
+	Model tree;
+
+	Shader shaderTree = Shader("vertex_shader.vert", "fragment_shader.frag");
+
 
 private:
 	// The terrain
 	Terrain terrain;
-	Renderer renderer; 
+
+	Model treeModel;
+
+	vector<Tree> trees;
 
 	GLuint mvp_handle;
 
@@ -51,20 +57,4 @@ private:
 	float lastFrame = 0.0f;
 
 	void ProcessInput(GLFWwindow * window);
-	extern GLFWwindow* window;
-
-	/* This is a handle to the shader program */
-	extern Camera camera;
-	extern Model tree;
-
-	extern std::string exe_path;
-
-	// settings
-	const unsigned int SCR_WIDTH = 1920;
-	const unsigned int SCR_HEIGHT = 1080;
-	const float SCREEN_RATIO = (float)SCR_WIDTH / (float)SCR_HEIGHT;
-	// render time, admin machine 16 sek from pressing debug to show render at 300x300 (for reference)
-
-	const unsigned int MAP_WIDTH = 300;
-	const unsigned int MAP_HEIGHT = 400;
 };
