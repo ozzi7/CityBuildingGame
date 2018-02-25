@@ -1,15 +1,13 @@
 #include "game_class.h"
 
-GameClass::GameClass(float aScreenWidth, float aScreenHeight, int aMapWidth, int aMapHeight)
+GameClass::GameClass() {}
+GameClass::~GameClass() {}
+void GameClass::Init(float aScreenWidth, float aScreenHeight, int aMapWidth, int aMapHeight)
 {
 	screenWidth = aScreenWidth;
 	screenHeight = aScreenHeight;
 
 	terrain.Initialize(aMapWidth, aMapHeight);
-}
-
-GameClass::~GameClass()
-{
 }
 void GameClass::StartGame()
 {
@@ -20,7 +18,7 @@ void GameClass::StartGame()
 	// Spawning a tree,
 	Tree tree(glm::vec3(10.0f, 10.0f, 5.0f));
 	trees.push_back(tree);
-	std::string texture_path = Common::exe_path + "\\tree2_3ds\\Tree2.3ds";
+	std::string texture_path = exe_path + "\\tree2_3ds\\Tree2.3ds";
 	std::replace(texture_path.begin(), texture_path.end(), '\\', '/');
 	treeModel = Model(texture_path.c_str());
 
@@ -43,13 +41,13 @@ void GameClass::RenderLoop()
 
 	shaderTree.use();
 
-	glm::mat4 projection = glm::ortho(-Common::SCREEN_RATIO * camera.Zoom, Common::SCREEN_RATIO * camera.Zoom, -1 * camera.Zoom, 1 * camera.Zoom, 1.0f, 1000.0f);
+	glm::mat4 projection = glm::ortho(-SCREEN_RATIO * camera.Zoom, SCREEN_RATIO * camera.Zoom, -1 * camera.Zoom, 1 * camera.Zoom, 1.0f, 1000.0f);
 	shaderTree.setMat4("projection", projection);
 
 	glm::mat4 view = camera.GetViewMatrix();
 	shaderTree.setMat4("view", view);
 
-	for (int i = 0; trees.size; i++) {
+	for (int i = 0; trees.size(); i++) {
 		glm::mat4 model2 = glm::mat4(1.0f);
 		model2 = glm::translate(model2, trees[i].Position);
 		

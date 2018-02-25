@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="common.cpp" />
     <ClCompile Include="game_class.cpp" />
     <ClCompile Include="heightmap.cpp" />
     <ClCompile Include="main.cpp" />

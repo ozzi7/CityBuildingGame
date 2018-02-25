@@ -26,20 +26,19 @@
 
 // camera
 Camera camera = Camera();
+Common common = Common();
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void window_focus_callback(GLFWwindow *window, int focused);
 
-GameClass Common::gameClass((float)Common::SCR_WIDTH, (float)Common::SCR_HEIGHT, Common::MAP_WIDTH, Common::MAP_HEIGHT);
-
 int main(int argc, char* argv[])
 {
-	Common::SCREEN_RATIO = (float)Common::SCR_WIDTH / (float)Common::SCR_HEIGHT;
+	common.SCREEN_RATIO = (float)common.SCR_WIDTH / (float)common.SCR_HEIGHT;
 
 	// store path for resources
-	Common::exe_path = std::string(argv[0]);
-	Common::exe_path = Common::exe_path.substr(0, Common::exe_path.find_last_of("\\/"));
+	common.exe_path = std::string(argv[0]);
+	common.exe_path = common.exe_path.substr(0, common.exe_path.find_last_of("\\/"));
 
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -47,15 +46,15 @@ int main(int argc, char* argv[])
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// glfw window creation
-	GLFWwindow* window = glfwCreateWindow(Common::SCR_WIDTH, Common::SCR_HEIGHT, "CityBuildingGame", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(common.SCR_WIDTH, common.SCR_HEIGHT, "CityBuildingGame", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
-	//GameClass gameClass((float)Common::SCR_WIDTH, (float)Common::SCR_HEIGHT, Common::MAP_WIDTH, Common::MAP_HEIGHT);
-	Common::gameClass = GameClass((float)Common::SCR_WIDTH, (float)Common::SCR_HEIGHT, Common::MAP_WIDTH, Common::MAP_HEIGHT);
+	//GameClass gameClass((float)SCR_WIDTH, (float)SCR_HEIGHT, MAP_WIDTH, MAP_HEIGHT);
+	//gameClass = GameClass((float)SCR_WIDTH, (float)SCR_HEIGHT, MAP_WIDTH, MAP_HEIGHT);
 
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -74,8 +73,10 @@ int main(int argc, char* argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	gameClass.StartGame();
 
+	common.gameClass.Init((float)common.SCR_WIDTH, (float)common.SCR_HEIGHT, common.MAP_WIDTH, common.MAP_HEIGHT);
+	common.gameClass.StartGame();
+	common.camera = camera;
 	glfwTerminate();
 	return 0;
 }

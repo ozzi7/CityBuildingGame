@@ -19,9 +19,11 @@
 class GameClass
 {
 public:
-	GameClass(float aScreenWidth, float aScreenHeight, int aMapWidth, int aMapHeight);
+	GameClass();
 	~GameClass();
 	
+	void Init(float aScreenWidth, float aScreenHeight, int aMapWidth, int aMapHeight);
+
 	// Entry point to the game
 	void StartGame();
 
@@ -44,11 +46,11 @@ public:
 
 private:
 	// The terrain
-	Terrain terrain;
+	Terrain & terrain;
 
-	Model treeModel;
+	Model & treeModel;
 
-	vector<Tree> trees;
+	vector<Tree &> trees;
 
 	GLuint mvp_handle;
 
