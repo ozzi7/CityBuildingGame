@@ -42,7 +42,7 @@ public:
 	Model tree;
 
 	Shader shaderTree;
-	Shader terrainShader;
+	Shader shaderTerrain;
 
 	float screenRatio;
 

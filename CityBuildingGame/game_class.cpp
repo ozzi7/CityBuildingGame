@@ -24,7 +24,7 @@ void GameClass::StartGame()
 	terrainModel = Model(texture_path, false);
 
 	shaderTree = Shader("vertex_shader.vert", "fragment_shader.frag");
-	terrainShader = Shader("basic_lighting.vert", "basic_lighting.frag");
+	shaderTerrain = Shader("basic_lighting.vert", "basic_lighting.frag");
 
 	std::thread threadGameLoop(&GameClass::GameLoop, this);
 	std::thread threadRenderLoop(&GameClass::RenderLoop, this);
