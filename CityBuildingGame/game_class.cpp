@@ -69,14 +69,13 @@ void GameClass::RenderLoop()
 
 void GameClass::GameLoop()
 {		
-	ProcessInput();
-
 	const int TICKS_PER_SECOND = 60;
 	const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
 	const int MAX_FRAMESKIP = 10;
 
 	while(true)
 	{
+		ProcessInput();
 		DWORD next_game_tick = GetTickCount();
 		int loops = 0;
 		while (GetTickCount() > next_game_tick && loops < MAX_FRAMESKIP) {
