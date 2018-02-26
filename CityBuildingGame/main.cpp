@@ -23,8 +23,8 @@
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 // render time, admin machine 16 sek from pressing debug to show render at 300x300 (for reference)
-const unsigned int MAP_WIDTH = 300;
-const unsigned int MAP_HEIGHT = 400;
+const unsigned int MAP_WIDTH = 30;
+const unsigned int MAP_HEIGHT = 40;
 
 Camera camera;
 
@@ -55,8 +55,6 @@ int main(int argc, char* argv[])
 
 	Camera camera = Camera(glm::vec3(20.0f, 0.0f, 50.0f), window);
 
-	GameClass gameClass(MAP_WIDTH, MAP_HEIGHT, SCREEN_RATIO, exe_path, camera, window);
-
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
@@ -74,6 +72,7 @@ int main(int argc, char* argv[])
 		exit(EXIT_FAILURE);
 	}
 
+	GameClass gameClass(MAP_WIDTH, MAP_HEIGHT, SCREEN_RATIO, exe_path, camera, window);
 	gameClass.StartGame();
 
 	glfwTerminate();
@@ -84,7 +83,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	// make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
-	glViewport(0, 0, width, height);
+	//glViewport(0, 0, width, height);
 }
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)

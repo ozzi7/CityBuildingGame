@@ -34,7 +34,7 @@ public:
 	void RenderLoop();
 	
 	string exe_path;
-	Camera *camera;
+	Camera * camera;
 
 	GLFWwindow *window;
 
