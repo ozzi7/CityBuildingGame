@@ -15,10 +15,13 @@
 #include "terrain.h"
 #include "tree.h"
 
+// Include GLFW, implements openGL
+#include <GLFW/glfw3.h>
+
 class GameClass
 {
 public:
-	GameClass::GameClass(int, int, float, string, Camera &);
+	GameClass::GameClass(int, int, float, string, Camera &, GLFWwindow* window);
 	~GameClass();
 
 	// Entry point to the game
@@ -45,7 +48,6 @@ public:
 
 private:
 	Terrain *terrain;
-
 	Model treeModel;
 	Model terrainModel;
 

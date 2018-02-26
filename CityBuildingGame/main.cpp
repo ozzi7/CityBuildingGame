@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 
 	Camera camera = Camera(glm::vec3(20.0f, 0.0f, 50.0f), window);
 
-	GameClass gameClass(MAP_WIDTH, MAP_HEIGHT, SCREEN_RATIO, exe_path, camera);
+	GameClass gameClass(MAP_WIDTH, MAP_HEIGHT, SCREEN_RATIO, exe_path, camera, window);
 
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

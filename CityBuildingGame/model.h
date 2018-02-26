@@ -30,9 +30,9 @@ public:
 	bool gammaCorrection;
 
 	/*  Functions   */
-	// constructor, expects a filepath to a 3D model.
-	Model(string const &path, bool gamma = false);
+	// constructor, expects a filepath to a 3D model.	
 	Model();
+	Model(const string &path, bool gamma);
 
 	// draws the model, and thus all its meshes
 	void Draw(Shader shader);

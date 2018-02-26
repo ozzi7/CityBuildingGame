@@ -1,10 +1,10 @@
 #include "game_class.h"
 
-GameClass::GameClass(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, Camera & aCamera) {
+GameClass::GameClass(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, Camera & aCamera, GLFWwindow* aWindow) {
 	screenRatio = aScreenRatio;
 	exe_path = aExePath;
 	camera = & aCamera;
-
+	window = aWindow;
 	terrain = &Terrain();
 
 	terrain->Initialize(aMapWidth, aMapHeight);
@@ -20,8 +20,8 @@ void GameClass::StartGame()
 	trees.push_back(tree);
 	std::string texture_path = exe_path + "\\tree2_3ds\\Tree2.3ds";
 	std::replace(texture_path.begin(), texture_path.end(), '\\', '/');
-	treeModel = Model(texture_path.c_str());
-	terrainModel = Model(texture_path.c_str());
+	treeModel = Model(texture_path, false);
+	terrainModel = Model(texture_path, false);
 
 	shaderTree = Shader("vertex_shader.vert", "fragment_shader.frag");
 	terrainShader = Shader("basic_lighting.vert", "basic_lighting.frag");
@@ -33,7 +33,7 @@ void GameClass::StartGame()
 }
 void GameClass::RenderLoop()
 {	
-	ProcessInput(window);
+	ProcessInput();
 
 	camera->lock_cursor_to_window();
 	camera->mouse_scroll();

@@ -4,11 +4,11 @@
 
 using namespace std;
 
-Model::Model(string const &path, bool gamma = false) : gammaCorrection(gamma)
+Model::Model() {}
+Model::Model(const string &path, bool gamma = false) : gammaCorrection(gamma)
 {
 	loadModel(path);
 }
-Model::Model() {}
 void Model::Draw(Shader shader)
 {
 	for (unsigned int i = 0; i < meshes.size(); i++)
