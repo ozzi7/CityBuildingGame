@@ -1,10 +1,10 @@
 #include "game_class.h"
 
-GameClass::GameClass(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, Camera & aCamera, GLFWwindow* aWindow) {
+GameClass::GameClass(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, Camera & aCamera, GLFWwindow & aWindow) {
 	screenRatio = aScreenRatio;
 	exe_path = aExePath;
 	camera = &aCamera;
-	window = aWindow;
+	window = & aWindow;
 	terrain = &Terrain();
 
 	terrain->Initialize(aMapWidth, aMapHeight);
@@ -14,8 +14,12 @@ GameClass::~GameClass() {}
 void GameClass::StartGame()
 {	
 
-	camera->lock_cursor_to_window();
-	camera->mouse_scroll();
+	//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	//glfwSetScrollCallback(window, scroll_callback);
+	//glfwSetWindowFocusCallback(window, window_focus_callback);
+
+	//camera->lock_cursor_to_window();
+	//camera->mouse_scroll();
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -34,6 +38,7 @@ void GameClass::StartGame()
 
 	std::thread threadGameLoop(&GameClass::GameLoop, this);
 	std::thread threadRenderLoop(&GameClass::RenderLoop, this);
+	while (!glfwWindowShouldClose(window)){}
 	threadGameLoop.join();
 	threadRenderLoop.join();
 }
@@ -50,6 +55,7 @@ void GameClass::RenderLoop()
 
 	while (true)
 	{	
+		ProcessInput();
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		/*for (int i = 0; trees.size(); i++) {
@@ -73,9 +79,8 @@ void GameClass::GameLoop()
 	const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
 	const int MAX_FRAMESKIP = 10;
 
-	while(true)
+	while (true)
 	{
-		ProcessInput();
 		DWORD next_game_tick = GetTickCount();
 		int loops = 0;
 		while (GetTickCount() > next_game_tick && loops < MAX_FRAMESKIP) {
@@ -99,4 +104,24 @@ void GameClass::ProcessInput()
 		camera->keyboard_scroll(LEFT);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		camera->keyboard_scroll(RIGHT);
+}
+
+// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+void GameClass::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	// make sure the viewport matches the new window dimensions; note that width and 
+	// height will be significantly larger than specified on retina displays.
+	//glViewport(0, 0, width, height);
+}
+// glfw: whenever the mouse scroll wheel scrolls, this callback is called
+void GameClass::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	camera->mouse_zoom((float)yoffset);
+}
+// glfw: whenever the window receives focus, camera gets locked
+void GameClass::window_focus_callback(GLFWwindow *window, int focused)
+{
+	if (focused) {
+		camera->lock_cursor_to_window();
+	}
 }
