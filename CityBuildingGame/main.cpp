@@ -20,13 +20,17 @@
 #include "game_class.h"
 
 // settings
-const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1080;
+const unsigned int SCR_WIDTH = 1400;
+const unsigned int SCR_HEIGHT = 800;
 // render time, admin machine 16 sek from pressing debug to show render at 300x300 (for reference)
-const unsigned int MAP_WIDTH = 30;
-const unsigned int MAP_HEIGHT = 40;
+const unsigned int MAP_WIDTH = 300;
+const unsigned int MAP_HEIGHT = 400;
 
-//Camera camera;
+Camera camera;
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void window_focus_callback(GLFWwindow *window, int focused);
 
 int main(int argc, char* argv[])
 {
@@ -49,13 +53,16 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	Camera camera = Camera(glm::vec3(20.0f, 0.0f, 50.0f), window);
+	camera = Camera(glm::vec3(20.0f, 0.0f, 50.0f), window);
 
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	/* Specify callbacks */
 	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetWindowFocusCallback(window, window_focus_callback);
 
 	// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
 	glewExperimental = GL_TRUE;
@@ -65,9 +72,28 @@ int main(int argc, char* argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	GameClass gameClass(MAP_WIDTH, MAP_HEIGHT, SCREEN_RATIO, exe_path, camera, *window);
+	GameClass gameClass(MAP_WIDTH, MAP_HEIGHT, SCREEN_RATIO, exe_path, camera, window);
 	gameClass.StartGame();
 
 	glfwTerminate();
 	return 0;
+}
+// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	// make sure the viewport matches the new window dimensions; note that width and 
+	// height will be significantly larger than specified on retina displays.
+	glViewport(0, 0, width, height);
+}
+// glfw: whenever the mouse scroll wheel scrolls, this callback is called
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	camera.mouse_zoom((float)yoffset);
+}
+// glfw: whenever the window receives focus, camera gets locked
+void window_focus_callback(GLFWwindow *window, int focused)
+{
+	if (focused) {
+		camera.lock_cursor_to_window();
+	}
 }

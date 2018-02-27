@@ -12,12 +12,9 @@ void Terrain::Initialize(int aWidth, int aHeight)
 	heightmap_obj.GeneratePerlinNoise(heightmap, gridWidth + 1, gridHeight + 1, 20, 6);
 
 	CreateGrid();
-	AddTexturesToGrid();
 	PopulateGridWithObjects();
 
-	LoadTextures();
 	CreateGeometry();
-	GenerateBuffers();
 }
 void Terrain::SetRenderWindow(int startX, int endX, int startY, int endY)
 {
@@ -30,6 +27,7 @@ void Terrain::SetRenderWindow(int startX, int endX, int startY, int endY)
 		currEndY = endY;
 		LoadVisibleGeometry(startX, endX, startY, endY);
 	}
+	LoadVisibleGeometry(startX, endX, startY, endY);
 }
 float Terrain::GetHeight(int argX, int argY)
 {
@@ -52,54 +50,30 @@ void Terrain::PopulateGridWithObjects()
 {
 
 }
-void Terrain::Draw()
+void Terrain::Draw(Shader &shaderTerrain)
 {
-//	shaderTerrain.use();
-//
-//	// light properties
-//	glm::vec3 lightColor;
-//	lightColor.x = 1.0f;//sin(glfwGetTime() * 2.0f);
-//	lightColor.y = 1.0f;// sin(glfwGetTime() * 0.7f);
-//	lightColor.z = 1.0f;// sin(glfwGetTime() * 1.3f);
-//	glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
-//	glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
-//	shaderTerrain.setVec3("light.ambient", ambientColor);
-//	shaderTerrain.setVec3("light.diffuse", diffuseColor);
-//	//ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-//	shaderTerrain.setVec3("light.position", gameClass->camera->Position);
-//	shaderTerrain.setVec3("viewPos", gameClass->camera->Position);
-//
-//	//glm::mat4 projection = glm::ortho(-1.77777f * camera->Zoom, 1.77777f * camera->Zoom, -1 * camera->Zoom, 1 * camera->Zoom, 1.0f, 1000.0f);
-//	glm::mat4 projection = glm::ortho(-gameClass->screenRatio * gameClass->camera->Zoom, gameClass->screenRatio * gameClass->camera->Zoom, -1 * gameClass->camera->Zoom, 1 * gameClass->camera->Zoom, 1.0f, 1000.0f);
-//	shaderTerrain.setMat4("projection", projection);
-//
-//	// camera/view transformation
-//	glm::mat4 view = gameClass->camera->GetViewMatrix();
-//	shaderTerrain.setMat4("view", view);
-//
-//	// calculate the model matrix for each object and pass it to shader before drawing
-//	glm::mat4 model = glm::mat4(1.0f);
-//	shaderTerrain.setMat4("model", model);
-//
-//
-//	if (reloadGPUData.load())
-//	{
-//		reloadGPUData.store(false);
-//		ReloadGPUData();
-//	}
-//
-//	// render
-//	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//	// bind textures on corresponding texture units
-//	glActiveTexture(GL_TEXTURE0);
-//	glBindTexture(GL_TEXTURE_2D, texture_id_grass);
-//
-//	glBindVertexArray(VAO);
-//
-//	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-//	glDrawArrays(GL_TRIANGLES, 0, visibleWidth*visibleHeight*6);
+	// calculate the model matrix for each object and pass it to shader before drawing
+	glm::mat4 model = glm::mat4(1.0f);
+	shaderTerrain.setMat4("model", model);
+
+	if (reloadGPUData.load())
+	{
+		reloadGPUData.store(false);
+		ReloadGPUData();
+	}
+
+	// render
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// bind textures on corresponding texture units
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture_id_grass);
+
+	glBindVertexArray(VAO);
+
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glDrawArrays(GL_TRIANGLES, 0, visibleWidth*visibleHeight*6);
 }
 void Terrain::ReloadGPUData()
 {
@@ -318,25 +292,24 @@ void Terrain::CreateGeometry()
 		}
 	}
 }
-void Terrain::LoadTextures()
+void Terrain::LoadTextures(Shader & shaderTerrain, string exePath)
 {
-	//texture_id_grass = TextureLoader::LoadTexture(texture_grass);
+	Model tree = Model();
+	string texturesPath = exePath + "/textures";
+	texture_id_grass = tree.TextureFromFile(texture_grass.c_str(), texturesPath);
 
-	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
-	// -------------------------------------------------------------------------------------------
-
-	//shaderTerrain.setInt("texture1", 0);
+	shaderTerrain.setInt("texture1", 0);
 }
 void Terrain::GenerateBuffers()
 {
-	//glGenVertexArrays(1, &VAO);
-	//glGenBuffers(1, &VBO);
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
 }
 Terrain::~Terrain()
 {
 	// Properly de-allocate all resources once they've outlived their purpose
-	//glDeleteVertexArrays(1, &VAO);
-	//glDeleteBuffers(1, &VBO);
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
 }
 Unit::Unit(float pAverageHeight)
 {

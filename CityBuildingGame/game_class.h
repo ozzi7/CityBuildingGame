@@ -21,7 +21,7 @@
 class GameClass
 {
 public:
-	GameClass::GameClass(int, int, float, string, Camera &, GLFWwindow &);
+	GameClass::GameClass(int, int, float, string, Camera &, GLFWwindow* window);
 	~GameClass();
 
 	// Entry point to the game
@@ -33,21 +33,23 @@ public:
 	// Called by the application class when the window need to be redrawn.
 	void RenderLoop();
 	
+	int mapHeight;
+	int mapWidth;
 	string exe_path;
 	Camera * camera;
 
-	GLFWwindow * window;
+	GLFWwindow *window;
 
 	/* This is a handle to the shader program */
 	Model tree;
 
-	Shader shaderTree;
-	Shader shaderTerrain;
+	Shader *shaderTree;
+	Shader *shaderTerrain;
 
 	float screenRatio;
 
 private:
-	Terrain * terrain;
+	Terrain *terrain;
 	Model treeModel;
 	Model terrainModel;
 
@@ -60,7 +62,4 @@ private:
 	float lastFrame = 0.0f;
 
 	void ProcessInput();
-	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-	void window_focus_callback(GLFWwindow *window, int focused);
 };

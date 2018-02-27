@@ -16,6 +16,7 @@
 
 #include "heightmap.h"
 #include "shader.h"
+#include "model.h"
 
 /* Represents a grid subunit */
 class Unit
@@ -37,7 +38,9 @@ public:
 	void Initialize(int argWidth, int argHeight);
 	void SetRenderWindow(int startX, int endX, int startY, int endY);
 	float GetHeight(int argX, int argY);
-	void Draw();
+	void Draw(Shader & shader);
+	void LoadTextures(Shader & shaderTerrain, string exePath);
+	void GenerateBuffers();
 
 	vector<vector<Unit>> grid;
 	vector<vector<float>> heightmap;
@@ -45,12 +48,10 @@ public:
 private:
 	void CreateGeometry();
 	void LoadVisibleGeometry(int startX, int endX, int startY, int endY);
-	void LoadTextures();
 	void CreateGrid();
 	void AddTexturesToGrid();
 	void PopulateGridWithObjects();
 	void ReloadGPUData();
-	void GenerateBuffers();
 
 	GLuint VBO, VAO, EBO;
 	unsigned int texture_id_grass;

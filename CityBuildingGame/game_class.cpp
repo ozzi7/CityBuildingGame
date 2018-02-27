@@ -1,63 +1,93 @@
 #include "game_class.h"
 
-GameClass::GameClass(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, Camera & aCamera, GLFWwindow & aWindow) {
+GameClass::GameClass(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, Camera & aCamera, GLFWwindow* aWindow) {
 	screenRatio = aScreenRatio;
 	exe_path = aExePath;
 	camera = &aCamera;
-	window = & aWindow;
-	terrain = &Terrain();
+	window = aWindow;
 
-	terrain->Initialize(aMapWidth, aMapHeight);
+	mapHeight = aMapHeight;
+	mapWidth = aMapWidth;
+	terrain = new Terrain();
 }
-GameClass::~GameClass() {}
+GameClass::~GameClass() 
+{
+	delete terrain;
+}
 
 void GameClass::StartGame()
 {	
-
-	//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	//glfwSetScrollCallback(window, scroll_callback);
-	//glfwSetWindowFocusCallback(window, window_focus_callback);
-
-	//camera->lock_cursor_to_window();
-	//camera->mouse_scroll();
-
-	glEnable(GL_DEPTH_TEST);
+	camera->lock_cursor_to_window();
+	camera->mouse_scroll();
 
 	// Spawning a tree,
 	Tree tree(glm::vec3(10.0f, 10.0f, 5.0f));
 	trees.push_back(tree);
-	std::string texture_path = exe_path + "\\tree2_3ds\\Tree2.3ds";
-	std::replace(texture_path.begin(), texture_path.end(), '\\', '/');
+	std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
+	std::string texture_path = exe_path + "/tree2_3ds/Tree2.3ds";
 	treeModel = Model(texture_path, false);
-	terrainModel = Model(texture_path, false);
+	
+	shaderTree = new Shader("vertex_shader.vert", "fragment_shader.frag");
+	shaderTerrain = new Shader("basic_lighting.vert", "basic_lighting.frag");
 
-	shaderTree = Shader("vertex_shader.vert", "fragment_shader.frag");
-	shaderTerrain = Shader("basic_lighting.vert", "basic_lighting.frag");
-
+	terrain->Initialize(mapWidth, mapHeight);
+	terrain->LoadTextures(*shaderTerrain, exe_path);
+	terrain->GenerateBuffers();
 	glfwMakeContextCurrent(NULL);
 
-	std::thread threadGameLoop(&GameClass::GameLoop, this);
 	std::thread threadRenderLoop(&GameClass::RenderLoop, this);
-	while (!glfwWindowShouldClose(window)){}
-	threadGameLoop.join();
+	GameLoop();
 	threadRenderLoop.join();
 }
 void GameClass::RenderLoop()
 {	
 	glfwMakeContextCurrent(window);
 
-	shaderTree.use();
-	glm::mat4 projection = glm::ortho(-screenRatio * camera->Zoom, screenRatio * camera->Zoom, -camera->Zoom, camera->Zoom, 1.0f, 1000.0f);
-	shaderTree.setMat4("projection", projection);
-
-	glm::mat4 view = camera->GetViewMatrix();
-	shaderTree.setMat4("view", view);
+	glEnable(GL_DEPTH_TEST);
 
 	while (true)
 	{	
-		ProcessInput();
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		// render terrain...
+		// light properties
+		glm::vec3 lightColor;
+		lightColor.x = 1.0f;//sin(glfwGetTime() * 2.0f);
+		lightColor.y = 1.0f;// sin(glfwGetTime() * 0.7f);
+		lightColor.z = 1.0f;// sin(glfwGetTime() * 1.3f);
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+		shaderTerrain->setVec3("light.ambient", ambientColor);
+		shaderTerrain->setVec3("light.diffuse", diffuseColor);
+		//ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		shaderTerrain->setVec3("light.position", camera->Position);
+		shaderTerrain->setVec3("viewPos", camera->Position);
+
+		//glm::mat4 projection = glm::ortho(-1.77777f * camera.Zoom, 1.77777f * camera.Zoom, -1 * camera.Zoom, 1 * camera.Zoom, 1.0f, 1000.0f);
+		glm::mat4 projection = glm::ortho(-1.77777f * camera->Zoom, 1.77777f * camera->Zoom, -1 * camera->Zoom, 1 * camera->Zoom, 1.0f, 1000.0f);
+		shaderTerrain->setMat4("projection", projection);
+
+		// camera/view transformation
+		glm::mat4 view = camera->GetViewMatrix();
+		shaderTerrain->setMat4("view", view);
+
+		// calculate the model matrix for each object and pass it to shader before drawing
+		glm::mat4 model = glm::mat4(1.0f);
+		shaderTerrain->setMat4("model", model);
+
+		terrain->Draw(*shaderTerrain);
+
+
+		// render tree...
+
+		//shaderTree.use();
+		//glm::mat4 projection = glm::ortho(-screenRatio * camera->Zoom, screenRatio * camera->Zoom, -camera->Zoom, camera->Zoom, 1.0f, 1000.0f);
+		//shaderTree.setMat4("projection", projection);
+
+		//glm::mat4 view = camera->GetViewMatrix();
+		//shaderTree.setMat4("view", view);
+
 		/*for (int i = 0; trees.size(); i++) {
 			glm::mat4 model2 = glm::mat4(1.0f);
 			model2 = glm::translate(model2, trees[i].Position);
@@ -67,9 +97,7 @@ void GameClass::RenderLoop()
 			treeModel.Draw(shaderTree);
 		}*/
 
-		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		glfwSwapBuffers(window);
-		glfwPollEvents();
 	}
 }
 
@@ -79,11 +107,16 @@ void GameClass::GameLoop()
 	const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
 	const int MAX_FRAMESKIP = 10;
 
-	while (true)
+	while(true)
 	{
+
 		DWORD next_game_tick = GetTickCount();
 		int loops = 0;
 		while (GetTickCount() > next_game_tick && loops < MAX_FRAMESKIP) {
+
+			glfwPollEvents();
+			ProcessInput();
+			terrain->SetRenderWindow(0, 100, 0, 110);
 
 			next_game_tick += SKIP_TICKS;
 			loops++;
@@ -104,24 +137,4 @@ void GameClass::ProcessInput()
 		camera->keyboard_scroll(LEFT);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		camera->keyboard_scroll(RIGHT);
-}
-
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-void GameClass::framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	// make sure the viewport matches the new window dimensions; note that width and 
-	// height will be significantly larger than specified on retina displays.
-	//glViewport(0, 0, width, height);
-}
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-void GameClass::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-	camera->mouse_zoom((float)yoffset);
-}
-// glfw: whenever the window receives focus, camera gets locked
-void GameClass::window_focus_callback(GLFWwindow *window, int focused)
-{
-	if (focused) {
-		camera->lock_cursor_to_window();
-	}
 }
