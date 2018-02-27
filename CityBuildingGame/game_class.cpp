@@ -45,7 +45,7 @@ void GameClass::RenderLoop()
 
 	glEnable(GL_DEPTH_TEST);
 
-	while (true)
+	while (!glfwWindowShouldClose(window))
 	{	
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -107,7 +107,7 @@ void GameClass::GameLoop()
 	const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
 	const int MAX_FRAMESKIP = 10;
 
-	while(true)
+	while(!glfwWindowShouldClose(window))
 	{
 
 		DWORD next_game_tick = GetTickCount();
