@@ -30,10 +30,8 @@ void GameClass::StartGame()
 	shaderTree = new Shader("vertex_shader.vert", "fragment_shader.frag");
 	shaderTerrain = new Shader("basic_lighting.vert", "basic_lighting.frag");
 
-	terrain->Initialize(mapWidth, mapHeight);
-	terrain->LoadTextures(*shaderTerrain, exe_path);
-	terrain->GenerateBuffers();
 	glfwMakeContextCurrent(NULL);
+	terrain->Initialize(mapWidth, mapHeight);
 
 	std::thread threadRenderLoop(&GameClass::RenderLoop, this);
 	GameLoop();
@@ -44,6 +42,10 @@ void GameClass::RenderLoop()
 	glfwMakeContextCurrent(window);
 
 	glEnable(GL_DEPTH_TEST);
+
+	shaderTerrain->use();
+	terrain->LoadTextures(*shaderTerrain, exe_path);
+	terrain->GenerateBuffers();
 
 	while (!glfwWindowShouldClose(window))
 	{	
