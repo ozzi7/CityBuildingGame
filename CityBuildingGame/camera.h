@@ -20,7 +20,7 @@ enum Camera_Movement {
 };
 
 // Default camera values
-const float SCROLL_SPEED = 0.03f;
+const float SCROLL_SPEED = 0.3f;
 const float ZOOM_DEFAULT = 5.0f;
 const float ZOOM_MAX = 100.0f;
 const float ZOOM_MIN = 0.2f;

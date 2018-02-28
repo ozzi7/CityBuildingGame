@@ -6,6 +6,7 @@
 #include <string>
 #include <algorithm>
 #include <thread>
+#include <chrono>
 
 // Include GLM, math library
 #include <glm/glm.hpp>

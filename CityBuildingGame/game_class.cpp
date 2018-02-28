@@ -105,24 +105,21 @@ void GameClass::RenderLoop()
 
 void GameClass::GameLoop()
 {		
-	const int TICKS_PER_SECOND = 60;
+	const int TICKS_PER_SECOND = 120;
 	const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
 	const int MAX_FRAMESKIP = 10;
 
+	int loops = 0;
+	DWORD next_game_tick = GetTickCount() + SKIP_TICKS;
 	while(!glfwWindowShouldClose(window))
 	{
+		glfwPollEvents();
+		ProcessInput();
+		terrain->SetRenderWindow(0, 100, 0, 110);
 
-		DWORD next_game_tick = GetTickCount();
-		int loops = 0;
-		while (GetTickCount() > next_game_tick && loops < MAX_FRAMESKIP) {
-
-			glfwPollEvents();
-			ProcessInput();
-			terrain->SetRenderWindow(0, 100, 0, 110);
-
-			next_game_tick += SKIP_TICKS;
-			loops++;
-		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(next_game_tick - GetTickCount64()));
+		next_game_tick += SKIP_TICKS;
+		loops++;
 	}
 }
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly

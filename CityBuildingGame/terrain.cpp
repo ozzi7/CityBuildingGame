@@ -27,7 +27,6 @@ void Terrain::SetRenderWindow(int startX, int endX, int startY, int endY)
 		currEndY = endY;
 		LoadVisibleGeometry(startX, endX, startY, endY);
 	}
-	LoadVisibleGeometry(startX, endX, startY, endY);
 }
 float Terrain::GetHeight(int argX, int argY)
 {
