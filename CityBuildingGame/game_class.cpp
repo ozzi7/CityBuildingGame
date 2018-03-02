@@ -20,9 +20,14 @@ void GameClass::StartGame()
 	camera->lock_cursor_to_window();
 	camera->mouse_scroll();
 
-	// Spawning a tree,
-	Tree tree(glm::vec3(10.0f, 10.0f, 5.0f));
-	trees.push_back(tree);
+	// Spawning many many trees
+	Tree *tree;
+	for (int i = 0; i<200; i++) {
+		float x = rand() % 50 + 3;
+		float y = rand() % 50 + 3;
+		tree = new Tree(glm::vec3(x, y, 10.0f));
+		trees.push_back(tree);
+	}
 	std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
 	std::string texture_path = exe_path + "/tree2_3ds/Tree2.3ds";
 	treeModel = Model(texture_path, false);
@@ -68,7 +73,7 @@ void GameClass::RenderLoop()
 		shaderTerrain->setVec3("viewPos", camera->Position);
 
 		//glm::mat4 projection = glm::ortho(-1.77777f * camera.Zoom, 1.77777f * camera.Zoom, -1 * camera.Zoom, 1 * camera.Zoom, 1.0f, 1000.0f);
-		glm::mat4 projection = glm::ortho(-1.77777f * camera->Zoom, 1.77777f * camera->Zoom, -1 * camera->Zoom, 1 * camera->Zoom, 1.0f, 1000.0f);
+		glm::mat4 projection = glm::ortho(-screenRatio * camera->Zoom, screenRatio * camera->Zoom, -1 * camera->Zoom, 1 * camera->Zoom, 1.0f, 1000.0f);
 		shaderTerrain->setMat4("projection", projection);
 
 		// camera/view transformation
@@ -84,21 +89,21 @@ void GameClass::RenderLoop()
 
 		// render tree...
 
-		//shaderTree.use();
-		//glm::mat4 projection = glm::ortho(-screenRatio * camera->Zoom, screenRatio * camera->Zoom, -camera->Zoom, camera->Zoom, 1.0f, 1000.0f);
-		//shaderTree.setMat4("projection", projection);
+		shaderTree->use();
+		shaderTree->setMat4("projection", projection);
+		shaderTree->setMat4("view", view);
 
-		//glm::mat4 view = camera->GetViewMatrix();
-		//shaderTree.setMat4("view", view);
-
-		/*for (int i = 0; trees.size(); i++) {
+		for (int i = 0; trees.size() > i; i++) {
 			glm::mat4 model2 = glm::mat4(1.0f);
-			model2 = glm::translate(model2, trees[i].Position);
+			model2 = glm::translate(model2, trees[i]->Position);
+			model2 = glm::scale(model2, glm::vec3(0.1f, 0.1f, 0.1f));
 
-			shaderTree.setMat4("model", model2);
+			shaderTree->setMat4("model", model2);
 
-			treeModel.Draw(shaderTree);
-		}*/
+			treeModel.Draw(*shaderTree);
+		}
+
+		shaderTerrain->use();
 
 		glfwSwapBuffers(window);
 	}
