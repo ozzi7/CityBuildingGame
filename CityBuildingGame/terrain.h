@@ -41,6 +41,7 @@ public:
 	void Draw(Shader & shader);
 	void LoadTextures(Shader & shaderTerrain, string exePath);
 	void GenerateBuffers();
+	void InitializeRenderData(int visibleWidth, int visibleHeight);
 
 	vector<vector<Unit>> grid;
 	vector<vector<float>> heightmap;
@@ -70,7 +71,9 @@ private:
 	int currStartX, currEndX, currStartY, currEndY = 0;
 
 	mutex renderDataMutex;
-	atomic_bool reloadGPUData = false;
-	vector<GLfloat> renderData; /* Gets sent to GPU */
+	bool reloadGPUData = false;
+	int currRenderData = 1;
+	vector<GLfloat> *renderData0; /* Gets sent to GPU */
+	vector<GLfloat> *renderData1; 
 	vector<unsigned int> indices;
 };

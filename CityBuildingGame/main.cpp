@@ -23,8 +23,8 @@
 const unsigned int SCR_WIDTH = 1400;
 const unsigned int SCR_HEIGHT = 800;
 // render time, admin machine 16 sek from pressing debug to show render at 300x300 (for reference)
-const unsigned int MAP_WIDTH = 100;
-const unsigned int MAP_HEIGHT = 120;
+const unsigned int MAP_WIDTH = 1000;
+const unsigned int MAP_HEIGHT = 1000;
 
 Camera camera;
 

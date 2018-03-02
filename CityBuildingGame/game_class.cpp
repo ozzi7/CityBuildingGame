@@ -32,6 +32,7 @@ void GameClass::StartGame()
 
 	glfwMakeContextCurrent(NULL);
 	terrain->Initialize(mapWidth, mapHeight);
+	terrain->InitializeRenderData(250, 200);
 
 	std::thread threadRenderLoop(&GameClass::RenderLoop, this);
 	GameLoop();
@@ -115,7 +116,7 @@ void GameClass::GameLoop()
 	{
 		glfwPollEvents();
 		ProcessInput();
-		terrain->SetRenderWindow(0, 100, 0, 110);
+		terrain->SetRenderWindow(camera->Position.x-100.0f, camera->Position.x + 150.0f, camera->Position.y - 100.0f, camera->Position.x + 100.0f);
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(next_game_tick - GetTickCount64()));
 		next_game_tick += SKIP_TICKS;
