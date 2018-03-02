@@ -54,7 +54,7 @@ private:
 	Model treeModel;
 	Model terrainModel;
 
-	vector<Tree> trees;
+	vector<Tree*> trees;
 
 	GLuint mvp_handle;
 
