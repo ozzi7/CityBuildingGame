@@ -134,7 +134,6 @@ void Terrain::LoadVisibleGeometry(int startX, int endX, int startY, int endY)
 	renderDataMutex.unlock();
 
 	/* Load GPU data for visible area */
-	std::fill((*renderDataTemp).begin(), (*renderDataTemp).end(), 0);
 	float global_i, global_j = 0.0f;
 	int index = 0;
 	for (int i = 0; i < visibleHeight; ++i)
@@ -215,6 +214,8 @@ void Terrain::LoadVisibleGeometry(int startX, int endX, int startY, int endY)
 			(*renderDataTemp)[index++] = 1.0f;
 		}
 	}
+	/* Fill rest with 0 if we render it */
+	std::fill((*renderDataTemp).begin() + index, (*renderDataTemp).end(), 0);
 	renderDataMutex.lock();
 	if (currRenderData == 1)
 	{
