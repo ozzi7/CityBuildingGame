@@ -121,7 +121,7 @@ void GameClass::GameLoop()
 	{
 		glfwPollEvents();
 		ProcessInput();
-		terrain->SetRenderWindow(camera->Position.x-100.0f, camera->Position.x + 150.0f, camera->Position.y - 100.0f, camera->Position.x + 100.0f);
+		terrain->SetRenderWindow(camera->Position.x-20.0f, camera->Position.x + 40.0f, camera->Position.y - 20.0f, camera->Position.x + 20.0f);
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(next_game_tick - GetTickCount64()));
 		next_game_tick += SKIP_TICKS;

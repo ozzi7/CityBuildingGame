@@ -2,10 +2,10 @@
 
 Terrain::Terrain() {}
 
-void Terrain::Initialize(int aWidth, int aHeight)
+void Terrain::Initialize(int aGridWidth, int aGridHeight)
 {
-	gridHeight = aHeight;
-	gridWidth = aWidth;
+	gridWidth = aGridWidth;
+	gridHeight = aGridHeight;
 
 	Heightmap heightmap_obj;
 	heightmap = vector<vector<float>>(gridHeight + 1, vector<float>(gridWidth + 1, 0));
@@ -107,12 +107,14 @@ void Terrain::ReloadGPUData()
 }
 void Terrain::LoadVisibleGeometry(int startX, int endX, int startY, int endY)
 {	
+	/* startx, endx, starty, endy should be the edge points of the rendered screen */
+	/* Note that bugs on edge of screen are from rendering old buffer data */
 	/* Create geometry data for visible area */
 	startX = max(0, startX);
-	endX = startX + 250; // min(gridWidth, endX);
+	endX = min(gridWidth, startX + 600);
 
 	startY = max(0, startY);
-	endY = startY + 200; //  min(gridHeight, endY);
+	endY = min(gridHeight, startY + 40);
 
 	/* Create vertices of triangles */
 	visibleHeight = endY - startY;
@@ -132,83 +134,85 @@ void Terrain::LoadVisibleGeometry(int startX, int endX, int startY, int endY)
 	renderDataMutex.unlock();
 
 	/* Load GPU data for visible area */
+	std::fill((*renderDataTemp).begin(), (*renderDataTemp).end(), 0);
 	float global_i, global_j = 0.0f;
+	int index = 0;
 	for (int i = 0; i < visibleHeight; ++i)
 	{
 		for (int j = 0; j < visibleWidth; ++j)
 		{
-			global_i = (float)startY + i;
-			global_j = (float)startX + j;
+			global_i = startY + i;
+			global_j = startX + j;
 
 			// x/y/z of first vertex
-			(*renderDataTemp)[(i*visibleWidth+j)*48] = global_j;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+1] = global_i;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+2] = heightmap[global_i][global_j];
+			(*renderDataTemp)[index++] = global_j;
+			(*renderDataTemp)[index++] = global_i;
+			(*renderDataTemp)[index++] = heightmap[global_i][global_j];
 
 			// x/y/z of normal vector
-			(*renderDataTemp)[(i*visibleWidth + j) * 48+3] = vertexNormals[global_i*(gridWidth + 1) + global_j].x;
-			(*renderDataTemp)[(i*visibleWidth + j) * 48+4] = vertexNormals[global_i*(gridWidth + 1) + global_j].y;
-			(*renderDataTemp)[(i*visibleWidth + j) * 48+5] = vertexNormals[global_i*(gridWidth + 1) + global_j].z;
+			(*renderDataTemp)[index++] = vertexNormals[global_i*(gridWidth + 1) + global_j].x;
+			(*renderDataTemp)[index++] = vertexNormals[global_i*(gridWidth + 1) + global_j].y;
+			(*renderDataTemp)[index++] = vertexNormals[global_i*(gridWidth + 1) + global_j].z;
 
 			// texture coord X, Y of first vertex
-			(*renderDataTemp)[(i*visibleWidth+j)*48+6] = 0.0f;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+7] = 0.0f;
+			(*renderDataTemp)[index++] = 0.0f;
+			(*renderDataTemp)[index++] = 0.0f;
 
-			(*renderDataTemp)[(i*visibleWidth+j)*48+8] = global_j + 1;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+9] = global_i;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+10] = heightmap[global_i][global_j + 1];
+			(*renderDataTemp)[index++] = global_j + 1;
+			(*renderDataTemp)[index++] = global_i;
+			(*renderDataTemp)[index++] = heightmap[global_i][global_j + 1];
 
 			// x/y/z of normal vector
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 11] = vertexNormals[global_i*(gridWidth + 1) + global_j+1].x;
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 12] = vertexNormals[global_i*(gridWidth + 1) + global_j+1].y;
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 13] = vertexNormals[global_i*(gridWidth + 1) + global_j+1].z;
+			(*renderDataTemp)[index++] = vertexNormals[global_i*(gridWidth + 1) + global_j+1].x;
+			(*renderDataTemp)[index++] = vertexNormals[global_i*(gridWidth + 1) + global_j+1].y;
+			(*renderDataTemp)[index++] = vertexNormals[global_i*(gridWidth + 1) + global_j+1].z;
 
-			(*renderDataTemp)[(i*visibleWidth+j)*48+14] = 1.0f;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+15] = 0.0f;
+			(*renderDataTemp)[index++] = 1.0f;
+			(*renderDataTemp)[index++] = 0.0f;
 
-			(*renderDataTemp)[(i*visibleWidth+j)*48+16] = global_j;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+17] = global_i + 1;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+18] = heightmap[global_i + 1][global_j];
+			(*renderDataTemp)[index++] = global_j;
+			(*renderDataTemp)[index++] = global_i + 1;
+			(*renderDataTemp)[index++] = heightmap[global_i + 1][global_j];
 
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 19] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j].x;
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 20] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j].y;
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 21] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j].z;
+			(*renderDataTemp)[index++] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j].x;
+			(*renderDataTemp)[index++] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j].y;
+			(*renderDataTemp)[index++] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j].z;
 
-			(*renderDataTemp)[(i*visibleWidth+j)*48+22] = 0.0f;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+23] = 1.0f;
+			(*renderDataTemp)[index++] = 0.0f;
+			(*renderDataTemp)[index++] = 1.0f;
 
-			(*renderDataTemp)[(i*visibleWidth+j)*48+24] = global_j;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+25] = global_i + 1;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+26] = heightmap[global_i + 1][global_j];
+			(*renderDataTemp)[index++] = global_j;
+			(*renderDataTemp)[index++] = global_i + 1;
+			(*renderDataTemp)[index++] = heightmap[global_i + 1][global_j];
 
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 27] = vertexNormals[(global_i + 1)*(gridWidth + 1) + global_j].x;
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 28] = vertexNormals[(global_i + 1)*(gridWidth + 1) + global_j].y;
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 29] = vertexNormals[(global_i + 1)*(gridWidth + 1) + global_j].z;
+			(*renderDataTemp)[index++] = vertexNormals[(global_i + 1)*(gridWidth + 1) + global_j].x;
+			(*renderDataTemp)[index++] = vertexNormals[(global_i + 1)*(gridWidth + 1) + global_j].y;
+			(*renderDataTemp)[index++] = vertexNormals[(global_i + 1)*(gridWidth + 1) + global_j].z;
 
-			(*renderDataTemp)[(i*visibleWidth+j)*48+30] = 0.0f;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+31] = 1.0f;
+			(*renderDataTemp)[index++] = 0.0f;
+			(*renderDataTemp)[index++] = 1.0f;
 
-			(*renderDataTemp)[(i*visibleWidth+j)*48+32] = global_j + 1;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+33] = global_i;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+34] = heightmap[global_i][global_j + 1];
+			(*renderDataTemp)[index++] = global_j + 1;
+			(*renderDataTemp)[index++] = global_i;
+			(*renderDataTemp)[index++] = heightmap[global_i][global_j + 1];
 
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 35] = vertexNormals[global_i*(gridWidth + 1) + global_j + 1].x;
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 36] = vertexNormals[global_i*(gridWidth + 1) + global_j + 1].y;
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 37] = vertexNormals[global_i*(gridWidth + 1) + global_j + 1].z;
+			(*renderDataTemp)[index++] = vertexNormals[global_i*(gridWidth + 1) + global_j + 1].x;
+			(*renderDataTemp)[index++] = vertexNormals[global_i*(gridWidth + 1) + global_j + 1].y;
+			(*renderDataTemp)[index++] = vertexNormals[global_i*(gridWidth + 1) + global_j + 1].z;
 
-			(*renderDataTemp)[(i*visibleWidth+j)*48+38] = 1.0f;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+39] = 0.0f;
+			(*renderDataTemp)[index++] = 1.0f;
+			(*renderDataTemp)[index++] = 0.0f;
 
-			(*renderDataTemp)[(i*visibleWidth+j)*48+40] = global_j + 1;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+41] = global_i + 1;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+42] = heightmap[global_i + 1][global_j + 1];
+			(*renderDataTemp)[index++] = global_j + 1;
+			(*renderDataTemp)[index++] = global_i + 1;
+			(*renderDataTemp)[index++] = heightmap[global_i + 1][global_j + 1];
 
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 43] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j + 1].x;
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 44] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j + 1].y;
-			(*renderDataTemp)[(i*visibleWidth + j) * 48 + 45] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j + 1].z;
+			(*renderDataTemp)[index++] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j + 1].x;
+			(*renderDataTemp)[index++] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j + 1].y;
+			(*renderDataTemp)[index++] = vertexNormals[(global_i+1)*(gridWidth + 1) + global_j + 1].z;
 
-			(*renderDataTemp)[(i*visibleWidth+j)*48+46] = 1.0f;
-			(*renderDataTemp)[(i*visibleWidth+j)*48+47] = 1.0f;
+			(*renderDataTemp)[index++] = 1.0f;
+			(*renderDataTemp)[index++] = 1.0f;
 		}
 	}
 	renderDataMutex.lock();
