@@ -36,7 +36,7 @@ public:
 	~Terrain();
 
 	void Initialize(int argWidth, int argHeight);
-	void SetRenderWindow(int startX, int endX, int startY, int endY);
+	void SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	float GetHeight(int argX, int argY);
 	void Draw(Shader & shader);
 	void LoadTextures(Shader & shaderTerrain, string exePath);
@@ -48,7 +48,7 @@ public:
 
 private:
 	void CreateGeometry();
-	void LoadVisibleGeometry(int startX, int endX, int startY, int endY);
+	void LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	void CreateGrid();
 	void AddTexturesToGrid();
 	void PopulateGridWithObjects();
@@ -68,11 +68,12 @@ private:
 	/* Defines what is rendered of the terrain*/
 	int visibleHeight;
 	int visibleWidth;
-	int currStartX, currEndX, currStartY, currEndY = 0;
+	int currUpperLeftX, currUpperLeftY = 0;
 
 	mutex renderDataMutex;
 	bool reloadGPUData = false;
 	int currRenderData = 1;
+	int renderDataVertexCount = 0;
 	vector<GLfloat> *renderData0; /* Gets sent to GPU */
 	vector<GLfloat> *renderData1; 
 	vector<unsigned int> indices;

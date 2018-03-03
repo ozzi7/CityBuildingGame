@@ -22,7 +22,7 @@ void GameClass::StartGame()
 
 	// Spawning many many trees
 	Tree *tree;
-	for (int i = 0; i<1000; i++) {
+	for (int i = 0; i<100; i++) {
 		float x = rand() % 50 + 3;
 		float y = rand() % 50 + 3;
 		tree = new Tree(glm::vec3(x, y, 10.0f));
@@ -37,7 +37,7 @@ void GameClass::StartGame()
 
 	glfwMakeContextCurrent(NULL);
 	terrain->Initialize(mapWidth, mapHeight);
-	terrain->InitializeRenderData(250, 200);
+	terrain->InitializeRenderData(120, 120);
 
 	std::thread threadRenderLoop(&GameClass::RenderLoop, this);
 	GameLoop();
@@ -123,7 +123,8 @@ void GameClass::GameLoop()
 		glfwPollEvents();
 		ProcessInput();
 
-		terrain->SetRenderWindow(camera->Position.x-20.0f, camera->Position.x + 40.0f, camera->Position.y - 20.0f, camera->Position.x + 20.0f);
+		terrain->SetRenderWindow(glm::vec2(10.0f, 10.0f), glm::vec2(30.0f, 30.0f), glm::vec2(20.0f, 0.0f),
+			glm::vec2(40.0f, 20.0f));
 		// mouse scroll
 		camera->mouse_scroll();
 
