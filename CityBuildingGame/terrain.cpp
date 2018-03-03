@@ -74,7 +74,7 @@ void Terrain::Draw(Shader &shaderTerrain)
 
 	glBindVertexArray(VAO);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, visibleWidth*visibleHeight*6);
 }
 void Terrain::ReloadGPUData()
