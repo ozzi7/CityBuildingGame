@@ -9,7 +9,7 @@ void Terrain::Initialize(int aGridWidth, int aGridHeight)
 
 	Heightmap heightmap_obj;
 	heightmap = vector<vector<float>>(gridHeight + 1, vector<float>(gridWidth + 1, 0));
-	heightmap_obj.GeneratePerlinNoise(heightmap, gridWidth + 1, gridHeight + 1, 20, 6);
+	heightmap_obj.GeneratePerlinNoise(heightmap, gridWidth + 1, gridHeight + 1, 5, 6);
 
 	CreateGrid();
 	PopulateGridWithObjects();
@@ -132,10 +132,16 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 
 	/* Load GPU data for visible area */
 	int index = 0;
+	int startX = max(0, min(gridWidth, (int)lowerLeft.x));
+	int endX = max(0, min(gridWidth, (int)lowerLeft.x));
 	for (int i = lowerLeft.y; i < 50; ++i)
 	{
-		for (int j = (int)max(0, (int)min(gridWidth, (int)(lowerLeft.x - (i - lowerLeft.y))));
-			j < (int)max(0, (int)min(gridWidth, (int)(lowerLeft.x + (i - lowerLeft.y)))); ++j)
+		startX--;
+		endX++;
+		startX = max(0, min(gridWidth, (int)startX));
+		endX = max(0, min(gridWidth, (int)endX));
+
+		for (int j = startX; j < endX; ++j)
 		{
 			/* Check if the point is inside the rectangle given by the arguments*/
 			glm::vec2 AM = glm::vec2(j - upperLeft.x, i - upperLeft.y);
@@ -144,7 +150,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 
 			if (!(0 <= glm::dot(AM, AB)))
 			{ 
-				// on left side of rectangle
+				// on left side of rectangle ( should never happen)
 				continue;
 			}
 			else if (!(glm::dot(AM, AB) < glm::dot(AB, AB)))
@@ -160,6 +166,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 			else if (!(0 <= glm::dot(AM, AD)))
 			{
 				// on top of rectangle
+				startX = startX + 2;
 				continue;
 			}
 
