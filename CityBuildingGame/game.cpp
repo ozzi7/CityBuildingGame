@@ -1,6 +1,6 @@
-#include "game_class.h"
+#include "game.h"
 
-GameClass::GameClass(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, Camera & aCamera, GLFWwindow* aWindow) {
+Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, Camera & aCamera, GLFWwindow* aWindow) {
 	screenRatio = aScreenRatio;
 	exe_path = aExePath;
 	camera = &aCamera;
@@ -10,13 +10,13 @@ GameClass::GameClass(int aMapWidth, int aMapHeight, float aScreenRatio, string a
 	mapWidth = aMapWidth;
 	terrain = new Terrain();
 }
-GameClass::~GameClass() 
+Game::~Game()
 {
 	delete terrain;
 }
 
-void GameClass::StartGame()
-{	
+void Game::StartGame()
+{
 	//camera->lock_cursor_to_window();
 	//camera->mouse_scroll();
 
@@ -31,20 +31,21 @@ void GameClass::StartGame()
 	std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
 	std::string texture_path = exe_path + "/tree2_3ds/Tree2.3ds";
 	treeModel = Model(texture_path, false);
-	
+
 	shaderTree = new Shader("vertex_shader.vert", "fragment_shader.frag");
-	shaderTerrain = new Shader("basic_lighting.vert", "basic_lighting.frag");
+	shaderTerrain = new Shader("vertex_shader.vert", "fragment_shader.frag");
+	//shaderTerrain = new Shader("basic_lighting.vert", "basic_lighting.frag");
 
 	glfwMakeContextCurrent(NULL);
 	terrain->Initialize(mapWidth, mapHeight);
 	terrain->InitializeRenderData(120, 120);
 
-	std::thread threadRenderLoop(&GameClass::RenderLoop, this);
+	std::thread threadRenderLoop(&Game::RenderLoop, this);
 	GameLoop();
 	threadRenderLoop.join();
 }
-void GameClass::RenderLoop()
-{	
+void Game::RenderLoop()
+{
 	glfwMakeContextCurrent(window);
 
 	glEnable(GL_DEPTH_TEST);
@@ -54,7 +55,7 @@ void GameClass::RenderLoop()
 	terrain->GenerateBuffers();
 
 	while (!glfwWindowShouldClose(window))
-	{	
+	{
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -110,21 +111,24 @@ void GameClass::RenderLoop()
 	}
 }
 
-void GameClass::GameLoop()
-{		
+void Game::GameLoop()
+{
 	const int TICKS_PER_SECOND = 120;
 	const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
 	const int MAX_FRAMESKIP = 10;
 
 	int loops = 0;
 	DWORD next_game_tick = GetTickCount() + SKIP_TICKS;
-	while(!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
 		ProcessInput();
 
-		terrain->SetRenderWindow(glm::vec2(10.0f, 10.0f), glm::vec2(30.0f, 30.0f), glm::vec2(20.0f, 0.0f),
-			glm::vec2(40.0f, 20.0f));
+		/*terrain->SetRenderWindow(glm::vec2(10.0f, 10.0f), glm::vec2(30.0f, 30.0f), glm::vec2(20.0f, 0.0f),
+		glm::vec2(40.0f, 20.0f));
+		*/
+		terrain->SetRenderWindow(camera->Position + 10.0f, glm::vec2(camera->Position.x + 30.0f, camera->Position.y + 30.0f), glm::vec2(camera->Position.x + 20.0f,
+			camera->Position.y), glm::vec2(camera->Position.x + 40.0f, camera->Position.y + 20.0f));
 		// mouse scroll
 		camera->mouse_scroll();
 
@@ -134,7 +138,7 @@ void GameClass::GameLoop()
 	}
 }
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-void GameClass::ProcessInput()
+void Game::ProcessInput()
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);

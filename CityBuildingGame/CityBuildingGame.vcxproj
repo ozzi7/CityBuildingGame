@@ -145,7 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="game_class.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="heightmap.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh.h" />
@@ -155,7 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
-    <ClInclude Include="game_class.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="heightmap.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="shader.h" />

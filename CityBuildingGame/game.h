@@ -19,11 +19,11 @@
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
 
-class GameClass
+class Game
 {
 public:
-	GameClass::GameClass(int, int, float, string, Camera &, GLFWwindow* window);
-	~GameClass();
+	Game::Game(int, int, float, string, Camera &, GLFWwindow* window);
+	~Game();
 
 	// Entry point to the game
 	void StartGame();

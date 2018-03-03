@@ -17,7 +17,7 @@
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
 
-#include "game_class.h"
+#include "game.h"
 
 // settings
 const unsigned int SCR_WIDTH = 1920;
@@ -72,8 +72,8 @@ int main(int argc, char* argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	GameClass gameClass(MAP_WIDTH, MAP_HEIGHT, SCREEN_RATIO, exe_path, camera, window);
-	gameClass.StartGame();
+	Game game(MAP_WIDTH, MAP_HEIGHT, SCREEN_RATIO, exe_path, camera, window);
+	game.StartGame();
 
 	glfwTerminate();
 	return 0;

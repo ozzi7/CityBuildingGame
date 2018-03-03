@@ -134,12 +134,22 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	int index = 0;
 	int startX = max(0, min(gridWidth, (int)lowerLeft.x));
 	int endX = max(0, min(gridWidth, (int)lowerLeft.x));
-	for (int i = lowerLeft.y; i < 50; ++i)
+	for (int i = lowerLeft.y; ; ++i)
 	{
 		startX--;
 		endX++;
 		startX = max(0, min(gridWidth, (int)startX));
 		endX = max(0, min(gridWidth, (int)endX));
+
+		// break outer loop if next is to the right and top of the rectangle
+		glm::vec2 AM = glm::vec2(startX - upperLeft.x, i - upperLeft.y);
+		glm::vec2 AB = glm::vec2(upperRight - upperLeft);
+		glm::vec2 AD = glm::vec2(lowerLeft - upperLeft);
+		if (!(glm::dot(AM, AB) < glm::dot(AB, AB)) && !(0 <= glm::dot(AM, AD)))
+		{
+			//to the right of rectangle
+			break;
+		}
 
 		for (int j = startX; j < endX; ++j)
 		{
