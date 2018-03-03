@@ -17,12 +17,12 @@ GameClass::~GameClass()
 
 void GameClass::StartGame()
 {	
-	camera->lock_cursor_to_window();
-	camera->mouse_scroll();
+	//camera->lock_cursor_to_window();
+	//camera->mouse_scroll();
 
 	// Spawning many many trees
 	Tree *tree;
-	for (int i = 0; i<200; i++) {
+	for (int i = 0; i<1000; i++) {
 		float x = rand() % 50 + 3;
 		float y = rand() % 50 + 3;
 		tree = new Tree(glm::vec3(x, y, 10.0f));
@@ -55,6 +55,7 @@ void GameClass::RenderLoop()
 
 	while (!glfwWindowShouldClose(window))
 	{	
+
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -121,6 +122,9 @@ void GameClass::GameLoop()
 	{
 		glfwPollEvents();
 		ProcessInput();
+		// mouse scroll
+		camera->mouse_scroll();
+
 		terrain->SetRenderWindow(camera->Position.x-100.0f, camera->Position.x + 150.0f, camera->Position.y - 100.0f, camera->Position.x + 100.0f);
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(next_game_tick - GetTickCount64()));

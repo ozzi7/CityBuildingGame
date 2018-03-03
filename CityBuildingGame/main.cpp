@@ -20,8 +20,8 @@
 #include "game_class.h"
 
 // settings
-const unsigned int SCR_WIDTH = 1400;
-const unsigned int SCR_HEIGHT = 800;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
 // render time, admin machine 16 sek from pressing debug to show render at 300x300 (for reference)
 const unsigned int MAP_WIDTH = 1000;
 const unsigned int MAP_HEIGHT = 1000;
@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	camera = Camera(glm::vec3(20.0f, 0.0f, 50.0f), window);
+	camera = Camera(glm::vec3(0.0f, 0.0f, 50.0f), window);
 
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

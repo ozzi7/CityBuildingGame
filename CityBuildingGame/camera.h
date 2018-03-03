@@ -32,14 +32,15 @@ class Camera
 public:
 	// Camera Attributes
 	glm::vec3 Position;
+	float Zoom;
+private:
 	glm::vec3 Up;
 	glm::vec3 Right;
-	glm::vec3 Lookat;
-	// Camera options
-	float Zoom;
+	glm::vec3 LookatOffset;
 	// Window object
 	GLFWwindow *Window;
 
+public:
 	// Empty constructor
 	Camera() {}
 
@@ -51,7 +52,7 @@ public:
 		Window = window;
 		Up = glm::vec3(-1.0f, 1.0f, 0.0f);
 		Right = glm::vec3(1.0f, 1.0f, 0.0f);
-		Lookat = glm::vec3(-50.0f, 50.0f, -50.0f);
+		LookatOffset = glm::vec3(-50.0f, 50.0f, -50.0f);
 
 		lock_cursor_to_window();
 	}
@@ -59,7 +60,12 @@ public:
 	// Returns the view matrix calculated using LookAt Matrix
 	glm::mat4 GetViewMatrix()
 	{
-		return glm::lookAt(Position, Position + Lookat, Up);
+		return glm::lookAt(Position, Position + LookatOffset, Up);
+	}
+
+	glm::vec3 GetLookatCoords()
+	{
+		return glm::vec3(Position + LookatOffset);
 	}
 
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
