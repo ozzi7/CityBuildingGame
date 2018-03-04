@@ -133,13 +133,13 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	/* Load GPU data for visible area */
 	int index = 0;
 	int startX = max(0, min(gridWidth, (int)lowerLeft.x));
-	int endX = max(0, min(gridWidth, (int)lowerLeft.x));
+	int endX = startX;
 	for (int i = lowerLeft.y; ; ++i)
 	{
 		startX--;
 		endX++;
-		startX = max(0, min(gridWidth, (int)startX));
-		endX = max(0, min(gridWidth, (int)endX));
+		startX = max(0, min(gridWidth, startX));
+		endX = max(0, min(gridWidth, endX));
 
 		// break outer loop if next is to the right and top of the rectangle
 		glm::vec2 AM = glm::vec2(startX - upperLeft.x, i - upperLeft.y);
@@ -147,24 +147,23 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 		glm::vec2 AD = glm::vec2(lowerLeft - upperLeft);
 		if (!(glm::dot(AM, AB) < glm::dot(AB, AB)) && !(0 <= glm::dot(AM, AD)))
 		{
-			//to the right of rectangle
 			break;
 		}
 
 		for (int j = startX; j < endX; ++j)
 		{
-			/* Check if the point is inside the rectangle given by the arguments*/
+			/* Check if the point is inside the rectangle*/
 			glm::vec2 AM = glm::vec2(j - upperLeft.x, i - upperLeft.y);
 			glm::vec2 AB = glm::vec2(upperRight - upperLeft);
 			glm::vec2 AD = glm::vec2(lowerLeft -upperLeft);
 
 			if (!(0 <= glm::dot(AM, AB)))
-			{ 
+			{
 				// on left side of rectangle ( should never happen)
 				continue;
 			}
 			else if (!(glm::dot(AM, AB) < glm::dot(AB, AB)))
-			{ 
+			{
 				//to the right of rectangle
 				break;
 			}
@@ -176,8 +175,15 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 			else if (!(0 <= glm::dot(AM, AD)))
 			{
 				// on top of rectangle
-				startX = startX + 2;
-				continue;
+				if (!(startX == 0))
+				{
+					startX = startX + 2;
+					continue;
+				}
+				else
+				{
+					continue;
+				}
 			}
 
 			// x/y/z of first vertex
