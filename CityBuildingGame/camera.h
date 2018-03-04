@@ -36,7 +36,7 @@ public:
 private:
 	glm::vec3 Up;
 	glm::vec3 Right;
-	glm::vec3 LookatOffset;
+	glm::vec3 Lookat;
 	// Window object
 	GLFWwindow *Window;
 
@@ -52,7 +52,7 @@ public:
 		Window = window;
 		Up = glm::vec3(-1.0f, 1.0f, 0.0f);
 		Right = glm::vec3(1.0f, 1.0f, 0.0f);
-		LookatOffset = glm::vec3(-50.0f, 50.0f, -50.0f);
+		Lookat = glm::vec3(-50.0f, 50.0f, -50.0f);
 
 		lock_cursor_to_window();
 	}
@@ -60,12 +60,27 @@ public:
 	// Returns the view matrix calculated using LookAt Matrix
 	glm::mat4 GetViewMatrix()
 	{
-		return glm::lookAt(Position, Position + LookatOffset, Up);
+		return glm::lookAt(Position, Position + Lookat, Up);
 	}
 
-	glm::vec3 GetLookatCoords()
+	glm::vec2 GetTopLeftVisible()
 	{
-		return glm::vec3(Position + LookatOffset);
+		return glm::vec2(Position.x + Lookat.x - 20, Position.y + Lookat.y);
+	}
+
+	glm::vec2 GetTopRightVisible()
+	{
+		return glm::vec2(Position.x + Lookat.x, Position.y + Lookat.y + 20);
+	}
+
+	glm::vec2 GetBottomLeftVisible()
+	{
+		return glm::vec2(Position.x + Lookat.x, Position.y + Lookat.y - 20);
+	}
+
+	glm::vec2 GetBottomRightVisible()
+	{
+		return glm::vec2(Position.x + Lookat.x + 20, Position.y + Lookat.y);
 	}
 
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
