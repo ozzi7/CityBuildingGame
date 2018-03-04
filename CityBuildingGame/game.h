@@ -16,6 +16,10 @@
 #include "grid.h"
 #include "tree.h"
 
+// To be removed
+#include "white_tree.h"
+#include "fir.h"
+
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
 
@@ -51,7 +55,8 @@ public:
 
 private:
 	Grid *grid;
-	Model treeModel;
+	Model whiteTreeModel;
+	Model firTreeModel;
 	Model terrainModel;
 
 	vector<Tree*> trees;

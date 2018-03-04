@@ -3,5 +3,6 @@
 
 class WhiteTree : public Tree
 {
-
+public:
+	WhiteTree(glm::vec3 position) : Tree(position) {}
 };

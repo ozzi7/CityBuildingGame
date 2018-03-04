@@ -19,20 +19,14 @@ Game::~Game()
 
 void Game::StartGame()
 {
-	//camera->lock_cursor_to_window();
-	//camera->mouse_scroll();
 
-	// Spawning many many trees
-	Tree *tree;
-	for (int i = 0; i<100; i++) {
-		float x = rand() % 50 + 3;
-		float y = rand() % 50 + 3;
-		tree = new Tree(glm::vec3(x, y, 10.0f));
-		trees.push_back(tree);
-	}
 	std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
 	std::string texture_path = exe_path + "/tree2_3ds/Tree2.3ds";
-	treeModel = Model(texture_path, false);
+	whiteTreeModel = Model(texture_path, false);
+
+	std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
+	texture_path = exe_path + "/fir/Fir.obj";
+	firTreeModel = Model(texture_path, false);
 
 	glfwMakeContextCurrent(NULL);
 
@@ -89,6 +83,15 @@ void Game::RenderLoop()
 		grid->terrain->Draw(*shaderTerrain);
 
 
+		for (int i = 0; i < grid->gridunits.size(); i++) {
+			for (int j = 0; i < grid->gridunits[i].size(); j++) {
+				for (auto it = grid->gridunits[i][j]->objects.begin(); it !=
+					grid->gridunits[i][j]->objects.end(); ++it) {
+						(*it)->Draw();
+				}
+			}
+		}
+
 		// render tree...
 
 		shaderTree->use();
@@ -102,7 +105,12 @@ void Game::RenderLoop()
 
 			shaderTree->setMat4("model", model2);
 
-			treeModel.Draw(*shaderTree);
+			if (typeid(trees[i]) == typeid(WhiteTree)) {
+				whiteTreeModel.Draw(*shaderTree);
+			} 
+			else if (typeid(trees[i]) == typeid(Fir)) {
+				firTreeModel.Draw(*shaderTree);
+			}
 		}
 
 		shaderTerrain->use();

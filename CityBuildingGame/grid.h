@@ -14,7 +14,7 @@ class Unit
 public:
 	bool occupied = false;
 	float averageHeight = 0;
-	list<Tree*> *objects;
+	list<Tree*> objects;
 	Unit();
 	~Unit();
 };
@@ -25,7 +25,7 @@ public:
 	Grid(int aGridHeight, int aGridWidth);
 	~Grid();
 
-	vector<vector<Unit*>> *grid;
+	vector<vector<Unit*>> gridunits;
 
 	int gridHeight;
 	int gridWidth;

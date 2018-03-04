@@ -10,6 +10,7 @@
 
 #include "mesh.h"
 #include "shader.h"
+#include "tree.h"
 
 #include <string>
 #include <fstream>
@@ -36,6 +37,7 @@ public:
 
 	// draws the model, and thus all its meshes
 	void Draw(Shader shader);
+	void DrawTree(Tree* tree);
 	unsigned int TextureFromFile(const char *path, const string &directory, bool gamma = false);
 
 private:

@@ -10,3 +10,7 @@ void Tree::ChangeSize()
 {
 
 }
+void Tree::Draw()
+{
+	model->DrawTree(this);
+}
