@@ -1,18 +1,12 @@
 #include "terrain.h"
 
-Terrain::Terrain() {}
-
-void Terrain::Initialize(int aGridWidth, int aGridHeight)
-{
+Terrain::Terrain(int aGridHeight, int aGridWidth) {
 	gridWidth = aGridWidth;
 	gridHeight = aGridHeight;
 
-	Heightmap heightmap_obj;
+	NoiseGen noise_gen;
 	heightmap = vector<vector<float>>(gridHeight + 1, vector<float>(gridWidth + 1, 0));
-	heightmap_obj.GeneratePerlinNoise(heightmap, gridWidth + 1, gridHeight + 1, 5, 6);
-
-	CreateGrid();
-	PopulateGridWithObjects();
+	noise_gen.GeneratePerlinNoise(heightmap, gridHeight + 1, gridWidth + 1, 5, 6);
 
 	CreateGeometry();
 }
@@ -33,19 +27,6 @@ void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::ve
 		LoadVisibleGeometry(upperLeft, upperRight, lowerLeft, lowerRight);
 	}
 }
-float Terrain::GetHeight(int argX, int argY)
-{
-	return grid[argY][argX].averageHeight;
-}
-void Terrain::CreateGrid()
-{
-	vector<vector<Unit>> grid = vector<vector<Unit>>(gridHeight, vector<Unit>(gridWidth, 0.0f));
-	for (int i = 0; i < heightmap.size() - 1 ; ++i) {
-		for (int j = 0; j < heightmap[i].size() - 1; ++j) {
-			grid[i][j] = Unit((heightmap[i+1][j] + heightmap[i][j + 1])/2.0f);
-		}
-	}
-}
 void Terrain::AddTexturesToGrid()
 {
 
@@ -60,7 +41,7 @@ void Terrain::Draw(Shader &shaderTerrain)
 	glm::mat4 model = glm::mat4(1.0f);
 	shaderTerrain.setMat4("model", model);
 
-	ReloadGPUData();
+	int vertexCount = ReloadGPUData();
 
 	// render
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -73,21 +54,28 @@ void Terrain::Draw(Shader &shaderTerrain)
 	glBindVertexArray(VAO);
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glDrawArrays(GL_TRIANGLES, 0, renderDataVertexCount);
+	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 }
-void Terrain::ReloadGPUData()
+int Terrain::ReloadGPUData()
 {
 	renderDataMutex.lock();
+	int vertexCount = -1;
 	if (reloadGPUData)
 	{
 		glBindVertexArray(VAO);
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-		if(currRenderData)
+		if (currRenderData)
+		{
 			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * (*renderData1).size(), &(*renderData1)[0], GL_STATIC_DRAW);
-		else 
+			vertexCount = renderData1VertexCount;
+		}
+		else
+		{
 			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * (*renderData0).size(), &(*renderData0)[0], GL_STATIC_DRAW);
+			vertexCount = renderData0VertexCount;
+		}
 
 		// position attribute, 5th attribute can be 0 for tightly packed, its equal to 3*sizeof(float)
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -102,6 +90,7 @@ void Terrain::ReloadGPUData()
 		glEnableVertexAttribArray(2);
 	}
 	renderDataMutex.unlock();
+	return vertexCount;
 }
 void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
 {	
@@ -213,12 +202,17 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	std::fill((*renderDataTemp).begin() + index, (*renderDataTemp).end(), 0.0f);
 	renderDataMutex.lock();
 	if (currRenderData == 1)
+	{
 		currRenderData = 0;
+		renderData0VertexCount = (*renderDataTemp).size() / 48 * 6;
+	}
 	else
+	{
 		currRenderData = 1;
+		renderData1VertexCount = (*renderDataTemp).size() / 48 * 6;
+	}
 	reloadGPUData = true;
 	renderDataMutex.unlock();
-	renderDataVertexCount = (*renderDataTemp).size() / 48 * 6;
 }
 void Terrain::CreateGeometry()
 {
@@ -332,12 +326,4 @@ Terrain::~Terrain()
 	// Properly de-allocate all resources once they've outlived their purpose
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
-}
-Unit::Unit(float pAverageHeight)
-{
-	averageHeight = pAverageHeight;
-}
-Unit::~Unit()
-{
-
 }

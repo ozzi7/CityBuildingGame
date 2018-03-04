@@ -13,9 +13,14 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "model.h"
 #include "camera.h"
+<<<<<<< HEAD
 #include "terrain.h"
 #include "tree_generator.h"
 //#include "tree.h"
+=======
+#include "grid.h"
+#include "tree.h"
+>>>>>>> 7c4316156be5b26cdee624bc587fbc9976e6e776
 
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
@@ -51,7 +56,7 @@ public:
 	float screenRatio;
 
 private:
-	Terrain *terrain;
+	Grid *grid;
 	Model treeModel;
 	Model terrainModel;
 

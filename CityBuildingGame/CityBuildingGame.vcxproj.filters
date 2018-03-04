@@ -27,9 +27,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="heightmap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="mesh.h">
       <Filter>Header Files</Filter>
     </ClCompile>
@@ -41,6 +38,12 @@
     </ClCompile>
     <ClCompile Include="tree.cpp">
       <Filter>Source Files\Game objects</Filter>
+    </ClCompile>
+    <ClCompile Include="grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="noise_gen.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -54,9 +57,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="heightmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="model.h">
@@ -73,6 +73,12 @@
     </ClInclude>
     <ClInclude Include="white_tree.h">
       <Filter>Header Files\Game objects</Filter>
+    </ClInclude>
+    <ClInclude Include="grid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="noise_gen.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
