@@ -146,7 +146,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="game.cpp" />
-    <ClCompile Include="heightmap.cpp" />
+    <ClCompile Include="grid.cpp" />
+    <ClCompile Include="noise_gen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh.h" />
     <ClCompile Include="model.cpp" />
@@ -157,7 +158,8 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="fir.h" />
     <ClInclude Include="game.h" />
-    <ClInclude Include="heightmap.h" />
+    <ClInclude Include="grid.h" />
+    <ClInclude Include="noise_gen.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />

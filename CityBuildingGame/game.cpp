@@ -8,11 +8,13 @@ Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, C
 
 	mapHeight = aMapHeight;
 	mapWidth = aMapWidth;
-	terrain = new Terrain();
+	grid = new Grid(aMapHeight, aMapHeight);
 }
 Game::~Game()
 {
-	delete terrain;
+	delete grid;
+	delete shaderTree;
+	delete shaderTerrain;
 }
 
 void Game::StartGame()
@@ -33,8 +35,6 @@ void Game::StartGame()
 	treeModel = Model(texture_path, false);
 
 	glfwMakeContextCurrent(NULL);
-	terrain->Initialize(mapWidth, mapHeight);
-	terrain->InitializeRenderData(120, 120);
 
 	std::thread threadRenderLoop(&Game::RenderLoop, this);
 	GameLoop();
@@ -51,8 +51,8 @@ void Game::RenderLoop()
 	glEnable(GL_DEPTH_TEST);
 
 	shaderTerrain->use();
-	terrain->LoadTextures(*shaderTerrain, exe_path);
-	terrain->GenerateBuffers();
+	grid->terrain->LoadTextures(*shaderTerrain, exe_path);
+	grid->terrain->GenerateBuffers();
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -86,7 +86,7 @@ void Game::RenderLoop()
 		glm::mat4 model = glm::mat4(1.0f);
 		shaderTerrain->setMat4("model", model);
 
-		terrain->Draw(*shaderTerrain);
+		grid->terrain->Draw(*shaderTerrain);
 
 
 		// render tree...
@@ -113,6 +113,8 @@ void Game::RenderLoop()
 
 void Game::GameLoop()
 {
+	grid->terrain->InitializeRenderData(100, 100); // this sets the maximum visible range..
+
 	const int TICKS_PER_SECOND = 120;
 	const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
 	const int MAX_FRAMESKIP = 10;
@@ -127,7 +129,7 @@ void Game::GameLoop()
 		/*terrain->SetRenderWindow(glm::vec2(10.0f, 10.0f), glm::vec2(30.0f, 30.0f), glm::vec2(20.0f, 0.0f),
 		glm::vec2(40.0f, 20.0f));
 		*/
-		terrain->SetRenderWindow(camera->GetTopLeftVisible(),camera->GetTopRightVisible(), camera->GetBottomLeftVisible(),
+		grid->terrain->SetRenderWindow(camera->GetTopLeftVisible(),camera->GetTopRightVisible(), camera->GetBottomLeftVisible(),
 			camera->GetBottomRightVisible());
 		
 		//terrain->SetRenderWindow(glm::vec2(camera->Position.x -10, camera->Position.y + 10.0f), glm::vec2(camera->Position.x + 10.0f, camera->Position.y + 10.0f),

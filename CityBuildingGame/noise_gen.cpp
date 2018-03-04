@@ -1,11 +1,11 @@
 #pragma once
-#include "heightmap.h"
+#include "noise_gen.h"
 
 using namespace std;
 
-Heightmap::Heightmap() {};
+NoiseGen::NoiseGen() {};
 
-void Heightmap::GeneratePerlinNoise(vector<vector<float>> &pHeightmap, int pWidth, int pHeight,
+void NoiseGen::GeneratePerlinNoise(vector<vector<float>> &pHeightmap, int pHeight, int pWidth,
 		int maximumHeight, int octaveCount)
 	{
 		width = pWidth;
@@ -27,7 +27,7 @@ void Heightmap::GeneratePerlinNoise(vector<vector<float>> &pHeightmap, int pWidt
 
 		Rescale(pHeightmap, maximumHeight);
 	}
-void Heightmap::CombineNoiseMaps(vector<vector<float>> &pHeightmap, int octaveCount)
+void NoiseGen::CombineNoiseMaps(vector<vector<float>> &pHeightmap, int octaveCount)
 {
 	float persistence = 0.5f;
 	float amplitude = 1.0f;
@@ -36,13 +36,13 @@ void Heightmap::CombineNoiseMaps(vector<vector<float>> &pHeightmap, int octaveCo
 	for (auto &i : pHeightmap)
 		std::fill(i.begin(), i.end(), 0);
 
-	Heightmap::totalAmplitude = 0.0f;
+	NoiseGen::totalAmplitude = 0.0f;
 
 	float maxValue = 0;
 	for (int octave = octaveCount - 1; octave >= 0; octave--)
 	{
 		amplitude *= persistence;
-		Heightmap::totalAmplitude += amplitude;
+		NoiseGen::totalAmplitude += amplitude;
 
 		for (int i = 0; i < height; i++)
 		{
@@ -54,7 +54,7 @@ void Heightmap::CombineNoiseMaps(vector<vector<float>> &pHeightmap, int octaveCo
 	}
 }
 
-void Heightmap::GenerateWhiteNoise(vector<vector<float>> &pHeightmap)
+void NoiseGen::GenerateWhiteNoise(vector<vector<float>> &pHeightmap)
 {
 	srand((unsigned)time(0)); // seed random numbers
 
@@ -66,7 +66,7 @@ void Heightmap::GenerateWhiteNoise(vector<vector<float>> &pHeightmap)
 		}
 	}
 }
-void Heightmap::GenerateSmoothNoise(vector<vector<float>> &baseNoise,
+void NoiseGen::GenerateSmoothNoise(vector<vector<float>> &baseNoise,
 	vector<vector<float>> &smoothNoise, int octave)
 {
 	int samplePeriod = 1 << octave; // calculates 2 ^ k
@@ -100,11 +100,11 @@ void Heightmap::GenerateSmoothNoise(vector<vector<float>> &baseNoise,
 	}
 }
 
-float Heightmap::Interpolate(float x0, float x1, float alpha)
+float NoiseGen::Interpolate(float x0, float x1, float alpha)
 {
 	return x0 * (1 - alpha) + alpha * x1;
 }
-void Heightmap::Rescale(vector<vector<float>> &pHeightmap, float maxHeight)
+void NoiseGen::Rescale(vector<vector<float>> &pHeightmap, float maxHeight)
 {
 	//normalisation
 	for (int i = 0; i < height; i++)
@@ -115,4 +115,4 @@ void Heightmap::Rescale(vector<vector<float>> &pHeightmap, float maxHeight)
 		}
 	}
 }
-Heightmap::~Heightmap() {};
+NoiseGen::~NoiseGen() {};

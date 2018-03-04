@@ -4,12 +4,12 @@
 
 using namespace std;
 
-class Heightmap
+class NoiseGen
 {
 public:
-	Heightmap();
-	~Heightmap();
-	void GeneratePerlinNoise(vector<vector<float>>& pHeightmap, int pWidth, int pHeight,
+	NoiseGen();
+	~NoiseGen();
+	void GeneratePerlinNoise(vector<vector<float>>& pHeightmap, int pHeight, int pWidth,
 		int maximumHeight, int octaveCount);
 
 	void CombineNoiseMaps(vector<vector<float>> &pHeightmap,int octaveCount);

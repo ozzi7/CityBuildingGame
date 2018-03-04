@@ -14,45 +14,31 @@
 #include <math.h>
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "heightmap.h"
+#include "noise_gen.h"
 #include "shader.h"
 #include "model.h"
 
-/* Represents a grid subunit */
-class Unit
-{
-public:
-	bool occupied = false;
-	float averageHeight = 0;
-	
-	Unit(float pAverageHeight);
-	~Unit();
-};
 
 class Terrain
 {
 public:
-	Terrain();
+	Terrain(int gridHeight, int gridWidth);
 	~Terrain();
 
-	void Initialize(int argWidth, int argHeight);
 	void SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
-	float GetHeight(int argX, int argY);
 	void Draw(Shader & shader);
 	void LoadTextures(Shader & shaderTerrain, string exePath);
 	void GenerateBuffers();
 	void InitializeRenderData(int visibleWidth, int visibleHeight);
 
-	vector<vector<Unit>> grid;
 	vector<vector<float>> heightmap;
 
 private:
 	void CreateGeometry();
 	void LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
-	void CreateGrid();
 	void AddTexturesToGrid();
 	void PopulateGridWithObjects();
-	void ReloadGPUData();
+	int ReloadGPUData();
 
 	GLuint VBO, VAO, EBO;
 	unsigned int texture_id_grass;
@@ -73,7 +59,8 @@ private:
 	mutex renderDataMutex;
 	bool reloadGPUData = false;
 	int currRenderData = 1;
-	int renderDataVertexCount = 0;
+	int renderData0VertexCount = 0;
+	int renderData1VertexCount = 0;
 	vector<GLfloat> *renderData0; /* Gets sent to GPU */
 	vector<GLfloat> *renderData1; 
 	vector<unsigned int> indices;
