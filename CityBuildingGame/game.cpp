@@ -32,10 +32,6 @@ void Game::StartGame()
 	std::string texture_path = exe_path + "/tree2_3ds/Tree2.3ds";
 	treeModel = Model(texture_path, false);
 
-	shaderTree = new Shader("vertex_shader.vert", "fragment_shader.frag");
-	shaderTerrain = new Shader("vertex_shader.vert", "fragment_shader.frag");
-	//shaderTerrain = new Shader("basic_lighting.vert", "basic_lighting.frag");
-
 	glfwMakeContextCurrent(NULL);
 	terrain->Initialize(mapWidth, mapHeight);
 	terrain->InitializeRenderData(120, 120);
@@ -47,6 +43,10 @@ void Game::StartGame()
 void Game::RenderLoop()
 {
 	glfwMakeContextCurrent(window);
+
+	shaderTree = new Shader("vertex_shader.vert", "fragment_shader.frag");
+	//shaderTerrain = new Shader("vertex_shader.vert", "fragment_shader.frag");
+	shaderTerrain = new Shader("basic_lighting.vert", "basic_lighting.frag");
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -127,8 +127,11 @@ void Game::GameLoop()
 		/*terrain->SetRenderWindow(glm::vec2(10.0f, 10.0f), glm::vec2(30.0f, 30.0f), glm::vec2(20.0f, 0.0f),
 		glm::vec2(40.0f, 20.0f));
 		*/
-		terrain->SetRenderWindow(camera->Position + 10.0f, glm::vec2(camera->Position.x + 30.0f, camera->Position.y + 30.0f), glm::vec2(camera->Position.x + 20.0f,
-			camera->Position.y), glm::vec2(camera->Position.x + 40.0f, camera->Position.y + 20.0f));
+		terrain->SetRenderWindow(camera->GetTopLeftVisible(),camera->GetTopRightVisible(), camera->GetBottomLeftVisible(),
+			camera->GetBottomRightVisible());
+		
+		//terrain->SetRenderWindow(glm::vec2(camera->Position.x -10, camera->Position.y + 10.0f), glm::vec2(camera->Position.x + 10.0f, camera->Position.y + 10.0f),
+		//	glm::vec2(camera->Position.x -10, camera->Position.y -10), glm::vec2(camera->Position.x + 10.0f, camera->Position.y + -10.0f));
 		// mouse scroll
 		camera->mouse_scroll();
 

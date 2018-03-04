@@ -109,18 +109,6 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	/* Note that bugs on edge of screen are from rendering old buffer data */
 	/* Create geometry data for visible area */
 
-	upperLeft.x = max(0.0f, upperLeft.x);
-	upperRight.x = min((float)gridWidth, upperRight.x);
-
-	lowerLeft.x = max(0.0f, lowerLeft.x);
-	lowerRight.x = min((float)gridWidth, lowerRight.x);
-
-	upperLeft.y = max(0.0f, upperLeft.y);
-	upperRight.y = min((float)gridHeight, upperRight.y);
-
-	lowerLeft.y = max(0.0f, lowerLeft.y);
-	lowerRight.y = min((float)gridHeight, lowerRight.y);
-
 	///* We initialize this only once since not implementing zoom and over edge scrolling for now*/
 	vector<GLfloat> *renderDataTemp;
 	renderDataMutex.lock();
@@ -132,142 +120,102 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 
 	/* Load GPU data for visible area */
 	int index = 0;
-	int startX = max(0, min(gridWidth, (int)lowerLeft.x));
-	int endX = startX;
-	for (int i = lowerLeft.y; ; ++i)
+	int startX = min(min((int)upperLeft.x, int(lowerLeft.x)), min((int)upperRight.x, int(lowerRight.x)));
+	int endX = max(max((int)upperLeft.x, int(lowerLeft.x)), max((int)upperRight.x, int(lowerRight.x)));
+	int startY = min(min((int)upperLeft.y, int(lowerLeft.y)), min((int)upperRight.y, int(lowerRight.y)));
+	int endY = max(max((int)upperLeft.y, int(lowerLeft.y)), max((int)upperRight.y, int(lowerRight.y)));
+
+	for (int i = max(0, startY+1); i <= min(gridHeight-1, endY); ++i)
 	{
-		startX--;
-		endX++;
-		startX = max(0, min(gridWidth, startX));
-		endX = max(0, min(gridWidth, endX));
-
-		// break outer loop if next is to the right and top of the rectangle
-		glm::vec2 AM = glm::vec2(startX - upperLeft.x, i - upperLeft.y);
-		glm::vec2 AB = glm::vec2(upperRight - upperLeft);
-		glm::vec2 AD = glm::vec2(lowerLeft - upperLeft);
-		if (!(glm::dot(AM, AB) < glm::dot(AB, AB)) && !(0 <= glm::dot(AM, AD)))
-		{
-			break;
-		}
-
-		for (int j = startX; j < endX; ++j)
+		for (int j = max(0, startX+1); j <= min(gridWidth-1, endX); ++j)
 		{
 			/* Check if the point is inside the rectangle*/
 			glm::vec2 AM = glm::vec2(j - upperLeft.x, i - upperLeft.y);
 			glm::vec2 AB = glm::vec2(upperRight - upperLeft);
 			glm::vec2 AD = glm::vec2(lowerLeft -upperLeft);
 
-			if (!(0 <= glm::dot(AM, AB)))
+			if ((0 <= glm::dot(AM, AB)) && (glm::dot(AM, AB) < glm::dot(AB, AB)) &&
+				(glm::dot(AM, AD) < glm::dot(AD, AD)) && 0 <= glm::dot(AM, AD))
 			{
-				// on left side of rectangle ( should never happen)
-				continue;
+				// x/y/z of first vertex
+				(*renderDataTemp)[index++] = j;
+				(*renderDataTemp)[index++] = i;
+				(*renderDataTemp)[index++] = heightmap[i][j];
+
+				// x/y/z of normal vector
+				(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j].x;
+				(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j].y;
+				(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j].z;
+
+				// texture coord X, Y of first vertex
+				(*renderDataTemp)[index++] = 0.0f;
+				(*renderDataTemp)[index++] = 0.0f;
+
+				(*renderDataTemp)[index++] = j + 1;
+				(*renderDataTemp)[index++] = i;
+				(*renderDataTemp)[index++] = heightmap[i][j + 1];
+
+				// x/y/z of normal vector
+				(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].x;
+				(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].y;
+				(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].z;
+
+				(*renderDataTemp)[index++] = 1.0f;
+				(*renderDataTemp)[index++] = 0.0f;
+
+				(*renderDataTemp)[index++] = j;
+				(*renderDataTemp)[index++] = i + 1;
+				(*renderDataTemp)[index++] = heightmap[i + 1][j];
+
+				(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].x;
+				(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].y;
+				(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].z;
+
+				(*renderDataTemp)[index++] = 0.0f;
+				(*renderDataTemp)[index++] = 1.0f;
+
+				(*renderDataTemp)[index++] = j;
+				(*renderDataTemp)[index++] = i + 1;
+				(*renderDataTemp)[index++] = heightmap[i + 1][j];
+
+				(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].x;
+				(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].y;
+				(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].z;
+
+				(*renderDataTemp)[index++] = 0.0f;
+				(*renderDataTemp)[index++] = 1.0f;
+
+				(*renderDataTemp)[index++] = j + 1;
+				(*renderDataTemp)[index++] = i;
+				(*renderDataTemp)[index++] = heightmap[i][j + 1];
+
+				(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].x;
+				(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].y;
+				(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].z;
+
+				(*renderDataTemp)[index++] = 1.0f;
+				(*renderDataTemp)[index++] = 0.0f;
+
+				(*renderDataTemp)[index++] = j + 1;
+				(*renderDataTemp)[index++] = i + 1;
+				(*renderDataTemp)[index++] = heightmap[i + 1][j + 1];
+
+				(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j + 1].x;
+				(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j + 1].y;
+				(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j + 1].z;
+
+				(*renderDataTemp)[index++] = 1.0f;
+				(*renderDataTemp)[index++] = 1.0f;
 			}
-			else if (!(glm::dot(AM, AB) < glm::dot(AB, AB)))
-			{
-				//to the right of rectangle
-				break;
-			}
-			else if (!(glm::dot(AM, AD) < glm::dot(AD, AD)))
-			{
-				// below rectangle
-				break;
-			}
-			else if (!(0 <= glm::dot(AM, AD)))
-			{
-				// on top of rectangle
-				if (!(startX == 0))
-				{
-					startX = startX + 2;
-					continue;
-				}
-				else
-				{
-					continue;
-				}
-			}
-
-			// x/y/z of first vertex
-			(*renderDataTemp)[index++] = j;
-			(*renderDataTemp)[index++] = i;
-			(*renderDataTemp)[index++] = heightmap[i][j];
-
-			// x/y/z of normal vector
-			(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j].x;
-			(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j].y;
-			(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j].z;
-
-			// texture coord X, Y of first vertex
-			(*renderDataTemp)[index++] = 0.0f;
-			(*renderDataTemp)[index++] = 0.0f;
-
-			(*renderDataTemp)[index++] = j + 1;
-			(*renderDataTemp)[index++] = i;
-			(*renderDataTemp)[index++] = heightmap[i][j + 1];
-
-			// x/y/z of normal vector
-			(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j+1].x;
-			(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j+1].y;
-			(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j+1].z;
-
-			(*renderDataTemp)[index++] = 1.0f;
-			(*renderDataTemp)[index++] = 0.0f;
-
-			(*renderDataTemp)[index++] = j;
-			(*renderDataTemp)[index++] = i + 1;
-			(*renderDataTemp)[index++] = heightmap[i + 1][j];
-
-			(*renderDataTemp)[index++] = vertexNormals[(i+1)*(gridWidth + 1) + j].x;
-			(*renderDataTemp)[index++] = vertexNormals[(i+1)*(gridWidth + 1) + j].y;
-			(*renderDataTemp)[index++] = vertexNormals[(i+1)*(gridWidth + 1) + j].z;
-
-			(*renderDataTemp)[index++] = 0.0f;
-			(*renderDataTemp)[index++] = 1.0f;
-
-			(*renderDataTemp)[index++] = j;
-			(*renderDataTemp)[index++] = i + 1;
-			(*renderDataTemp)[index++] = heightmap[i + 1][j];
-
-			(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].x;
-			(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].y;
-			(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].z;
-
-			(*renderDataTemp)[index++] = 0.0f;
-			(*renderDataTemp)[index++] = 1.0f;
-
-			(*renderDataTemp)[index++] = j + 1;
-			(*renderDataTemp)[index++] = i;
-			(*renderDataTemp)[index++] = heightmap[i][j + 1];
-
-			(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].x;
-			(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].y;
-			(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].z;
-
-			(*renderDataTemp)[index++] = 1.0f;
-			(*renderDataTemp)[index++] = 0.0f;
-
-			(*renderDataTemp)[index++] = j + 1;
-			(*renderDataTemp)[index++] = i + 1;
-			(*renderDataTemp)[index++] = heightmap[i + 1][j + 1];
-
-			(*renderDataTemp)[index++] = vertexNormals[(i+1)*(gridWidth + 1) + j + 1].x;
-			(*renderDataTemp)[index++] = vertexNormals[(i+1)*(gridWidth + 1) + j + 1].y;
-			(*renderDataTemp)[index++] = vertexNormals[(i+1)*(gridWidth + 1) + j + 1].z;
-
-			(*renderDataTemp)[index++] = 1.0f;
-			(*renderDataTemp)[index++] = 1.0f;
 		}
 	}
 	/* Fill rest with 0 if we render it */
 	std::fill((*renderDataTemp).begin() + index, (*renderDataTemp).end(), 0.0f);
 	renderDataMutex.lock();
 	if (currRenderData == 1)
-	{
 		currRenderData = 0;
-	}
 	else
-	{
 		currRenderData = 1;
-	}
 	reloadGPUData = true;
 	renderDataMutex.unlock();
 	renderDataVertexCount = (*renderDataTemp).size() / 48 * 6;
