@@ -126,15 +126,9 @@ void Game::GameLoop()
 		glfwPollEvents();
 		ProcessInput();
 
-		/*terrain->SetRenderWindow(glm::vec2(10.0f, 10.0f), glm::vec2(30.0f, 30.0f), glm::vec2(20.0f, 0.0f),
-		glm::vec2(40.0f, 20.0f));
-		*/
 		grid->terrain->SetRenderWindow(camera->GetTopLeftVisible(),camera->GetTopRightVisible(), camera->GetBottomLeftVisible(),
 			camera->GetBottomRightVisible());
 		
-		//terrain->SetRenderWindow(glm::vec2(camera->Position.x -10, camera->Position.y + 10.0f), glm::vec2(camera->Position.x + 10.0f, camera->Position.y + 10.0f),
-		//	glm::vec2(camera->Position.x -10, camera->Position.y -10), glm::vec2(camera->Position.x + 10.0f, camera->Position.y + -10.0f));
-		// mouse scroll
 		camera->mouse_scroll();
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(next_game_tick - GetTickCount64()));

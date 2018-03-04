@@ -19,17 +19,24 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 	/* create trees */
 	NoiseGen noise_gen;
 	vector<vector<float>> treeMap = vector<vector<float>>(gridHeight, vector<float>(gridWidth, 0));
-	noise_gen.GeneratePerlinNoise(treeMap, gridHeight, gridWidth, 5, 6);
+	noise_gen.GeneratePerlinNoise(treeMap, gridHeight, gridWidth, 10, 6);
 
 	for (int i = 0; i < gridHeight; ++i) {
 		for (int j = 0; j < gridWidth; ++j) {
-			if(treeMap[i][j] > 5.0f)
-				(*grid)[i][j]->objects->push_back(new Tree(glm::vec3(0.0f,10.0f,10.0f)));
+			if(treeMap[i][j] > 7.0f)
+				(*grid)[i][j]->objects->push_back(new Tree(glm::vec3(i,j,(*grid)[i][j]->averageHeight)));
 		}
 	}
 }
-Grid::~Grid() {}
+Grid::~Grid() {
+	delete terrain;
+	delete grid;
+}
 
-Unit::Unit() {}
-Unit::~Unit() {}
+Unit::Unit() {
+	objects = new list<Tree*>();
+}
+Unit::~Unit() {
+	delete objects;
+}
 
