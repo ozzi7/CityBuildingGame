@@ -14,7 +14,8 @@
 #include "model.h"
 #include "camera.h"
 #include "terrain.h"
-#include "tree.h"
+#include "tree_generator.h"
+//#include "tree.h"
 
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>

@@ -65,22 +65,22 @@ public:
 
 	glm::vec2 GetTopLeftVisible()
 	{
-		return glm::vec2(Position.x + Lookat.x - 20, Position.y + Lookat.y);
+		return glm::vec2(Position.x + Lookat.x - 50, Position.y + Lookat.y);
 	}
 
 	glm::vec2 GetTopRightVisible()
 	{
-		return glm::vec2(Position.x + Lookat.x, Position.y + Lookat.y + 20);
+		return glm::vec2(Position.x + Lookat.x, Position.y + Lookat.y + 50);
 	}
 
 	glm::vec2 GetBottomLeftVisible()
 	{
-		return glm::vec2(Position.x + Lookat.x, Position.y + Lookat.y - 20);
+		return glm::vec2(Position.x + Lookat.x, Position.y + Lookat.y - 50);
 	}
 
 	glm::vec2 GetBottomRightVisible()
 	{
-		return glm::vec2(Position.x + Lookat.x + 20, Position.y + Lookat.y);
+		return glm::vec2(Position.x + Lookat.x + 50, Position.y + Lookat.y);
 	}
 
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
