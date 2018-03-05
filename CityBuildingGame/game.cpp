@@ -19,14 +19,13 @@ Game::~Game()
 
 void Game::StartGame()
 {
+	renderer = new Renderer();
+	//std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
+	//std::string texture_path = exe_path + "/tree2_3ds/Tree2.3ds";
 
-	std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
-	std::string texture_path = exe_path + "/tree2_3ds/Tree2.3ds";
-	whiteTreeModel = Model(texture_path, false);
-
-	std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
-	texture_path = exe_path + "/fir/Fir.obj";
-	firTreeModel = Model(texture_path, false);
+	//std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
+	//texture_path = exe_path + "/fir/Fir.obj";
+	//firTreeModel = Model(texture_path, false);
 
 	glfwMakeContextCurrent(NULL);
 
@@ -38,7 +37,11 @@ void Game::RenderLoop()
 {
 	glfwMakeContextCurrent(window);
 
-	shaderTree = new Shader("vertex_shader.vert", "fragment_shader.frag");
+	renderer->shader_tree = new Shader("vertex_shader.vert", "fragment_shader.frag");
+	std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
+	std::string texture_path = exe_path + "/tree2_3ds/Tree2.3ds";
+
+	renderer->model_tree = new Model(texture_path, false);
 	//shaderTerrain = new Shader("vertex_shader.vert", "fragment_shader.frag");
 	shaderTerrain = new Shader("basic_lighting.vert", "basic_lighting.frag");
 
@@ -50,6 +53,7 @@ void Game::RenderLoop()
 
 	while (!glfwWindowShouldClose(window))
 	{
+		shaderTerrain->use();
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -82,38 +86,15 @@ void Game::RenderLoop()
 
 		grid->terrain->Draw(*shaderTerrain);
 
-
-		for (int i = 0; i < grid->gridunits.size(); i++) {
-			for (int j = 0; i < grid->gridunits[i].size(); j++) {
+		// render all objects
+		for (int i = 0; i < grid->gridunits.size()-270; i++) {
+			for (int j = 0; j < grid->gridunits[i].size()-270; j++) {
 				for (auto it = grid->gridunits[i][j]->objects.begin(); it !=
 					grid->gridunits[i][j]->objects.end(); ++it) {
-						(*it)->Draw();
+						(*it)->Accept(*renderer);
 				}
 			}
 		}
-
-		// render tree...
-
-		shaderTree->use();
-		shaderTree->setMat4("projection", projection);
-		shaderTree->setMat4("view", view);
-
-		for (int i = 0; trees.size() > i; i++) {
-			glm::mat4 model2 = glm::mat4(1.0f);
-			model2 = glm::translate(model2, trees[i]->Position);
-			model2 = glm::scale(model2, glm::vec3(0.1f, 0.1f, 0.1f));
-
-			shaderTree->setMat4("model", model2);
-
-			if (typeid(trees[i]) == typeid(WhiteTree)) {
-				whiteTreeModel.Draw(*shaderTree);
-			} 
-			else if (typeid(trees[i]) == typeid(Fir)) {
-				firTreeModel.Draw(*shaderTree);
-			}
-		}
-
-		shaderTerrain->use();
 
 		glfwSwapBuffers(window);
 	}

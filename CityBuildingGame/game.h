@@ -15,6 +15,7 @@
 #include "camera.h"
 #include "grid.h"
 #include "tree.h"
+#include "renderer.h"
 
 // To be removed
 #include "white_tree.h"
@@ -54,6 +55,7 @@ public:
 	float screenRatio;
 
 private:
+	Renderer * renderer;
 	Grid *grid;
 	Model whiteTreeModel;
 	Model firTreeModel;

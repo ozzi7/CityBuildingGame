@@ -2,15 +2,10 @@
 
 using namespace std;
 
-
 Tree::Tree(glm::vec3 position) {
 	Position = position;
 }
-void Tree::ChangeSize()
+void Tree::Accept(Visitor &v)
 {
-
-}
-void Tree::Draw()
-{
-	model->DrawTree(this);
+	v.Visit(this);
 }

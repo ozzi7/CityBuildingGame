@@ -80,5 +80,14 @@
     <ClInclude Include="noise_gen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="visitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="object.h">
+      <Filter>Header Files\Game objects</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

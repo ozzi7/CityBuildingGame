@@ -1,19 +1,13 @@
 #pragma once
 #include <glm/glm.hpp>
-#include "shader.h"
-#include "model.h"
+#include "object.h"
+#include "visitor.h"
 
-class Model;
-
-
-class Tree
+class Tree : public Object
 {
 	public:
+		Tree(glm::vec3 position);
 		glm::vec3 Position;
 
-		Tree(glm::vec3);
-		void ChangeSize();
-		void Draw();
-		static Model* model;
-		static Shader* shader;
+		void Accept(Visitor &v);
 };

@@ -4,7 +4,7 @@
 #include <list>
 
 #include "terrain.h"
-#include "tree.h"
+#include "white_tree.h"
 
 using namespace std;
 

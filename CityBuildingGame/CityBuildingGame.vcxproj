@@ -161,10 +161,13 @@
     <ClInclude Include="grid.h" />
     <ClInclude Include="noise_gen.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="object.h" />
+    <ClInclude Include="renderer.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="terrain.h" />
     <ClInclude Include="tree.h" />
+    <ClInclude Include="visitor.h" />
     <ClInclude Include="white_tree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

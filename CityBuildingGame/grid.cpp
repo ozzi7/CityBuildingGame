@@ -9,7 +9,16 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 	terrain = new Terrain(gridHeight, gridWidth);
 
 	/* create grid including heights*/
-	gridunits = vector<vector<Unit*>>(gridHeight, vector<Unit*>(gridWidth, new Unit()));
+	for (int i = 0; i < gridHeight; ++i)
+	{
+		vector<Unit*> temp = vector<Unit*>();
+		for (int j = 0; j < gridWidth; ++j)
+		{
+			temp.push_back(new Unit());
+		}
+		gridunits.push_back(temp);
+	}
+
 	for (int i = 0; i < terrain->heightmap.size() - 1; ++i) {
 		for (int j = 0; j < terrain->heightmap[i].size() - 1; ++j) {
 			gridunits[i][j]->averageHeight = (terrain->heightmap[i + 1][j] + terrain->heightmap[i][j + 1]) / 2.0f;
@@ -23,8 +32,8 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 
 	for (int i = 0; i < gridHeight; ++i) {
 		for (int j = 0; j < gridWidth; ++j) {
-			if(treeMap[i][j] > 7.0f)
-				gridunits[i][j]->objects.push_back(new Tree(glm::vec3(i,j,gridunits[i][j]->averageHeight)));
+			if(treeMap[i][j] > 2.0f)
+				gridunits[i][j]->objects.push_back(new WhiteTree(glm::vec3(i,j,gridunits[i][j]->averageHeight)));
 		}
 	}
 }
