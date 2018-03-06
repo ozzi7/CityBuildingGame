@@ -20,7 +20,6 @@ Game::~Game()
 
 void Game::StartGame()
 {
-	renderer = new Renderer();
 	//std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
 	//std::string texture_path = exe_path + "/tree2_3ds/Tree2.3ds";
 
@@ -37,13 +36,8 @@ void Game::StartGame()
 void Game::RenderLoop()
 {
 	glfwMakeContextCurrent(window);
+	renderer = new Renderer(exe_path);
 
-	renderer->shader_tree = new Shader("vertex_shader.vert", "fragment_shader.frag");
-	std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
-	std::string texture_path = exe_path + "/tree2_3ds/Tree2.3ds";
-
-	renderer->model_tree = new Model(texture_path, false);
-	//shaderTerrain = new Shader("vertex_shader.vert", "fragment_shader.frag");
 	shaderTerrain = new Shader("basic_lighting.vert", "basic_lighting.frag");
 
 	glEnable(GL_DEPTH_TEST);
@@ -58,6 +52,9 @@ void Game::RenderLoop()
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		//glDepthMask(GL_FALSE); 
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// render terrain...
 		// light properties

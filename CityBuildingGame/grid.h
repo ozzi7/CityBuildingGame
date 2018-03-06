@@ -2,9 +2,11 @@
 
 #include <vector>
 #include <list>
+#include <random>
 
 #include "terrain.h"
 #include "white_tree.h"
+#include "fir.h"
 
 using namespace std;
 
