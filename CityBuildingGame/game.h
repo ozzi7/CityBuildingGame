@@ -61,8 +61,6 @@ private:
 	Model firTreeModel;
 	Model terrainModel;
 
-	vector<Tree*> trees;
-
 	GLuint mvp_handle;
 
 	// timing

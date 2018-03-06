@@ -32,8 +32,8 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 
 	for (int i = 0; i < gridHeight; ++i) {
 		for (int j = 0; j < gridWidth; ++j) {
-			if(treeMap[i][j] > 2.0f)
-				gridunits[i][j]->objects.push_back(new WhiteTree(glm::vec3(i,j,gridunits[i][j]->averageHeight)));
+			if(treeMap[i][j] > 5.0f)
+				gridunits[i][j]->objects.push_back(new WhiteTree(glm::vec3(j,i,gridunits[i][j]->averageHeight)));
 		}
 	}
 }
@@ -45,5 +45,7 @@ Unit::Unit() {
 	objects = list<Tree*>();
 }
 Unit::~Unit() {
+	for (auto it = objects.begin(); it != objects.end(); ++it)
+		delete (*it);
 }
 

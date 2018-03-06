@@ -9,7 +9,7 @@
 #include "tree.h"
 #include "white_tree.h"
 #include "visitor.h"
-
+#include "fir.h"
 #include "shader.h"
 #include "model.h"
 
@@ -22,6 +22,12 @@ public:
 	glm::mat4 projection;
 	glm::mat4 view;
 
+	Renderer()
+	{
+		//std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
+		//texture_path = exe_path + "/fir/Fir.obj";
+		//firTreeModel = Model(texture_path, false);
+	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
 	{
 		projection = aProjection;
@@ -49,6 +55,20 @@ public:
 
 		glm::mat4 model2 = glm::mat4(1.0f);
 		model2 = glm::translate(model2, white_tree->Position);
+		model2 = glm::scale(model2, glm::vec3(0.1f, 0.1f, 0.1f));
+
+		shader_tree->setMat4("model", model2);
+
+		model_tree->Draw(*shader_tree);
+	};
+	void Visit(Fir *fir)
+	{
+		shader_tree->use();
+		shader_tree->setMat4("projection", projection);
+		shader_tree->setMat4("view", view);
+
+		glm::mat4 model2 = glm::mat4(1.0f);
+		model2 = glm::translate(model2, fir->Position);
 		model2 = glm::scale(model2, glm::vec3(0.1f, 0.1f, 0.1f));
 
 		shader_tree->setMat4("model", model2);

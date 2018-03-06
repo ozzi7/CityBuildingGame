@@ -15,6 +15,7 @@ Game::~Game()
 	delete grid;
 	delete shaderTree;
 	delete shaderTerrain;
+	delete renderer;
 }
 
 void Game::StartGame()
@@ -86,9 +87,10 @@ void Game::RenderLoop()
 
 		grid->terrain->Draw(*shaderTerrain);
 
+		renderer->SetMatrices(projection, view);
 		// render all objects
-		for (int i = 0; i < grid->gridunits.size()-270; i++) {
-			for (int j = 0; j < grid->gridunits[i].size()-270; j++) {
+		for (int i = 0; i < grid->gridunits.size()-250; i++) {
+			for (int j = 0; j < grid->gridunits[i].size()-250; j++) {
 				for (auto it = grid->gridunits[i][j]->objects.begin(); it !=
 					grid->gridunits[i][j]->objects.end(); ++it) {
 						(*it)->Accept(*renderer);
