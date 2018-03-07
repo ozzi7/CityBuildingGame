@@ -5,7 +5,7 @@
 #include <random>
 
 #include "terrain.h"
-#include "white_tree.h"
+#include "chamaecyparis.h"
 #include "fir.h"
 
 using namespace std;

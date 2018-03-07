@@ -7,7 +7,7 @@
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
 #include "tree.h"
-#include "white_tree.h"
+#include "chamaecyparis.h"
 #include "visitor.h"
 #include "fir.h"
 #include "shader.h"
@@ -16,9 +16,11 @@
 class Renderer : public Visitor
 {
 public:
-	Model *model_white_tree;
+	Model *model_chamaecyparis;
 	Model *model_fir;
-	Shader *shader_white_tree;
+	//Model *model_fir;
+	Shader *shader_chamaecyparis;
+	//Shader *shader_chamaecyparis;
 	Shader *shader_fir;
 
 	glm::mat4 projection;
@@ -26,17 +28,17 @@ public:
 
 	Renderer(std::string exe_path)
 	{
-		/* white tree init*/
-		shader_white_tree = new Shader("vertex_shader.vert", "fragment_shader.frag");
+		/* Chamaecyparis init*/
+		shader_chamaecyparis = new Shader("mesh_shader.vert", "fragment_shader.frag");
 
 		std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
-		std::string texture_path = exe_path + "/tree2_3ds/Tree2.3ds";
-		model_white_tree = new Model(texture_path, false);
+		std::string texture_path = exe_path + "/Chamaecyparis/Tree Chamaecyparis N161216.3ds";
+		model_chamaecyparis = new Model(texture_path, false);
 
 		/* fir init*/
-		shader_fir = new Shader("vertex_shader.vert", "fragment_shader.frag");
+		shader_fir = new Shader("mesh_shader.vert", "mesh_shader.frag");
 
-		texture_path = exe_path + "/fir/Fir.obj";
+		texture_path = exe_path + "/fir/Fir.3DS";
 		model_fir = new Model(texture_path, false);
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
@@ -48,19 +50,20 @@ public:
 	{
 		// no general tree..
 	};
-	void Visit(WhiteTree *white_tree)
+	void Visit(Chamaecyparis *chamaecyparis)
 	{
-		shader_white_tree->use();
-		shader_white_tree->setMat4("projection", projection);
-		shader_white_tree->setMat4("view", view);
+		shader_chamaecyparis->use();
+		shader_chamaecyparis->setMat4("projection", projection);
+		shader_chamaecyparis->setMat4("view", view);
 
 		glm::mat4 model2 = glm::mat4(1.0f);
-		model2 = glm::translate(model2, white_tree->Position);
-		model2 = glm::scale(model2, glm::vec3(0.07f, 0.07f, 0.07f));
+		model2 = glm::translate(model2, chamaecyparis->Position);
+		model2 = glm::rotate(model2, 90.0f, glm::vec3(1,0,0));
+		model2 = glm::scale(model2, glm::vec3(0.02f, 0.02f, 0.02));
 
-		shader_white_tree->setMat4("model", model2);
+		shader_chamaecyparis->setMat4("model", model2);
 
-		model_white_tree->Draw(*shader_white_tree);
+		model_chamaecyparis->Draw(*shader_chamaecyparis);
 	};
 	void Visit(Fir *fir)
 	{

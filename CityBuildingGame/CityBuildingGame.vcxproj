@@ -168,7 +168,7 @@
     <ClInclude Include="terrain.h" />
     <ClInclude Include="tree.h" />
     <ClInclude Include="visitor.h" />
-    <ClInclude Include="white_tree.h" />
+    <ClInclude Include="chamaecyparis.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

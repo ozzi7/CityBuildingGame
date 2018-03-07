@@ -71,9 +71,6 @@
     <ClInclude Include="tree.h">
       <Filter>Header Files\Game objects</Filter>
     </ClInclude>
-    <ClInclude Include="white_tree.h">
-      <Filter>Header Files\Game objects</Filter>
-    </ClInclude>
     <ClInclude Include="grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -87,6 +84,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="object.h">
+      <Filter>Header Files\Game objects</Filter>
+    </ClInclude>
+    <ClInclude Include="chamaecyparis.h">
       <Filter>Header Files\Game objects</Filter>
     </ClInclude>
   </ItemGroup>

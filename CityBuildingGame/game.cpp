@@ -40,8 +40,6 @@ void Game::RenderLoop()
 
 	shaderTerrain = new Shader("basic_lighting.vert", "basic_lighting.frag");
 
-	glEnable(GL_DEPTH_TEST);
-
 	shaderTerrain->use();
 	grid->terrain->LoadTextures(*shaderTerrain, exe_path);
 	grid->terrain->GenerateBuffers();
@@ -51,10 +49,16 @@ void Game::RenderLoop()
 		shaderTerrain->use();
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		/*glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+*/
+		glEnable(GL_DEPTH_TEST);
+		//glDepthFunc(GL_ALWAYS);
+
 		//glDepthMask(GL_FALSE); 
-		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
 		// render terrain...
 		// light properties

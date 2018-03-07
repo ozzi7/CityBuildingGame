@@ -17,10 +17,6 @@
 #include "tree.h"
 #include "renderer.h"
 
-// To be removed
-#include "white_tree.h"
-#include "fir.h"
-
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
 
