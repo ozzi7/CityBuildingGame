@@ -95,7 +95,6 @@ int Terrain::ReloadGPUData()
 void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
 {	
 	/* parameters: corners of visible grid on (x/y/z=0) plane */
-	/* Note that bugs on edge of screen are from rendering old buffer data */
 	/* Create geometry data for visible area */
 
 	///* We initialize this only once since not implementing zoom and over edge scrolling for now*/

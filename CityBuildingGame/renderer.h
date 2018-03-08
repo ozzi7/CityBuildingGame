@@ -52,18 +52,20 @@ public:
 	};
 	void Visit(Chamaecyparis *chamaecyparis)
 	{
-		shader_chamaecyparis->use();
+		/*shader_chamaecyparis->use();
 		shader_chamaecyparis->setMat4("projection", projection);
 		shader_chamaecyparis->setMat4("view", view);
 
-		glm::mat4 model2 = glm::mat4(1.0f);
-		model2 = glm::translate(model2, chamaecyparis->Position);
-		model2 = glm::rotate(model2, 90.0f, glm::vec3(1,0,0));
-		model2 = glm::scale(model2, glm::vec3(0.02f, 0.02f, 0.02));
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, chamaecyparis->position);
+		model = glm::rotate(model, 90.0f, glm::vec3(1,0,0));
+		model = glm::scale(model, glm::vec3(0.02f, 0.02f, 0.02));
+		model = glm::scale(model, chamaecyparis->scale);
+		model = glm::rotate(model, chamaecyparis->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 
-		shader_chamaecyparis->setMat4("model", model2);
+		shader_chamaecyparis->setMat4("model", model);
 
-		model_chamaecyparis->Draw(*shader_chamaecyparis);
+		model_chamaecyparis->Draw(*shader_chamaecyparis);*/
 	};
 	void Visit(Fir *fir)
 	{
@@ -71,11 +73,14 @@ public:
 		shader_fir->setMat4("projection", projection);
 		shader_fir->setMat4("view", view);
 
-		glm::mat4 model2 = glm::mat4(1.0f);
-		model2 = glm::translate(model2, fir->Position);
-		model2 = glm::scale(model2, glm::vec3(0.003f, 0.003f, 0.003f));
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, fir->position);
+		model = glm::translate(model, glm::vec3(0.0f,0.0f,0.3f));
 
-		shader_fir->setMat4("model", model2);
+		model = glm::scale(model, glm::vec3(0.003f, 0.003f, 0.003f));
+		model = glm::scale(model, fir->scale);
+		model = glm::rotate(model, fir->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+		shader_fir->setMat4("model", model);
 
 		model_fir->Draw(*shader_fir);
 	};
