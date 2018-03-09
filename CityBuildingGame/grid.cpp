@@ -7,8 +7,9 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 	gridWidth = aGridWidth;
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> pos_offset(-0.2, 0.2);
-	std::uniform_real_distribution<> scale(0.5, 2.0);
+	std::uniform_real_distribution<> pos_offset(-0.3, 0.3);
+	std::uniform_real_distribution<> scale(0.7, 1.3);
+	std::uniform_real_distribution<> rotation(0, 360.0f);
 
 	terrain = new Terrain(gridHeight, gridWidth);
 
@@ -39,10 +40,14 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 		for (int j = 0; j < gridWidth; ++j) {
 			if(treeMap[i][j] > 4.0f && treeMap[i][j] < 7.0f)
 				gridunits[i][j]->objects.push_back(
-					new Chamaecyparis(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridunits[i][j]->averageHeight)));
+					new Chamaecyparis(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridunits[i][j]->averageHeight),
+						glm::vec3(scale(gen), scale(gen), scale(gen)),
+						rotation(gen)));
 			else if (treeMap[i][j] >= 7.0f)
 				gridunits[i][j]->objects.push_back(
-					new Fir(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridunits[i][j]->averageHeight)));
+					new Fir(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridunits[i][j]->averageHeight),
+						glm::vec3(scale(gen), scale(gen), scale(gen)),
+						rotation(gen)));
 		}
 	}
 }
