@@ -7,8 +7,8 @@
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
 #include "visitor.h"
+#include "terrain.h"
 #include "shader.h"
-
 #include "model.h"
 #include "tree.h"
 #include "chamaecyparis.h"
@@ -20,11 +20,10 @@ class Renderer : public Visitor
 public:
 	Model *model_chamaecyparis;
 	Model *model_fir;
+
+	Shader *shader_terrain;
 	Model *model_palm;
 	Shader *mesh_shader;
-
-	//glm::mat4 projection;
-	//glm::mat4 view;
 
 	Renderer(std::string exe_path)
 	{
@@ -41,24 +40,23 @@ public:
 		texture_path = exe_path + "/../models/fir/Fir.3DS";
 		model_fir = new Model(texture_path, false);
 
+		shader_terrain = new Shader("terrain.vert", "terrain.frag");
+
 		/* Palm init*/
 		texture_path = exe_path + "/../models/palm/palm1.obj";
 		model_palm = new Model(texture_path, false);
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
 	{
-		//projection = aProjection;
-		//view = aView;
-
 		mesh_shader->use();
 		mesh_shader->setMat4("projection", aProjection);
 		mesh_shader->setMat4("view", aView);
 
+		shader_terrain->use();
+		shader_terrain->setMat4("projection", aProjection);
+		shader_terrain->setMat4("view", aView);
 	}
-	void Visit(Tree *tree)
-	{
-		// no general tree..
-	};
+	void Visit(Tree *tree) {};
 	void Visit(Chamaecyparis *chamaecyparis)
 	{
 		mesh_shader->use();
@@ -101,4 +99,32 @@ public:
 
 		model_palm->Draw(*mesh_shader);
 	};
+	void Visit(Terrain *terrain)
+	{
+		shader_terrain->use();
+
+		glm::vec3 lightColor;
+		lightColor.x = 1.0f;//sin(glfwGetTime() * 2.0f);
+		lightColor.y = 1.0f;// sin(glfwGetTime() * 0.7f);
+		lightColor.z = 1.0f;// sin(glfwGetTime() * 1.3f);
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+		shader_terrain->setVec3("light.ambient", ambientColor);
+		shader_terrain->setVec3("light.diffuse", diffuseColor);
+		shader_terrain->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		shader_terrain->setVec3("light.position", glm::vec3(10.0f, 10.0f, 10.0f));//camera->Position);
+		shader_terrain->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
+
+		// calculate the model matrix for each object and pass it to shader before drawing
+		glm::mat4 model = glm::mat4(1.0f);
+		shader_terrain->setMat4("model", model);
+
+		terrain->Draw(*shader_terrain);
+	}
+	~Renderer()
+	{
+		delete model_chamaecyparis;
+		delete model_fir;
+		delete shader_terrain;
+	}
 };

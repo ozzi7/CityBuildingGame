@@ -1,6 +1,6 @@
 #include "terrain.h"
 
-Terrain::Terrain(int aGridHeight, int aGridWidth) {
+Terrain::Terrain(int aGridHeight, int aGridWidth){
 	gridWidth = aGridWidth;
 	gridHeight = aGridHeight;
 
@@ -9,21 +9,21 @@ Terrain::Terrain(int aGridHeight, int aGridWidth) {
 	noise_gen.GeneratePerlinNoise(heightmap, gridHeight + 1, gridWidth + 1, 5, 6);
 
 	CreateGeometry();
+
+	renderData0 = new vector<GLfloat>(maxVisibleHeight * maxVisibleWidth * 48);
+	renderData1 = new vector<GLfloat>(maxVisibleHeight * maxVisibleWidth * 48);
 }
-void Terrain::InitializeRenderData(int visibleWidth, int visibleHeight)
-{
-	visibleHeight = visibleHeight;
-	visibleWidth = visibleWidth;
-	renderData0 = new vector<GLfloat>((visibleHeight + 1)*(visibleWidth + 1)*(48));
-	renderData1 = new vector<GLfloat>((visibleHeight + 1)*(visibleWidth + 1)*(48));
-}
+
 void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
 {
-	/* Check if terrain must be reloaded to GPU (after scrolling, zooming currently ignored)*/
-	if (currUpperLeftX != upperLeft.x || currUpperLeftY != upperLeft.y)
+	/* Check if terrain must be reloaded to GPU */
+	if (currUpperLeftX != upperLeft.x || currUpperLeftY != upperLeft.y ||
+		currLowerRightX != lowerRight.x || currLowerRightY != lowerRight.y)
 	{
 		currUpperLeftX = upperLeft.x;
 		currUpperLeftY = upperLeft.y;
+		currLowerRightX = lowerRight.x;
+		currLowerRightY = lowerRight.y;
 		LoadVisibleGeometry(upperLeft, upperRight, lowerLeft, lowerRight);
 	}
 }
@@ -37,10 +37,6 @@ void Terrain::PopulateGridWithObjects()
 }
 void Terrain::Draw(Shader &shaderTerrain)
 {
-	// calculate the model matrix for each object and pass it to shader before drawing
-	glm::mat4 model = glm::mat4(1.0f);
-	shaderTerrain.setMat4("model", model);
-
 	int vertexCount = ReloadGPUData();
 
 	// render
@@ -68,12 +64,12 @@ int Terrain::ReloadGPUData()
 
 		if (currRenderData)
 		{
-			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * (*renderData1).size(), &(*renderData1)[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderData1VertexCount*8, &(*renderData1)[0], GL_STATIC_DRAW);
 			vertexCount = renderData1VertexCount;
 		}
 		else
 		{
-			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * (*renderData0).size(), &(*renderData0)[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderData0VertexCount*8, &(*renderData0)[0], GL_STATIC_DRAW);
 			vertexCount = renderData0VertexCount;
 		}
 
@@ -97,7 +93,6 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	/* parameters: corners of visible grid on (x/y/z=0) plane */
 	/* Create geometry data for visible area */
 
-	///* We initialize this only once since not implementing zoom and over edge scrolling for now*/
 	vector<GLfloat> *renderDataTemp;
 	renderDataMutex.lock();
 	if (currRenderData)
@@ -112,6 +107,9 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	int endX = max(max((int)upperLeft.x, int(lowerLeft.x)), max((int)upperRight.x, int(lowerRight.x)));
 	int startY = min(min((int)upperLeft.y, int(lowerLeft.y)), min((int)upperRight.y, int(lowerRight.y)));
 	int endY = max(max((int)upperLeft.y, int(lowerLeft.y)), max((int)upperRight.y, int(lowerRight.y)));
+
+	endY = min(endY, startY + maxVisibleHeight);
+	endX = min(endX, startX + maxVisibleWidth);
 
 	for (int i = max(0, startY+1); i <= min(gridHeight-1, endY); ++i)
 	{
@@ -197,18 +195,16 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 			}
 		}
 	}
-	/* Fill rest with 0 if we render it */
-	std::fill((*renderDataTemp).begin() + index, (*renderDataTemp).end(), 0.0f);
 	renderDataMutex.lock();
 	if (currRenderData == 1)
 	{
 		currRenderData = 0;
-		renderData0VertexCount = (*renderDataTemp).size() / 48 * 6;
+		renderData0VertexCount = (index / 48) * 6;
 	}
 	else
 	{
 		currRenderData = 1;
-		renderData1VertexCount = (*renderDataTemp).size() / 48 * 6;
+		renderData1VertexCount = (index / 48) * 6;
 	}
 	reloadGPUData = true;
 	renderDataMutex.unlock();
@@ -307,13 +303,23 @@ void Terrain::CreateGeometry()
 		}
 	}
 }
-void Terrain::LoadTextures(Shader & shaderTerrain, string exePath)
+void Terrain::Accept(Visitor &v)
+{
+	v.Visit(this);
+}
+void Terrain::InitOpenGL(Shader* shader_terrain, string exe_path)
+{
+	shader_terrain->use();
+	LoadTextures(shader_terrain, exe_path);
+	GenerateBuffers();
+}
+void Terrain::LoadTextures(Shader * shader_terrain, string exe_path)
 {
 	Model tree = Model();
-	string texturesPath = exePath + "/../terrain";
+	string texturesPath = exe_path + "/../terrain";
 	texture_id_grass = tree.TextureFromFile(texture_grass.c_str(), texturesPath);
 
-	shaderTerrain.setInt("texture1", 0);
+	shader_terrain->setInt("texture1", 0);
 }
 void Terrain::GenerateBuffers()
 {
@@ -325,4 +331,7 @@ Terrain::~Terrain()
 	// Properly de-allocate all resources once they've outlived their purpose
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+
+	delete renderData0;
+	delete renderData1;
 }
