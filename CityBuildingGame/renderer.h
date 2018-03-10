@@ -10,6 +10,7 @@
 #include "chamaecyparis.h"
 #include "visitor.h"
 #include "fir.h"
+#include "terrain.h"
 #include "shader.h"
 #include "model.h"
 
@@ -22,6 +23,7 @@ public:
 	Shader *shader_chamaecyparis;
 	//Shader *shader_chamaecyparis;
 	Shader *shader_fir;
+	Shader *shader_terrain;
 
 	glm::mat4 projection;
 	glm::mat4 view;
@@ -31,7 +33,6 @@ public:
 		/* Chamaecyparis init*/
 		shader_chamaecyparis = new Shader("mesh_shader.vert", "mesh_shader.frag");
 
-		std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
 		std::string texture_path = exe_path + "/../models/Chamaecyparis/Tree Chamaecyparis N161216.3ds";
 		model_chamaecyparis = new Model(texture_path, false);
 
@@ -40,6 +41,8 @@ public:
 
 		texture_path = exe_path + "/../models/fir/Fir.3DS";
 		model_fir = new Model(texture_path, false);
+
+		shader_terrain = new Shader("terrain.vert", "terrain.frag");
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
 	{
@@ -84,4 +87,36 @@ public:
 
 		model_fir->Draw(*shader_fir);
 	};
+	void Visit(Terrain *terrain)
+	{
+		shader_terrain->use();
+		shader_terrain->setMat4("projection", projection);
+		shader_terrain->setMat4("view", view);
+
+		glm::vec3 lightColor;
+		lightColor.x = 1.0f;//sin(glfwGetTime() * 2.0f);
+		lightColor.y = 1.0f;// sin(glfwGetTime() * 0.7f);
+		lightColor.z = 1.0f;// sin(glfwGetTime() * 1.3f);
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+		shader_terrain->setVec3("light.ambient", ambientColor);
+		shader_terrain->setVec3("light.diffuse", diffuseColor);
+		shader_terrain->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		shader_terrain->setVec3("light.position", glm::vec3(10.0f, 10.0f, 10.0f));//camera->Position);
+		shader_terrain->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
+
+		// calculate the model matrix for each object and pass it to shader before drawing
+		glm::mat4 model = glm::mat4(1.0f);
+		shader_terrain->setMat4("model", model);
+
+		terrain->Draw(*shader_terrain);
+	}
+	~Renderer()
+	{
+		delete model_chamaecyparis;
+		delete model_fir;
+		delete shader_chamaecyparis;
+		delete shader_fir;
+		delete shader_terrain;
+	}
 };

@@ -19,13 +19,6 @@ Game::~Game()
 
 void Game::StartGame()
 {
-	//std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
-	//std::string texture_path = exe_path + "/tree2_3ds/Tree2.3ds";
-
-	//std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
-	//texture_path = exe_path + "/fir/Fir.obj";
-	//firTreeModel = Model(texture_path, false);
-
 	glfwMakeContextCurrent(NULL);
 
 	std::thread threadRenderLoop(&Game::RenderLoop, this);
@@ -36,57 +29,21 @@ void Game::RenderLoop()
 {
 	glfwMakeContextCurrent(window);
 	renderer = new Renderer(exe_path);
-
-	shaderTerrain = new Shader("terrain.vert", "terrain.frag");
-
-	shaderTerrain->use();
-	grid->terrain->LoadTextures(*shaderTerrain, exe_path);
-	grid->terrain->GenerateBuffers();
+	
+	grid->terrain->InitOpenGL(renderer->shader_terrain, exe_path);
 
 	while (!glfwWindowShouldClose(window))
 	{
-		shaderTerrain->use();
-
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		/*glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-*/
 		glEnable(GL_DEPTH_TEST);
-		//glDepthFunc(GL_ALWAYS);
-
-		//glDepthMask(GL_FALSE); 
-
-
-		// render terrain...
-		// light properties
-		glm::vec3 lightColor;
-		lightColor.x = 1.0f;//sin(glfwGetTime() * 2.0f);
-		lightColor.y = 1.0f;// sin(glfwGetTime() * 0.7f);
-		lightColor.z = 1.0f;// sin(glfwGetTime() * 1.3f);
-		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
-		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
-		shaderTerrain->setVec3("light.ambient", ambientColor);
-		shaderTerrain->setVec3("light.diffuse", diffuseColor);
-		shaderTerrain->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		shaderTerrain->setVec3("light.position", camera->Position);
-		shaderTerrain->setVec3("viewPos", camera->Position);
 
 		glm::mat4 projection = glm::ortho(-screenRatio * camera->Zoom, screenRatio * camera->Zoom, -1 * camera->Zoom, 1 * camera->Zoom, 1.0f, 1000.0f);
-		shaderTerrain->setMat4("projection", projection);
-
-		// camera/view transformation
 		glm::mat4 view = camera->GetViewMatrix();
-		shaderTerrain->setMat4("view", view);
-
-		// calculate the model matrix for each object and pass it to shader before drawing
-		glm::mat4 model = glm::mat4(1.0f);
-		shaderTerrain->setMat4("model", model);
-
-		grid->terrain->Draw(*shaderTerrain);
 
 		renderer->SetMatrices(projection, view);
+		grid->terrain->Accept(*renderer);
+
 		// render all objects
 		for (int i = 0; i < grid->gridunits.size()-250; i++) {
 			for (int j = 0; j < grid->gridunits[i].size()-250; j++) {
@@ -103,8 +60,6 @@ void Game::RenderLoop()
 
 void Game::GameLoop()
 {
-	grid->terrain->InitializeRenderData(100, 100); // this sets the maximum visible range..
-
 	const int TICKS_PER_SECOND = 120;
 	const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
 	const int MAX_FRAMESKIP = 10;

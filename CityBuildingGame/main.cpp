@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
 	// store path for resources
 	std::string exe_path = std::string(argv[0]);
 	exe_path = exe_path.substr(0, exe_path.find_last_of("\\/"));
+	std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
 
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);

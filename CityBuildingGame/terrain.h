@@ -17,9 +17,10 @@
 #include "noise_gen.h"
 #include "shader.h"
 #include "model.h"
+#include "visitor.h"
+#include "object.h"
 
-
-class Terrain
+class Terrain : Object
 {
 public:
 	Terrain(int gridHeight, int gridWidth);
@@ -27,11 +28,17 @@ public:
 
 	void SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	void Draw(Shader & shader);
-	void LoadTextures(Shader & shaderTerrain, string exePath);
+	void LoadTextures(Shader *shaderTerrain, string exePath);
 	void GenerateBuffers();
-	void InitializeRenderData(int visibleWidth, int visibleHeight);
+	void InitOpenGL(Shader *shaderTerrain, string exePath);
+	void Accept(Visitor &v);
 
 	vector<vector<float>> heightmap;
+
+	/* Defines the size of renderData0, renderData1 (main memory buffers)
+	Change this to allow further zoom out */
+	int maxVisibleHeight = 150;
+	int maxVisibleWidth = 200;
 
 private:
 	void CreateGeometry();
@@ -52,9 +59,12 @@ private:
 	vector<float> triangleArea;
 
 	/* Defines what is rendered of the terrain*/
-	int visibleHeight;
-	int visibleWidth;
-	int currUpperLeftX, currUpperLeftY = 0;
+	int visibleHeight = 0;
+	int visibleWidth = 0;
+	int currUpperLeftX = 0;
+	int currUpperLeftY = 0;
+	int currLowerRightX = 0;
+	int currLowerRightY = 0;
 
 	mutex renderDataMutex;
 	bool reloadGPUData = false;
