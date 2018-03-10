@@ -40,7 +40,8 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 		for (int j = 0; j < gridWidth; ++j) {
 			if(treeMap[i][j] > 4.0f && treeMap[i][j] < 7.0f)
 				gridunits[i][j]->objects.push_back(
-					new Chamaecyparis(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridunits[i][j]->averageHeight),
+					//new Chamaecyparis(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridunits[i][j]->averageHeight),
+					new Palm(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridunits[i][j]->averageHeight),
 						glm::vec3(scale(gen), scale(gen), scale(gen)),
 						rotation(gen)));
 			else if (treeMap[i][j] >= 7.0f)

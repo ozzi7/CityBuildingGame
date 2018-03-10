@@ -279,3 +279,4 @@ vc141.idb
 *.ipdb
 !/x64/models/**
 !/x64/terrain/**
+!/assets/**

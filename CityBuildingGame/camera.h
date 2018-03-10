@@ -39,6 +39,8 @@ private:
 	glm::vec3 Lookat;
 	// Window object
 	GLFWwindow *Window;
+	RECT WindowEdges;
+	float ScreenRatio;
 
 public:
 	// Empty constructor
@@ -65,22 +67,30 @@ public:
 
 	glm::vec2 GetTopLeftVisible()
 	{
-		return glm::vec2(Position.x + Lookat.x - 50, Position.y + Lookat.y);
+		return glm::vec2
+			(Position.x + Lookat.x - (3 * Zoom), 
+			Position.y + Lookat.y + (3 * Zoom) - ((3 * Zoom) * (0.5 * ScreenRatio)));
 	}
 
 	glm::vec2 GetTopRightVisible()
 	{
-		return glm::vec2(Position.x + Lookat.x, Position.y + Lookat.y + 50);
+		return glm::vec2
+			(Position.x + Lookat.x - (3 * Zoom) + ((3 * Zoom) * (0.5 * ScreenRatio)), 
+			Position.y + Lookat.y + (3 * Zoom));
 	}
 
 	glm::vec2 GetBottomLeftVisible()
 	{
-		return glm::vec2(Position.x + Lookat.x, Position.y + Lookat.y - 50);
+		return glm::vec2
+			(Position.x + Lookat.x + (3 * Zoom) - ((3 * Zoom) * (0.5 * ScreenRatio)), 
+			Position.y + Lookat.y - (3 * Zoom));
 	}
 
 	glm::vec2 GetBottomRightVisible()
 	{
-		return glm::vec2(Position.x + Lookat.x + 50, Position.y + Lookat.y);
+		return glm::vec2
+			(Position.x + Lookat.x + (3 * Zoom),
+			Position.y + Lookat.y - (3 * Zoom) + ((3 * Zoom) * (0.5 * ScreenRatio)));
 	}
 
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
@@ -131,7 +141,6 @@ public:
 	// Lock curser to current window size
 	void lock_cursor_to_window()
 	{
-		RECT WindowEdges;
 		int width;
 		int height;
 		int left;
@@ -152,6 +161,8 @@ public:
 		WindowEdges.top = top;
 		WindowEdges.right = right;
 		WindowEdges.bottom = bottom;
+
+		ScreenRatio = (float)width / (float)height;
 
 		ClipCursor(&WindowEdges);
 	}

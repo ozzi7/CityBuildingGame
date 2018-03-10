@@ -162,6 +162,7 @@
     <ClInclude Include="noise_gen.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="object.h" />
+    <ClInclude Include="palm.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
