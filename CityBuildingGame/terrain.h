@@ -37,8 +37,8 @@ public:
 
 	/* Defines the size of renderData0, renderData1 (main memory buffers)
 	Change this to allow further zoom out */
-	int maxVisibleHeight = 150;
-	int maxVisibleWidth = 200;
+	int maxVisibleHeight = 300;
+	int maxVisibleWidth = 300;
 
 private:
 	void CreateGeometry();
@@ -59,8 +59,6 @@ private:
 	vector<float> triangleArea;
 
 	/* Defines what is rendered of the terrain*/
-	int visibleHeight = 0;
-	int visibleWidth = 0;
 	int currUpperLeftX = 0;
 	int currUpperLeftY = 0;
 	int currLowerRightX = 0;

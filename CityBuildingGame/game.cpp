@@ -13,7 +13,6 @@ Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, C
 Game::~Game()
 {
 	delete grid;
-	delete shaderTerrain;
 	delete renderer;
 }
 
@@ -45,8 +44,8 @@ void Game::RenderLoop()
 		grid->terrain->Accept(*renderer);
 
 		// render all objects
-		for (int i = 0; i < grid->gridunits.size()-250; i++) {
-			for (int j = 0; j < grid->gridunits[i].size()-250; j++) {
+		for (int i = 0; i < grid->gridunits.size()-750; i++) {
+			for (int j = 0; j < grid->gridunits[i].size()-750; j++) {
 				for (auto it = grid->gridunits[i][j]->objects.begin(); it !=
 					grid->gridunits[i][j]->objects.end(); ++it) {
 						(*it)->Accept(*renderer);
@@ -68,6 +67,7 @@ void Game::GameLoop()
 	DWORD next_game_tick = GetTickCount64() + SKIP_TICKS;
 	while (!glfwWindowShouldClose(window))
 	{
+
 		glfwPollEvents();
 		ProcessInput();
 

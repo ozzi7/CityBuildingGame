@@ -108,8 +108,8 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	int startY = min(min((int)upperLeft.y, int(lowerLeft.y)), min((int)upperRight.y, int(lowerRight.y)));
 	int endY = max(max((int)upperLeft.y, int(lowerLeft.y)), max((int)upperRight.y, int(lowerRight.y)));
 
-	endY = min(endY, startY + maxVisibleHeight);
-	endX = min(endX, startX + maxVisibleWidth);
+	endY = min(endY, max(0, startY + 1) + maxVisibleHeight);
+	endX = min(endX, max(0, startX + 1) + maxVisibleWidth);
 
 	for (int i = max(0, startY+1); i <= min(gridHeight-1, endY); ++i)
 	{
