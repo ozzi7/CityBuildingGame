@@ -20,8 +20,8 @@ struct Vertex {
 	glm::vec3 Position;
 	glm::vec3 Normal;
 	glm::vec2 TexCoords;
-	//glm::vec3 Tangent;
-	//glm::vec3 Bitangent;
+	glm::vec3 Tangent;
+	glm::vec3 Bitangent;
 };
 
 struct Texture {
@@ -67,8 +67,8 @@ public:
 				number = std::to_string(specularNr++); // transfer unsigned int to stream
 			else if (name == "texture_normal")
 				number = std::to_string(normalNr++); // transfer unsigned int to stream
-			//else if (name == "texture_height")
-			//	number = std::to_string(heightNr++); // transfer unsigned int to stream
+			else if (name == "texture_height")
+				number = std::to_string(heightNr++); // transfer unsigned int to stream
 
 			// now set the sampler to the correct texture unit
 			glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
@@ -120,11 +120,11 @@ private:
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 		// vertex tangent
-		//glEnableVertexAttribArray(3);
-		//glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
 		// vertex bitangent
-		//glEnableVertexAttribArray(4);
-		//glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
 
 		glBindVertexArray(0);
 	}

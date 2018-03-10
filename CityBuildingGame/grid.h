@@ -7,6 +7,7 @@
 #include "terrain.h"
 #include "chamaecyparis.h"
 #include "fir.h"
+#include "palm.h"
 
 using namespace std;
 

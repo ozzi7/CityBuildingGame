@@ -89,5 +89,8 @@
     <ClInclude Include="chamaecyparis.h">
       <Filter>Header Files\Game objects</Filter>
     </ClInclude>
+    <ClInclude Include="palm.h">
+      <Filter>Header Files\Game objects</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

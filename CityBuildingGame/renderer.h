@@ -6,45 +6,54 @@
 
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
+#include "visitor.h"
+#include "shader.h"
+
+#include "model.h"
 #include "tree.h"
 #include "chamaecyparis.h"
-#include "visitor.h"
 #include "fir.h"
-#include "shader.h"
-#include "model.h"
+#include "palm.h"
 
 class Renderer : public Visitor
 {
 public:
 	Model *model_chamaecyparis;
 	Model *model_fir;
-	//Model *model_fir;
-	Shader *shader_chamaecyparis;
-	//Shader *shader_chamaecyparis;
-	Shader *shader_fir;
+	Model *model_palm;
+	Shader *mesh_shader;
 
-	glm::mat4 projection;
-	glm::mat4 view;
+	//glm::mat4 projection;
+	//glm::mat4 view;
 
 	Renderer(std::string exe_path)
 	{
-		/* Chamaecyparis init*/
-		shader_chamaecyparis = new Shader("mesh_shader.vert", "mesh_shader.frag");
-
+		std::string texture_path;
 		std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
-		std::string texture_path = exe_path + "/../models/Chamaecyparis/Tree Chamaecyparis N161216.3ds";
+
+		mesh_shader = new Shader("mesh_shader.vert", "mesh_shader.frag");
+
+		/* Chamaecyparis init*/
+		texture_path = exe_path + "/../models/Chamaecyparis/Tree Chamaecyparis N161216.3ds";
 		model_chamaecyparis = new Model(texture_path, false);
 
 		/* fir init*/
-		shader_fir = new Shader("mesh_shader.vert", "mesh_shader.frag");
-
 		texture_path = exe_path + "/../models/fir/Fir.3DS";
 		model_fir = new Model(texture_path, false);
+
+		/* Palm init*/
+		texture_path = exe_path + "/../models/palm/palm1.obj";
+		model_palm = new Model(texture_path, false);
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
 	{
-		projection = aProjection;
-		view = aView;
+		//projection = aProjection;
+		//view = aView;
+
+		mesh_shader->use();
+		mesh_shader->setMat4("projection", aProjection);
+		mesh_shader->setMat4("view", aView);
+
 	}
 	void Visit(Tree *tree)
 	{
@@ -52,9 +61,7 @@ public:
 	};
 	void Visit(Chamaecyparis *chamaecyparis)
 	{
-		/*shader_chamaecyparis->use();
-		shader_chamaecyparis->setMat4("projection", projection);
-		shader_chamaecyparis->setMat4("view", view);
+		mesh_shader->use();
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, chamaecyparis->position);
@@ -63,15 +70,13 @@ public:
 		model = glm::scale(model, chamaecyparis->scale);
 		model = glm::rotate(model, chamaecyparis->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 
-		shader_chamaecyparis->setMat4("model", model);
+		mesh_shader->setMat4("model", model);
 
-		model_chamaecyparis->Draw(*shader_chamaecyparis);*/
+		model_chamaecyparis->Draw(*mesh_shader);
 	};
 	void Visit(Fir *fir)
 	{
-		shader_fir->use();
-		shader_fir->setMat4("projection", projection);
-		shader_fir->setMat4("view", view);
+		mesh_shader->use();
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, fir->position);
@@ -80,8 +85,20 @@ public:
 		model = glm::scale(model, glm::vec3(0.003f, 0.003f, 0.003f));
 		model = glm::scale(model, fir->scale);
 		model = glm::rotate(model, fir->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-		shader_fir->setMat4("model", model);
+		mesh_shader->setMat4("model", model);
 
-		model_fir->Draw(*shader_fir);
+		model_fir->Draw(*mesh_shader);
+	};
+	void Visit(Palm *palm)
+	{
+		mesh_shader->use();
+
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, palm->position);
+		model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05));
+
+		mesh_shader->setMat4("model", model);
+
+		model_palm->Draw(*mesh_shader);
 	};
 };
