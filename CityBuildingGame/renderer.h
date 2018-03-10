@@ -32,13 +32,13 @@ public:
 		shader_chamaecyparis = new Shader("mesh_shader.vert", "fragment_shader.frag");
 
 		std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
-		std::string texture_path = exe_path + "/Chamaecyparis/Tree Chamaecyparis N161216.3ds";
+		std::string texture_path = exe_path + "/../models/Chamaecyparis/Tree Chamaecyparis N161216.3ds";
 		model_chamaecyparis = new Model(texture_path, false);
 
 		/* fir init*/
 		shader_fir = new Shader("mesh_shader.vert", "mesh_shader.frag");
 
-		texture_path = exe_path + "/fir/Fir.3DS";
+		texture_path = exe_path + "/../models/fir/Fir.3DS";
 		model_fir = new Model(texture_path, false);
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)

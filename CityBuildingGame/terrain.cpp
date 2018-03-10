@@ -310,7 +310,7 @@ void Terrain::CreateGeometry()
 void Terrain::LoadTextures(Shader & shaderTerrain, string exePath)
 {
 	Model tree = Model();
-	string texturesPath = exePath + "/textures";
+	string texturesPath = exePath + "/../terrain";
 	texture_id_grass = tree.TextureFromFile(texture_grass.c_str(), texturesPath);
 
 	shaderTerrain.setInt("texture1", 0);
