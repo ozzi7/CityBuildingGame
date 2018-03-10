@@ -277,4 +277,5 @@ vc141.idb
 *.iobj
 
 *.ipdb
-!/x64/Debug/nanosuit/*
+!/x64/models/**
+!/x64/terrain/**
