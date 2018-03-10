@@ -13,7 +13,6 @@ Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, C
 Game::~Game()
 {
 	delete grid;
-	delete shaderTree;
 	delete shaderTerrain;
 	delete renderer;
 }
