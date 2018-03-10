@@ -1,4 +1,4 @@
-#version 330 core
+#version 450 core
 out vec4 FragColor;
 
 struct Material {
@@ -12,7 +12,7 @@ struct Light {
 
     vec3 ambient;
     vec3 diffuse;
-    //vec3 specular;
+    vec3 specular;
 };
 
 in vec3 FragPos;  

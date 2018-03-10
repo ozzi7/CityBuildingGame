@@ -29,7 +29,7 @@ public:
 	Renderer(std::string exe_path)
 	{
 		/* Chamaecyparis init*/
-		shader_chamaecyparis = new Shader("mesh_shader.vert", "fragment_shader.frag");
+		shader_chamaecyparis = new Shader("mesh_shader.vert", "mesh_shader.frag");
 
 		std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
 		std::string texture_path = exe_path + "/../models/Chamaecyparis/Tree Chamaecyparis N161216.3ds";

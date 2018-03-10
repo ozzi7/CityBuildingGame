@@ -7,16 +7,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CityBuildingGame", "CityBui
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BA1CC948-9E99-4878-A1AB-C9BD999267F3}"
 	ProjectSection(SolutionItems) = preProject
-		CityBuildingGame\basic_lighting.frag = CityBuildingGame\basic_lighting.frag
-		CityBuildingGame\basic_lighting.vert = CityBuildingGame\basic_lighting.vert
-		CityBuildingGame\fragment_shader.frag = CityBuildingGame\fragment_shader.frag
-		lamp.frag = lamp.frag
-		lamp.vert = lamp.vert
 		CityBuildingGame\materials.frag = CityBuildingGame\materials.frag
 		CityBuildingGame\materials.vert = CityBuildingGame\materials.vert
 		CityBuildingGame\mesh_shader.frag = CityBuildingGame\mesh_shader.frag
 		CityBuildingGame\mesh_shader.vert = CityBuildingGame\mesh_shader.vert
-		CityBuildingGame\vertex_shader.vert = CityBuildingGame\vertex_shader.vert
+		CityBuildingGame\terrain.frag = CityBuildingGame\terrain.frag
+		CityBuildingGame\terrain.vert = CityBuildingGame\terrain.vert
 	EndProjectSection
 EndProject
 Global

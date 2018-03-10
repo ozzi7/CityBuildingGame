@@ -37,7 +37,7 @@ void Game::RenderLoop()
 	glfwMakeContextCurrent(window);
 	renderer = new Renderer(exe_path);
 
-	shaderTerrain = new Shader("basic_lighting.vert", "basic_lighting.frag");
+	shaderTerrain = new Shader("terrain.vert", "terrain.frag");
 
 	shaderTerrain->use();
 	grid->terrain->LoadTextures(*shaderTerrain, exe_path);
@@ -69,11 +69,10 @@ void Game::RenderLoop()
 		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
 		shaderTerrain->setVec3("light.ambient", ambientColor);
 		shaderTerrain->setVec3("light.diffuse", diffuseColor);
-		//ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		shaderTerrain->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 		shaderTerrain->setVec3("light.position", camera->Position);
 		shaderTerrain->setVec3("viewPos", camera->Position);
 
-		//glm::mat4 projection = glm::ortho(-1.77777f * camera.Zoom, 1.77777f * camera.Zoom, -1 * camera.Zoom, 1 * camera.Zoom, 1.0f, 1000.0f);
 		glm::mat4 projection = glm::ortho(-screenRatio * camera->Zoom, screenRatio * camera->Zoom, -1 * camera->Zoom, 1 * camera->Zoom, 1.0f, 1000.0f);
 		shaderTerrain->setMat4("projection", projection);
 
