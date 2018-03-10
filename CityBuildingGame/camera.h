@@ -89,8 +89,8 @@ public:
 	glm::vec2 GetBottomRightVisible()
 	{
 		return glm::vec2
-			(Position.x + Lookat.x + (3 * Zoom),
-			Position.y + Lookat.y - (3 * Zoom) + ((3 * Zoom) * (0.5 * ScreenRatio)));
+			(Position.x + Lookat.x + (VISIBLE_RANGE * Zoom),
+			Position.y + Lookat.y - (VISIBLE_RANGE * Zoom) + ((VISIBLE_RANGE * Zoom) * (0.5 * ScreenRatio)));
 	}
 
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
