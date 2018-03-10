@@ -37,7 +37,7 @@ public:
 
 	/* Defines the size of renderData0, renderData1 (main memory buffers)
 	Change this to allow further zoom out */
-	int maxVisibleHeight = 300;
+	int maxVisibleHeight = 200;
 	int maxVisibleWidth = 300;
 
 private:
@@ -67,9 +67,8 @@ private:
 	mutex renderDataMutex;
 	bool reloadGPUData = false;
 	int currRenderData = 1;
-	int renderData0VertexCount = 0;
-	int renderData1VertexCount = 0;
+	int renderDataVertexCount = 0;
 	vector<GLfloat> *renderData0; /* Gets sent to GPU */
-	vector<GLfloat> *renderData1; 
+	vector<GLfloat> *renderData1; /* .. */
 	vector<unsigned int> indices;
 };

@@ -17,8 +17,8 @@ Terrain::Terrain(int aGridHeight, int aGridWidth){
 void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
 {
 	/* Check if terrain must be reloaded to GPU */
-	if (currUpperLeftX != upperLeft.x || currUpperLeftY != upperLeft.y ||
-		currLowerRightX != lowerRight.x || currLowerRightY != lowerRight.y)
+	if (currUpperLeftX != (int)upperLeft.x || currUpperLeftY != (int)upperLeft.y ||
+		currLowerRightX != (int)lowerRight.x || currLowerRightY != (int)lowerRight.y)
 	{
 		currUpperLeftX = upperLeft.x;
 		currUpperLeftY = upperLeft.y;
@@ -64,14 +64,13 @@ int Terrain::ReloadGPUData()
 
 		if (currRenderData)
 		{
-			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderData1VertexCount*8, &(*renderData1)[0], GL_STATIC_DRAW);
-			vertexCount = renderData1VertexCount;
+			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount *8, &(*renderData1)[0], GL_STATIC_DRAW);
 		}
 		else
 		{
-			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderData0VertexCount*8, &(*renderData0)[0], GL_STATIC_DRAW);
-			vertexCount = renderData0VertexCount;
+			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount *8, &(*renderData0)[0], GL_STATIC_DRAW);
 		}
+		vertexCount = renderDataVertexCount;
 
 		// position attribute, 5th attribute can be 0 for tightly packed, its equal to 3*sizeof(float)
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -108,8 +107,8 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	int startY = min(min((int)upperLeft.y, int(lowerLeft.y)), min((int)upperRight.y, int(lowerRight.y)));
 	int endY = max(max((int)upperLeft.y, int(lowerLeft.y)), max((int)upperRight.y, int(lowerRight.y)));
 
-	endY = min(endY, max(0, startY + 1) + maxVisibleHeight);
-	endX = min(endX, max(0, startX + 1) + maxVisibleWidth);
+	endY = min(endY, max(0, startY + 1) + maxVisibleHeight-1);
+	endX = min(endX, max(0, startX + 1) + maxVisibleWidth-1);
 
 	for (int i = max(0, startY+1); i <= min(gridHeight-1, endY); ++i)
 	{
@@ -199,13 +198,12 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	if (currRenderData == 1)
 	{
 		currRenderData = 0;
-		renderData0VertexCount = (index / 48) * 6;
 	}
 	else
 	{
 		currRenderData = 1;
-		renderData1VertexCount = (index / 48) * 6;
 	}
+	renderDataVertexCount = (index / 48) * 6;
 	reloadGPUData = true;
 	renderDataMutex.unlock();
 }

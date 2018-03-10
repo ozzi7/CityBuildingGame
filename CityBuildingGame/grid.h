@@ -28,7 +28,21 @@ public:
 	Grid(int aGridHeight, int aGridWidth);
 	~Grid();
 
-	vector<vector<Unit*>> gridunits;
+	void UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::vec2 &lowerLeft, glm::vec2 &lowerRight);
+
+	vector<vector<Unit*>> gridUnits;
+
+	/* Used for rendering */
+	mutex visibleUnitsMutex;
+	int maximumVisibleUnits = 100 * 100; // maximum number of units stored in visibleUnits0 and 1
+	vector<Unit*> *visibleUnits0;
+	vector<Unit*> *visibleUnits1;
+	int visibleUnitsSize = 0;
+	int currUpperLeftX = 0;
+	int currUpperLeftY = 0;
+	int currLowerRightX = 0;
+	int currLowerRightY = 0;
+	int activeVisibleUnits = 0;
 
 	int gridHeight;
 	int gridWidth;

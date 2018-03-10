@@ -44,15 +44,27 @@ void Game::RenderLoop()
 		grid->terrain->Accept(*renderer);
 
 		// render all objects
-		for (int i = 0; i < grid->gridunits.size()-750; i++) {
-			for (int j = 0; j < grid->gridunits[i].size()-750; j++) {
-				for (auto it = grid->gridunits[i][j]->objects.begin(); it !=
-					grid->gridunits[i][j]->objects.end(); ++it) {
-						(*it)->Accept(*renderer);
+		//for (int i = 0; i < grid->gridUnits.size()-750; i++) {
+		//	for (int j = 0; j < grid->gridUnits[i].size()-750; j++) {
+		//		for (auto it = grid->gridUnits[i][j]->objects.begin(); it !=
+		//			grid->gridUnits[i][j]->objects.end(); ++it) {
+		//				(*it)->Accept(*renderer);
+		//		}
+		//	}
+		//}
+
+		grid->visibleUnitsMutex.lock();
+		vector<Unit*> *visibleUnitsTemp;
+		if (grid->activeVisibleUnits)
+			visibleUnitsTemp = grid->visibleUnits1;
+		else
+			visibleUnitsTemp = grid->visibleUnits0;
+			for (int i = 0; i < grid->visibleUnitsSize; i++) {
+				for (auto it = (*visibleUnitsTemp)[i]->objects.begin(); it != (*visibleUnitsTemp)[i]->objects.end(); ++it) {
+					(*it)->Accept(*renderer);
 				}
 			}
-		}
-
+		grid->visibleUnitsMutex.unlock();
 		glfwSwapBuffers(window);
 	}
 }
@@ -73,7 +85,9 @@ void Game::GameLoop()
 
 		grid->terrain->SetRenderWindow(camera->GetTopLeftVisible(),camera->GetTopRightVisible(), camera->GetBottomLeftVisible(),
 			camera->GetBottomRightVisible());
-		
+		grid->UpdateVisibleList(camera->GetTopLeftVisible(), camera->GetTopRightVisible(), camera->GetBottomLeftVisible(),
+			camera->GetBottomRightVisible());
+
 		camera->mouse_scroll();
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(next_game_tick - GetTickCount64()));
