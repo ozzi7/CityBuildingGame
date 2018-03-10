@@ -45,8 +45,6 @@ public:
 	/* This is a handle to the shader program */
 	Model tree;
 
-	Shader *shaderTerrain;
-
 	float screenRatio;
 
 private:
