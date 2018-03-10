@@ -43,16 +43,6 @@ void Game::RenderLoop()
 		renderer->SetMatrices(projection, view);
 		grid->terrain->Accept(*renderer);
 
-		// render all objects
-		//for (int i = 0; i < grid->gridUnits.size()-750; i++) {
-		//	for (int j = 0; j < grid->gridUnits[i].size()-750; j++) {
-		//		for (auto it = grid->gridUnits[i][j]->objects.begin(); it !=
-		//			grid->gridUnits[i][j]->objects.end(); ++it) {
-		//				(*it)->Accept(*renderer);
-		//		}
-		//	}
-		//}
-
 		grid->visibleUnitsMutex.lock();
 		vector<Unit*> *visibleUnitsTemp;
 		if (grid->activeVisibleUnits)
