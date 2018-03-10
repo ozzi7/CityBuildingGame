@@ -37,7 +37,7 @@ void Game::RenderLoop()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 
-		glm::mat4 projection = glm::ortho(-screenRatio * camera->Zoom, screenRatio * camera->Zoom, -1 * camera->Zoom, 1 * camera->Zoom, 1.0f, 1000.0f);
+		glm::mat4 projection = glm::ortho(-screenRatio * camera->Zoom, screenRatio * camera->Zoom, -1.0f * camera->Zoom, 1 * camera->Zoom, -1000.0f, 1000.0f);
 		glm::mat4 view = camera->GetViewMatrix();
 
 		renderer->SetMatrices(projection, view);

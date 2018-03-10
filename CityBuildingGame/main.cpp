@@ -20,8 +20,8 @@
 #include "game.h"
 
 // settings
-const unsigned int SCR_WIDTH = 1800;
-const unsigned int SCR_HEIGHT = 1000;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
 // render time, admin machine 16 sek from pressing debug to show render at 300x300 (for reference)
 const unsigned int MAP_WIDTH = 1000;
 const unsigned int MAP_HEIGHT = 1000;

@@ -23,7 +23,7 @@ const float SCROLL_SPEED = 0.3f;
 const float ZOOM_DEFAULT = 5.0f;
 const float ZOOM_MAX = 100.0f;
 const float ZOOM_MIN = 0.2f;
-const float VISIBLE_RANGE = 3.0f; // ~3 is entire screen
+const float VISIBLE_RANGE = 2.0f; // ~3 is entire screen
 
 
 // An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
