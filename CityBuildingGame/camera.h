@@ -19,11 +19,11 @@ enum Camera_Movement {
 	RIGHT
 };
 
-// Default camera values
 const float SCROLL_SPEED = 0.3f;
 const float ZOOM_DEFAULT = 5.0f;
 const float ZOOM_MAX = 100.0f;
 const float ZOOM_MIN = 0.2f;
+const float VISIBLE_RANGE = 2.0f; // ~3 is entire screen
 
 
 // An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
@@ -68,22 +68,22 @@ public:
 	glm::vec2 GetTopLeftVisible()
 	{
 		return glm::vec2
-			(Position.x + Lookat.x - (3 * Zoom), 
-			Position.y + Lookat.y + (3 * Zoom) - ((3 * Zoom) * (0.5 * ScreenRatio)));
+			(Position.x + Lookat.x - (VISIBLE_RANGE * Zoom),
+			Position.y + Lookat.y + (VISIBLE_RANGE * Zoom) - ((VISIBLE_RANGE * Zoom) * (0.5 * ScreenRatio)));
 	}
 
 	glm::vec2 GetTopRightVisible()
 	{
 		return glm::vec2
-			(Position.x + Lookat.x - (3 * Zoom) + ((3 * Zoom) * (0.5 * ScreenRatio)), 
-			Position.y + Lookat.y + (3 * Zoom));
+			(Position.x + Lookat.x - (VISIBLE_RANGE * Zoom) + ((VISIBLE_RANGE * Zoom) * (0.5 * ScreenRatio)),
+			Position.y + Lookat.y + (VISIBLE_RANGE * Zoom));
 	}
 
 	glm::vec2 GetBottomLeftVisible()
 	{
 		return glm::vec2
-			(Position.x + Lookat.x + (3 * Zoom) - ((3 * Zoom) * (0.5 * ScreenRatio)), 
-			Position.y + Lookat.y - (3 * Zoom));
+			(Position.x + Lookat.x + (VISIBLE_RANGE * Zoom) - ((VISIBLE_RANGE * Zoom) * (0.5 * ScreenRatio)),
+			Position.y + Lookat.y - (VISIBLE_RANGE * Zoom));
 	}
 
 	glm::vec2 GetBottomRightVisible()
