@@ -10,7 +10,7 @@ public:
 	NoiseGen();
 	~NoiseGen();
 	void GeneratePerlinNoise(vector<vector<float>>& pHeightmap, int pHeight, int pWidth,
-		int maximumHeight, int octaveCount);
+		float minimumHeight, float maximumHeight, int octaveCount);
 
 	void CombineNoiseMaps(vector<vector<float>> &pHeightmap,int octaveCount);
 
@@ -25,5 +25,5 @@ private:
 		vector<vector<float>> &smoothNoise, int octave);
 
 	float Interpolate(float x0, float x1, float alpha);
-	void Rescale(vector<vector<float>> &pHeightmap,float maxHeight);
+	void Rescale(vector<vector<float>> &pHeightmap, float minHeight, float maxHeight);
 };

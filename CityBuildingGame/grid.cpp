@@ -34,7 +34,7 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 	/* create trees using noise */
 	NoiseGen noise_gen;
 	vector<vector<float>> treeMap = vector<vector<float>>(gridHeight, vector<float>(gridWidth, 0));
-	noise_gen.GeneratePerlinNoise(treeMap, gridHeight, gridWidth, 10, 3);
+	noise_gen.GeneratePerlinNoise(treeMap, gridHeight, gridWidth, 0.0f, 10.0f, 3);
 
 	for (int i = 0; i < gridHeight; ++i) {
 		for (int j = 0; j < gridWidth; ++j) {
