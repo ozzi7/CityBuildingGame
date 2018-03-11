@@ -6,7 +6,7 @@ using namespace std;
 NoiseGen::NoiseGen() {};
 
 void NoiseGen::GeneratePerlinNoise(vector<vector<float>> &pHeightmap, int pHeight, int pWidth,
-		int maximumHeight, int octaveCount)
+		float minimumHeight, float maximumHeight, int octaveCount)
 	{
 		width = pWidth;
 		height = pHeight;
@@ -25,7 +25,7 @@ void NoiseGen::GeneratePerlinNoise(vector<vector<float>> &pHeightmap, int pHeigh
 
 		CombineNoiseMaps(pHeightmap, octaveCount);
 
-		Rescale(pHeightmap, maximumHeight);
+		Rescale(pHeightmap, minimumHeight, maximumHeight);
 	}
 void NoiseGen::CombineNoiseMaps(vector<vector<float>> &pHeightmap, int octaveCount)
 {
@@ -104,14 +104,14 @@ float NoiseGen::Interpolate(float x0, float x1, float alpha)
 {
 	return x0 * (1 - alpha) + alpha * x1;
 }
-void NoiseGen::Rescale(vector<vector<float>> &pHeightmap, float maxHeight)
+void NoiseGen::Rescale(vector<vector<float>> &pHeightmap, float minHeight, float maxHeight)
 {
 	//normalisation
 	for (int i = 0; i < height; i++)
 	{
 		for (int j = 0; j < width; j++)
 		{
-			pHeightmap[i][j] = pHeightmap[i][j] * (maxHeight / totalAmplitude);
+			pHeightmap[i][j] = pHeightmap[i][j] * ((maxHeight-minHeight) / totalAmplitude) + minHeight;
 		}
 	}
 }

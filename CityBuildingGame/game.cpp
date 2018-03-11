@@ -43,28 +43,28 @@ void Game::RenderLoop()
 		renderer->SetMatrices(projection, view);
 		grid->terrain->Accept(*renderer);
 
-		// render all objects
-		//for (int i = 0; i < grid->gridUnits.size()-750; i++) {
-		//	for (int j = 0; j < grid->gridUnits[i].size()-750; j++) {
-		//		for (auto it = grid->gridUnits[i][j]->objects.begin(); it !=
-		//			grid->gridUnits[i][j]->objects.end(); ++it) {
-		//				(*it)->Accept(*renderer);
-		//		}
-		//	}
-		//}
-
 		grid->visibleUnitsMutex.lock();
 		vector<Unit*> *visibleUnitsTemp;
-		if (grid->activeVisibleUnits)
-			visibleUnitsTemp = grid->visibleUnits1;
-		else
+		if (grid->visibleUnitsToRender == 0) {
 			visibleUnitsTemp = grid->visibleUnits0;
-			for (int i = 0; i < grid->visibleUnitsSize; i++) {
-				for (auto it = (*visibleUnitsTemp)[i]->objects.begin(); it != (*visibleUnitsTemp)[i]->objects.end(); ++it) {
-					(*it)->Accept(*renderer);
-				}
-			}
+			grid->visibleUnitsRendering = 0;
+		}
+		else if (grid->visibleUnitsToRender == 1) {
+			visibleUnitsTemp = grid->visibleUnits1;
+			grid->visibleUnitsRendering = 1;
+		}
+		else if (grid->visibleUnitsToRender == 2) {
+			visibleUnitsTemp = grid->visibleUnits2;
+			grid->visibleUnitsRendering = 2;
+		}
+		int nofUnits = grid->visibleUnitsSizeToRender;
 		grid->visibleUnitsMutex.unlock();
+
+		for (int i = 0; i < nofUnits; i++) {
+			for (list<Tree*>::iterator it = (*visibleUnitsTemp)[i]->objects.begin(); it != (*visibleUnitsTemp)[i]->objects.end(); ++it) {
+				(*it)->Accept(*renderer);
+			}
+		}
 		glfwSwapBuffers(window);
 	}
 }

@@ -34,7 +34,7 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 	/* create trees using noise */
 	NoiseGen noise_gen;
 	vector<vector<float>> treeMap = vector<vector<float>>(gridHeight, vector<float>(gridWidth, 0));
-	noise_gen.GeneratePerlinNoise(treeMap, gridHeight, gridWidth, 10, 3);
+	noise_gen.GeneratePerlinNoise(treeMap, gridHeight, gridWidth, 0.0f, 10.0f, 3);
 
 	for (int i = 0; i < gridHeight; ++i) {
 		for (int j = 0; j < gridWidth; ++j) {
@@ -55,6 +55,7 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 	/*Initialize the vectors used for determining what to render*/
 	visibleUnits0 = new vector<Unit*>(maximumVisibleUnits);
 	visibleUnits1 = new vector<Unit*>(maximumVisibleUnits);
+	visibleUnits2 = new vector<Unit*>(maximumVisibleUnits);
 }
 void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::vec2 &lowerLeft, glm::vec2 &lowerRight)
 {
@@ -67,7 +68,6 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 		currLowerRightX = lowerRight.x;
 		currLowerRightY = lowerRight.y;
 
-
 		int startX = min(min((int)upperLeft.x, int(lowerLeft.x)), min((int)upperRight.x, int(lowerRight.x)));
 		int endX = max(max((int)upperLeft.x, int(lowerLeft.x)), max((int)upperRight.x, int(lowerRight.x)));
 		int startY = min(min((int)upperLeft.y, int(lowerLeft.y)), min((int)upperRight.y, int(lowerRight.y)));
@@ -75,10 +75,12 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 
 		vector<Unit*> *visibleUnitsTemp;
 		visibleUnitsMutex.lock();
-		if (activeVisibleUnits)
+		if (visibleUnitsToFill == 0)
 			visibleUnitsTemp = visibleUnits0;
-		else
+		else if (visibleUnitsToFill == 1)
 			visibleUnitsTemp = visibleUnits1;
+		else
+			visibleUnitsTemp = visibleUnits2;
 		visibleUnitsMutex.unlock();
 
 		int index = 0;
@@ -101,16 +103,34 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 				}
 			}
 		}
-		visibleUnitsMutex.lock();
-		if (activeVisibleUnits == 1)
+		visibleUnitsMutex.lock();	
+		visibleUnitsToRender = visibleUnitsToFill;
+		if (visibleUnitsRendering == 0 && visibleUnitsToFill == 1)
 		{
-			activeVisibleUnits = 0;
+			visibleUnitsToFill = 2;
 		}
-		else
+		else if (visibleUnitsRendering == 0 && visibleUnitsToFill == 2)
 		{
-			activeVisibleUnits = 1;
+			visibleUnitsToFill = 1;
 		}
-		visibleUnitsSize = index;
+		else if (visibleUnitsRendering == 1 && visibleUnitsToFill == 0)
+		{
+			visibleUnitsToFill = 2;
+		}
+		else if (visibleUnitsRendering == 1 && visibleUnitsToFill == 2)
+		{
+			visibleUnitsToFill = 0;
+		}
+		else if (visibleUnitsRendering == 2 && visibleUnitsToFill == 0)
+		{
+			visibleUnitsToFill = 1;
+		}
+		else if (visibleUnitsRendering == 2 && visibleUnitsToFill == 1)
+		{
+			visibleUnitsToFill = 0;
+		}
+
+		visibleUnitsSizeToRender = index;
 		visibleUnitsMutex.unlock();
 	}
 }

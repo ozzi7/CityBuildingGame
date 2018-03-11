@@ -6,7 +6,7 @@ Terrain::Terrain(int aGridHeight, int aGridWidth){
 
 	NoiseGen noise_gen;
 	heightmap = vector<vector<float>>(gridHeight + 1, vector<float>(gridWidth + 1, 0));
-	noise_gen.GeneratePerlinNoise(heightmap, gridHeight + 1, gridWidth + 1, 5, 6);
+	noise_gen.GeneratePerlinNoise(heightmap, gridHeight + 1, gridWidth + 1, -2.5f, 2.5f, 6);
 
 	CreateGeometry();
 
