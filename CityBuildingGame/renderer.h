@@ -107,12 +107,12 @@ public:
 		lightColor.x = 1.0f;//sin(glfwGetTime() * 2.0f);
 		lightColor.y = 1.0f;// sin(glfwGetTime() * 0.7f);
 		lightColor.z = 1.0f;// sin(glfwGetTime() * 1.3f);
-		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
-		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.65f); // decrease the influence
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.25f); // low influence
 		shader_terrain->setVec3("light.ambient", ambientColor);
 		shader_terrain->setVec3("light.diffuse", diffuseColor);
 		shader_terrain->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		shader_terrain->setVec3("light.position", glm::vec3(10.0f, 10.0f, 10.0f));//camera->Position);
+		shader_terrain->setVec3("light.position", glm::vec3(100.0f, 100.0f, 40.0f));//camera->Position);
 		shader_terrain->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
 
 		// calculate the model matrix for each object and pass it to shader before drawing

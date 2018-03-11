@@ -45,16 +45,26 @@ void Game::RenderLoop()
 
 		grid->visibleUnitsMutex.lock();
 		vector<Unit*> *visibleUnitsTemp;
-		if (grid->activeVisibleUnits)
-			visibleUnitsTemp = grid->visibleUnits1;
-		else
+		if (grid->visibleUnitsToRender == 0) {
 			visibleUnitsTemp = grid->visibleUnits0;
-			for (int i = 0; i < grid->visibleUnitsSize; i++) {
-				for (auto it = (*visibleUnitsTemp)[i]->objects.begin(); it != (*visibleUnitsTemp)[i]->objects.end(); ++it) {
-					(*it)->Accept(*renderer);
-				}
-			}
+			grid->visibleUnitsRendering = 0;
+		}
+		else if (grid->visibleUnitsToRender == 1) {
+			visibleUnitsTemp = grid->visibleUnits1;
+			grid->visibleUnitsRendering = 1;
+		}
+		else if (grid->visibleUnitsToRender == 2) {
+			visibleUnitsTemp = grid->visibleUnits2;
+			grid->visibleUnitsRendering = 2;
+		}
+		int nofUnits = grid->visibleUnitsSizeToRender;
 		grid->visibleUnitsMutex.unlock();
+
+		for (int i = 0; i < nofUnits; i++) {
+			for (list<Tree*>::iterator it = (*visibleUnitsTemp)[i]->objects.begin(); it != (*visibleUnitsTemp)[i]->objects.end(); ++it) {
+				(*it)->Accept(*renderer);
+			}
+		}
 		glfwSwapBuffers(window);
 	}
 }

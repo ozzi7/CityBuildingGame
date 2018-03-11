@@ -34,15 +34,18 @@ public:
 
 	/* Used for rendering */
 	mutex visibleUnitsMutex;
-	int maximumVisibleUnits = 100 * 100; // maximum number of units stored in visibleUnits0 and 1
+	int maximumVisibleUnits = 300 * 100; // maximum number of units stored in visibleUnits0 and 1
 	vector<Unit*> *visibleUnits0;
 	vector<Unit*> *visibleUnits1;
-	int visibleUnitsSize = 0;
+	vector<Unit*> *visibleUnits2;
+	int visibleUnitsSizeToRender = 0;
+	int visibleUnitsRendering = 0;
+	int visibleUnitsToRender = 0;
+	int visibleUnitsToFill = 1;
 	int currUpperLeftX = 0;
 	int currUpperLeftY = 0;
 	int currLowerRightX = 0;
 	int currLowerRightY = 0;
-	int activeVisibleUnits = 0;
 
 	int gridHeight;
 	int gridWidth;
