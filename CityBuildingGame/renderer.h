@@ -37,7 +37,7 @@ public:
 		model_chamaecyparis = new Model(texture_path, false);
 
 		/* fir init*/
-		texture_path = exe_path + "/../models/fir/Fir.3DS";
+		texture_path = exe_path + "/../models/fir2/fir.obj";
 		model_fir = new Model(texture_path, false);
 
 		shader_terrain = new Shader("terrain.vert", "terrain.frag");
@@ -78,9 +78,9 @@ public:
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, fir->position);
-		model = glm::translate(model, glm::vec3(0.0f,0.0f,0.3f));
+		//model = glm::translate(model, glm::vec3(0.0f,0.0f,0.3f));
 
-		model = glm::scale(model, glm::vec3(0.003f, 0.003f, 0.003f));
+		model = glm::scale(model, glm::vec3(0.02f, 0.02f, 0.02f));
 		model = glm::scale(model, fir->scale);
 		model = glm::rotate(model, fir->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 		mesh_shader->setMat4("model", model);
