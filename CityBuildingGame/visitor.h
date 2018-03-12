@@ -5,6 +5,7 @@ class Chamaecyparis;
 class Fir;
 class Terrain;
 class Palm;
+class Lumberjack;
 
 class Visitor
 {
@@ -14,4 +15,5 @@ public:
 	virtual void Visit(Fir* fir) = 0;
 	virtual void Visit(Terrain* terrain) = 0;
 	virtual void Visit(Palm* palm) = 0;
+	virtual void Visit(Lumberjack* lumberjack) = 0;
 };

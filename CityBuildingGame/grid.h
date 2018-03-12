@@ -8,6 +8,7 @@
 #include "chamaecyparis.h"
 #include "fir.h"
 #include "palm.h"
+#include "lumberjack.h"
 
 using namespace std;
 

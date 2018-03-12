@@ -159,6 +159,7 @@
     <ClInclude Include="fir.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="grid.h" />
+    <ClInclude Include="lumberjack.h" />
     <ClInclude Include="noise_gen.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="object.h" />

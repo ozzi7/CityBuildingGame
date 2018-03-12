@@ -14,15 +14,17 @@
 #include "chamaecyparis.h"
 #include "fir.h"
 #include "palm.h"
+#include "lumberjack.h"
 
 class Renderer : public Visitor
 {
 public:
 	Model *model_chamaecyparis;
 	Model *model_fir;
+	Model *model_lumberjack;
+	Model *model_palm;
 
 	Shader *shader_terrain;
-	Model *model_palm;
 	Shader *mesh_shader;
 
 	Renderer(std::string exe_path)
@@ -45,6 +47,10 @@ public:
 		/* Palm init*/
 		texture_path = exe_path + "/../models/palm/palm1.obj";
 		model_palm = new Model(texture_path, false);
+
+		/* lumbejack init*/
+		texture_path = exe_path + "/../models/zombie/Zombie.dae";
+		model_lumberjack = new Model(texture_path, false);
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
 	{
@@ -89,7 +95,7 @@ public:
 	};
 	void Visit(Palm *palm)
 	{
-		mesh_shader->use();
+		/*mesh_shader->use();
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, palm->position);
@@ -97,8 +103,20 @@ public:
 
 		mesh_shader->setMat4("model", model);
 
-		model_palm->Draw(*mesh_shader);
+		model_palm->Draw(*mesh_shader);*/
 	};
+	void Visit(Lumberjack *lumberjack)
+	{
+		mesh_shader->use();
+
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, lumberjack->position);
+		model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05));
+
+		mesh_shader->setMat4("model", model);
+
+		model_lumberjack->Draw(*mesh_shader);
+	}
 	void Visit(Terrain *terrain)
 	{
 		shader_terrain->use();
@@ -125,6 +143,7 @@ public:
 	{
 		delete model_chamaecyparis;
 		delete model_fir;
+		delete model_lumberjack;
 		delete shader_terrain;
 	}
 };
