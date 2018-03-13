@@ -6,10 +6,13 @@
 
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
+
 #include "visitor.h"
 #include "terrain.h"
 #include "shader.h"
 #include "model.h"
+#include "skinned_mesh.hpp"
+
 #include "tree.h"
 #include "chamaecyparis.h"
 #include "fir.h"
@@ -19,13 +22,16 @@
 class Renderer : public Visitor
 {
 public:
-	Model *model_chamaecyparis;
+	Model * model_chamaecyparis;
 	Model *model_fir;
-	Model *model_lumberjack;
+	//Model *model_lumberjack;
 	Model *model_palm;
+
+	SkinnedMesh *mesh_lumberjack;
 
 	Shader *shader_terrain;
 	Shader *mesh_shader;
+	Shader *skinned_mesh_shader;
 
 	Renderer(std::string exe_path)
 	{
@@ -33,6 +39,7 @@ public:
 		std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
 
 		mesh_shader = new Shader("mesh_shader.vert", "mesh_shader.frag");
+		skinned_mesh_shader = new Shader("skinning.vert", "skinning.frag");
 
 		/* Chamaecyparis init*/
 		texture_path = exe_path + "/../models/Chamaecyparis/Tree Chamaecyparis N161216.3ds";
@@ -48,9 +55,10 @@ public:
 		texture_path = exe_path + "/../models/palm/palm1.obj";
 		model_palm = new Model(texture_path, false);
 
-		/* lumbejack init*/
+		/* lumberjack init*/
 		texture_path = exe_path + "/../models/zombie/Zombie.dae";
-		model_lumberjack = new Model(texture_path, false);
+		mesh_lumberjack = new SkinnedMesh();
+		mesh_lumberjack->loadMesh(texture_path);
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
 	{
@@ -61,6 +69,10 @@ public:
 		shader_terrain->use();
 		shader_terrain->setMat4("projection", aProjection);
 		shader_terrain->setMat4("view", aView);
+
+		skinned_mesh_shader->use();
+		skinned_mesh_shader->setMat4("projection", aProjection);
+		skinned_mesh_shader->setMat4("view", aView);
 	}
 	void Visit(Tree *tree) {};
 	void Visit(Chamaecyparis *chamaecyparis)
@@ -69,7 +81,7 @@ public:
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, chamaecyparis->position);
-		model = glm::rotate(model, 90.0f, glm::vec3(1,0,0));
+		model = glm::rotate(model, 90.0f, glm::vec3(1, 0, 0));
 		model = glm::scale(model, glm::vec3(0.02f, 0.02f, 0.02));
 		model = glm::scale(model, chamaecyparis->scale);
 		model = glm::rotate(model, chamaecyparis->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -84,7 +96,6 @@ public:
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, fir->position);
-		//model = glm::translate(model, glm::vec3(0.0f,0.0f,0.3f));
 
 		model = glm::scale(model, glm::vec3(0.02f, 0.02f, 0.02f));
 		model = glm::scale(model, fir->scale);
@@ -107,15 +118,21 @@ public:
 	};
 	void Visit(Lumberjack *lumberjack)
 	{
-		mesh_shader->use();
+		//mesh_shader->use();
+
+		//glm::mat4 model = glm::mat4(1.0f);
+		//model = glm::translate(model, lumberjack->position);
+		//model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05));
+
+		//mesh_shader->setMat4("model", model);
+
+		//model_lumberjack->Draw(*mesh_shader);
+
+		skinned_mesh_shader->use();
 
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, lumberjack->position);
-		model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05));
-
-		mesh_shader->setMat4("model", model);
-
-		model_lumberjack->Draw(*mesh_shader);
+		skinned_mesh_shader->setMat4("model", model);
+		mesh_lumberjack->render();
 	}
 	void Visit(Terrain *terrain)
 	{
@@ -143,7 +160,8 @@ public:
 	{
 		delete model_chamaecyparis;
 		delete model_fir;
-		delete model_lumberjack;
+		//delete model_lumberjack;
+		delete mesh_lumberjack;
 		delete shader_terrain;
 	}
 };
