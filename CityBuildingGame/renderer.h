@@ -131,6 +131,7 @@ public:
 		skinned_mesh_shader->use();
 
 		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, lumberjack->position);
 		skinned_mesh_shader->setMat4("model", model);
 		mesh_lumberjack->render();
 	}

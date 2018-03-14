@@ -21,6 +21,7 @@ uniform mat4 gBones[MAX_BONES];
 void main()
 { 
 	mat4 gWVP = model*view*projection;
+	mat4 gPVM = projection*view*model;
     mat4 BoneTransform = gBones[aBoneIDs[0]] * aWeights[0];
     BoneTransform += gBones[aBoneIDs[1]] * aWeights[1];
     BoneTransform += gBones[aBoneIDs[2]] * aWeights[2];
@@ -28,7 +29,7 @@ void main()
 
     vec4 PosL = BoneTransform * vec4(aPosition, 1.0);
     gl_Position = gWVP * PosL;
-    TexCoords = aTexCoord;
+    TexCoords = vec2(aTexCoord.x, aTexCoord.y);
     vec4 NormalL = BoneTransform * vec4(aNormal, 0.0);
     Normal = (model * NormalL).xyz;
     FragPos = (model * PosL).xyz; 
