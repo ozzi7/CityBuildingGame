@@ -58,7 +58,7 @@ public:
 		/* lumberjack init*/
 		texture_path = exe_path + "/../models/zombie/Zombie.dae";
 		mesh_lumberjack = new SkinnedMesh();
-		mesh_lumberjack->loadMesh(texture_path);
+		mesh_lumberjack->loadMesh("C:/Users/Admin/Desktop/Synology/GitHub Projects/CityBuildingGame/x64/Debug/../models/zombie/Zombie.dae");
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
 	{
@@ -132,8 +132,10 @@ public:
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, lumberjack->position);
+		model = glm::scale(model, glm::vec3(0.02f, 0.02f, 0.02f));
 		skinned_mesh_shader->setMat4("model", model);
-		mesh_lumberjack->render();
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		mesh_lumberjack->render(*skinned_mesh_shader);
 	}
 	void Visit(Terrain *terrain)
 	{

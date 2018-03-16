@@ -27,7 +27,7 @@ public:
 
 	bool loadMesh(const std::string& fileName);
 
-	void render();
+	void render(Shader shader);
 
 	unsigned int numBones() const
 	{
