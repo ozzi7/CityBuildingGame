@@ -27,10 +27,10 @@ void main()
     BoneTransform += gBones[aBoneIDs[2]] * aWeights[2];
     BoneTransform += gBones[aBoneIDs[3]] * aWeights[3];
 
-    //vec4 PosL = BoneTransform * vec4(aPosition, 1.0);
-    gl_Position = gPVM * vec4(aPosition, 1.0); // gl_Position = gPVM *PosL
+    vec4 PosL = BoneTransform * vec4(aPosition, 1.0);
+    gl_Position = gPVM * PosL;
     TexCoords = vec2(aTexCoord.x, aTexCoord.y);
-    //vec4 NormalL = BoneTransform * vec4(aNormal, 0.0);
-    Normal = (model * vec4(aNormal, 0.0)).xyz;//Normal = (model * NormalL).xyz;
-    FragPos = (model * vec4(aPosition, 1.0)).xyz; //FragPos = (model * PosL).xyz; 
+    vec4 NormalL = BoneTransform * vec4(aNormal, 0.0);
+    Normal = (model * NormalL).xyz;//Normal = (model * NormalL).xyz;
+    FragPos = (model * PosL).xyz; //FragPos = (model * PosL).xyz; 
 }

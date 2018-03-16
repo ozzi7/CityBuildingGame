@@ -366,19 +366,19 @@ void SkinnedMesh::render(Shader shader)
 		// cycle meshes of model
 		//for (unsigned int j = 0; j < m_Textures.size(); j++)
 		//{
-			glActiveTexture(GL_TEXTURE0 + 0); // active proper texture unit before binding
-											  // retrieve texture number (the N in diffuse_textureN)
-													 // now set the sampler to the correct texture unit
-			glUniform1i(glGetUniformLocation(shader.ID, "" + 0), 1);
-			if(i == 0)
-				// and finally bind the texture
-				glBindTexture(GL_TEXTURE_2D, m_Textures[0]);
-			if (i == 1 || i == 2)
-				// and finally bind the texture
-				glBindTexture(GL_TEXTURE_2D, m_Textures[1]);
-			else if (i == 3 || i == 4)
-				// and finally bind the texture
-				glBindTexture(GL_TEXTURE_2D, m_Textures[2]);
+						//glActiveTexture(GL_TEXTURE0 + 0); // active proper texture unit before binding
+						//								  // retrieve texture number (the N in diffuse_textureN)
+						//										 // now set the sampler to the correct texture unit
+						//glUniform1i(glGetUniformLocation(shader.ID, "" + 0), 1);
+						//if(i == 0)
+						//	// and finally bind the texture
+						//	glBindTexture(GL_TEXTURE_2D, m_Textures[0]);
+						//if (i == 1 || i == 2)
+						//	// and finally bind the texture
+						//	glBindTexture(GL_TEXTURE_2D, m_Textures[1]);
+						//else if (i == 3 || i == 4)
+						//	// and finally bind the texture
+						//	glBindTexture(GL_TEXTURE_2D, m_Textures[2]);
 		//}
 
 		glDrawElementsBaseVertex(GL_TRIANGLES,
