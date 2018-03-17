@@ -33,6 +33,7 @@ public:
 	// Camera Attributes
 	glm::vec3 Position;
 	float Zoom;
+	bool WindowFocused = true;
 private:
 	glm::vec3 Up;
 	glm::vec3 Right;
@@ -113,6 +114,10 @@ public:
 		double ypos;
 		int width;
 		int height;
+
+		if (!WindowFocused) {
+			return;
+		}
 
 		glfwGetCursorPos(Window, &xpos, &ypos); 
 		glfwGetWindowSize(Window, &width, &height);

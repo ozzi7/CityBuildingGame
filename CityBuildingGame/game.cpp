@@ -76,7 +76,7 @@ void Game::GameLoop()
 	const int MAX_FRAMESKIP = 10;
 
 	int loops = 0;
-	DWORD next_game_tick = GetTickCount64() + SKIP_TICKS;
+	ULONGLONG next_game_tick = GetTickCount64() + SKIP_TICKS;
 	while (!glfwWindowShouldClose(window))
 	{
 

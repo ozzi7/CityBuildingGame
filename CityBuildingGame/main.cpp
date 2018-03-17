@@ -96,5 +96,9 @@ void window_focus_callback(GLFWwindow *window, int focused)
 {
 	if (focused) {
 		camera.lock_cursor_to_window();
+		camera.WindowFocused = true;
+	}
+	else {
+		camera.WindowFocused = false;
 	}
 }

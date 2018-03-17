@@ -11,5 +11,5 @@ Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd FirTrunk_Df.tga
-bump FirTrunk_Bmp.tga -bm 1
+bump FirTrunk_Bmp.tga
 Ni 1.00
