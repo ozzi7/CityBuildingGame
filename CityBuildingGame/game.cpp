@@ -72,11 +72,12 @@ void Game::RenderLoop()
 void Game::GameLoop()
 {
 	const int TICKS_PER_SECOND = 120;
-	const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
+	const int SKIP_TICKS = 1000000 / TICKS_PER_SECOND; // microseconds
 	const int MAX_FRAMESKIP = 10;
 
 	int loops = 0;
-	ULONGLONG next_game_tick = GetTickCount64() + SKIP_TICKS;
+	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
+	std::chrono::high_resolution_clock::time_point next_game_tick(start + std::chrono::microseconds(SKIP_TICKS));
 	while (!glfwWindowShouldClose(window))
 	{
 
@@ -90,8 +91,8 @@ void Game::GameLoop()
 
 		camera->mouse_scroll();
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(next_game_tick - GetTickCount64()));
-		next_game_tick += SKIP_TICKS;
+		std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::microseconds>(next_game_tick - std::chrono::high_resolution_clock::now()));
+		next_game_tick = (next_game_tick + std::chrono::microseconds(SKIP_TICKS));
 		loops++;
 	}
 }
