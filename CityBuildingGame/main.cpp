@@ -27,10 +27,13 @@ const unsigned int MAP_WIDTH = 1000;
 const unsigned int MAP_HEIGHT = 1000;
 
 Camera camera;
+Game game;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void window_focus_callback(GLFWwindow *window, int focused);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+
 
 int main(int argc, char* argv[])
 {
@@ -64,6 +67,7 @@ int main(int argc, char* argv[])
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 	glfwSetWindowFocusCallback(window, window_focus_callback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
 
 	// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
 	glewExperimental = GL_TRUE;
@@ -73,7 +77,7 @@ int main(int argc, char* argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	Game game(MAP_WIDTH, MAP_HEIGHT, SCREEN_RATIO, exe_path, camera, window);
+	game = Game(MAP_WIDTH, MAP_HEIGHT, SCREEN_RATIO, exe_path, camera, window);
 	game.StartGame();
 
 	glfwTerminate();
@@ -101,4 +105,10 @@ void window_focus_callback(GLFWwindow *window, int focused)
 	else {
 		camera.WindowFocused = false;
 	}
+}
+
+// glfw: whenever a mouse button is clicked
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	game.ProcessMouseclick(button, action, mods);
 }

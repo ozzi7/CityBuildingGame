@@ -1,5 +1,7 @@
 #include "game.h"
 
+Game::Game(){};
+
 Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, Camera & aCamera, GLFWwindow* aWindow) {
 	screenRatio = aScreenRatio;
 	exe_path = aExePath;
@@ -12,8 +14,8 @@ Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, C
 }
 Game::~Game()
 {
-	delete grid;
-	delete renderer;
+	//delete grid;
+	//delete renderer;
 }
 
 void Game::StartGame()
@@ -33,6 +35,8 @@ void Game::RenderLoop()
 
 	while (!glfwWindowShouldClose(window))
 	{
+		glfwMakeContextCurrent(window);
+
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
@@ -71,9 +75,8 @@ void Game::RenderLoop()
 
 void Game::GameLoop()
 {
-	const int TICKS_PER_SECOND = 120;
+	const int TICKS_PER_SECOND = 240;
 	const int SKIP_TICKS = 1000000 / TICKS_PER_SECOND; // microseconds
-	const int MAX_FRAMESKIP = 10;
 
 	int loops = 0;
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
@@ -83,13 +86,12 @@ void Game::GameLoop()
 
 		glfwPollEvents();
 		ProcessInput();
+		camera->mouse_scroll();
 
 		grid->terrain->SetRenderWindow(camera->GetTopLeftVisible(),camera->GetTopRightVisible(), camera->GetBottomLeftVisible(),
 			camera->GetBottomRightVisible());
 		grid->UpdateVisibleList(camera->GetTopLeftVisible(), camera->GetTopRightVisible(), camera->GetBottomLeftVisible(),
 			camera->GetBottomRightVisible());
-
-		camera->mouse_scroll();
 
 		std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::microseconds>(next_game_tick - std::chrono::high_resolution_clock::now()));
 		next_game_tick = (next_game_tick + std::chrono::microseconds(SKIP_TICKS));
@@ -102,6 +104,9 @@ void Game::ProcessInput()
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
+
+
+
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 		camera->keyboard_scroll(UP);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
@@ -110,4 +115,20 @@ void Game::ProcessInput()
 		camera->keyboard_scroll(LEFT);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		camera->keyboard_scroll(RIGHT);
+}
+
+void Game::ProcessMouseclick(int button, int action, int mods) {
+	
+	if (!action == GLFW_PRESS) {return;}
+
+	glm::vec2 mouse_position = camera->GetMousePosition();
+
+	std::cout<< "(x|y) (" << mouse_position.x << "|" << mouse_position.y << ")" << std::endl;
+
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+		grid->gridUnits[mouse_position.x][mouse_position.y]->objects.push_back(
+			new Fir(glm::vec3(20, 20, grid->gridUnits[mouse_position.x][mouse_position.y]->averageHeight),
+				glm::vec3(5.0f,5.0f,5.0f), 
+				1.0f));
+	}
 }

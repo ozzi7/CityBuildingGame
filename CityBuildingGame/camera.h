@@ -19,7 +19,7 @@ enum Camera_Movement {
 	RIGHT
 };
 
-const float SCROLL_SPEED = 0.3f;
+const float SCROLL_SPEED = 0.1f;
 const float ZOOM_DEFAULT = 5.0f;
 const float ZOOM_MAX = 100.0f;
 const float ZOOM_MIN = 0.2f;
@@ -30,7 +30,6 @@ const float VISIBLE_RANGE = 2.0f; // ~3 is entire screen
 class Camera
 {
 public:
-	// Camera Attributes
 	glm::vec3 Position;
 	float Zoom;
 	bool WindowFocused = true;
@@ -38,16 +37,13 @@ private:
 	glm::vec3 Up;
 	glm::vec3 Right;
 	glm::vec3 Lookat;
-	// Window object
 	GLFWwindow *Window;
 	RECT WindowEdges;
 	float ScreenRatio;
 
 public:
-	// Empty constructor
 	Camera() {}
 
-	// Constructor with position vector
 	Camera(glm::vec3 position, GLFWwindow *window)
 	{
 		Position = position;
@@ -94,13 +90,41 @@ public:
 			Position.y + Lookat.y - (VISIBLE_RANGE * Zoom) + ((VISIBLE_RANGE * Zoom) * (0.5 * ScreenRatio)));
 	}
 
+	glm::vec2 GetMousePosition()
+	{
+		double window_x = 0.0;
+		double window_y = 0.0;
+		double window_z = -100.0;
+		GLdouble x = 0.0;
+		GLdouble y = 0.0;
+		GLdouble z = 0.0;
+		double modelMatrix[16];
+		double projMatrix[16];
+		GLint viewport[4];
+
+		//glfwMakeContextCurrent(Window);
+
+		glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
+		glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
+		glGetIntegerv(GL_VIEWPORT, viewport);
+
+		glfwGetCursorPos(Window, &window_x, &window_y);
+		//glReadPixels(window_x, window_y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &window_z);
+
+		gluUnProject(window_x, window_y, window_z, modelMatrix, projMatrix, viewport, &x, &y, &z);
+		//gluUnProject(window_x, window_y, window_z, modelMatrix, projMatrix, viewport, &x, &y, &z);
+		//gluUnProject(window_x, (viewport[3] - window_y), window_z, modelMatrix, projMatrix, viewport, &x, &y, &z);
+
+		return glm::vec2(x, y);
+	}
+
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
 	void keyboard_scroll(Camera_Movement direction)
 	{
 		if (direction == UP)
-			Position += Up * SCROLL_SPEED;
+			Position += Up * SCROLL_SPEED * 1.5f;
 		if (direction == DOWN)
-			Position -= Up * SCROLL_SPEED;
+			Position -= Up * SCROLL_SPEED * 1.5f;
 		if (direction == LEFT)
 			Position -= Right * SCROLL_SPEED;
 		if (direction == RIGHT)
@@ -125,11 +149,11 @@ public:
 		if (xpos == 0)
 			Position -= Right * SCROLL_SPEED;
 		if (ypos == 0)
-			Position += Up * SCROLL_SPEED;
+			Position += Up * SCROLL_SPEED * 1.5f;
 		if (width-(int)xpos <= 1)
 			Position += Right * SCROLL_SPEED;
 		if (height-(int)ypos <= 1)
-			Position -= Up * SCROLL_SPEED;
+			Position -= Up * SCROLL_SPEED * 1.5f;
 	}
 
 	// Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
