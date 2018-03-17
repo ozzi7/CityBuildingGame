@@ -165,7 +165,7 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 	return textures;
 }
 
-// utility function for loading a 2D texture from fileunsigned int TextureFromFile(const char *path, const string &directory, bool gamma)
+// utility function for loading a 2D texture from file
 unsigned int Model::TextureFromFile(const char *path, const string &directory, bool gamma)
 {
 	string filename = string(path);

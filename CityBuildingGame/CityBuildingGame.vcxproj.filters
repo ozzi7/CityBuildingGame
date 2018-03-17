@@ -45,6 +45,9 @@
     <ClCompile Include="noise_gen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="skinned_mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="terrain.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="lumberjack.h">
       <Filter>Header Files\Game objects</Filter>
+    </ClInclude>
+    <ClInclude Include="skinned_mesh.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
