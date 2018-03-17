@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CityBuildingGame\materials.vert = CityBuildingGame\materials.vert
 		CityBuildingGame\mesh_shader.frag = CityBuildingGame\mesh_shader.frag
 		CityBuildingGame\mesh_shader.vert = CityBuildingGame\mesh_shader.vert
+		CityBuildingGame\skinning.frag = CityBuildingGame\skinning.frag
+		CityBuildingGame\skinning.vert = CityBuildingGame\skinning.vert
 		CityBuildingGame\terrain.frag = CityBuildingGame\terrain.frag
 		CityBuildingGame\terrain.vert = CityBuildingGame\terrain.vert
 	EndProjectSection

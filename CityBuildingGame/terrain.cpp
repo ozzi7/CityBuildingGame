@@ -51,6 +51,11 @@ void Terrain::Draw(Shader &shaderTerrain)
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+	
+	glBindVertexArray(0);
+
+	// always good practice to set everything back to defaults once configured.
+	glActiveTexture(GL_TEXTURE0);
 }
 int Terrain::ReloadGPUData()
 {

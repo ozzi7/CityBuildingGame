@@ -10,7 +10,6 @@
 
 #include "mesh.h"
 #include "shader.h"
-#include "tree.h"
 
 #include <string>
 #include <fstream>

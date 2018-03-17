@@ -151,6 +151,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh.h" />
     <ClCompile Include="model.cpp" />
+    <ClCompile Include="skinned_mesh.cpp" />
     <ClCompile Include="terrain.cpp" />
     <ClCompile Include="tree.cpp" />
   </ItemGroup>
@@ -166,6 +167,7 @@
     <ClInclude Include="palm.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="skinned_mesh.hpp" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="terrain.h" />
     <ClInclude Include="tree.h" />
