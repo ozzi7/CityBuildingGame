@@ -59,7 +59,8 @@ public:
 		/* lumberjack init*/
 		//texture_path = exe_path + "/../models/zombie/Zombie.fbx";
 		mesh_lumberjack = new SkinnedMesh();
-		mesh_lumberjack->LoadMesh("C:/Users/Admin/Desktop/Synology/GitHub Projects/CityBuildingGame/x64/models/minotaur/animation/Minotaur@Walk.fbx");
+		texture_path = exe_path + "/../models/minotaur/animation/Minotaur@Walk.fbx";
+		mesh_lumberjack->LoadMesh(texture_path);
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
 	{
