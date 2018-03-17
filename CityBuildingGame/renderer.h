@@ -24,7 +24,6 @@ class Renderer : public Visitor
 public:
 	Model * model_chamaecyparis;
 	Model *model_fir;
-	//Model *model_lumberjack;
 	Model *model_palm;
 
 	SkinnedMesh *mesh_lumberjack;
@@ -60,7 +59,7 @@ public:
 		/* lumberjack init*/
 		//texture_path = exe_path + "/../models/zombie/Zombie.fbx";
 		mesh_lumberjack = new SkinnedMesh();
-		mesh_lumberjack->loadMesh("C:/Users/Admin/Desktop/Synology/GitHub Projects/CityBuildingGame/x64/models/minotaur/animation/Minotaur@Walk.fbx");
+		mesh_lumberjack->LoadMesh("C:/Users/Admin/Desktop/Synology/GitHub Projects/CityBuildingGame/x64/models/minotaur/animation/Minotaur@Walk.fbx");
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
 	{
@@ -134,7 +133,7 @@ public:
 		vector<glm::mat4> Transforms;
 		z++;
 		if (z > 1000.0f) z = 0.0f;
-		mesh_lumberjack->boneTransform(z, Transforms);
+		mesh_lumberjack->BoneTransform(z, Transforms);
 		for (unsigned int i = 0; i < Transforms.size(); ++i)
 		{
 			const std::string name = "gBones[" + std::to_string(i) + "]";
@@ -146,9 +145,10 @@ public:
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, lumberjack->position);
 		model = glm::scale(model, glm::vec3(0.02f, 0.02f, 0.02f));
+		model = glm::rotate(model, 1.5708f, glm::vec3(1.0f, 0.0f, 0.0f));
 		skinned_mesh_shader->setMat4("model", model);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		mesh_lumberjack->render(*skinned_mesh_shader);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		mesh_lumberjack->Render(*skinned_mesh_shader);
 	}
 	void Visit(Terrain *terrain)
 	{

@@ -15,9 +15,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "mesh.h"
 #include "shader.h"
-
+#include "model.h"
 
 class SkinnedMesh
 {
@@ -25,16 +24,16 @@ public:
 	SkinnedMesh();
 	~SkinnedMesh();
 
-	bool loadMesh(const std::string& fileName);
+	bool LoadMesh(const std::string& fileName);
 
-	void render(Shader shader);
+	void Render(Shader shader);
 
-	unsigned int numBones() const
+	unsigned int NumBones() const
 	{
 		return m_NumBones;
 	}
 
-	void boneTransform(float timeInSeconds, std::vector<glm::mat4>& Transforms);
+	void BoneTransform(float timeInSeconds, std::vector<glm::mat4>& Transforms);
 
 private:
 #define NUM_BONES_PER_VERTEX 4
@@ -91,7 +90,10 @@ private:
 		std::vector<VertexBoneData>& Bones,
 		std::vector<unsigned int>& Indices);
 	void LoadBones(unsigned int MeshIndex, const aiMesh* paiMesh, std::vector<VertexBoneData>& Bones);
-	bool InitMaterials(const aiScene* pScene, const std::string& Filename);
+	bool InitMaterials(const unsigned int meshIndex, const aiMesh* mesh, const aiScene *scene);
+	std::vector<Texture> SkinnedMesh::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
+		// utility function for loading a 2D texture from file
+	unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
 	void Clear();
 
 #define INVALID_MATERIAL 0xFFFFFFFF
@@ -125,8 +127,10 @@ private:
 		unsigned int MaterialIndex;
 	};
 
+	std::string directory;
+
 	std::vector<MeshEntry> m_Entries;
-	std::vector<GLuint> m_Textures;
+	std::vector<std::vector<Texture>> m_Textures;
 
 	std::map<std::string, unsigned int> m_BoneMapping; // maps a bone name to its index
 	unsigned int m_NumBones;

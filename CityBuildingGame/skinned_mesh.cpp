@@ -74,8 +74,11 @@ void SkinnedMesh::Clear()
 }
 
 /* loads the model */
-bool SkinnedMesh::loadMesh(const std::string& fileName)
+bool SkinnedMesh::LoadMesh(const std::string& fileName)
 {
+	// retrieve the directory path of the filepath
+	directory = fileName.substr(0, fileName.find_last_of('/'));
+
 	/* Deletes the previous loaded mesh(if it exists) */
 	Clear();
 
@@ -93,7 +96,7 @@ bool SkinnedMesh::loadMesh(const std::string& fileName)
 
 	if (m_pScene)
 	{
-		/* Get transformation matrix for nodes(vertices relative to boes) */
+		/* Get transformation matrix for nodes(vertices relative to bones) */
 		aiMatrix4x4 tp1 = m_pScene->mRootNode->mTransformation;
 		m_GlobalInverseTransform = aiMatrix4x4ToGlm(tp1);
 		m_GlobalInverseTransform =  glm::inverse(m_GlobalInverseTransform);
@@ -115,7 +118,7 @@ bool SkinnedMesh::InitFromScene(const aiScene* pScene, const std::string& fileNa
 {
 	/* Resize the mesh & texture vectors */
 	m_Entries.resize(pScene->mNumMeshes);
-	m_Textures.resize(pScene->mNumMaterials);
+	m_Textures.resize(pScene->mNumMeshes);
 	
 	std::vector<glm::vec3> Positions;
 	std::vector<glm::vec3> Normals;
@@ -152,11 +155,11 @@ bool SkinnedMesh::InitFromScene(const aiScene* pScene, const std::string& fileNa
 		const aiMesh* paiMesh = pScene->mMeshes[i];
 		/* init the mesh */
 		InitMesh(i, paiMesh, Positions, Normals, TexCoords, Bones, Indices);
+
+		/* init the material */
+		if (!InitMaterials(i, paiMesh, pScene))
+			return false;
 	}
-	
-	/* init the material */
-	if (!InitMaterials(pScene, fileName))
-		return false;
 	
 	/* Generate and populate the buffers with vertex attributes and indices */
 	glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[POS_VB]);
@@ -272,114 +275,71 @@ void SkinnedMesh::LoadBones(unsigned int MeshIndex, const aiMesh* pMesh, std::ve
 	}
 }
 
-bool SkinnedMesh::InitMaterials(const aiScene* pScene, const std::string& Filename)
+// loads all texture of given mesh
+bool SkinnedMesh::InitMaterials(const unsigned int meshIndex, const aiMesh *mesh, const aiScene *scene)
 {
-	// Extract the directory part from the file name
-	std::string::size_type SlashIndex = Filename.find_last_of("/");
-	std::string Dir;
+	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-	if (SlashIndex == std::string::npos) {
-		Dir = ".";
-	}
-	else if (SlashIndex == 0) {
-		Dir = "/";
-	}
-	else {
-		Dir = Filename.substr(0, SlashIndex);
-	}
+	// we assume a convention for sampler names in the shaders. Each diffuse texture should be named
+	// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
+	// Same applies to other texture as the following list summarizes:
+	// diffuse: texture_diffuseN
+	// specular: texture_specularN
+	// normal: texture_normalN
 
-	bool ret = true;
-
-	/* Initialize the materials */
-	for (unsigned int i = 0; i < pScene->mNumMaterials; ++i)
-	{
-		/* Get the material */
-		const aiMaterial* pMaterial = pScene->mMaterials[i];
-
-		m_Textures[i] = 0;
-
-		if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
-		{
-			aiString Path;
-
-			if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS)
-			{
-				std::string p(Path.data);
-
-				if (p.substr(0, 2) == ".\\")
-				{
-					p = p.substr(2, p.size() - 2);
-				}
-
-				std::string FullPath = Dir + "/" + p;
-
-				/* Here load the textures */				
-				// if texture hasn't been loaded already, load it
-				Texture texture;
-
-				unsigned int textureID;
-				glGenTextures(1, &textureID);
-
-				int width, height, nrComponents;
-				unsigned char *data = stbi_load(FullPath.c_str(), &width, &height, &nrComponents, 0);
-				if (data)
-				{
-					GLenum format;
-					if (nrComponents == 1)
-						format = GL_RED;
-					else if (nrComponents == 3)
-						format = GL_RGB;
-					else if (nrComponents == 4)
-						format = GL_RGBA;
-
-					glBindTexture(GL_TEXTURE_2D, textureID);
-					glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-					glGenerateMipmap(GL_TEXTURE_2D);
-
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-					stbi_image_free(data);
-				}
-				else
-				{
-					std::cout << "Texture failed to load at path: " << FullPath << std::endl;
-					stbi_image_free(data);
-				}
-
-				texture.path = FullPath.c_str();
-				m_Textures[i] = textureID;
-
-			}
-		}
-	}
-	return ret;
+	// 1. diffuse maps
+	std::vector <Texture> temp;
+	std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+	temp.insert(temp.end(), diffuseMaps.begin(), diffuseMaps.end());
+	// 2. specular maps
+	std::vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+	temp.insert(temp.end(), specularMaps.begin(), specularMaps.end());
+	// 3. normal maps
+	std::vector<Texture> normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+	temp.insert(temp.end(), normalMaps.begin(), normalMaps.end());
+	// 4. height maps
+	std::vector<Texture> heightMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+	temp.insert(temp.end(), heightMaps.begin(), heightMaps.end());
+	m_Textures[meshIndex] = temp;
+	return true;
 }
 
-void SkinnedMesh::render(Shader shader)
+void SkinnedMesh::Render(Shader shader)
 {
 	glBindVertexArray(m_VAO);
 
 	for (unsigned int i = 0; i < m_Entries.size(); i++) {
-		// cycle meshes of model
-		//for (unsigned int j = 0; j < m_Textures.size(); j++)
-		//{
-						//glActiveTexture(GL_TEXTURE0 + 0); // active proper texture unit before binding
-						//								  // retrieve texture number (the N in diffuse_textureN)
-						//										 // now set the sampler to the correct texture unit
-						//glUniform1i(glGetUniformLocation(shader.ID, "" + 0), 1);
-						//if(i == 0)
-						//	// and finally bind the texture
-						//	glBindTexture(GL_TEXTURE_2D, m_Textures[0]);
-						//if (i == 1 || i == 2)
-						//	// and finally bind the texture
-						//	glBindTexture(GL_TEXTURE_2D, m_Textures[1]);
-						//else if (i == 3 || i == 4)
-						//	// and finally bind the texture
-						//	glBindTexture(GL_TEXTURE_2D, m_Textures[2]);
-		//}
+		
+		int currTexture = 0;
+
+		// bind appropriate textures
+		unsigned int diffuseNr = 1;
+		unsigned int specularNr = 1;
+		unsigned int normalNr = 1;
+		unsigned int heightNr = 1;
+
+		for (unsigned int j = 0; j < m_Textures[i].size(); ++j)
+		{
+			// activates all textures of this mesh
+			glActiveTexture(GL_TEXTURE0 + currTexture); // active proper texture unit before binding
+											  // retrieve texture number (the N in diffuse_textureN)
+			currTexture++;
+			std::string number;
+			std::string name = m_Textures[i][j].type;
+			if (name == "texture_diffuse")
+				number = std::to_string(diffuseNr++);
+			else if (name == "texture_specular")
+				number = std::to_string(specularNr++); // transfer unsigned int to stream
+			else if (name == "texture_normal")
+				number = std::to_string(normalNr++); // transfer unsigned int to stream
+			else if (name == "texture_height")
+				number = std::to_string(heightNr++); // transfer unsigned int to stream
+
+													 // now set the sampler to the correct texture unit
+			glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), j);
+			// and finally bind the texture
+			glBindTexture(GL_TEXTURE_2D, m_Textures[i][j].id);
+		}
 
 		glDrawElementsBaseVertex(GL_TRIANGLES,
 			m_Entries[i].NumIndices,
@@ -387,8 +347,10 @@ void SkinnedMesh::render(Shader shader)
 			(void*)(sizeof(unsigned int) * m_Entries[i].BaseIndex),
 			m_Entries[i].BaseVertex);
 	}
-
 	glBindVertexArray(0);
+
+	// always good practice to set everything back to defaults once configured.
+	glActiveTexture(GL_TEXTURE0);
 }
 
 unsigned int SkinnedMesh::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
@@ -538,7 +500,7 @@ void SkinnedMesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, co
 	}
 }
 
-void SkinnedMesh::boneTransform(float timeInSeconds, std::vector<glm::mat4>& Transforms)
+void SkinnedMesh::BoneTransform(float timeInSeconds, std::vector<glm::mat4>& Transforms)
 {
 	glm::mat4 Identity = glm::mat4();
 	
@@ -574,4 +536,68 @@ const aiNodeAnim* SkinnedMesh::FindNodeAnim(const aiAnimation* pAnimation, const
 	}
 
 	return NULL;
+}
+
+// loads all textures of the whole model of a single type (i.e., diffuse, specular..)
+std::vector<Texture> SkinnedMesh::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+{
+	std::vector<Texture> textures;
+	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+	{
+		aiString str;
+		mat->GetTexture(type, i, &str);
+
+		Texture texture;
+		texture.id = TextureFromFile(str.C_Str(), this->directory);
+		texture.type = typeName;
+		texture.path = str.C_Str();
+		textures.push_back(texture);
+	}
+	return textures;
+}
+
+// utility function for loading a 2D texture from file
+unsigned int SkinnedMesh::TextureFromFile(const char *path, const std::string &directory, bool gamma)
+{
+	std::string filename = std::string(path);
+	if (filename._Equal("*0"))
+		filename = "Minotaur_diffuse.tga";
+	else
+		filename = "Pants_diffuse.tga";
+
+	filename = directory + '/' + filename;
+
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+
+	int width, height, nrComponents;
+	unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+	if (data)
+	{
+		GLenum format;
+		if (nrComponents == 1)
+			format = GL_RED;
+		else if (nrComponents == 3)
+			format = GL_RGB;
+		else if (nrComponents == 4)
+			format = GL_RGBA;
+
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data);
+	}
+	else
+	{
+		std::cout << "Texture failed to load at path: " << path << std::endl;
+		stbi_image_free(data);
+	}
+
+	return textureID;
 }
