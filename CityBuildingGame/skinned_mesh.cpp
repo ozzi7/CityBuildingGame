@@ -560,10 +560,6 @@ std::vector<Texture> SkinnedMesh::LoadMaterialTextures(aiMaterial *mat, aiTextur
 unsigned int SkinnedMesh::TextureFromFile(const char *path, const std::string &directory, bool gamma)
 {
 	std::string filename = std::string(path);
-	if (filename._Equal("*0"))
-		filename = "Minotaur_diffuse.tga";
-	else
-		filename = "Pants_diffuse.tga";
 
 	filename = directory + '/' + filename;
 
