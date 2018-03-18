@@ -6,6 +6,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 #include <vector>
 #include <Windows.h>
@@ -94,7 +96,7 @@ public:
 	{
 		double window_x = 0.0;
 		double window_y = 0.0;
-		double window_z = -100.0;
+		double window_z = 0;
 		GLdouble x = 0.0;
 		GLdouble y = 0.0;
 		GLdouble z = 0.0;
@@ -104,12 +106,34 @@ public:
 
 		//glfwMakeContextCurrent(Window);
 
-		glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
-		glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
+		//glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
+		//glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
 		glGetIntegerv(GL_VIEWPORT, viewport);
 
 		glfwGetCursorPos(Window, &window_x, &window_y);
 		//glReadPixels(window_x, window_y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &window_z);
+
+		// projection to array
+		glm::mat4 projection = glm::ortho(-ScreenRatio * Zoom, ScreenRatio * Zoom, -1.0f * Zoom, 1 * Zoom, -1000.0f, 1000.0f);
+		const float *pSource = (const float*)glm::value_ptr(projection);
+		int j = 0;
+		for (int i = 0; i < 16; i++) {
+			projMatrix[i*4-j] = pSource[i];
+			if (((i+1)*4-j) >= 16) {
+				j += 15;
+			}
+		}
+
+		// model to array
+		glm::mat4 model = GetViewMatrix();
+		pSource = (const float*)glm::value_ptr(model);
+		j = 0;
+		for (int i = 0; i < 16; i++) {
+			modelMatrix[i * 4 - j] = pSource[i];
+			if (((i + 1) * 4 - j) >= 16) {
+				j += 15;
+			}
+		}
 
 		gluUnProject(window_x, window_y, window_z, modelMatrix, projMatrix, viewport, &x, &y, &z);
 		//gluUnProject(window_x, window_y, window_z, modelMatrix, projMatrix, viewport, &x, &y, &z);
