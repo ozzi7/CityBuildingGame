@@ -59,7 +59,8 @@ public:
 		/* lumberjack init*/
 		//texture_path = exe_path + "/../models/zombie/Zombie.fbx";
 		mesh_lumberjack = new SkinnedMesh();
-		texture_path = exe_path + "/../models/minotaur/animation/Minotaur@Walk.dae";
+		//texture_path = exe_path + "/../models/minotaur/animation/Minotaur@Walk.dae";
+		texture_path = exe_path + "/../models/mario/mariofight.dae";
 		mesh_lumberjack->LoadMesh(texture_path);
 		mesh_lumberjack->PrecalculateBoneTransforms();
 	}
@@ -127,8 +128,8 @@ public:
 		
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, lumberjack->position);
-		model = glm::scale(model, glm::vec3(0.10f, 0.10f, 0.10f));
-		model = glm::rotate(model, 1.5708f, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.03f, 0.03f, 0.03f));
+		model = glm::rotate(model, -1.5708f, glm::vec3(1.0f, 0.0f, 0.0f));
 		skinned_mesh_shader->setMat4("model", model);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		mesh_lumberjack->Render(*skinned_mesh_shader);

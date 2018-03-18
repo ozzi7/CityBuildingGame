@@ -1,0 +1,11 @@
+create ew maya scene
+drag and drop mariolow.obj into maya
+select the complete mesh (via windows-> outliner & shift select)
+select rigging in drop down, then skeleton -> quickrig -> auto rig button
+drag and drop the animation fbx into maya
+in drop down of rigging stuff (which is still open) select source: humanoid1 (animation now works, check with slider..)
+in outliner select quickrigcharacter_reference & all the meshes
+click file -> export selection, select dae/fbx and change settings to bake animation with keyframes so that the complete animation is contained..
+done.. 
+
+change the .dae file in editor, on top change the texture paths to absolute ones (relative to dae file) (copy paste them from another .dae..)
