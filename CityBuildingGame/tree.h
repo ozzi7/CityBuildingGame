@@ -6,11 +6,6 @@
 class Tree : public Object
 {
 	public:
-		Tree(glm::vec3 aPosition, glm::vec3 aScale, float aRotation);
-
-		glm::vec3 position;
-		glm::vec3 scale;
-		float rotation;
-
-		void Accept(Visitor &v);
+		Tree(glm::vec3 aPosition, glm::vec3 aScale, float aRotation)
+			: Object(aPosition, aScale, aRotation) {};
 };

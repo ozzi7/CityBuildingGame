@@ -144,7 +144,7 @@ Grid::~Grid() {
 }
 
 Unit::Unit() {
-	objects = list<Tree*>();
+	objects = list<Object*>();
 }
 Unit::~Unit() {
 	for (auto it = objects.begin(); it != objects.end(); ++it)

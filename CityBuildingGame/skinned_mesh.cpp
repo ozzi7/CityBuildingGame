@@ -453,7 +453,7 @@ void SkinnedMesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, 
 		Out = Start + Factor * Delta;
 }
 
-void SkinnedMesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform)
+void SkinnedMesh::ReadNodeHierarchy(float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform)
 {
 	std::string NodeName(pNode->mName.data);
 
@@ -496,10 +496,33 @@ void SkinnedMesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, co
 	}
 
 	for (unsigned int i = 0; i < pNode->mNumChildren; i++) {
-		ReadNodeHeirarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation);
+		ReadNodeHierarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation);
 	}
 }
+void SkinnedMesh::PrecalculateBoneTransforms()
+{
+	unsigned int numPosKeys = m_pScene->mAnimations[0]->mChannels[0]->mNumPositionKeys;
+	animDuration = m_pScene->mAnimations[0]->mChannels[0]->mPositionKeys[numPosKeys - 1].mTime;
+	for (float tick = 0.0f; tick < animDuration; tick += (1.0f / TRANSFORMS_PER_SECOND))
+	{
+		vector<glm::mat4> Transform;
+		BoneTransform(tick, Transform);
+		for(int i = 0; i < Transform.size(); ++i)
+			Transform[i] = glm::transpose(Transform[i]);
+		Transforms.push_back(Transform);
+	}
+}
+void SkinnedMesh::BindBoneTransform(float timeInSeconds, Shader* shader)
+{
+	int index = int(fmod(timeInSeconds * (float)TRANSFORMS_PER_SECOND, float(Transforms.size())));
+	for (unsigned int i = 0; i < Transforms[index].size(); ++i)
+	{
+		const std::string name = "gBones[" + std::to_string(i) + "]";
+		GLuint boneTransform = glGetUniformLocation((*shader).ID, name.c_str());
 
+		glUniformMatrix4fv(boneTransform, 1, GL_TRUE, glm::value_ptr(Transforms[index][i]));
+	}
+}
 void SkinnedMesh::BoneTransform(float timeInSeconds, std::vector<glm::mat4>& Transforms)
 {
 	glm::mat4 Identity = glm::mat4();
@@ -516,7 +539,7 @@ void SkinnedMesh::BoneTransform(float timeInSeconds, std::vector<glm::mat4>& Tra
 	float TimeInTicks = timeInSeconds * TicksPerSecond;
 	float AnimationTime = fmod(TimeInTicks, animDuration);
 	
-	ReadNodeHeirarchy(AnimationTime, m_pScene->mRootNode, Identity);
+	ReadNodeHierarchy(AnimationTime, m_pScene->mRootNode, Identity);
 
 	Transforms.resize(m_NumBones);
 	

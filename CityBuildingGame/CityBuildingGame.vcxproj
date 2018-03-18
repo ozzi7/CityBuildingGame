@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="object.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="noise_gen.cpp" />
     <ClCompile Include="main.cpp" />
@@ -153,9 +154,9 @@
     <ClCompile Include="model.cpp" />
     <ClCompile Include="skinned_mesh.cpp" />
     <ClCompile Include="terrain.cpp" />
-    <ClCompile Include="tree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bone_animated.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="fir.h" />
     <ClInclude Include="game.h" />
