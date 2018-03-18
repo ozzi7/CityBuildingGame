@@ -23,6 +23,7 @@ void Game::StartGame()
 	glfwMakeContextCurrent(NULL);
 
 	std::thread threadRenderLoop(&Game::RenderLoop, this);
+	
 	GameLoop();
 	threadRenderLoop.join();
 }
@@ -65,14 +66,13 @@ void Game::RenderLoop()
 		grid->visibleUnitsMutex.unlock();
 
 		for (int i = 0; i < nofUnits; i++) {
-			for (list<Tree*>::iterator it = (*visibleUnitsTemp)[i]->objects.begin(); it != (*visibleUnitsTemp)[i]->objects.end(); ++it) {
+			for (list<Object*>::iterator it = (*visibleUnitsTemp)[i]->objects.begin(); it != (*visibleUnitsTemp)[i]->objects.end(); ++it) {
 				(*it)->Accept(*renderer);
 			}
 		}
 		glfwSwapBuffers(window);
 	}
 }
-
 void Game::GameLoop()
 {
 	const int TICKS_PER_SECOND = 240;

@@ -36,9 +36,6 @@
     <ClCompile Include="game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tree.cpp">
-      <Filter>Source Files\Game objects</Filter>
-    </ClCompile>
     <ClCompile Include="grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -47,6 +44,9 @@
     </ClCompile>
     <ClCompile Include="skinned_mesh.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="object.cpp">
+      <Filter>Source Files\Game objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="skinned_mesh.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bone_animated.h">
+      <Filter>Header Files\Game objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

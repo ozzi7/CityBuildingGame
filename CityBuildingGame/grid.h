@@ -18,7 +18,7 @@ class Unit
 public:
 	bool occupied = false;
 	float averageHeight = 0;
-	list<Tree*> objects;
+	list<Object*> objects;
 	Unit();
 	~Unit();
 };

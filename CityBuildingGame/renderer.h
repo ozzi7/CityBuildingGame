@@ -22,7 +22,7 @@
 class Renderer : public Visitor
 {
 public:
-	Model * model_chamaecyparis;
+	Model *model_chamaecyparis;
 	Model *model_fir;
 	Model *model_palm;
 
@@ -61,6 +61,7 @@ public:
 		mesh_lumberjack = new SkinnedMesh();
 		texture_path = exe_path + "/../models/minotaur/animation/Minotaur@Walk.dae";
 		mesh_lumberjack->LoadMesh(texture_path);
+		mesh_lumberjack->PrecalculateBoneTransforms();
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
 	{
@@ -120,29 +121,10 @@ public:
 	};
 	void Visit(Lumberjack *lumberjack)
 	{
-		//mesh_shader->use();
-
-		//glm::mat4 model = glm::mat4(1.0f);
-		//model = glm::translate(model, lumberjack->position);
-		//model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05));
-
-		//mesh_shader->setMat4("model", model);
-
-		//model_lumberjack->Draw(*mesh_shader);
-
 		skinned_mesh_shader->use();
-		vector<glm::mat4> Transforms;
-		z++;
-		if (z > 100.0f) z = 0.0f;
-		mesh_lumberjack->BoneTransform(z, Transforms);
-		for (unsigned int i = 0; i < Transforms.size(); ++i)
-		{
-			const std::string name = "gBones[" + std::to_string(i) + "]";
-			GLuint boneTransform = glGetUniformLocation((*skinned_mesh_shader).ID, name.c_str());
-			Transforms[i] = glm::transpose(Transforms[i]);
-			glUniformMatrix4fv(boneTransform, 1, GL_TRUE, glm::value_ptr(Transforms[i]));
-		}
-
+		z = z + 0.01f;
+		mesh_lumberjack->BindBoneTransform(z, skinned_mesh_shader);
+		
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, lumberjack->position);
 		model = glm::scale(model, glm::vec3(0.10f, 0.10f, 0.10f));
@@ -156,9 +138,9 @@ public:
 		shader_terrain->use();
 
 		glm::vec3 lightColor;
-		lightColor.x = 1.0f;//sin(glfwGetTime() * 2.0f);
-		lightColor.y = 1.0f;// sin(glfwGetTime() * 0.7f);
-		lightColor.z = 1.0f;// sin(glfwGetTime() * 1.3f);
+		lightColor.x = 1.0f;
+		lightColor.y = 1.0f;
+		lightColor.z = 1.0f;
 		glm::vec3 diffuseColor = lightColor * glm::vec3(0.65f); // decrease the influence
 		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.25f); // low influence
 		shader_terrain->setVec3("light.ambient", ambientColor);
@@ -177,7 +159,6 @@ public:
 	{
 		delete model_chamaecyparis;
 		delete model_fir;
-		//delete model_lumberjack;
 		delete mesh_lumberjack;
 		delete shader_terrain;
 	}

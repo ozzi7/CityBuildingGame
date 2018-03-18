@@ -25,19 +25,20 @@ public:
 	~SkinnedMesh();
 
 	bool LoadMesh(const std::string& fileName);
-
 	void Render(Shader shader);
 
 	unsigned int NumBones() const
 	{
 		return m_NumBones;
 	}
-
-	void BoneTransform(float timeInSeconds, std::vector<glm::mat4>& Transforms);
+	void PrecalculateBoneTransforms();
+	void BindBoneTransform(float timeInSeconds, Shader* shader);
 
 private:
 #define NUM_BONES_PER_VERTEX 4
 	
+	void BoneTransform(float timeInSeconds, std::vector<glm::mat4>& Transforms);
+
 	struct BoneInfo
 	{
 		glm::mat4 BoneOffset;
@@ -80,7 +81,7 @@ private:
 	unsigned int FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
 	unsigned int FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
 	const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName);
-	void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform);
+	void ReadNodeHierarchy(float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform);
 	bool InitFromScene(const aiScene* pScene, const std::string& Filename);
 	void InitMesh(unsigned int MeshIndex,
 		const aiMesh* paiMesh,
@@ -92,7 +93,6 @@ private:
 	void LoadBones(unsigned int MeshIndex, const aiMesh* paiMesh, std::vector<VertexBoneData>& Bones);
 	bool InitMaterials(const unsigned int meshIndex, const aiMesh* mesh, const aiScene *scene);
 	std::vector<Texture> SkinnedMesh::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
-		// utility function for loading a 2D texture from file
 	unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
 	void Clear();
 
@@ -131,6 +131,9 @@ private:
 
 	std::vector<MeshEntry> m_Entries;
 	std::vector<std::vector<Texture>> m_Textures;
+
+	std::vector<std::vector<glm::mat4>> Transforms;
+	const int TRANSFORMS_PER_SECOND = 120;
 
 	std::map<std::string, unsigned int> m_BoneMapping; // maps a bone name to its index
 	unsigned int m_NumBones;

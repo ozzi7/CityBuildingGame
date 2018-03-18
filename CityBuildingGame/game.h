@@ -33,8 +33,10 @@ public:
 	// Called by the application class to update the game logic
 	void GameLoop();
 
-	// Called by the application class when the window need to be redrawn.
+	// Continuously redraws all visible objects
 	void RenderLoop();
+	// Continuously recalculates bones of all visible objects
+	void BoneCalcLoop();
 
 	void ProcessMouseclick(int button, int action, int mods);
 	
