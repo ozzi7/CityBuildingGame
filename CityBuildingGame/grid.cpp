@@ -106,8 +106,11 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 						(*visibleUnitsTemp)[index++] = gridUnits[i][j];
 					}
 				}
+				else
+					goto end;
 			}
 		}
+	end:
 		visibleUnitsMutex.lock();	
 		visibleUnitsToRender = visibleUnitsToFill;
 		if (visibleUnitsRendering == 0 && visibleUnitsToFill == 1)

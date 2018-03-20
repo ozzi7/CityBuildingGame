@@ -123,7 +123,7 @@ public:
 	void Visit(Lumberjack *lumberjack)
 	{
 		skinned_mesh_shader->use();
-		z = z + 0.01f;
+		z = z + 0.0011f;
 		mesh_lumberjack->BindBoneTransform(z, skinned_mesh_shader);
 		
 		glm::mat4 model = glm::mat4(1.0f);

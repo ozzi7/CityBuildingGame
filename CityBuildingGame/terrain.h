@@ -35,10 +35,9 @@ public:
 
 	vector<vector<float>> heightmap;
 
-	/* Defines the size of renderData0, renderData1 (main memory buffers)
+	/* Defines the size of renderData0, renderData1 (main memory buffers) in terms of tiles
 	Change this to allow further zoom out */
-	int maxVisibleHeight = 200;
-	int maxVisibleWidth = 300;
+	int maximumVisibleUnits = 300 * 100;
 
 private:
 	void CreateGeometry();
