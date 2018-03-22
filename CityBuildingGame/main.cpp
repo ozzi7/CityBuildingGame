@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 50.0f), window);
+	camera = Camera(glm::vec3(50.0f, -50.0f, 50.0f), window);
 
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

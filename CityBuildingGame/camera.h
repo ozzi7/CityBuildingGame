@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <cmath>
 
 
 #include <vector>
@@ -25,7 +26,8 @@ const float SCROLL_SPEED = 0.1f;
 const float ZOOM_DEFAULT = 5.0f;
 const float ZOOM_MAX = 100.0f;
 const float ZOOM_MIN = 0.2f;
-const float VISIBLE_RANGE = 2.0f; // ~3 is entire screen
+const float VISIBLE_RANGE = 1.4f; // ~1.5 is entire screen
+const float ROOT3 = sqrt(3); // ROOT3 if viewing angle is 45°
 
 
 // An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
@@ -66,78 +68,57 @@ public:
 
 	glm::vec2 GetTopLeftVisible()
 	{
-		return glm::vec2
-			(Position.x + Lookat.x - (VISIBLE_RANGE * Zoom),
-			Position.y + Lookat.y + (VISIBLE_RANGE * Zoom) - ((VISIBLE_RANGE * Zoom) * (0.5 * ScreenRatio)));
+		float x = Position.x + Lookat.x - Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE - Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
+		float y = Position.y + Lookat.y - Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE + Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
+
+		return glm::vec2(x, y);
 	}
 
 	glm::vec2 GetTopRightVisible()
 	{
-		return glm::vec2
-			(Position.x + Lookat.x - (VISIBLE_RANGE * Zoom) + ((VISIBLE_RANGE * Zoom) * (0.5 * ScreenRatio)),
-			Position.y + Lookat.y + (VISIBLE_RANGE * Zoom));
+		float x = Position.x + Lookat.x + Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE - Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
+		float y = Position.y + Lookat.y + Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE + Zoom * 0.5 * ROOT3	* VISIBLE_RANGE;
+
+		return glm::vec2(x, y);
 	}
 
 	glm::vec2 GetBottomLeftVisible()
 	{
-		return glm::vec2
-			(Position.x + Lookat.x + (VISIBLE_RANGE * Zoom) - ((VISIBLE_RANGE * Zoom) * (0.5 * ScreenRatio)),
-			Position.y + Lookat.y - (VISIBLE_RANGE * Zoom));
+		float x = Position.x + Lookat.x - Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE + Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
+		float y = Position.y + Lookat.y - Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE - Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
+
+		return glm::vec2(x, y);
 	}
 
 	glm::vec2 GetBottomRightVisible()
 	{
-		return glm::vec2
-			(Position.x + Lookat.x + (VISIBLE_RANGE * Zoom),
-			Position.y + Lookat.y - (VISIBLE_RANGE * Zoom) + ((VISIBLE_RANGE * Zoom) * (0.5 * ScreenRatio)));
+		float x = Position.x + Lookat.x + Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE + Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
+		float y = Position.y + Lookat.y + Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE - Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
+
+		return glm::vec2(x, y);
 	}
 
-	glm::vec2 GetMousePosition()
+	glm::vec2 GetCursorPosition()
 	{
-		double window_x = 0.0;
-		double window_y = 0.0;
-		double window_z = 0;
-		GLdouble x = 0.0;
-		GLdouble y = 0.0;
-		GLdouble z = 0.0;
-		double modelMatrix[16];
-		double projMatrix[16];
-		GLint viewport[4];
-
-		//glfwMakeContextCurrent(Window);
-
-		//glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
-		//glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
-		glGetIntegerv(GL_VIEWPORT, viewport);
+		int window_width, window_height;
+		double window_x, window_y;
+		GLfloat x = 0.0f, y = 0.0f;
 
 		glfwGetCursorPos(Window, &window_x, &window_y);
-		//glReadPixels(window_x, window_y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &window_z);
+		glfwGetWindowSize(Window, &window_width, &window_height);
 
-		// projection to array
-		glm::mat4 projection = glm::ortho(-ScreenRatio * Zoom, ScreenRatio * Zoom, -1.0f * Zoom, 1 * Zoom, -1000.0f, 1000.0f);
-		const float *pSource = (const float*)glm::value_ptr(projection);
-		int j = 0;
-		for (int i = 0; i < 16; i++) {
-			projMatrix[i*4-j] = pSource[i];
-			if (((i+1)*4-j) >= 16) {
-				j += 15;
-			}
-		}
 
-		// model to array
-		glm::mat4 model = GetViewMatrix();
-		pSource = (const float*)glm::value_ptr(model);
-		j = 0;
-		for (int i = 0; i < 16; i++) {
-			modelMatrix[i * 4 - j] = pSource[i];
-			if (((i + 1) * 4 - j) >= 16) {
-				j += 15;
-			}
-		}
+		x += (window_x - window_width / 2); // Cursor offset from middle of screen in X direction
+		y += (window_x - window_width / 2);
 
-		gluUnProject(window_x, window_y, window_z, modelMatrix, projMatrix, viewport, &x, &y, &z);
-		//gluUnProject(window_x, window_y, window_z, modelMatrix, projMatrix, viewport, &x, &y, &z);
-		//gluUnProject(window_x, (viewport[3] - window_y), window_z, modelMatrix, projMatrix, viewport, &x, &y, &z);
+		x += (window_y - window_height / 2) * ROOT3; // Cursor offset from middle of screen in Y direction
+		y -= (window_y - window_height / 2) * ROOT3; // Screen coordinate system starts at top
+
+		x *= 0.0014f * Zoom; // Adjust for zoom
+		y *= 0.0014f * Zoom;
+
+		x += Position.x - 50.0f; // Camera offset
+		y += Position.y + 50.0f;
 
 		return glm::vec2(x, y);
 	}

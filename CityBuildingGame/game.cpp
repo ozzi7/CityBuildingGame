@@ -96,14 +96,12 @@ void Game::GameLoop()
 		loops++;
 	}
 }
+
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 void Game::ProcessInput()
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-
-
-
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 		camera->keyboard_scroll(UP);
@@ -119,14 +117,22 @@ void Game::ProcessMouseclick(int button, int action, int mods) {
 	
 	if (!action == GLFW_PRESS) {return;}
 
-	glm::vec2 mouse_position = camera->GetMousePosition();
+	glm::vec2 cursor_position = camera->GetCursorPosition();
 
-	std::cout<< "(x|y) (" << mouse_position.x << "|" << mouse_position.y << ")" << std::endl;
+	std::cout<< "(x|y) (" << cursor_position.x << "|" << cursor_position.y << ")" << std::endl;
 
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-		grid->gridUnits[mouse_position.x][mouse_position.y]->objects.push_back(
-			new Fir(glm::vec3(20, 20, grid->gridUnits[mouse_position.x][mouse_position.y]->averageHeight),
-				glm::vec3(5.0f,5.0f,5.0f), 
-				1.0f));
+		try {
+			if (grid->gridUnits.at(cursor_position.x).at(cursor_position.y)) {
+				grid->gridUnits[cursor_position.x][cursor_position.y]->objects.push_back(
+					new Fir(glm::vec3(cursor_position.x, cursor_position.y, grid->gridUnits[cursor_position.x][cursor_position.y]->averageHeight),
+						glm::vec3(5.0f, 5.0f, 5.0f),
+						1.0f));
+			}
+		}
+		catch(const std::out_of_range & e) {
+			std::cout << "Cannot insert outside of grid" << std::endl;
+		}
+		
 	}
 }
