@@ -35,8 +35,6 @@ public:
 
 	// Continuously redraws all visible objects
 	void RenderLoop();
-	// Continuously recalculates bones of all visible objects
-	void BoneCalcLoop();
 
 	void ProcessMouseclick(int button, int action, int mods);
 	
