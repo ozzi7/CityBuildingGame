@@ -11,6 +11,8 @@ Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, C
 	mapHeight = aMapHeight;
 	mapWidth = aMapWidth;
 	grid = new Grid(aMapHeight, aMapHeight);
+
+	camera->grid = grid;
 }
 Game::~Game()
 {
@@ -119,16 +121,14 @@ void Game::ProcessMouseclick(int button, int action, int mods) {
 	
 	if (!action == GLFW_PRESS) {return;}
 
-	glm::vec2 cursor_position = camera->GetCursorPosition();
-
-	std::cout<< "(x|y) (" << cursor_position.x << "|" << cursor_position.y << ")" << std::endl;
+	glm::vec2 cursor_position = camera->CursorPositionGrid();
 
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
 		try {
 			if (grid->gridUnits.at((int)cursor_position.y).at((int)cursor_position.x)) {
 				grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->objects.push_back(
 					new Fir(glm::vec3(cursor_position.x, cursor_position.y, grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->averageHeight),
-						glm::vec3(2.0f, 2.0f, 2.0f),
+						glm::vec3(1.0f, 1.0f, 1.0f),
 						1.0f));
 			}
 		}
