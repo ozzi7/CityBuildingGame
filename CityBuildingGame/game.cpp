@@ -49,18 +49,16 @@ void Game::RenderLoop()
 		grid->terrain->Accept(*renderer);
 
 		grid->visibleUnitsMutex.lock();
+		grid->visibleUnitsRendering = grid->visibleUnitsToRender;
 		vector<Unit*> *visibleUnitsTemp;
 		if (grid->visibleUnitsToRender == 0) {
 			visibleUnitsTemp = grid->visibleUnits0;
-			grid->visibleUnitsRendering = 0;
 		}
 		else if (grid->visibleUnitsToRender == 1) {
 			visibleUnitsTemp = grid->visibleUnits1;
-			grid->visibleUnitsRendering = 1;
 		}
 		else if (grid->visibleUnitsToRender == 2) {
 			visibleUnitsTemp = grid->visibleUnits2;
-			grid->visibleUnitsRendering = 2;
 		}
 		int nofUnits = grid->visibleUnitsSizeToRender;
 		grid->visibleUnitsMutex.unlock();
