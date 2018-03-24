@@ -60,7 +60,7 @@ public:
 		//texture_path = exe_path + "/../models/zombie/Zombie.fbx";
 		mesh_lumberjack = new SkinnedMesh();
 		//texture_path = exe_path + "/../models/minotaur/animation/Minotaur@Walk.dae";
-		texture_path = exe_path + "/../models/mario/mariofight.dae";
+		texture_path = exe_path + "/../models/mario/mario_fat.dae";
 		mesh_lumberjack->LoadMesh(texture_path);
 		mesh_lumberjack->PrecalculateBoneTransforms();
 	}
