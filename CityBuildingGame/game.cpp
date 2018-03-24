@@ -123,10 +123,10 @@ void Game::ProcessMouseclick(int button, int action, int mods) {
 
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
 		try {
-			if (grid->gridUnits.at(cursor_position.x).at(cursor_position.y)) {
-				grid->gridUnits[cursor_position.x][cursor_position.y]->objects.push_back(
-					new Fir(glm::vec3(cursor_position.x, cursor_position.y, grid->gridUnits[cursor_position.x][cursor_position.y]->averageHeight),
-						glm::vec3(5.0f, 5.0f, 5.0f),
+			if (grid->gridUnits.at((int)cursor_position.x).at((int)cursor_position.y)) {
+				grid->gridUnits[(int)cursor_position.x][(int)cursor_position.y]->objects.push_back(
+					new Fir(glm::vec3(cursor_position.x, cursor_position.y, grid->gridUnits[(int)cursor_position.x][(int)cursor_position.y]->averageHeight),
+						glm::vec3(2.0f, 2.0f, 2.0f),
 						1.0f));
 			}
 		}

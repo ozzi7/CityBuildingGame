@@ -27,7 +27,7 @@ const float ZOOM_DEFAULT = 5.0f;
 const float ZOOM_MAX = 100.0f;
 const float ZOOM_MIN = 0.2f;
 const float VISIBLE_RANGE = 1.4f; // ~1.5 is entire screen
-const float ROOT3 = sqrt(3); // ROOT3 if viewing angle is 45°
+const float ROOT3 = (float)sqrt(3); // ROOT3 if viewing angle is 45°
 
 
 // An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
@@ -68,32 +68,32 @@ public:
 
 	glm::vec2 GetTopLeftVisible()
 	{
-		float x = Position.x + Lookat.x - Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE - Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
-		float y = Position.y + Lookat.y - Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE + Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
+		float x = Position.x + Lookat.x - Zoom * 0.5f * ScreenRatio * VISIBLE_RANGE - Zoom * 0.5f * ROOT3 * VISIBLE_RANGE;
+		float y = Position.y + Lookat.y - Zoom * 0.5f * ScreenRatio * VISIBLE_RANGE + Zoom * 0.5f * ROOT3 * VISIBLE_RANGE;
 
 		return glm::vec2(x, y);
 	}
 
 	glm::vec2 GetTopRightVisible()
 	{
-		float x = Position.x + Lookat.x + Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE - Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
-		float y = Position.y + Lookat.y + Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE + Zoom * 0.5 * ROOT3	* VISIBLE_RANGE;
+		float x = Position.x + Lookat.x + Zoom * 0.5f * ScreenRatio * VISIBLE_RANGE - Zoom * 0.5f * ROOT3 * VISIBLE_RANGE;
+		float y = Position.y + Lookat.y + Zoom * 0.5f * ScreenRatio * VISIBLE_RANGE + Zoom * 0.5f * ROOT3 * VISIBLE_RANGE;
 
 		return glm::vec2(x, y);
 	}
 
 	glm::vec2 GetBottomLeftVisible()
 	{
-		float x = Position.x + Lookat.x - Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE + Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
-		float y = Position.y + Lookat.y - Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE - Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
+		float x = Position.x + Lookat.x - Zoom * 0.5f * ScreenRatio * VISIBLE_RANGE + Zoom * 0.5f * ROOT3 * VISIBLE_RANGE;
+		float y = Position.y + Lookat.y - Zoom * 0.5f * ScreenRatio * VISIBLE_RANGE - Zoom * 0.5f * ROOT3 * VISIBLE_RANGE;
 
 		return glm::vec2(x, y);
 	}
 
 	glm::vec2 GetBottomRightVisible()
 	{
-		float x = Position.x + Lookat.x + Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE + Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
-		float y = Position.y + Lookat.y + Zoom * 0.5 * ScreenRatio * VISIBLE_RANGE - Zoom * 0.5 * ROOT3 * VISIBLE_RANGE;
+		float x = Position.x + Lookat.x + Zoom * 0.5f * ScreenRatio * VISIBLE_RANGE + Zoom * 0.5f * ROOT3 * VISIBLE_RANGE;
+		float y = Position.y + Lookat.y + Zoom * 0.5f * ScreenRatio * VISIBLE_RANGE - Zoom * 0.5f * ROOT3 * VISIBLE_RANGE;
 
 		return glm::vec2(x, y);
 	}
@@ -108,17 +108,17 @@ public:
 		glfwGetWindowSize(Window, &window_width, &window_height);
 
 
-		x += (window_x - window_width / 2); // Cursor offset from middle of screen in X direction
-		y += (window_x - window_width / 2);
+		x += ((float)window_x - window_width / 2); // Cursor offset from middle of screen in X direction
+		y += ((float)window_x - window_width / 2);
 
-		x += (window_y - window_height / 2) * ROOT3; // Cursor offset from middle of screen in Y direction
-		y -= (window_y - window_height / 2) * ROOT3; // Screen coordinate system starts at top
+		x += ((float)window_y - window_height / 2) * ROOT3; // Cursor offset from middle of screen in Y direction
+		y -= ((float)window_y - window_height / 2) * ROOT3; // Screen coordinate system starts at top
 
-		x *= 0.0014f * Zoom; // Adjust for zoom
-		y *= 0.0014f * Zoom;
+		x *= (Zoom / window_width) * 2.5f; // Adjust for zoom
+		y *= (Zoom / window_width) * 2.5f;
 
-		x += Position.x - 50.0f; // Camera offset
-		y += Position.y + 50.0f;
+		x += Position.x + Lookat.x; // Camera offset
+		y += Position.y + Lookat.y;
 
 		return glm::vec2(x, y);
 	}
@@ -127,9 +127,9 @@ public:
 	void keyboard_scroll(Camera_Movement direction)
 	{
 		if (direction == UP)
-			Position += Up * SCROLL_SPEED * 1.5f;
+			Position += Up * SCROLL_SPEED * ROOT3;
 		if (direction == DOWN)
-			Position -= Up * SCROLL_SPEED * 1.5f;
+			Position -= Up * SCROLL_SPEED * ROOT3;
 		if (direction == LEFT)
 			Position -= Right * SCROLL_SPEED;
 		if (direction == RIGHT)
@@ -154,11 +154,11 @@ public:
 		if (xpos == 0)
 			Position -= Right * SCROLL_SPEED;
 		if (ypos == 0)
-			Position += Up * SCROLL_SPEED * 1.5f;
+			Position += Up * SCROLL_SPEED * ROOT3;
 		if (width-(int)xpos <= 1)
 			Position += Right * SCROLL_SPEED;
 		if (height-(int)ypos <= 1)
-			Position -= Up * SCROLL_SPEED * 1.5f;
+			Position -= Up * SCROLL_SPEED * ROOT3;
 	}
 
 	// Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
