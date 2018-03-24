@@ -74,7 +74,9 @@ void Game::GameLoop()
 	const int TICKS_PER_SECOND = 240;
 	const int SKIP_TICKS = 1000000 / TICKS_PER_SECOND; // microseconds
 
+
 	int loops = 0;
+
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 	std::chrono::high_resolution_clock::time_point next_game_tick(start + std::chrono::microseconds(SKIP_TICKS));
 	while (!glfwWindowShouldClose(window))
@@ -121,10 +123,10 @@ void Game::ProcessMouseclick(int button, int action, int mods) {
 
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
 		try {
-			if (grid->gridUnits.at(cursor_position.x).at(cursor_position.y)) {
-				grid->gridUnits[cursor_position.x][cursor_position.y]->objects.push_back(
-					new Fir(glm::vec3(cursor_position.x, cursor_position.y, grid->gridUnits[cursor_position.x][cursor_position.y]->averageHeight+1.0f),
-						glm::vec3(5.0f, 5.0f, 5.0f),
+			if (grid->gridUnits.at((int)cursor_position.y).at((int)cursor_position.x)) {
+				grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->objects.push_back(
+					new Fir(glm::vec3(cursor_position.x, cursor_position.y, grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->averageHeight),
+						glm::vec3(2.0f, 2.0f, 2.0f),
 						1.0f));
 			}
 		}
