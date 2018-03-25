@@ -115,8 +115,8 @@ public:
 		// Outside of grid cases
 		if (y < 0) y = 0;
 		if (x < 0) x = 0;
-		if (y > (float)grid->gridUnits.size()) y = (float)grid->gridUnits.size();
-		if (x > (float)grid->gridUnits[0].size()) x = (float)grid->gridUnits[0].size();
+		if (y > (float)grid->gridUnits.size() - 1) y = (float)grid->gridUnits.size() - 1;
+		if (x > (float)grid->gridUnits[0].size() - 1) x = (float)grid->gridUnits[0].size() - 1;
 		
 		z = grid->gridUnits[(int)y][(int)x]->averageHeight;
 
@@ -131,8 +131,8 @@ public:
 			// Outside of grid cases
 			if (y < 0) y = 0;
 			if (x < 0) x = 0;
-			if (y >(float)grid->gridUnits.size()) y = (float)grid->gridUnits.size();
-			if (x >(float)grid->gridUnits[0].size()) x = (float)grid->gridUnits[0].size();
+			if (y >(float)grid->gridUnits.size() - 1) y = (float)grid->gridUnits.size() - 1;
+			if (x >(float)grid->gridUnits[0].size() - 1) x = (float)grid->gridUnits[0].size() - 1;
 
 			z = grid->gridUnits[(int)y][(int)x]->averageHeight;
 
