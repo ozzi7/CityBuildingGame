@@ -36,7 +36,7 @@ public:
 
 	/* Used for rendering */
 	mutex visibleUnitsMutex;
-	int maximumVisibleUnits = 300 * 100; // maximum number of units stored in visibleUnits0 and 1
+	int maximumVisibleUnits = 600 * 500; // maximum number of units stored in visibleUnits0 and 1
 
 	vector<Unit*> *visibleUnits0;
 	vector<Unit*> *visibleUnits1;

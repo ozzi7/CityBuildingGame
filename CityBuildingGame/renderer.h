@@ -12,6 +12,7 @@
 #include "shader.h"
 #include "model.h"
 #include "skinned_mesh.hpp"
+#include "instanced_model.h"
 
 #include "tree.h"
 #include "chamaecyparis.h"
@@ -19,6 +20,11 @@
 #include "palm.h"
 #include "lumberjack.h"
 
+/* could add shader, mesh, texture path,.. here*/
+struct renderData {
+public:
+	vector<glm::mat4> models;
+};
 class Renderer : public Visitor
 {
 public:
@@ -27,12 +33,15 @@ public:
 	Model *model_palm;
 
 	SkinnedMesh *mesh_lumberjack;
+	InstancedModel *instanced_model_fir;
 
 	Shader *shader_terrain;
 	Shader *mesh_shader;
 	Shader *skinned_mesh_shader;
+	Shader *instanced_mesh_shader;
 
 	float z = 0.0f;
+	renderData dataFir;
 
 	Renderer(std::string exe_path)
 	{
@@ -41,6 +50,7 @@ public:
 
 		mesh_shader = new Shader("mesh_shader.vert", "mesh_shader.frag");
 		skinned_mesh_shader = new Shader("skinning.vert", "skinning.frag");
+		instanced_mesh_shader = new Shader("mesh_instanced.vert", "mesh_instanced.frag");
 
 		/* Chamaecyparis init*/
 		texture_path = exe_path + "/../models/Chamaecyparis/Tree Chamaecyparis N161216.3ds";
@@ -48,7 +58,8 @@ public:
 
 		/* fir init*/
 		texture_path = exe_path + "/../models/fir2/fir.obj";
-		model_fir = new Model(texture_path, false);
+		//model_fir = new Model(texture_path, false);
+		instanced_model_fir = new InstancedModel(texture_path, false);
 
 		shader_terrain = new Shader("terrain.vert", "terrain.frag");
 
@@ -77,6 +88,10 @@ public:
 		skinned_mesh_shader->use();
 		skinned_mesh_shader->setMat4("projection", aProjection);
 		skinned_mesh_shader->setMat4("view", aView);
+
+		instanced_mesh_shader->use();
+		instanced_mesh_shader->setMat4("projection", aProjection);
+		instanced_mesh_shader->setMat4("view", aView);
 	}
 	void Visit(Tree *tree) {};
 	void Visit(Chamaecyparis *chamaecyparis)
@@ -96,7 +111,7 @@ public:
 	};
 	void Visit(Fir *fir)
 	{
-		mesh_shader->use();
+		//instanced_mesh_fir->use();
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, fir->position);
@@ -104,9 +119,10 @@ public:
 		model = glm::scale(model, glm::vec3(0.02f, 0.02f, 0.02f));
 		model = glm::scale(model, fir->scale);
 		model = glm::rotate(model, fir->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-		mesh_shader->setMat4("model", model);
+		dataFir.models.push_back(model);
+			//mesh_shader->setMat4("model", model);
 
-		model_fir->Draw(*mesh_shader);
+			//model_fir->Draw(*mesh_shader);
 	};
 	void Visit(Palm *palm)
 	{
@@ -125,7 +141,7 @@ public:
 		skinned_mesh_shader->use();
 		z = z + 0.0011f;
 		mesh_lumberjack->BindBoneTransform(z, skinned_mesh_shader);
-		
+
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, lumberjack->position);
 		model = glm::scale(model, glm::vec3(0.03f, 0.03f, 0.03f));
@@ -155,6 +171,11 @@ public:
 		shader_terrain->setMat4("model", model);
 
 		terrain->Draw(*shader_terrain);
+	}
+	void RenderAll()
+	{
+		instanced_model_fir->Draw(*instanced_mesh_shader, dataFir.models); // note shader.use() is in model
+		dataFir.models.clear();
 	}
 	~Renderer()
 	{

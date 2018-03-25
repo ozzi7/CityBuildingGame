@@ -36,7 +36,7 @@ public:
 
 private:
 #define NUM_BONES_PER_VERTEX 4
-	
+
 	void BoneTransform(float timeInSeconds, std::vector<glm::mat4>& Transforms);
 
 	struct BoneInfo

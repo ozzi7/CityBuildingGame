@@ -48,6 +48,9 @@
     <ClCompile Include="object.cpp">
       <Filter>Source Files\Game objects</Filter>
     </ClCompile>
+    <ClCompile Include="instanced_model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="terrain.h">
@@ -103,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="bone_animated.h">
       <Filter>Header Files\Game objects</Filter>
+    </ClInclude>
+    <ClInclude Include="instanced_model.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

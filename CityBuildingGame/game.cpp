@@ -66,6 +66,7 @@ void Game::RenderLoop()
 				(*it)->Accept(*renderer);
 			}
 		}
+		renderer->RenderAll();
 		glfwSwapBuffers(window);
 	}
 }

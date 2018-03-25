@@ -37,7 +37,7 @@ public:
 
 	/* Defines the size of renderData0, renderData1 (main memory buffers) in terms of tiles
 	Change this to allow further zoom out */
-	int maximumVisibleUnits = 300 * 100;
+	int maximumVisibleUnits = 600 * 500;
 
 private:
 	void CreateGeometry();
