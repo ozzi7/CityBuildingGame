@@ -62,7 +62,7 @@ public:
 		texture_path = exe_path + "/../models/fir2/fir.obj";
 		//model_fir = new Model(texture_path, false);
 		instanced_model_fir = new InstancedModel(texture_path, false);
-		texture_path = exe_path + "/../models/grass/grassPatch.dae";
+		texture_path = exe_path + "/../models/grass/test.dae";
 		instanced_model_grass = new InstancedModel(texture_path, false);
 
 		shader_terrain = new Shader("terrain.vert", "terrain.frag");
@@ -146,7 +146,7 @@ public:
 		model = glm::translate(model, grass->position);
 		model = glm::translate(model, glm::vec3(0.0f,0.0f,0.18f));
 
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));
 		model = glm::scale(model, grass->scale);
 		model = glm::rotate(model, grass->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 		dataGrass.models.push_back(model);

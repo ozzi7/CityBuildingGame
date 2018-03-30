@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset><contributor><author></author><authoring_tool>FBX COLLADA exporter</authoring_tool><comments></comments></contributor><created>2018-03-30T17:59:10Z</created><keywords></keywords><modified>2018-03-30T17:59:10Z</modified><revision></revision><subject></subject><title></title><unit meter="0.010000" name="centimeter"></unit><up_axis>Y_UP</up_axis></asset>
+  <library_images>
+    <image id="grass_texture_1-image" name="grass_texture_1"><init_from>grass_texture.png</init_from></image>
+	</library_images>
+  <library_materials>
+    <material id="grass_Mat" name="grass_Mat">
+      <instance_effect url="#grass_Mat-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="grass_Mat-fx" name="grass_Mat">
+      <profile_COMMON>
+        <technique sid="standard">
+          <phong>
+            <emission>
+              <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0.200000  0.200000 0.200000 1.000000</color>
+            </ambient>
+            <diffuse>
+              <texture texture="grass_texture_1-image" texcoord="CHANNEL0">
+                <extra>
+                  <technique profile="MAYA">
+                    <wrapU sid="wrapU0">TRUE</wrapU>
+                    <wrapV sid="wrapV0">TRUE</wrapV>
+                    <blend_mode>NONE</blend_mode>
+                  </technique>
+                </extra>
+              </texture>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.200000  0.200000 0.200000 1.000000</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">20.000000</float>
+            </shininess>
+            <reflective>
+              <color sid="reflective">0.000000  0.000000 0.000000 1.000000</color>
+            </reflective>
+            <reflectivity>
+              <float sid="reflectivity">1.000000</float>
+            </reflectivity>
+            <transparent opaque="RGB_ZERO">
+              <color sid="transparent">1.000000  1.000000 1.000000 1.000000</color>
+            </transparent>
+            <transparency>
+              <float sid="transparency">1.000000</float>
+            </transparency>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="PlaneFBXASC046013-lib" name="PlaneFBXASC046013Mesh">
+      <mesh>
+        <source id="PlaneFBXASC046013-POSITION">
+          <float_array id="PlaneFBXASC046013-POSITION-array" count="144">
+21.114395 -17.673790 -14.999999
+-6.074847 -4.995259 -14.999999
+21.114391 -17.673798 14.999999
+-6.074851 -4.995268 14.999999
+44.111904 5.212728 -14.999999
+16.922661 17.891258 -14.999999
+44.111900 5.212719 14.999999
+16.922657 17.891251 14.999999
+44.111904 17.469048 -14.999999
+16.922661 30.147577 -14.999999
+44.111900 17.469038 14.999999
+16.922657 30.147568 14.999999
+24.178017 10.213687 -14.999999
+36.856556 37.402924 -14.999999
+24.178005 10.213693 14.999999
+36.856544 37.402927 14.999999
+-23.860090 10.213687 -14.999999
+-11.181551 37.402924 -14.999999
+-23.860102 10.213693 14.999999
+-11.181562 37.402927 14.999999
+-3.926203 17.469048 -14.999999
+-31.115446 30.147577 -14.999999
+-3.926207 17.469038 14.999999
+-31.115450 30.147568 14.999999
+-31.526779 -5.369659 -14.999999
+-3.514870 5.369647 -14.999999
+-31.526783 -5.369647 14.999999
+-3.514874 5.369659 14.999999
+7.262559 21.811230 -14.999999
+-15.195199 1.920304 -14.999999
+7.262563 21.811226 14.999999
+-15.195195 1.920299 14.999999
+24.643692 18.795238 -14.999999
+-4.900545 24.004644 -14.999999
+24.643690 18.795229 14.999999
+-4.900547 24.004635 14.999999
+29.034344 -12.287275 -14.999999
+11.827043 12.287281 -14.999999
+29.034336 -12.287281 14.999999
+11.827035 12.287275 14.999999
+-23.860090 -13.594621 -14.999999
+-11.181551 13.594615 -14.999999
+-23.860102 -13.594615 14.999999
+-11.181562 13.594621 14.999999
+-14.999999 -0.000008 -14.999999
+14.999999 -0.000008 -14.999999
+-14.999999 0.000008 14.999999
+14.999999 0.000008 14.999999
+</float_array>
+          <technique_common>
+            <accessor source="#PlaneFBXASC046013-POSITION-array" count="48" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="PlaneFBXASC046013-Normal0">
+          <float_array id="PlaneFBXASC046013-Normal0-array" count="144">
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.906308 -0.422618 0.000000
+0.906308 -0.422618 0.000000
+0.906308 -0.422618 0.000000
+0.906308 -0.422618 0.000000
+0.906308 -0.422618 0.000000
+0.906308 -0.422618 0.000000
+0.906308 -0.422618 0.000000
+0.906308 -0.422618 0.000000
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.422618 0.906308 0.000000
+0.357977 -0.933730 0.000000
+0.357977 -0.933730 0.000000
+0.357977 -0.933730 0.000000
+0.357977 -0.933730 0.000000
+-0.663031 0.748592 0.000000
+-0.663031 0.748592 0.000000
+-0.663031 0.748592 0.000000
+-0.663031 0.748592 0.000000
+0.173647 0.984808 0.000000
+0.173647 0.984808 0.000000
+0.173647 0.984808 0.000000
+0.173647 0.984808 0.000000
+0.819152 0.573577 0.000000
+0.819152 0.573577 0.000000
+0.819152 0.573577 0.000000
+0.819152 0.573577 0.000000
+0.906308 -0.422618 0.000000
+0.906308 -0.422618 0.000000
+0.906308 -0.422618 0.000000
+0.906308 -0.422618 0.000000
+0.000000 -1.000000 0.000001
+0.000000 -1.000000 0.000001
+0.000000 -1.000000 0.000001
+0.000000 -1.000000 0.000001
+</float_array>
+          <technique_common>
+            <accessor source="#PlaneFBXASC046013-Normal0-array" count="48" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="PlaneFBXASC046013-UV0">
+          <float_array id="PlaneFBXASC046013-UV0-array" count="96">
+0.000100 0.057549
+0.999900 0.057549
+0.999900 0.997195
+0.000100 0.997195
+0.000100 0.057549
+0.999900 0.057549
+0.999900 0.997195
+0.000100 0.997195
+0.000100 0.057549
+0.999900 0.057549
+0.999900 0.997195
+0.000100 0.997195
+0.000100 0.057549
+0.999900 0.057549
+0.999900 0.997195
+0.000100 0.997195
+0.000100 0.057549
+0.999900 0.057549
+0.999900 0.997195
+0.000100 0.997195
+0.000100 0.057549
+0.999900 0.057549
+0.999900 0.997195
+0.000100 0.997195
+0.000100 0.057549
+0.999900 0.057549
+0.999900 0.997195
+0.000100 0.997195
+0.000100 0.057549
+0.999900 0.057549
+0.999900 0.997195
+0.000100 0.997195
+0.000100 0.057549
+0.999900 0.057549
+0.999900 0.997195
+0.000100 0.997195
+0.000100 0.057549
+0.999900 0.057549
+0.999900 0.997195
+0.000100 0.997195
+0.000100 0.057549
+0.999900 0.057549
+0.999900 0.997195
+0.000100 0.997195
+0.000100 0.057549
+0.999900 0.057549
+0.999900 0.997195
+0.000100 0.997195
+</float_array>
+          <technique_common>
+            <accessor source="#PlaneFBXASC046013-UV0-array" count="48" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="PlaneFBXASC046013-VERTEX">
+          <input semantic="POSITION" source="#PlaneFBXASC046013-POSITION"/>
+          <input semantic="NORMAL" source="#PlaneFBXASC046013-Normal0"/>
+        </vertices>
+        <triangles count="24" material="grass_Mat"><input semantic="VERTEX" offset="0" source="#PlaneFBXASC046013-VERTEX"/><input semantic="TEXCOORD" offset="1" set="0" source="#PlaneFBXASC046013-UV0"/><p> 2 3 1 1 3 2 1 1 2 3 0 0 6 7 5 5 7 6 5 5 6 7 4 4 10 11 9 9 11 10 9 9 10 11 8 8 14 15 13 13 15 14 13 13 14 15 12 12 18 19 17 17 19 18 17 17 18 19 16 16 22 23 21 21 23 22 21 21 22 23 20 20 27 26 26 27 24 24 27 26 24 24 25 25 31 30 30 31 28 28 31 30 28 28 29 29 34 35 33 33 35 34 33 33 34 35 32 32 39 38 38 39 36 36 39 38 36 36 37 37 42 43 41 41 43 42 41 41 42 43 40 40 47 46 46 47 44 44 47 46 44 44 45 45</p></triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="test" name="test">
+      <node name="PlaneFBXASC046012" id="PlaneFBXASC046012" sid="PlaneFBXASC046012"><matrix sid="matrix">-90.630813 -42.261770 0.000003 7.519773 0.000000 0.000008 100.000000 0.000000 -42.261770 90.630813 -0.000007 11.334529 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra><node name="transform12" id="transform12" sid="transform12"><matrix sid="matrix">1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 -0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>0.000000</visibility></technique></extra></node></node>
+      <node name="PlaneFBXASC046011" id="PlaneFBXASC046011" sid="PlaneFBXASC046011"><matrix sid="matrix">-90.630813 -42.261770 0.000003 30.517281 0.000000 0.000008 100.000000 0.000000 -42.261770 90.630813 -0.000007 -11.551989 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra><node name="transform11" id="transform11" sid="transform11"><matrix sid="matrix">1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 -0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>0.000000</visibility></technique></extra></node></node>
+      <node name="PlaneFBXASC046010" id="PlaneFBXASC046010" sid="PlaneFBXASC046010"><matrix sid="matrix">-90.630813 -42.261770 0.000003 30.517281 0.000000 0.000008 100.000000 0.000000 -42.261770 90.630813 -0.000007 -23.808308 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra><node name="transform10" id="transform10" sid="transform10"><matrix sid="matrix">1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 -0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>0.000000</visibility></technique></extra></node></node>
+      <node name="PlaneFBXASC046009" id="PlaneFBXASC046009" sid="PlaneFBXASC046009"><matrix sid="matrix">42.261804 -90.630789 -0.000004 30.517281 0.000000 -0.000004 100.000000 0.000000 -90.630789 -42.261804 -0.000002 -23.808308 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra><node name="transform9" id="transform9" sid="transform9"><matrix sid="matrix">1.000000 -0.000000 -0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>0.000000</visibility></technique></extra></node></node>
+      <node name="PlaneFBXASC046008" id="PlaneFBXASC046008" sid="PlaneFBXASC046008"><matrix sid="matrix">42.261804 -90.630789 -0.000004 -17.520826 0.000000 -0.000004 100.000000 0.000000 -90.630789 -42.261804 -0.000002 -23.808308 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra><node name="transform8" id="transform8" sid="transform8"><matrix sid="matrix">1.000000 -0.000000 -0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>0.000000</visibility></technique></extra></node></node>
+      <node name="PlaneFBXASC046007" id="PlaneFBXASC046007" sid="PlaneFBXASC046007"><matrix sid="matrix">-90.630813 -42.261770 0.000003 -17.520826 0.000000 0.000008 100.000000 0.000000 -42.261770 90.630813 -0.000007 -23.808308 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra><node name="transform7" id="transform7" sid="transform7"><matrix sid="matrix">1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 -0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>0.000000</visibility></technique></extra></node></node>
+      <node name="PlaneFBXASC046006" id="PlaneFBXASC046006" sid="PlaneFBXASC046006"><matrix sid="matrix">93.373036 -35.797691 -0.000002 -17.520826 -0.000000 -0.000004 100.000000 0.000000 -35.797691 -93.373036 -0.000004 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra><node name="transform6" id="transform6" sid="transform6"><matrix sid="matrix">1.000000 -0.000000 -0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>0.000000</visibility></technique></extra></node></node>
+      <node name="PlaneFBXASC046005" id="PlaneFBXASC046005" sid="PlaneFBXASC046005"><matrix sid="matrix">-74.859203 66.303090 -0.000013 -3.966318 0.000000 0.000019 100.000000 0.000000 66.303090 74.859203 -0.000015 -11.865765 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra><node name="transform5" id="transform5" sid="transform5"><matrix sid="matrix">1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>0.000000</visibility></technique></extra></node></node>
+      <node name="PlaneFBXASC046004" id="PlaneFBXASC046004" sid="PlaneFBXASC046004"><matrix sid="matrix">-98.480798 -17.364688 0.000001 9.871572 -0.000000 0.000008 100.000000 0.000000 -17.364688 98.480798 -0.000007 -21.399937 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra><node name="transform4" id="transform4" sid="transform4"><matrix sid="matrix">1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>0.000000</visibility></technique></extra></node></node>
+      <node name="PlaneFBXASC046003" id="PlaneFBXASC046003" sid="PlaneFBXASC046003"><matrix sid="matrix">-57.357671 -81.915195 0.000006 20.430689 0.000000 0.000008 100.000000 0.000000 -81.915195 57.357671 -0.000004 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra><node name="transform3" id="transform3" sid="transform3"><matrix sid="matrix">1.000000 0.000000 -0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 -0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>0.000000</visibility></technique></extra></node></node>
+      <node name="PlaneFBXASC046002" id="PlaneFBXASC046002" sid="PlaneFBXASC046002"><matrix sid="matrix">42.261804 -90.630789 -0.000004 -17.520826 0.000000 -0.000004 100.000000 0.000000 -90.630789 -42.261804 -0.000002 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra><node name="transform2" id="transform2" sid="transform2"><matrix sid="matrix">1.000000 -0.000000 -0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>0.000000</visibility></technique></extra></node></node>
+      <node name="Plane" id="Plane" sid="Plane"><matrix sid="matrix">100.000000 0.000000 0.000000 0.000000 0.000000 -0.000016 100.000000 0.000000 0.000000 -100.000000 -0.000016 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra><node name="transform1" id="transform1" sid="transform1"><matrix sid="matrix">1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><extra><technique profile="FCOLLADA"><visibility>0.000000</visibility></technique></extra></node></node>
+      <node name="PlaneFBXASC046013" id="PlaneFBXASC046013" sid="PlaneFBXASC046013"><matrix sid="matrix">1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><instance_geometry url="#PlaneFBXASC046013-lib"><bind_material><technique_common><instance_material symbol="grass_Mat" target="#grass_Mat"/></technique_common></bind_material></instance_geometry><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra></node>
+      <extra><technique profile="MAX3D"><frame_rate>24.000000</frame_rate></technique><technique profile="FCOLLADA"><start_time>0.041667</start_time><end_time>8.333333</end_time></technique></extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#test"></instance_visual_scene>
+  </scene>
+</COLLADA>

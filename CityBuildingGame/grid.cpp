@@ -9,7 +9,9 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> pos_offset(-0.3, 0.3);
 	std::uniform_real_distribution<> pos_offset_grass(-0.5, 0.5);
-	std::uniform_real_distribution<> scale(0.7, 1.3);
+	std::chi_squared_distribution<> scale_tree(3.0);
+	std::uniform_real_distribution<> scale_tree_(0.03, 1.3f);
+	std::uniform_real_distribution<> scale_grass(0.9, 1.2);
 	std::uniform_real_distribution<> rotation(0, glm::two_pi<float>());
 
 	terrain = new Terrain(gridHeight, gridWidth);
@@ -45,21 +47,27 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 					/*new Palm(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridUnits[i][j]->averageHeight),
 						glm::vec3(scale(gen), scale(gen), scale(gen)),
 						rotation(gen)));*/
+			float scale = scale_tree(gen);
+			while (scale < 0 || scale > 12) { scale = scale_tree(gen); }
+			scale = 12 - scale;
+			scale = scale / 10.0f;
+
 			if (treeMap[i][j] >= 5.0f) {
 				float posX = j + 0.5f + pos_offset(gen);
 				float posY = i + 0.5f + pos_offset(gen);
+
 				gridUnits[i][j]->objects.push_back(
-					new Fir(glm::vec3(posX, posY, gridUnits[i][j]->averageHeight),
-						glm::vec3(scale(gen), scale(gen), scale(gen)),
+					new Fir(glm::vec3(posX, posY, GetHeight(posX, posY)),
+						glm::vec3(scale,scale,scale),
 						rotation(gen)));
 			}
-			else if (treeMap[i][j] >= 4.0f)
-				for (int z = 0; z < 1; ++z) {
+			if (treeMap[i][j] < 3.0f)
+				for (int z = 0; z < 3; ++z) {
 					float posX = j + 0.5f + pos_offset_grass(gen);
 					float posY = i + 0.5f + pos_offset_grass(gen);
 					gridUnits[i][j]->objects.push_back(
 						new Grass(glm::vec3(posX, posY, GetHeight(posX, posY)),
-							glm::vec3(scale(gen), scale(gen), scale(gen)),
+							glm::vec3(scale_grass(gen), scale_grass(gen), scale_grass(gen)),
 							rotation(gen)));
 				}
 			/*else if (treeMap[i][j] < 3.0f)
