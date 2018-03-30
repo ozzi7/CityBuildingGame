@@ -161,6 +161,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="fir.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="grass.h" />
     <ClInclude Include="grid.h" />
     <ClInclude Include="instanced_model.h" />
     <ClInclude Include="lumberjack.h" />

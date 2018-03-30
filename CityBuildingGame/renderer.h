@@ -19,6 +19,7 @@
 #include "fir.h"
 #include "palm.h"
 #include "lumberjack.h"
+#include "grass.h"
 
 /* could add shader, mesh, texture path,.. here*/
 struct renderData {
@@ -34,7 +35,7 @@ public:
 
 	SkinnedMesh *mesh_lumberjack;
 	InstancedModel *instanced_model_fir;
-
+	InstancedModel *instanced_model_grass;
 	Shader *shader_terrain;
 	Shader *mesh_shader;
 	Shader *skinned_mesh_shader;
@@ -42,6 +43,7 @@ public:
 
 	float z = 0.0f;
 	renderData dataFir;
+	renderData dataGrass;
 
 	Renderer(std::string exe_path)
 	{
@@ -60,6 +62,8 @@ public:
 		texture_path = exe_path + "/../models/fir2/fir.obj";
 		//model_fir = new Model(texture_path, false);
 		instanced_model_fir = new InstancedModel(texture_path, false);
+		texture_path = exe_path + "/../models/grass/grassPatch.dae";
+		instanced_model_grass = new InstancedModel(texture_path, false);
 
 		shader_terrain = new Shader("terrain.vert", "terrain.frag");
 
@@ -136,6 +140,17 @@ public:
 
 		model_palm->Draw(*mesh_shader);*/
 	};
+	void Visit(Grass *grass)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, grass->position);
+		model = glm::translate(model, glm::vec3(0.0f,0.0f,0.18f));
+
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::scale(model, grass->scale);
+		model = glm::rotate(model, grass->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+		dataGrass.models.push_back(model);
+	}
 	void Visit(Lumberjack *lumberjack)
 	{
 		skinned_mesh_shader->use();
@@ -175,6 +190,8 @@ public:
 	void RenderAll()
 	{
 		instanced_model_fir->Draw(*instanced_mesh_shader, dataFir.models); // note shader.use() is in model
+		instanced_model_grass->Draw(*instanced_mesh_shader, dataGrass.models); // note shader.use() is in model
+		dataGrass.models.clear();
 		dataFir.models.clear();
 	}
 	~Renderer()

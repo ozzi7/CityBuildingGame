@@ -8,8 +8,9 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> pos_offset(-0.3, 0.3);
+	std::uniform_real_distribution<> pos_offset_grass(-0.5, 0.5);
 	std::uniform_real_distribution<> scale(0.7, 1.3);
-	std::uniform_real_distribution<> rotation(0, 360.0f);
+	std::uniform_real_distribution<> rotation(0, glm::two_pi<float>());
 
 	terrain = new Terrain(gridHeight, gridWidth);
 
@@ -44,11 +45,23 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 					/*new Palm(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridUnits[i][j]->averageHeight),
 						glm::vec3(scale(gen), scale(gen), scale(gen)),
 						rotation(gen)));*/
-			if (treeMap[i][j] >= 7.0f)
+			if (treeMap[i][j] >= 5.0f) {
+				float posX = j + 0.5f + pos_offset(gen);
+				float posY = i + 0.5f + pos_offset(gen);
 				gridUnits[i][j]->objects.push_back(
-					new Fir(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridUnits[i][j]->averageHeight),
+					new Fir(glm::vec3(posX, posY, gridUnits[i][j]->averageHeight),
 						glm::vec3(scale(gen), scale(gen), scale(gen)),
 						rotation(gen)));
+			}
+			else if (treeMap[i][j] >= 4.0f)
+				for (int z = 0; z < 1; ++z) {
+					float posX = j + 0.5f + pos_offset_grass(gen);
+					float posY = i + 0.5f + pos_offset_grass(gen);
+					gridUnits[i][j]->objects.push_back(
+						new Grass(glm::vec3(posX, posY, GetHeight(posX, posY)),
+							glm::vec3(scale(gen), scale(gen), scale(gen)),
+							rotation(gen)));
+				}
 			/*else if (treeMap[i][j] < 3.0f)
 				gridUnits[i][j]->objects.push_back(
 					new Lumberjack(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridUnits[i][j]->averageHeight),
@@ -140,6 +153,28 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 
 		visibleUnitsSizeToRender = index;
 		visibleUnitsMutex.unlock();
+	}
+}
+/* Return height of any point on the grid */
+float Grid::GetHeight(float posX, float posY)
+{
+	// top left i+1 j, bottom right i, j+1
+	// bottom left i, j top right i+1, j+1
+	int i = (int)posY;
+	int j = (int)posX;
+	float offsetX = fmod(posX, 1.0f);
+	float offsetY = fmod(posY, 1.0f);
+
+	if (offsetX + offsetY <= 1.0f) {
+		// left triangle
+		float m = terrain->heightmap[i][j + 1] - terrain->heightmap[i][j];
+		float n = terrain->heightmap[i + 1][j] - terrain->heightmap[i][j];
+		return (offsetX*m + offsetY*n) + terrain->heightmap[i][j];
+	}
+	else {
+		float m = terrain->heightmap[i + 1][j] - terrain->heightmap[i + 1][j + 1];
+		float n = terrain->heightmap[i][j + 1] - terrain->heightmap[i + 1][j + 1];
+		return ((1-offsetX)*m + (1-offsetY) * n) + terrain->heightmap[i + 1][j + 1];;
 	}
 }
 Grid::~Grid() {

@@ -124,6 +124,7 @@ void Game::ProcessMouseclick(int button, int action, int mods) {
 
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
 		try {
+			int y = (int)cursor_position.y;
 			if (grid->gridUnits.at((int)cursor_position.y).at((int)cursor_position.x)) {
 				grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->objects.push_back(
 					new Fir(glm::vec3(cursor_position.x, cursor_position.y, grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->averageHeight),

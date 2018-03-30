@@ -10,6 +10,7 @@
 #include "fir.h"
 #include "palm.h"
 #include "lumberjack.h"
+#include "grass.h"
 
 using namespace std;
 
@@ -28,6 +29,7 @@ class Grid
 {
 public:
 	Grid(int aGridHeight, int aGridWidth);
+	float GetHeight(float posX, float posY);
 	~Grid();
 
 	void UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::vec2 &lowerLeft, glm::vec2 &lowerRight);
