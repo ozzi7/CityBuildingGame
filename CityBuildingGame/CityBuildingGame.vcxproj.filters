@@ -110,5 +110,8 @@
     <ClInclude Include="instanced_model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="grass.h">
+      <Filter>Header Files\Game objects</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
