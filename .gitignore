@@ -280,3 +280,15 @@ vc141.idb
 !/x64/models/**
 !/x64/terrain/**
 !/assets/**
+CityBuildingGame/x64/Release/game.nativecodeanalysis.xml
+CityBuildingGame/x64/Release/grid.nativecodeanalysis.xml
+CityBuildingGame/x64/Release/instanced_model.nativecodeanalysis.xml
+CityBuildingGame/x64/Release/main.nativecodeanalysis.xml
+CityBuildingGame/x64/Release/mesh.nativecodeanalysis.xml
+CityBuildingGame/x64/Release/model.nativecodeanalysis.xml
+CityBuildingGame/x64/Release/noise_gen.nativecodeanalysis.xml
+CityBuildingGame/x64/Release/object.nativecodeanalysis.xml
+CityBuildingGame/x64/Release/skinned_mesh.nativecodeanalysis.xml
+CityBuildingGame/x64/Release/terrain.nativecodeanalysis.xml
+CityBuildingGame/x64/Release/vc.nativecodeanalysis.all.xml
+x64/Release/CityBuildingGame.exe.lastcodeanalysissucceeded
