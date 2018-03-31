@@ -47,19 +47,21 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 					/*new Palm(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridUnits[i][j]->averageHeight),
 						glm::vec3(scale(gen), scale(gen), scale(gen)),
 						rotation(gen)));*/
-			float scale = scale_tree(gen);
-			while (scale < 0 || scale > 12) { scale = scale_tree(gen); }
-			scale = 12 - scale;
-			scale = scale / 10.0f;
+			for (int z = 0; z < 1; ++z) {
+				float scale = scale_tree(gen);
+				while (scale < 0 || scale > 12) { scale = scale_tree(gen); }
+				scale = 12 - scale;
+				scale = scale / 10.0f;
 
-			if (treeMap[i][j] >= 5.0f) {
-				float posX = j + 0.5f + pos_offset(gen);
-				float posY = i + 0.5f + pos_offset(gen);
+				if (treeMap[i][j] >= 3.0f) {
+					float posX = j + 0.5f + pos_offset(gen);
+					float posY = i + 0.5f + pos_offset(gen);
 
-				gridUnits[i][j]->objects.push_back(
-					new Fir(glm::vec3(posX, posY, GetHeight(posX, posY)),
-						glm::vec3(scale,scale,scale),
-						rotation(gen)));
+					gridUnits[i][j]->objects.push_back(
+						new Fir(glm::vec3(posX, posY, GetHeight(posX, posY)),
+							glm::vec3(scale, scale, scale),
+							rotation(gen)));
+				}
 			}
 			if (treeMap[i][j] < 3.0f)
 				for (int z = 0; z < 3; ++z) {

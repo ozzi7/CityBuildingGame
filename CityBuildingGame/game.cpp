@@ -32,6 +32,7 @@ void Game::StartGame()
 void Game::RenderLoop()
 {
 	glfwMakeContextCurrent(window);
+
 	renderer = new Renderer(exe_path);
 	
 	grid->terrain->InitOpenGL(renderer->shader_terrain, exe_path);
@@ -41,6 +42,7 @@ void Game::RenderLoop()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_MULTISAMPLE);
 
 		glm::mat4 projection = glm::ortho(-screenRatio * camera->Zoom, screenRatio * camera->Zoom, -1.0f * camera->Zoom, 1 * camera->Zoom, -1000.0f, 1000.0f);
 		glm::mat4 view = camera->GetViewMatrix();

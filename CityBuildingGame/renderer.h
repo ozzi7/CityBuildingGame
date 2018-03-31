@@ -178,7 +178,8 @@ public:
 		shader_terrain->setVec3("light.ambient", ambientColor);
 		shader_terrain->setVec3("light.diffuse", diffuseColor);
 		shader_terrain->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		shader_terrain->setVec3("light.position", glm::vec3(100.0f, 100.0f, 40.0f));//camera->Position);
+		//shader_terrain->setVec3("light.position", glm::vec3(100.0f, 100.0f, 40.0f));//camera->Position);
+		shader_terrain->setVec3("light.direction", glm::vec3(-1.0, -1.0, -1.0));
 		shader_terrain->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
 
 		// calculate the model matrix for each object and pass it to shader before drawing
