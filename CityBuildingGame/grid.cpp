@@ -7,7 +7,7 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 	gridWidth = aGridWidth;
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> pos_offset(-0.3, 0.3);
+	std::uniform_real_distribution<> pos_offset_tree(-0.45, 0.45);
 	std::uniform_real_distribution<> pos_offset_grass(-0.5, 0.5);
 	std::chi_squared_distribution<> scale_tree(3.0);
 	std::uniform_real_distribution<> scale_tree_(0.03, 1.3f);
@@ -47,21 +47,47 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 					/*new Palm(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridUnits[i][j]->averageHeight),
 						glm::vec3(scale(gen), scale(gen), scale(gen)),
 						rotation(gen)));*/
-			for (int z = 0; z < 1; ++z) {
-				float scale = scale_tree(gen);
-				while (scale < 0 || scale > 12) { scale = scale_tree(gen); }
-				scale = 12 - scale;
-				scale = scale / 10.0f;
+			float scale = scale_tree(gen);
+			while (scale < 0 || scale > 12) { scale = scale_tree(gen); }
+			scale = 12 - scale;
+			scale = scale / 10.0f;
 
-				if (treeMap[i][j] >= 3.0f) {
-					float posX = j + 0.5f + pos_offset(gen);
-					float posY = i + 0.5f + pos_offset(gen);
+			if (treeMap[i][j] >= 4.5f) {
+				float posX = j + 0.5f + pos_offset_tree(gen);
+				float posY = i + 0.5f + pos_offset_tree(gen);
 
-					gridUnits[i][j]->objects.push_back(
-						new Fir(glm::vec3(posX, posY, GetHeight(posX, posY)),
-							glm::vec3(scale, scale, scale),
-							rotation(gen)));
-				}
+				gridUnits[i][j]->objects.push_back(
+					new Fir(glm::vec3(posX, posY, GetHeight(posX, posY)),
+						glm::vec3(scale, scale, scale),
+						rotation(gen)));
+			}
+			scale = scale_tree(gen);
+			while (scale < 0 || scale > 12) { scale = scale_tree(gen); }
+			scale = 12 - scale;
+			scale = scale / 10.0f;
+
+			if (treeMap[i][j] >= 7.0f) {
+				float posX = j + 0.5f + pos_offset_tree(gen);
+				float posY = i + 0.5f + pos_offset_tree(gen);
+
+				gridUnits[i][j]->objects.push_back(
+					new Fir(glm::vec3(posX, posY, GetHeight(posX, posY)),
+						glm::vec3(scale, scale, scale),
+						rotation(gen)));
+			}
+			scale = scale_tree(gen);
+			while (scale < 0 || scale > 12) { scale = scale_tree(gen); }
+			scale = 12 - scale;
+			scale = scale / 10.0f;
+
+			if (treeMap[i][j] >= 8.5f) {
+				float posX = j + 0.5f + pos_offset_tree(gen);
+				float posY = i + 0.5f + pos_offset_tree(gen);
+
+				gridUnits[i][j]->objects.push_back(
+					new Fir(glm::vec3(posX, posY, GetHeight(posX, posY)),
+						glm::vec3(scale, scale, scale),
+						rotation(gen)));
 			}
 			if (treeMap[i][j] < 3.0f)
 				for (int z = 0; z < 3; ++z) {
