@@ -36,7 +36,7 @@ public:
 	SkinnedMesh *mesh_lumberjack;
 	InstancedModel *instanced_model_fir;
 	InstancedModel *instanced_model_grass;
-	Shader *shader_terrain;
+	Shader *terrain_shader;
 	Shader *mesh_shader;
 	Shader *skinned_mesh_shader;
 	Shader *instanced_mesh_shader;
@@ -72,7 +72,7 @@ public:
 		texture_path = exe_path + "/../models/grass/test.dae";
 		instanced_model_grass = new InstancedModel(texture_path, false);
 
-		shader_terrain = new Shader("terrain.vert", "terrain.frag");
+		terrain_shader = new Shader("terrain.vert", "terrain.frag");
 
 		/* Palm init*/
 		texture_path = exe_path + "/../models/palm/palm1.obj";
@@ -84,9 +84,7 @@ public:
 		//texture_path = exe_path + "/../models/minotaur/animation/Minotaur@Walk.dae";
 		texture_path = exe_path + "/../models/mario/mario_fat.dae";
 		mesh_lumberjack->LoadMesh(texture_path);
-		mesh_lumberjack->PrecalculateBoneTransforms();
-
-		
+		mesh_lumberjack->PrecalculateBoneTransforms();	
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
 	{
@@ -94,9 +92,9 @@ public:
 		mesh_shader->setMat4("projection", aProjection);
 		mesh_shader->setMat4("view", aView);
 
-		shader_terrain->use();
-		shader_terrain->setMat4("projection", aProjection);
-		shader_terrain->setMat4("view", aView);
+		terrain_shader->use();
+		terrain_shader->setMat4("projection", aProjection);
+		terrain_shader->setMat4("view", aView);
 
 		skinned_mesh_shader->use();
 		skinned_mesh_shader->setMat4("projection", aProjection);
@@ -173,7 +171,7 @@ public:
 	}
 	void Visit(Terrain *terrain)
 	{
-		shader_terrain->use();
+		terrain_shader->use();
 
 		glm::vec3 lightColor;
 		lightColor.x = 1.0f;
@@ -181,21 +179,37 @@ public:
 		lightColor.z = 1.0f;
 		glm::vec3 diffuseColor = lightColor * glm::vec3(0.65f); // decrease the influence
 		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.5f); // low influence
-		shader_terrain->setVec3("light.ambient", ambientColor);
-		shader_terrain->setVec3("light.diffuse", diffuseColor);
-		shader_terrain->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		//shader_terrain->setVec3("light.position", glm::vec3(100.0f, 100.0f, 40.0f));//camera->Position);
-		shader_terrain->setVec3("light.direction", glm::vec3(-1.0, -1.0, -1.0));
-		shader_terrain->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
+		terrain_shader->setVec3("light.ambient", ambientColor);
+		terrain_shader->setVec3("light.diffuse", diffuseColor);
+		terrain_shader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		//terrain_shader->setVec3("light.position", glm::vec3(100.0f, 100.0f, 40.0f));//camera->Position);
+		terrain_shader->setVec3("light.direction", glm::vec3(-1.0, -1.0, -1.0));
+		terrain_shader->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
 
 		// calculate the model matrix for each object and pass it to shader before drawing
 		glm::mat4 model = glm::mat4(1.0f);
-		shader_terrain->setMat4("model", model);
+		terrain_shader->setMat4("model", model);
 
-		terrain->Draw(*shader_terrain);
+		terrain->Draw(*terrain_shader);
 	}
-	void RenderAll()
+	void RenderInstancedObjects()
 	{
+		instanced_mesh_shader->use();
+
+		/*set the light source*/
+		glm::vec3 lightColor;
+		lightColor.x = 1.0f;
+		lightColor.y = 1.0f;
+		lightColor.z = 1.0f;
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.65f); // decrease the influence
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.5f); // low influence
+		instanced_mesh_shader->setVec3("light.ambient", ambientColor);
+		instanced_mesh_shader->setVec3("light.diffuse", diffuseColor);
+		//terrain_shader->setVec3("light.position", glm::vec3(100.0f, 100.0f, 40.0f));//camera->Position);
+		instanced_mesh_shader->setVec3("light.direction", glm::vec3(-1.0, -1.0, -1.0));
+		instanced_mesh_shader->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
+
+		/*draw instanced objects*/
 		instanced_model_fir->Draw(*instanced_mesh_shader, dataFir.models); // note shader.use() is in model
 		instanced_model_grass->Draw(*instanced_mesh_shader, dataGrass.models); // note shader.use() is in model
 		dataGrass.models.clear();
@@ -233,6 +247,6 @@ public:
 		delete model_chamaecyparis;
 		delete model_fir;
 		delete mesh_lumberjack;
-		delete shader_terrain;
+		delete terrain_shader;
 	}
 };

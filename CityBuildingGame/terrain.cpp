@@ -312,19 +312,19 @@ void Terrain::Accept(Visitor &v)
 {
 	v.Visit(this);
 }
-void Terrain::InitOpenGL(Shader* shader_terrain, string exe_path)
+void Terrain::InitOpenGL(Shader* terrain_shader, string exe_path)
 {
-	shader_terrain->use();
-	LoadTextures(shader_terrain, exe_path);
+	terrain_shader->use();
+	LoadTextures(terrain_shader, exe_path);
 	GenerateBuffers();
 }
-void Terrain::LoadTextures(Shader * shader_terrain, string exe_path)
+void Terrain::LoadTextures(Shader * terrain_shader, string exe_path)
 {
 	Model tree = Model();
 	string texturesPath = exe_path + "/../terrain";
 	texture_id_grass = tree.TextureFromFile(texture_grass.c_str(), texturesPath);
 
-	shader_terrain->setInt("texture1", 0);
+	terrain_shader->setInt("texture1", 0);
 }
 void Terrain::GenerateBuffers()
 {

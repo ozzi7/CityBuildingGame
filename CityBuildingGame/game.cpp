@@ -35,7 +35,7 @@ void Game::RenderLoop()
 
 	renderer = new Renderer(exe_path);
 	
-	grid->terrain->InitOpenGL(renderer->shader_terrain, exe_path);
+	grid->terrain->InitOpenGL(renderer->terrain_shader, exe_path);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -43,6 +43,8 @@ void Game::RenderLoop()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_MULTISAMPLE);
+		glDepthMask(TRUE);
+
 
 		glm::mat4 projection = glm::ortho(-screenRatio * camera->Zoom, screenRatio * camera->Zoom, -1.0f * camera->Zoom, 1 * camera->Zoom, -1000.0f, 1000.0f);
 		glm::mat4 view = camera->GetViewMatrix();
@@ -70,7 +72,15 @@ void Game::RenderLoop()
 				(*it)->Accept(*renderer);
 			}
 		}
-		renderer->RenderAll();
+
+		glDepthMask(FALSE);
+		/*Use of continuous alpha values requires blending*/
+		glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+		//glBlendFunc(GL_ONE, GL_ONE);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		renderer->RenderInstancedObjects();
 		glfwSwapBuffers(window);
 	}
 }
