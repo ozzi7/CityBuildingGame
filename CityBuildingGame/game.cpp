@@ -39,19 +39,16 @@ void Game::RenderLoop()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_MULTISAMPLE);
-		glDepthMask(TRUE);
-
-
 		glm::mat4 projection = glm::ortho(-screenRatio * camera->Zoom, screenRatio * camera->Zoom, -1.0f * camera->Zoom, 1 * camera->Zoom, -1000.0f, 1000.0f);
 		glm::mat4 view = camera->GetViewMatrix();
 
 		renderer->SetMatrices(projection, view);
+		renderer->OpenGLStart();
+
+		/* Render terrain */
 		grid->terrain->Accept(*renderer);
 
+		/* TODO: write a class which handles 3 buffers and mutex to exchange*/
 		grid->visibleUnitsMutex.lock();
 		grid->visibleUnitsRendering = grid->visibleUnitsToRender;
 		vector<Unit*> *visibleUnitsTemp;
@@ -67,19 +64,14 @@ void Game::RenderLoop()
 		int nofUnits = grid->visibleUnitsSizeToRender;
 		grid->visibleUnitsMutex.unlock();
 
+		/* Render dynamic objects */
 		for (int i = 0; i < nofUnits; i++) {
 			for (list<Object*>::iterator it = (*visibleUnitsTemp)[i]->objects.begin(); it != (*visibleUnitsTemp)[i]->objects.end(); ++it) {
 				(*it)->Accept(*renderer);
 			}
 		}
 
-		glDepthMask(FALSE);
-		/*Use of continuous alpha values requires blending*/
-		glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
-		//glBlendFunc(GL_ONE, GL_ONE);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		/* Render instanced objects */
 		renderer->RenderInstancedObjects();
 		glfwSwapBuffers(window);
 	}

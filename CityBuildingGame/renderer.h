@@ -104,6 +104,13 @@ public:
 		instanced_mesh_shader->setMat4("projection", aProjection);
 		instanced_mesh_shader->setMat4("view", aView);
 	}
+	void OpenGLStart() {
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_MULTISAMPLE);
+		glDepthMask(TRUE);
+	}
 	void Visit(Tree *tree) {};
 	void Visit(Chamaecyparis *chamaecyparis)
 	{
@@ -129,7 +136,7 @@ public:
 		model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 		model = glm::scale(model, fir->scale);
 		model = glm::rotate(model, fir->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::rotate(model, 1.5708f, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, 1.5707963f, glm::vec3(1.0f, 0.0f, 0.0f));
 		dataFir.models.push_back(model);
 	};
 	void Visit(Palm *palm)
@@ -194,15 +201,25 @@ public:
 	}
 	void RenderInstancedObjects()
 	{
+		glDepthMask(FALSE);
+		/*Use of continuous alpha values requires blending*/
+		glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+		//glBlendFunc(GL_ONE, GL_ONE);
+		//glBlendFunc(GL_ONE, GL_ONE);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		instanced_mesh_shader->use();
+		instanced_model_grass->Draw(*instanced_mesh_shader, dataGrass.models); // note shader.use() is in model
 
 		/*set the light source*/
 		glm::vec3 lightColor;
 		lightColor.x = 1.0f;
 		lightColor.y = 1.0f;
 		lightColor.z = 1.0f;
-		glm::vec3 diffuseColor = lightColor * glm::vec3(0.65f); // decrease the influence
-		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.5f); // low influence
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.6f); // decrease the influence
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.8f); // low influence
 		instanced_mesh_shader->setVec3("light.ambient", ambientColor);
 		instanced_mesh_shader->setVec3("light.diffuse", diffuseColor);
 		//terrain_shader->setVec3("light.position", glm::vec3(100.0f, 100.0f, 40.0f));//camera->Position);
@@ -211,7 +228,7 @@ public:
 
 		/*draw instanced objects*/
 		instanced_model_fir->Draw(*instanced_mesh_shader, dataFir.models); // note shader.use() is in model
-		instanced_model_grass->Draw(*instanced_mesh_shader, dataGrass.models); // note shader.use() is in model
+
 		dataGrass.models.clear();
 		dataFir.models.clear();
 	}
