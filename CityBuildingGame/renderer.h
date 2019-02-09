@@ -115,52 +115,24 @@ public:
 	void Visit(Chamaecyparis *chamaecyparis)
 	{
 		mesh_shader->use();
-
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, chamaecyparis->position);
-		model = glm::rotate(model, 90.0f, glm::vec3(1, 0, 0));
-		model = glm::scale(model, glm::vec3(0.02f, 0.02f, 0.02));
-		model = glm::scale(model, chamaecyparis->scale);
-		model = glm::rotate(model, chamaecyparis->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-
-		mesh_shader->setMat4("model", model);
+		mesh_shader->setMat4("model", chamaecyparis->model);
 
 		model_chamaecyparis->Draw(*mesh_shader);
 	};
 	void Visit(Fir *fir)
 	{
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, fir->position);
-
-		//model = glm::scale(model, glm::vec3(0.02f, 0.02f, 0.02f));
-		model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
-		model = glm::scale(model, fir->scale);
-		model = glm::rotate(model, fir->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::rotate(model, 1.5707963f, glm::vec3(1.0f, 0.0f, 0.0f));
-		dataFir.models.push_back(model);
+		dataFir.models.push_back(fir->model);
 	};
 	void Visit(Palm *palm)
 	{
-		/*mesh_shader->use();
+		mesh_shader->use();
+		mesh_shader->setMat4("model", palm->model);
 
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, palm->position);
-		model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05));
-
-		mesh_shader->setMat4("model", model);
-
-		model_palm->Draw(*mesh_shader);*/
+		model_palm->Draw(*mesh_shader);
 	};
 	void Visit(Grass *grass)
 	{
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, grass->position);
-		model = glm::translate(model, glm::vec3(0.0f,0.0f,0.18f));
-
-		model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));
-		model = glm::scale(model, grass->scale);
-		model = glm::rotate(model, grass->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-		dataGrass.models.push_back(model);
+		dataGrass.models.push_back(grass->model);
 	}
 	void Visit(Lumberjack *lumberjack)
 	{
@@ -168,11 +140,7 @@ public:
 		z = z + 0.0011f;
 		mesh_lumberjack->BindBoneTransform(z, skinned_mesh_shader);
 
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, lumberjack->position);
-		model = glm::scale(model, glm::vec3(0.03f, 0.03f, 0.03f));
-		model = glm::rotate(model, -1.5708f, glm::vec3(1.0f, 0.0f, 0.0f));
-		skinned_mesh_shader->setMat4("model", model);
+		skinned_mesh_shader->setMat4("model", lumberjack->model);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		mesh_lumberjack->Render(*skinned_mesh_shader);
 	}
