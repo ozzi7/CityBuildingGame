@@ -8,22 +8,22 @@
 #include <thread>
 
 // Include GLEW, used to detect supported openGL extensions
-#include <GL\glew.h>
-
-// Include GLM, math library
-#include <glm/glm.hpp>
-#include "glm/gtc/matrix_transform.hpp"
+#include <GL/glew.h>
 
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
 
+//#include <glm/glm.hpp>
+//#include "glm/gtc/matrix_transform.hpp"
+
 #include "game.h"
 
 // settings
-const unsigned int SCR_WIDTH = 1820;
-const unsigned int SCR_HEIGHT = 1000;
-const unsigned int MAP_WIDTH = 40;
-const unsigned int MAP_HEIGHT = 42;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
+const unsigned int MAP_WIDTH = 50;
+const unsigned int MAP_HEIGHT = 50;
+const float SCREEN_RATIO = (float)SCR_WIDTH / (float)SCR_HEIGHT;
 
 Camera camera;
 Game game;
@@ -36,7 +36,6 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
 int main(int argc, char* argv[])
 {
-	float SCREEN_RATIO = (float)SCR_WIDTH / (float)SCR_HEIGHT;
 	// store path for resources
 	std::string exe_path = std::string(argv[0]);
 	exe_path = exe_path.substr(0, exe_path.find_last_of("\\/"));
@@ -46,7 +45,7 @@ int main(int argc, char* argv[])
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_SAMPLES, 4); /* MSAA */
+	//glfwWindowHint(GLFW_SAMPLES, 4); /* MSAA */
 
 	// glfw window creation
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "CityBuildingGame", NULL, NULL);
@@ -54,7 +53,7 @@ int main(int argc, char* argv[])
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
-		return -1;
+		exit(EXIT_FAILURE);
 	}
 
 	camera = Camera(glm::vec3(50.0f, -50.0f, 50.0f), window);
@@ -74,6 +73,7 @@ int main(int argc, char* argv[])
 
 	if (glewInit() != 0)
 	{
+		std::cout << "Failed to init GLEW" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 

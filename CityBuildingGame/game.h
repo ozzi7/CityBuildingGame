@@ -46,7 +46,7 @@ public:
 	GLFWwindow *window;
 
 	/* This is a handle to the shader program */
-	Model tree;
+	//Model tree;
 
 	float screenRatio;
 
