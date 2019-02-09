@@ -39,6 +39,7 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 	vector<vector<float>> treeMap = vector<vector<float>>(gridHeight, vector<float>(gridWidth, 0));
 	noise_gen.GeneratePerlinNoise(treeMap, gridHeight, gridWidth, 0.0f, 10.0f, 3);
 
+	/* TODO: this is temporary & ugly*/
 	for (int i = 0; i < gridHeight; ++i) {
 		for (int j = 0; j < gridWidth; ++j) {
 			//if(treeMap[i][j] > 4.0f && treeMap[i][j] < 7.0f)

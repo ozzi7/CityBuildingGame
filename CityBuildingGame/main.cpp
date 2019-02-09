@@ -22,8 +22,8 @@
 // settings
 const unsigned int SCR_WIDTH = 1820;
 const unsigned int SCR_HEIGHT = 1000;
-const unsigned int MAP_WIDTH = 40;
-const unsigned int MAP_HEIGHT = 42;
+const unsigned int MAP_WIDTH = 200;
+const unsigned int MAP_HEIGHT = 300;
 
 Camera camera;
 Game game;
