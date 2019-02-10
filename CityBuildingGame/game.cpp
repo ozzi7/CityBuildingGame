@@ -8,8 +8,8 @@ Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, G
 	window = aWindow;
 	inputHandler = aInputHandler;
 
-	grid = new Grid(aMapHeight, aMapHeight);
-	camera = new Camera(glm::vec3(50.0f, -50.0f, 50.0f), window);
+	grid = new Grid(aMapWidth, aMapHeight);
+	camera = new Camera(glm::vec3(50.0f + aMapHeight * 0.5f, -50.0f + aMapWidth * 0.5f, 50.0f), window);
 
 	inputHandler->Camera = camera;
 	inputHandler->Window = window;
