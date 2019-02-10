@@ -11,57 +11,43 @@
 // Include GLM, math library
 #include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
-#include "model.h"
+
 #include "camera.h"
 #include "grid.h"
-#include "tree.h"
 #include "renderer.h"
+#include "input_handler.h"
 
-// Include GLFW, implements openGL
-#include <GLFW/glfw3.h>
 
 class Game
 {
 public:
-	Game(int, int, float, string, Camera &, GLFWwindow* window);
+	Game(int, int, float, string, GLFWwindow*, InputHandler*);
 	Game();
 	~Game();
 
 	// Entry point to the game
 	void StartGame();
 
-	// Called by the application class to update the game logic
-	void GameLoop();
-
-	// Continuously redraws all visible objects
-	void RenderLoop();
-
-	void ProcessMouseclick(int button, int action, int mods);
-	
-	int mapHeight;
-	int mapWidth;
-	string exe_path;
-	Camera * camera;
-
-	GLFWwindow *window;
-
-	/* This is a handle to the shader program */
-	//Model tree;
-
-	float screenRatio;
 
 private:
-	Renderer *renderer;
-	Grid *grid;
-	Model whiteTreeModel;
-	Model firTreeModel;
-	Model terrainModel;
+	Renderer* renderer;
+	Grid* grid;
+	Camera* camera;
+	GLFWwindow* window;
+	InputHandler* inputHandler;
 
-	GLuint mvp_handle;
+	float screenRatio;
+	
+	string exe_path;
 
 	// timing
 	float deltaTime = 0.0f;	// time between current frame and last frame
 	float lastFrame = 0.0f;
 
-	void ProcessInput();
+	// Called by the application class to update the game logic
+	void gameLoop();
+
+	// Continuously redraws all visible objects
+	void renderLoop();
+
 };

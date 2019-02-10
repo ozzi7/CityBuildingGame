@@ -294,3 +294,4 @@ CityBuildingGame/x64/Release/vc.nativecodeanalysis.all.xml
 x64/Release/CityBuildingGame.exe.lastcodeanalysissucceeded
 x64/models/fir3/.mayaSwatches/branch.png_hcm.swatch
 x64/models/fir3/.mayaSwatches/bark.jpg_hcm.swatch
+*.vcxproj
