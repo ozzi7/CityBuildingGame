@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="input_handler.cpp" />
     <ClCompile Include="instanced_model.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="grid.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="grass.h" />
     <ClInclude Include="grid.h" />
+    <ClInclude Include="input_handler.h" />
     <ClInclude Include="instanced_model.h" />
     <ClInclude Include="lumberjack.h" />
     <ClInclude Include="noise_gen.h" />

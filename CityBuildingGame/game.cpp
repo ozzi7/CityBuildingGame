@@ -2,15 +2,18 @@
 
 Game::Game(){};
 
-Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, Camera & aCamera, GLFWwindow* aWindow) {
+Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	screenRatio = aScreenRatio;
 	exe_path = aExePath;
-	camera = &aCamera;
 	window = aWindow;
+	inputHandler = aInputHandler;
 
-	mapHeight = aMapHeight;
-	mapWidth = aMapWidth;
 	grid = new Grid(aMapHeight, aMapHeight);
+	camera = new Camera(glm::vec3(50.0f, -50.0f, 50.0f), window);
+
+	inputHandler->Camera = camera;
+	inputHandler->Window = window;
+	inputHandler->Grid = grid;
 
 	camera->grid = grid;
 }
@@ -24,12 +27,13 @@ void Game::StartGame()
 {
 	glfwMakeContextCurrent(NULL);
 
-	std::thread threadRenderLoop(&Game::RenderLoop, this);
+	std::thread threadRenderLoop(&Game::renderLoop, this);
 	
-	GameLoop();
+	gameLoop();
 	threadRenderLoop.join();
 }
-void Game::RenderLoop()
+
+void Game::renderLoop()
 {
 	glfwMakeContextCurrent(window);
 
@@ -76,7 +80,8 @@ void Game::RenderLoop()
 		glfwSwapBuffers(window);
 	}
 }
-void Game::GameLoop()
+
+void Game::gameLoop()
 {
 	const int TICKS_PER_SECOND = 240;
 	const int SKIP_TICKS = 1000000 / TICKS_PER_SECOND; // microseconds
@@ -90,8 +95,7 @@ void Game::GameLoop()
 	{
 
 		glfwPollEvents();
-		ProcessInput();
-		camera->mouse_scroll();
+		inputHandler->MouseScroll();
 
 		grid->terrain->SetRenderWindow(camera->GetTopLeftVisible(),camera->GetTopRightVisible(), camera->GetBottomLeftVisible(),
 			camera->GetBottomRightVisible());
@@ -101,43 +105,5 @@ void Game::GameLoop()
 		std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::microseconds>(next_game_tick - std::chrono::high_resolution_clock::now()));
 		next_game_tick = (next_game_tick + std::chrono::microseconds(SKIP_TICKS));
 		loops++;
-	}
-}
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-void Game::ProcessInput()
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		camera->keyboard_scroll(UP);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		camera->keyboard_scroll(DOWN);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		camera->keyboard_scroll(LEFT);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		camera->keyboard_scroll(RIGHT);
-}
-
-void Game::ProcessMouseclick(int button, int action, int mods) {
-	
-	if (!action == GLFW_PRESS) {return;}
-
-	glm::vec2 cursor_position = camera->CursorPositionGrid();
-
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-		try {
-			if (cursor_position.x >= 0 && cursor_position.y >= 0 && grid->gridUnits.at((int)cursor_position.y).at((int)cursor_position.x)) {
-				grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->objects.push_back(
-					new Fir(glm::vec3(cursor_position.x, cursor_position.y, grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->averageHeight),
-						glm::vec3(1.0f, 1.0f, 1.0f),
-						1.0f));
-			}
-		}
-		catch(const std::out_of_range & e) {
-			std::cout << "Cannot insert outside of grid" << std::endl;
-		}
-		
 	}
 }

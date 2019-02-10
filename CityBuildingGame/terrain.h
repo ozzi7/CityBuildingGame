@@ -6,8 +6,8 @@
 #include <mutex> 
 #include <atomic>
 
-#include <GL\glew.h>
-#include <GLFW\glfw3.h>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 // Include GLM, math library
 #include "glm/glm.hpp"

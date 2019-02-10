@@ -1,8 +1,7 @@
-# pragma once
 #ifndef CAMERA_H
 #define CAMERA_H
 
-// Include GLFW, implements openGL
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
