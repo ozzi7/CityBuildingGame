@@ -14,8 +14,9 @@ Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, G
 	inputHandler->Camera = camera;
 	inputHandler->Window = window;
 	inputHandler->Grid = grid;
+	inputHandler->WindowFocus(true);
 
-	camera->grid = grid;
+	camera->Grid = grid;
 }
 Game::~Game()
 {
@@ -43,7 +44,7 @@ void Game::renderLoop()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		glm::mat4 projection = glm::ortho(-screenRatio * camera->Zoom, screenRatio * camera->Zoom, -1.0f * camera->Zoom, 1 * camera->Zoom, -1000.0f, 1000.0f);
+		glm::mat4 projection = glm::ortho(-screenRatio * camera->ZoomLevel, screenRatio * camera->ZoomLevel, -1.0f * camera->ZoomLevel, 1 * camera->ZoomLevel, -1000.0f, 1000.0f);
 		glm::mat4 view = camera->GetViewMatrix();
 
 		renderer->SetMatrices(projection, view);
@@ -97,10 +98,10 @@ void Game::gameLoop()
 		glfwPollEvents();
 		inputHandler->MouseScroll();
 
-		grid->terrain->SetRenderWindow(camera->GetTopLeftVisible(),camera->GetTopRightVisible(), camera->GetBottomLeftVisible(),
-			camera->GetBottomRightVisible());
-		grid->UpdateVisibleList(camera->GetTopLeftVisible(), camera->GetTopRightVisible(), camera->GetBottomLeftVisible(),
-			camera->GetBottomRightVisible());
+		grid->terrain->SetRenderWindow(camera->GridTopLeftVisible(),camera->GridTopRightVisible(), camera->GridBottomLeftVisible(),
+			camera->GridBottomRightVisible());
+		grid->UpdateVisibleList(camera->GridTopLeftVisible(), camera->GridTopRightVisible(), camera->GridBottomLeftVisible(),
+			camera->GridBottomRightVisible());
 
 		std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::microseconds>(next_game_tick - std::chrono::high_resolution_clock::now()));
 		next_game_tick = (next_game_tick + std::chrono::microseconds(SKIP_TICKS));
