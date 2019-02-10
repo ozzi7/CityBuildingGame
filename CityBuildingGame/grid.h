@@ -21,6 +21,7 @@ public:
 	bool occupied = false;
 	float averageHeight = 0;
 	list<Object*> objects;
+	list<BoneAnimated*> movingObjects; // TODO doesnt have to coincide with bone animated.. hmm
 	Unit();
 	~Unit();
 };
