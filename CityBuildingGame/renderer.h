@@ -137,9 +137,8 @@ public:
 	void Visit(Lumberjack *lumberjack)
 	{
 		skinned_mesh_shader->use();
-		z = z + 0.0011f;
+		z = z + 0.0011f; // TODO: speed of animation doesnt belong here...
 		mesh_lumberjack->BindBoneTransform(z, skinned_mesh_shader);
-
 		skinned_mesh_shader->setMat4("model", lumberjack->model);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		mesh_lumberjack->Render(*skinned_mesh_shader);

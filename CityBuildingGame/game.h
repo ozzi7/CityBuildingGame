@@ -17,7 +17,6 @@
 #include "renderer.h"
 #include "input_handler.h"
 
-
 class Game
 {
 public:

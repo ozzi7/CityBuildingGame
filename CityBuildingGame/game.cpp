@@ -74,6 +74,9 @@ void Game::renderLoop()
 			for (list<Object*>::iterator it = (*visibleUnitsTemp)[i]->objects.begin(); it != (*visibleUnitsTemp)[i]->objects.end(); ++it) {
 				(*it)->Accept(*renderer);
 			}
+			for (list<BoneAnimated*>::iterator it = (*visibleUnitsTemp)[i]->movingObjects.begin(); it != (*visibleUnitsTemp)[i]->movingObjects.end(); ++it) {
+				(*it)->Accept(*renderer);
+			}
 		}
 
 		/* Render instanced objects */
@@ -94,9 +97,21 @@ void Game::gameLoop()
 	std::chrono::high_resolution_clock::time_point next_game_tick(start + std::chrono::microseconds(SKIP_TICKS));
 	while (!glfwWindowShouldClose(window))
 	{
-
 		glfwPollEvents();
 		inputHandler->MouseScroll();
+
+		/* TODO: temp */
+		for (int i = 0; i < grid->gridUnits.size(); i++) {
+			for (int j = 0; j < grid->gridUnits[i].size(); j++) {
+				for (list<BoneAnimated*>::iterator it = grid->gridUnits[i][j]->movingObjects.begin(); 
+					it != grid->gridUnits[i][j]->movingObjects.end(); ++it) {
+					(*it)->UpdatePosition();
+					std::cout << (*it)->position[0] << " | " <<
+						(*it)->position[1] << " | " << 
+						(*it)->position[2] << endl;
+				}
+			}
+		}
 
 		grid->terrain->SetRenderWindow(camera->GridTopLeftVisible(),camera->GridTopRightVisible(), camera->GridBottomLeftVisible(),
 			camera->GridBottomRightVisible());
