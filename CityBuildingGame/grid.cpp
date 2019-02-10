@@ -90,7 +90,7 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 						glm::vec3(scale, scale, scale),
 						rotation(gen)));
 			}
-			if (treeMap[i][j] < 3.0f)
+			if (treeMap[i][j] < 2.0f)
 				for (int z = 0; z < 3; ++z) {
 					float posX = j + 0.5f + pos_offset_grass(gen);
 					float posY = i + 0.5f + pos_offset_grass(gen);
@@ -99,11 +99,11 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 							glm::vec3(scale_grass(gen), scale_grass(gen), scale_grass(gen)),
 							rotation(gen)));
 				}
-			/*else if (treeMap[i][j] < 3.0f)
+			else if (treeMap[i][j] < 3.0f)
 				gridUnits[i][j]->objects.push_back(
-					new Lumberjack(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridUnits[i][j]->averageHeight),
-						glm::vec3(scale(gen), scale(gen), scale(gen)),
-						rotation(gen)));*/
+					new Lumberjack(glm::vec3(j + 0.5f + pos_offset_tree(gen), i + 0.5f + pos_offset_tree(gen), gridUnits[i][j]->averageHeight),
+						glm::vec3(scale_tree(gen), scale_tree(gen), scale_tree(gen)),
+						rotation(gen)));
 		}
 	}
 

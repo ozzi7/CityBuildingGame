@@ -8,4 +8,4 @@ in outliner select quickrigcharacter_reference & all the meshes
 click file -> export selection, select dae/fbx and change settings to bake animation with keyframes so that the complete animation is contained..
 done.. 
 
-change the .dae file in editor, on top change the texture paths to absolute ones (relative to dae file) (copy paste them from another .dae..)
+change the .dae file in text editor, on top change the texture paths to absolute ones (relative to dae file) (copy paste them from another .dae..)
