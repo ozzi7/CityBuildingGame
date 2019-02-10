@@ -22,7 +22,7 @@ enum Camera_Movement {
 	RIGHT
 };
 
-const float SCROLL_SPEED = 0.1f;
+const float SCROLL_SPEED = 0.02f;
 const float ZOOM_DEFAULT = 5.0f;
 const float ZOOM_MAX = 100.0f;
 const float ZOOM_MIN = 0.2f;
@@ -37,12 +37,12 @@ public:
 	glm::vec3 Position;
 	float Zoom;
 	bool WindowFocused = true;
-	Grid * grid;
+	Grid* grid;
 private:
 	glm::vec3 Up;
 	glm::vec3 Right;
 	glm::vec3 Lookat;
-	GLFWwindow *Window;
+	GLFWwindow* Window;
 	RECT WindowEdges;
 	float ScreenRatio;
 
@@ -150,13 +150,13 @@ public:
 	void keyboard_scroll(Camera_Movement direction)
 	{
 		if (direction == UP)
-			Position += Up * SCROLL_SPEED * ROOT3;
+			Position += Up * SCROLL_SPEED * Zoom *ROOT3;
 		if (direction == DOWN)
-			Position -= Up * SCROLL_SPEED * ROOT3;
+			Position -= Up * SCROLL_SPEED * Zoom * ROOT3;
 		if (direction == LEFT)
-			Position -= Right * SCROLL_SPEED;
+			Position -= Right * SCROLL_SPEED * Zoom;
 		if (direction == RIGHT)
-			Position += Right * SCROLL_SPEED;
+			Position += Right * SCROLL_SPEED * Zoom;
 	}
 
 	// Processes scrolling when mouse reaches edge of window
@@ -175,20 +175,20 @@ public:
 		glfwGetWindowSize(Window, &width, &height);
 
 		if (xpos == 0)
-			Position -= Right * SCROLL_SPEED;
+			Position -= Right * SCROLL_SPEED * Zoom;
 		if (ypos == 0)
-			Position += Up * SCROLL_SPEED * ROOT3;
+			Position += Up * SCROLL_SPEED * Zoom * ROOT3;
 		if (width-(int)xpos <= 1)
-			Position += Right * SCROLL_SPEED;
+			Position += Right * SCROLL_SPEED * Zoom;
 		if (height-(int)ypos <= 1)
-			Position -= Up * SCROLL_SPEED * ROOT3;
+			Position -= Up * SCROLL_SPEED * Zoom * ROOT3;
 	}
 
 	// Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
 	void mouse_zoom(float yoffset)
 	{
 		if (Zoom >= ZOOM_MIN && Zoom <= ZOOM_MAX)
-			Zoom -= yoffset;
+			Zoom -= yoffset * Zoom / 10.0f;
 		if (Zoom <= ZOOM_MIN)
 			Zoom = ZOOM_MIN;
 		if (Zoom >= ZOOM_MAX)

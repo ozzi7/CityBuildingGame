@@ -20,7 +20,7 @@
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 const unsigned int MAP_WIDTH = 200;
-const unsigned int MAP_HEIGHT = 200;
+const unsigned int MAP_HEIGHT = 100;
 const float SCREEN_RATIO = (float)SCR_WIDTH / (float)SCR_HEIGHT;
 
 Game game;
