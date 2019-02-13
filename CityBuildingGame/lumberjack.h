@@ -1,6 +1,7 @@
 #pragma once
 #include "bone_animated.h"
 #include "visitor.h"
+#include <math.h> 
 
 class Lumberjack : public BoneAnimated
 {
@@ -8,20 +9,20 @@ public:
 	Lumberjack(glm::vec3 aPosition, glm::vec3 aScale, float aRotation)
 		: BoneAnimated(aPosition, aScale, aRotation) {
 		model = glm::translate(model, position);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.1f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 		model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
 		model = glm::rotate(model, -3.1416f, glm::vec3(1.0f, 0.0f, 0.0f));
-
-		wayPoints.push_back(glm::vec3(3.63833, 6.81779, 0.181271));
-		wayPoints.push_back(glm::vec3(3.86907, 6.58705, 0.230742));
-		wayPoints.push_back(glm::vec3(3.63388, 5.73592, 0.352878));
-		wayPoints.push_back(glm::vec3(3.55535, 4.78177, 0.477088));
-		wayPoints.push_back(glm::vec3(3.18281, 4.01433, 0.477088));
-		wayPoints.push_back(glm::vec3(2.8589, 3.22502, 0.489148));
-		wayPoints.push_back(glm::vec3(3.3160, 3.29101, 0.464005));
-		wayPoints.push_back(glm::vec3(3.86888, 3.44896, 0.464005));
-		wayPoints.push_back(glm::vec3(4.44139, 3.56043, 0.508691));
-		wayPoints.push_back(glm::vec3(4.84637, 3.82603, 0.508691));
+		model = glm::rotate(model, -1.5708f, glm::vec3(0.0f, 0.0f, 1.0f));
+		//wayPoints.push_back(glm::vec3(3.63833, 6.81779, 1.181271));
+		//wayPoints.push_back(glm::vec3(3.86907, 6.58705, 1.230742));
+		//wayPoints.push_back(glm::vec3(3.63388, 5.73592, 1.352878));
+		//wayPoints.push_back(glm::vec3(3.55535, 4.78177, 1.477088));
+		//wayPoints.push_back(glm::vec3(3.18281, 4.01433, 1.477088));
+		//wayPoints.push_back(glm::vec3(2.8589, 3.22502, 1.489148));
+		//wayPoints.push_back(glm::vec3(3.3160, 3.29101, 1.464005));
+		//wayPoints.push_back(glm::vec3(3.86888, 3.44896, 1.464005));
+		//wayPoints.push_back(glm::vec3(4.44139, 3.56043, 1.508691));
+		//wayPoints.push_back(glm::vec3(4.84637, 3.82603, 1.508691));
 	};
 	void Accept(Visitor &v)
 	{
@@ -32,9 +33,10 @@ public:
 	{
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, position);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.1f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 		model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
 		model = glm::rotate(model, -3.1416f, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, 1.5708f + rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 	}
 	/* Updates the position, rotation of the lumberjack*/
 	void UpdatePosition()
@@ -55,7 +57,7 @@ public:
 	void UpdatePositionPrimitive()
 	{
 		/* TODO: temporary, assume pathfinding gives us a sequence of x,y,z (unit middle)*/ 
-		glm::vec3 translation = glm::vec3();
+		glm::vec3 translation = glm::vec3(0,0,0);
 		if (wayPointIndex + 1 < wayPoints.size())
 		{
 			// not arrived yet
@@ -77,19 +79,29 @@ public:
 				}
 				wayPointIndex = wayPointIndex + 1;
 			}
+
+			position += translation;
+			rotation = std::atan2f(translation.y,translation.x);
+			if (translation.y < 0)
+				rotation += 2 * 3.1415;
+			rotation = -rotation; // somehow roation direction is not from +x to +y but +x to -y.. 
+			rotation = rotation + 3.1415;
+			cout << translation.x << " " << translation.y << endl;
+			cout << rotation << endl;
+			recalculateModelMatrix();
 		}
 		else {
 			// arrived previously already
 		}
-		position += translation;
-		/*model = glm::translate(model, translation);*/
-		recalculateModelMatrix();
+
 	}
-private:
-	float wayPointIndex = 0;
-	float walkingSpeed = 0.001f;
-	float maxRotation = 0.1;
 	vector<glm::vec3> wayPoints; // TODO: for tests only, center point of grid units on path
+
+private:
+	float z = 0.0f;
+	float wayPointIndex = 0;
+	float walkingSpeed = 0.004f; // TODO: depends on model size.. 
+	float maxRotation = 0.1;
 	/*
 	(x | y) (3.68684 | 7.4935)
 		(x | y) adjusted(3.86812 | 7.31223) by height z 0.181271

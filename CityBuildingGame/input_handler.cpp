@@ -24,10 +24,21 @@ void InputHandler::Mouseclick(int button, int action)
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
 		try {
 			if (cursor_position.x >= 0 && cursor_position.y >= 0 && Grid->gridUnits.at((int)cursor_position.y).at((int)cursor_position.x)) {
-				Grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->objects.push_back(
-					new Fir(glm::vec3(cursor_position.x, cursor_position.y, Grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->averageHeight),
-						glm::vec3(1.0f, 1.0f, 1.0f),
-						1.0f));
+				//Grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->objects.push_back(
+				//	new Fir(glm::vec3(cursor_position.x, cursor_position.y, Grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->averageHeight),
+				//		glm::vec3(1.0f, 1.0f, 1.0f),
+				//		1.0f));
+
+				/* TODO: temp */
+				for (int i = 0; i < Grid->gridUnits.size(); i++) {
+					for (int j = 0; j < Grid->gridUnits[i].size(); j++) {
+						for (list<BoneAnimated*>::iterator it = Grid->gridUnits[i][j]->movingObjects.begin();
+							it != Grid->gridUnits[i][j]->movingObjects.end(); ++it) {
+							// to create path to walk
+							static_cast<Lumberjack*>(*it)->wayPoints.push_back(glm::vec3(cursor_position.x, cursor_position.y, Grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->averageHeight));
+						}
+					}
+				}
 			}
 		}
 		catch (const std::out_of_range & e) {
