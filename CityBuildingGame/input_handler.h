@@ -15,4 +15,7 @@ public:
 	GLFWwindow* Window;
 	Camera* Camera;
 	Grid* Grid;
+
+private:
+	bool windowFocused;
 };
