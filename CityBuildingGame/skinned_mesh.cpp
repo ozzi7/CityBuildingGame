@@ -537,7 +537,7 @@ void SkinnedMesh::BoneTransform(float timeInSeconds, std::vector<glm::mat4>& Tra
 	float TicksPerSecond = (float)(m_pScene->mAnimations[0]->mTicksPerSecond != 0 ? m_pScene->mAnimations[0]->mTicksPerSecond : 25.0f);
 
 	float TimeInTicks = timeInSeconds * TicksPerSecond;
-	float AnimationTime = fmod(TimeInTicks, animDuration);
+	float AnimationTime = (float)fmod(TimeInTicks, animDuration);
 	
 	ReadNodeHierarchy(AnimationTime, m_pScene->mRootNode, Identity);
 

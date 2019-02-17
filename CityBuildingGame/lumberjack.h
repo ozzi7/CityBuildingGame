@@ -99,9 +99,9 @@ public:
 
 private:
 	float z = 0.0f;
-	float wayPointIndex = 0;
+	int wayPointIndex = 0;
 	float walkingSpeed = 0.004f; // TODO: depends on model size.. 
-	float maxRotation = 0.1;
+	float maxRotation = 0.1f;
 	/*
 	(x | y) (3.68684 | 7.4935)
 		(x | y) adjusted(3.86812 | 7.31223) by height z 0.181271

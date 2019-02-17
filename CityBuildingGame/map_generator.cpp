@@ -41,15 +41,15 @@ void MapGenerator::generateFirs()
 	for (int i = 0; i < grid->gridHeight; ++i) {
 		for (int j = 0; j < grid->gridWidth; ++j) {
 			if (treeMap[i][j] >= 5) {
-				float scale = 1 - scale_tree(gen);
-				while (scale < 0.1f) {scale = 1 - scale_tree(gen); }
-				float posX = j + 0.5f + pos_offset_tree(gen);
-				float posY = i + 0.5f + pos_offset_tree(gen);
+				float scale = 1.0f - (float)scale_tree(gen);
+				while (scale < 0.1f) {scale = 1.0f - (float)scale_tree(gen); }
+				float posX = j + 0.5f + (float)pos_offset_tree(gen);
+				float posY = i + 0.5f + (float)pos_offset_tree(gen);
 
 				grid->gridUnits[i][j]->objects.push_back(
 					new Fir(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 						glm::vec3(scale, scale, scale),
-						rotation(gen)));
+						(float)rotation(gen)));
 			}
 		}
 	}

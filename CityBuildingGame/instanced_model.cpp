@@ -15,7 +15,7 @@ void InstancedModel::Draw(Shader &shader, vector<glm::mat4> &models)
 	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
 		meshes[i].Bind(shader, models);
-		meshes[i].Draw(models.size());
+		meshes[i].Draw((int)models.size());
 	}
 }
 // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.

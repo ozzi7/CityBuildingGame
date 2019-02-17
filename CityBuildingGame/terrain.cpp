@@ -12,10 +12,10 @@ void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::ve
 	if (currUpperLeftX != (int)upperLeft.x || currUpperLeftY != (int)upperLeft.y ||
 		currLowerRightX != (int)lowerRight.x || currLowerRightY != (int)lowerRight.y)
 	{
-		currUpperLeftX = upperLeft.x;
-		currUpperLeftY = upperLeft.y;
-		currLowerRightX = lowerRight.x;
-		currLowerRightY = lowerRight.y;
+		currUpperLeftX = (int)upperLeft.x;
+		currUpperLeftY = (int)upperLeft.y;
+		currLowerRightX = (int)lowerRight.x;
+		currLowerRightY = (int)lowerRight.y;
 		LoadVisibleGeometry(upperLeft, upperRight, lowerLeft, lowerRight);
 	}
 }
