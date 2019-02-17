@@ -9,7 +9,7 @@ class NoiseGen
 public:
 	NoiseGen();
 	~NoiseGen();
-	void GeneratePerlinNoise(vector<vector<float>>& pHeightmap, int pHeight, int pWidth,
+	void GeneratePerlinNoise(vector<vector<float>> &pHeightmap, int pHeight, int pWidth,
 		float minimumHeight, float maximumHeight, int octaveCount);
 
 	void CombineNoiseMaps(vector<vector<float>> &pHeightmap,int octaveCount);

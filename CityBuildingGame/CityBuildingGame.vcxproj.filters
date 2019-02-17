@@ -57,6 +57,9 @@
     <ClCompile Include="camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="map_generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="terrain.h">
@@ -120,6 +123,9 @@
       <Filter>Header Files\Game objects</Filter>
     </ClInclude>
     <ClInclude Include="input_handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="map_generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

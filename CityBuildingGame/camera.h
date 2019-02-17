@@ -23,7 +23,7 @@ enum Camera_Movement {
 };
 
 const float SCROLL_SPEED = 0.02f;
-const float ZOOM_DEFAULT = 5.0f;
+const float ZOOM_DEFAULT = 10.0f;
 const float ZOOM_MAX = 50.0f;
 const float ZOOM_MIN = 0.2f;
 const float VISIBLE_RANGE = 1.4f; // ~1.5 is entire screen
@@ -40,7 +40,7 @@ public:
 
 
 	Camera();
-	Camera(glm::vec3, GLFWwindow*);
+	Camera(glm::vec3 position, GLFWwindow* window);
 
 	// Returns the view matrix calculated using LookAt Matrix
 	glm::mat4 GetViewMatrix();

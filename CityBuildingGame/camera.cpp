@@ -64,8 +64,24 @@ glm::vec2 Camera::CursorPositionOnGrid()
 
 	gridPosition = cursorPosition(z);
 
+	std::cout << "(x|y) (" << gridPosition.x << "|" << gridPosition.y << ")" << std::endl;
+
+	// Outside of grid cases
+	if (gridPosition.y < 0)
+		gridPosition.y = 0;
+	if (gridPosition.x < 0)
+		gridPosition.x = 0;
+	if (gridPosition.y > (float)Grid->gridUnits.size() - 1)
+		gridPosition.y = (float)Grid->gridUnits.size() - 1;
+	if (gridPosition.x > (float)Grid->gridUnits[0].size() - 1)
+		gridPosition.x = (float)Grid->gridUnits[0].size() - 1;
+	z = Grid->gridUnits[(int)gridPosition.y][(int)gridPosition.x]->averageHeight;
+
+	// Reposition with average height of tile, until coordinates match 
+	while (z > zOld + 0.5f || z < zOld - 0.5f) 
 	{
-		std::cout << "(x|y) (" << gridPosition.x << "|" << gridPosition.y << ")" << std::endl;
+		gridPosition.x += z;
+		gridPosition.y -= z;
 
 		// Outside of grid cases
 		if (gridPosition.y < 0)
@@ -76,26 +92,6 @@ glm::vec2 Camera::CursorPositionOnGrid()
 			gridPosition.y = (float)Grid->gridUnits.size() - 1;
 		if (gridPosition.x > (float)Grid->gridUnits[0].size() - 1)
 			gridPosition.x = (float)Grid->gridUnits[0].size() - 1;
-	}
-	z = Grid->gridUnits[(int)gridPosition.y][(int)gridPosition.x]->averageHeight;
-
-	// Reposition with average height of tile, until coordinates match 
-	while (z > zOld + 0.5f || z < zOld - 0.5f) 
-	{
-		gridPosition.x += z;
-		gridPosition.y -= z;
-		{
-			// Outside of grid cases
-			if (gridPosition.y < 0)
-				gridPosition.y = 0;
-			if (gridPosition.x < 0)
-				gridPosition.x = 0;
-			if (gridPosition.y > (float)Grid->gridUnits.size() - 1)
-				gridPosition.y = (float)Grid->gridUnits.size() - 1;
-			if (gridPosition.x > (float)Grid->gridUnits[0].size() - 1)
-				gridPosition.x = (float)Grid->gridUnits[0].size() - 1;
-		}
-		gridPosition = cursorPosition(z);
 
 		zOld = z;
 		z = Grid->gridUnits[(int)gridPosition.y][(int)gridPosition.x]->averageHeight;

@@ -1,8 +1,6 @@
 #pragma once
 #include "noise_gen.h"
 
-using namespace std;
-
 NoiseGen::NoiseGen() {};
 
 void NoiseGen::GeneratePerlinNoise(vector<vector<float>> &pHeightmap, int pHeight, int pWidth,
@@ -18,7 +16,7 @@ void NoiseGen::GeneratePerlinNoise(vector<vector<float>> &pHeightmap, int pHeigh
 		{
 			vector<vector<float>> smoothNoise = vector<vector<float>>(pHeight, vector<float>(pWidth, 0));
 			for (auto &j : smoothNoise)
-				std::fill(j.begin(), j.end(), 0);
+				fill(j.begin(), j.end(), 0);
 			GenerateSmoothNoise(pHeightmap, smoothNoise, i);
 			smoothNoiseList.push_back(smoothNoise);
 		}
@@ -34,7 +32,7 @@ void NoiseGen::CombineNoiseMaps(vector<vector<float>> &pHeightmap, int octaveCou
 
 	//blend noise together
 	for (auto &i : pHeightmap)
-		std::fill(i.begin(), i.end(), 0);
+		fill(i.begin(), i.end(), 0);
 
 	NoiseGen::totalAmplitude = 0.0f;
 

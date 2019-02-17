@@ -5,17 +5,12 @@
 Grid::Grid(int aGridHeight, int aGridWidth) {
 	gridHeight = aGridHeight;
 	gridWidth = aGridWidth;
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> pos_offset_tree(-0.45, 0.45);
-	std::uniform_real_distribution<> pos_offset_grass(-0.5, 0.5);
-	std::chi_squared_distribution<> scale_tree(3.0);
-	std::uniform_real_distribution<> scale_tree_(0.03, 1.3f);
-	std::uniform_real_distribution<> scale_grass(0.9, 1.2);
-	std::uniform_real_distribution<> rotation(0, glm::two_pi<float>());
 
 	terrain = new Terrain(gridHeight, gridWidth);
+}
 
+void Grid::Init()
+{
 	/* create gridUnits */
 	for (int i = 0; i < gridHeight; ++i)
 	{
@@ -34,88 +29,12 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 		}
 	}
 
-	/* create trees using noise */
-	NoiseGen noise_gen;
-	vector<vector<float>> treeMap = vector<vector<float>>(gridHeight, vector<float>(gridWidth, 0));
-	noise_gen.GeneratePerlinNoise(treeMap, gridHeight, gridWidth, 0.0f, 10.0f, 3);
-
-	/* TODO: this is temporary & ugly*/
-	for (int i = 0; i < gridHeight; ++i) {
-		for (int j = 0; j < gridWidth; ++j) {
-			//if(treeMap[i][j] > 4.0f && treeMap[i][j] < 7.0f)
-				//gridUnits[i][j]->objects.push_back(
-					//new Chamaecyparis(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridUnits[i][j]->averageHeight),
-					/*new Palm(glm::vec3(j + 0.5f + pos_offset(gen), i + 0.5f + pos_offset(gen), gridUnits[i][j]->averageHeight),
-						glm::vec3(scale(gen), scale(gen), scale(gen)),
-						rotation(gen)));*/
-			float scale = scale_tree(gen);
-			while (scale < 0 || scale > 12) { scale = scale_tree(gen); }
-			scale = 12 - scale;
-			scale = scale / 10.0f;
-
-			if (treeMap[i][j] >= 4.5f) {
-				float posX = j + 0.5f + pos_offset_tree(gen);
-				float posY = i + 0.5f + pos_offset_tree(gen);
-
-				gridUnits[i][j]->objects.push_back(
-					new Fir(glm::vec3(posX, posY, GetHeight(posX, posY)),
-						glm::vec3(scale, scale, scale),
-						rotation(gen)));
-			}
-			scale = scale_tree(gen);
-			while (scale < 0 || scale > 12) { scale = scale_tree(gen); }
-			scale = 12 - scale;
-			scale = scale / 10.0f;
-
-			if (treeMap[i][j] >= 7.0f) {
-				float posX = j + 0.5f + pos_offset_tree(gen);
-				float posY = i + 0.5f + pos_offset_tree(gen);
-
-				gridUnits[i][j]->objects.push_back(
-					new Fir(glm::vec3(posX, posY, GetHeight(posX, posY)),
-						glm::vec3(scale, scale, scale),
-						rotation(gen)));
-			}
-			scale = scale_tree(gen);
-			while (scale < 0 || scale > 12) { scale = scale_tree(gen); }
-			scale = 12 - scale;
-			scale = scale / 10.0f;
-
-			if (treeMap[i][j] >= 8.5f) {
-				float posX = j + 0.5f + pos_offset_tree(gen);
-				float posY = i + 0.5f + pos_offset_tree(gen);
-
-				gridUnits[i][j]->objects.push_back(
-					new Fir(glm::vec3(posX, posY, GetHeight(posX, posY)),
-						glm::vec3(scale, scale, scale),
-						rotation(gen)));
-			}
-			if (treeMap[i][j] < 2.0f)
-				for (int z = 0; z < 3; ++z) {
-					float posX = j + 0.5f + pos_offset_grass(gen);
-					float posY = i + 0.5f + pos_offset_grass(gen);
-					gridUnits[i][j]->objects.push_back(
-						new Grass(glm::vec3(posX, posY, GetHeight(posX, posY)),
-							glm::vec3(scale_grass(gen), scale_grass(gen), scale_grass(gen)),
-							rotation(gen)));
-				}
-			else if (treeMap[i][j] < 3.0f)
-			gridUnits[i][j]->movingObjects.push_back(
-				new Lumberjack(glm::vec3(j + 0.5f + pos_offset_tree(gen), i + 0.5f + pos_offset_tree(gen), gridUnits[i][j]->averageHeight),
-					glm::vec3(scale_tree(gen), scale_tree(gen), scale_tree(gen)),
-					rotation(gen)));
-		}
-	}
-	//gridUnits[0][0]->movingObjects.push_back(
-	//	new Lumberjack(glm::vec3(0 + 0.5f + pos_offset_tree(gen), 0 + 0.5f + pos_offset_tree(gen), gridUnits[0][0]->averageHeight),
-	//		glm::vec3(scale_tree(gen), scale_tree(gen), scale_tree(gen)),
-	//		rotation(gen)));
-
 	/*Initialize the vectors used for determining what to render*/
 	visibleUnits0 = new vector<Unit*>(maximumVisibleUnits);
 	visibleUnits1 = new vector<Unit*>(maximumVisibleUnits);
 	visibleUnits2 = new vector<Unit*>(maximumVisibleUnits);
 }
+
 void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::vec2 &lowerLeft, glm::vec2 &lowerRight)
 {
 	/* Check if we need to recalculate visible grid */
