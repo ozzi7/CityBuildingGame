@@ -27,6 +27,7 @@ public:
 	~Terrain();
 
 	void SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
+	void CreateGeometry();
 	void Draw(Shader & shader);
 	void LoadTextures(Shader *shaderTerrain, string exePath);
 	void GenerateBuffers();
@@ -40,10 +41,8 @@ public:
 	int maximumVisibleUnits = 600 * 500;
 
 private:
-	void CreateGeometry();
 	void LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	void AddTexturesToGrid();
-	void PopulateGridWithObjects();
 	int ReloadGPUData();
 
 	GLuint VBO, VAO, EBO;
@@ -67,7 +66,7 @@ private:
 	bool reloadGPUData = false;
 	int currRenderData = 1;
 	int renderDataVertexCount = 0;
-	vector<GLfloat> *renderData0; /* Gets sent to GPU */
-	vector<GLfloat> *renderData1; /* .. */
+	vector<GLfloat> *renderData0 = new vector<GLfloat>(maximumVisibleUnits * 48); /* Gets sent to GPU */
+	vector<GLfloat> *renderData1 = new vector<GLfloat>(maximumVisibleUnits * 48); /* .. */
 	vector<unsigned int> indices;
 };

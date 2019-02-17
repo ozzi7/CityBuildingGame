@@ -30,8 +30,10 @@ class Grid
 {
 public:
 	Grid(int aGridHeight, int aGridWidth);
-	float GetHeight(float posX, float posY);
 	~Grid();
+
+	void Init();
+	float GetHeight(float posX, float posY);
 
 	void UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::vec2 &lowerLeft, glm::vec2 &lowerRight);
 

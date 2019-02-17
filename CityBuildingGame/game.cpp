@@ -17,6 +17,9 @@ Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, G
 	inputHandler->WindowFocus(true);
 
 	camera->Grid = grid;
+
+	MapGenerator* mapGenerator = new MapGenerator(grid);
+	mapGenerator->GenerateMap();
 }
 Game::~Game()
 {

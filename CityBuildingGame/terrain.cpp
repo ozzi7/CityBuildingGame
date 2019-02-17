@@ -1,17 +1,9 @@
 #include "terrain.h"
 
-Terrain::Terrain(int aGridHeight, int aGridWidth){
+Terrain::Terrain(int aGridHeight, int aGridWidth)
+{
 	gridWidth = aGridWidth;
 	gridHeight = aGridHeight;
-
-	NoiseGen noise_gen;
-	heightmap = vector<vector<float>>(gridHeight + 1, vector<float>(gridWidth + 1, 0));
-	noise_gen.GeneratePerlinNoise(heightmap, gridHeight + 1, gridWidth + 1, -2.5f, 2.5f, 6);
-
-	CreateGeometry();
-
-	renderData0 = new vector<GLfloat>(maximumVisibleUnits* 48);
-	renderData1 = new vector<GLfloat>(maximumVisibleUnits* 48);
 }
 
 void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
@@ -31,10 +23,7 @@ void Terrain::AddTexturesToGrid()
 {
 
 }
-void Terrain::PopulateGridWithObjects()
-{
 
-}
 void Terrain::Draw(Shader &shaderTerrain)
 {
 	int vertexCount = ReloadGPUData();
@@ -125,6 +114,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 				{
 					float float_i = float(i);
 					float float_j = float(j);
+
 					// x/y/z of first vertex
 					(*renderDataTemp)[index++] = float_j;
 					(*renderDataTemp)[index++] = float_i;
@@ -320,9 +310,9 @@ void Terrain::InitOpenGL(Shader* terrain_shader, string exe_path)
 }
 void Terrain::LoadTextures(Shader * terrain_shader, string exe_path)
 {
-	Model tree = Model();
+	Model grass = Model();
 	string texturesPath = exe_path + "/../terrain";
-	texture_id_grass = tree.TextureFromFile(texture_grass.c_str(), texturesPath);
+	texture_id_grass = grass.TextureFromFile(texture_grass.c_str(), texturesPath);
 
 	terrain_shader->setInt("texture1", 0);
 }
