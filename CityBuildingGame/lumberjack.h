@@ -86,8 +86,6 @@ public:
 				rotation += 2 * 3.1415;
 			rotation = -rotation; // somehow roation direction is not from +x to +y but +x to -y.. 
 			rotation = rotation + 3.1415;
-			cout << translation.x << " " << translation.y << endl;
-			cout << rotation << endl;
 			recalculateModelMatrix();
 		}
 		else {
@@ -100,7 +98,7 @@ public:
 private:
 	float z = 0.0f;
 	float wayPointIndex = 0;
-	float walkingSpeed = 0.004f; // TODO: depends on model size.. 
+	float walkingSpeed = 0.05f; // TODO: depends on model size.. 
 	float maxRotation = 0.1;
 	/*
 	(x | y) (3.68684 | 7.4935)

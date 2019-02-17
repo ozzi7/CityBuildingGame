@@ -99,17 +99,17 @@ Grid::Grid(int aGridHeight, int aGridWidth) {
 							glm::vec3(scale_grass(gen), scale_grass(gen), scale_grass(gen)),
 							rotation(gen)));
 				}
-			//else if (treeMap[i][j] < 3.0f)
-			//gridUnits[i][j]->movingObjects.push_back(
-			//	new Lumberjack(glm::vec3(j + 0.5f + pos_offset_tree(gen), i + 0.5f + pos_offset_tree(gen), gridUnits[i][j]->averageHeight),
-			//		glm::vec3(scale_tree(gen), scale_tree(gen), scale_tree(gen)),
-			//		rotation(gen)));
+			else if (treeMap[i][j] < 3.0f)
+			gridUnits[i][j]->movingObjects.push_back(
+				new Lumberjack(glm::vec3(j + 0.5f + pos_offset_tree(gen), i + 0.5f + pos_offset_tree(gen), gridUnits[i][j]->averageHeight),
+					glm::vec3(scale_tree(gen), scale_tree(gen), scale_tree(gen)),
+					rotation(gen)));
 		}
 	}
-	gridUnits[0][0]->movingObjects.push_back(
-		new Lumberjack(glm::vec3(0 + 0.5f + pos_offset_tree(gen), 0 + 0.5f + pos_offset_tree(gen), gridUnits[0][0]->averageHeight),
-			glm::vec3(scale_tree(gen), scale_tree(gen), scale_tree(gen)),
-			rotation(gen)));
+	//gridUnits[0][0]->movingObjects.push_back(
+	//	new Lumberjack(glm::vec3(0 + 0.5f + pos_offset_tree(gen), 0 + 0.5f + pos_offset_tree(gen), gridUnits[0][0]->averageHeight),
+	//		glm::vec3(scale_tree(gen), scale_tree(gen), scale_tree(gen)),
+	//		rotation(gen)));
 
 	/*Initialize the vectors used for determining what to render*/
 	visibleUnits0 = new vector<Unit*>(maximumVisibleUnits);
