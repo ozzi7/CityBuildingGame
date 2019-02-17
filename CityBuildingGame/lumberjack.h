@@ -86,8 +86,6 @@ public:
 				rotation += 2 * 3.1415;
 			rotation = -rotation; // somehow roation direction is not from +x to +y but +x to -y.. 
 			rotation = rotation + 3.1415;
-			cout << translation.x << " " << translation.y << endl;
-			cout << rotation << endl;
 			recalculateModelMatrix();
 		}
 		else {
