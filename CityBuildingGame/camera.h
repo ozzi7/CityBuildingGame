@@ -22,10 +22,8 @@ enum Camera_Movement {
 	RIGHT
 };
 
-const float ZOOM_DEFAULT = 10.0f;
 const float ZOOM_MAX = 50.0f;
 const float ZOOM_MIN = 0.2f;
-const float VISIBLE_RANGE = 1.4f; // ~1.5 is entire screen
 const float ROOT3 = (float)sqrt(3); // ROOT3 if viewing angle is 45°
 
 class Camera
@@ -38,13 +36,13 @@ public:
 	Camera();
 	Camera(glm::vec3 position, GLFWwindow* window);
 
-	// Returns the view matrix calculated using LookAt Matrix
-	glm::mat4 GetViewMatrix();
+	glm::mat4 GetViewMatrix();			// Returns the view matrix calculated using LookAt Matrix
+	glm::mat4 GetProjectionMatrix();	// Returns the projection orthographic projection matrix
 	glm::vec2 GridTopLeftVisible();
 	glm::vec2 GridTopRightVisible();
 	glm::vec2 GridBottomLeftVisible();
 	glm::vec2 GridBottomRightVisible();
-	glm::vec2 CursorPositionOnGrid();
+	glm::vec3 CursorPositionOnGrid();
 	void Scroll(Camera_Movement, float);
 	void Zoom(float);
 
@@ -53,8 +51,6 @@ private:
 	glm::vec3 right;
 	glm::vec3 lookat;
 	GLFWwindow* window;
-
-	glm::vec2 cursorPosition(float);
 };
 
 #endif

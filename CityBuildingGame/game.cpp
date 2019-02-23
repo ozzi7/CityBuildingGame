@@ -47,7 +47,7 @@ void Game::renderLoop()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		glm::mat4 projection = glm::ortho(-SCREEN_RATIO * camera->ZoomLevel, SCREEN_RATIO * camera->ZoomLevel, -1.0f * camera->ZoomLevel, 1 * camera->ZoomLevel, 0.0f, 200.0f);
+		glm::mat4 projection = camera->GetProjectionMatrix();
 		glm::mat4 view = camera->GetViewMatrix();
 
 		renderer->SetMatrices(projection, view);

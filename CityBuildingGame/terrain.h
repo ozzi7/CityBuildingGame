@@ -28,7 +28,7 @@ public:
 
 	void SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	void CreateGeometry();
-	void Draw(Shader & shader);
+	void Draw();
 	void LoadTextures(Shader *shaderTerrain, string exePath);
 	void GenerateBuffers();
 	void InitOpenGL(Shader *shaderTerrain, string exePath);

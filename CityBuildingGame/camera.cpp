@@ -19,6 +19,11 @@ glm::mat4 Camera::GetViewMatrix()
 	return glm::lookAt(Position, Position + lookat, up);
 }
 
+glm::mat4 Camera::GetProjectionMatrix()
+{
+	return glm::ortho(-SCREEN_RATIO * ZoomLevel, SCREEN_RATIO * ZoomLevel, -1.0f * ZoomLevel, 1.0f * ZoomLevel, 0.0f, 200.0f);
+}
+
 // Top left position on Grid that is visible by camera
 glm::vec2 Camera::GridTopLeftVisible()
 {
@@ -56,7 +61,7 @@ glm::vec2 Camera::GridBottomRightVisible()
 }
 
 // Current cursor position on Grid
-glm::vec2 Camera::CursorPositionOnGrid()
+glm::vec3 Camera::CursorPositionOnGrid()
 {
 	float x, y, z;
 	double window_x, window_y;
@@ -68,13 +73,12 @@ glm::vec2 Camera::CursorPositionOnGrid()
 	
 	glm::vec3 window = glm::vec3(x, y, z);
 	glm::mat4 model = GetViewMatrix();
-	glm::mat4 projection = glm::ortho(-SCREEN_RATIO * ZoomLevel, SCREEN_RATIO * ZoomLevel, -1.0f * ZoomLevel, 1.0f * ZoomLevel, 0.0f, 200.0f);
+	glm::mat4 projection = GetProjectionMatrix();
 	glm::vec4 viewport = glm::vec4(0.0f, 0.0f, (float)SCR_WIDTH, (float)SCR_HEIGHT);
 	
 	glm::vec3 result = glm::unProject(window, model, projection, viewport);
 
-	// x and y are interchanged for some reason...
-	return glm::vec2(result.x, result.y);
+	return result;
 }
 
 void Camera::Scroll(Camera_Movement direction, float yOffset)
@@ -99,31 +103,3 @@ void Camera::Zoom(float yOffset)
 		ZoomLevel = ZOOM_MAX;
 }
 
-// Calculates (x,y) coordinates on Grid, given a specific height
-glm::vec2 Camera::cursorPosition(float z)
-{
-	int window_width, window_height;
-	double window_x, window_y;
-	GLfloat x = 0.0f, y = 0.0f;
-
-	glfwGetCursorPos(window, &window_x, &window_y);
-	glfwGetWindowSize(window, &window_width, &window_height);
-
-
-	x += ((float)window_x - window_width / 2); // Cursor offset from middle of screen in X direction
-	y += ((float)window_x - window_width / 2);
-
-	x += ((float)window_y - window_height / 2) * ROOT3; // Cursor offset from middle of screen in Y direction
-	y -= ((float)window_y - window_height / 2) * ROOT3; // Screen coordinate system starts at top
-
-	x *= (ZoomLevel / window_width) * 2.515f; // Adjust for zoom
-	y *= (ZoomLevel / window_width) * 2.515f; // 2.575 = magic number
-
-	x += 0.5f * z;	// Adjust for z height
-	y -= 0.5f * z;
-
-	x += Position.x + lookat.x; // Camera offset
-	y += Position.y + lookat.y;
-
-	return glm::vec2(x, y);
-}

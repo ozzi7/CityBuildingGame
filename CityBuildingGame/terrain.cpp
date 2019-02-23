@@ -24,7 +24,7 @@ void Terrain::AddTexturesToGrid()
 
 }
 
-void Terrain::Draw(Shader &shaderTerrain)
+void Terrain::Draw()
 {
 	int vertexCount = ReloadGPUData();
 
@@ -308,7 +308,7 @@ void Terrain::InitOpenGL(Shader* terrain_shader, string exe_path)
 	LoadTextures(terrain_shader, exe_path);
 	GenerateBuffers();
 }
-void Terrain::LoadTextures(Shader * terrain_shader, string exe_path)
+void Terrain::LoadTextures(Shader* terrain_shader, string exe_path)
 {
 	Model grass = Model();
 	string texturesPath = exe_path + "/../terrain";
