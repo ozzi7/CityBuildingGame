@@ -2,14 +2,13 @@
 
 Game::Game(){};
 
-Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, GLFWwindow* aWindow, InputHandler* aInputHandler) {
-	screenRatio = aScreenRatio;
+Game::Game(string aExePath, GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	exe_path = aExePath;
 	window = aWindow;
 	inputHandler = aInputHandler;
 
-	grid = new Grid(aMapWidth, aMapHeight);
-	camera = new Camera(glm::vec3(50.0f + aMapHeight * 0.5f, -50.0f + aMapWidth * 0.5f, 50.0f), window);
+	grid = new Grid(MAP_WIDTH, MAP_HEIGHT);
+	camera = new Camera(glm::vec3(50.0f + MAP_HEIGHT * 0.5f, -50.0f + MAP_WIDTH * 0.5f, 50.0f), window);
 
 	inputHandler->Camera = camera;
 	inputHandler->Window = window;
@@ -20,6 +19,7 @@ Game::Game(int aMapWidth, int aMapHeight, float aScreenRatio, string aExePath, G
 
 	MapGenerator* mapGenerator = new MapGenerator(grid);
 	mapGenerator->GenerateMap();
+	delete mapGenerator;
 }
 Game::~Game()
 {
@@ -29,17 +29,17 @@ Game::~Game()
 
 void Game::StartGame()
 {
-	glfwMakeContextCurrent(NULL);
+	//glfwMakeContextCurrent(NULL);
 
-	std::thread threadRenderLoop(&Game::renderLoop, this);
+	std::thread threadGameLoop(&Game::gameLoop, this);
 	
-	gameLoop();
-	threadRenderLoop.join();
+	renderLoop();
+	threadGameLoop.join();
 }
 
 void Game::renderLoop()
 {
-	glfwMakeContextCurrent(window);
+	//glfwMakeContextCurrent(window);
 
 	renderer = new Renderer(exe_path);
 	
@@ -47,7 +47,7 @@ void Game::renderLoop()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		glm::mat4 projection = glm::ortho(-screenRatio * camera->ZoomLevel, screenRatio * camera->ZoomLevel, -1.0f * camera->ZoomLevel, 1 * camera->ZoomLevel, -1000.0f, 1000.0f);
+		glm::mat4 projection = glm::ortho(-SCREEN_RATIO * camera->ZoomLevel, SCREEN_RATIO * camera->ZoomLevel, -1.0f * camera->ZoomLevel, 1 * camera->ZoomLevel, 0.0f, 200.0f);
 		glm::mat4 view = camera->GetViewMatrix();
 
 		renderer->SetMatrices(projection, view);
@@ -84,7 +84,10 @@ void Game::renderLoop()
 
 		/* Render instanced objects */
 		renderer->RenderInstancedObjects();
+
 		glfwSwapBuffers(window);
+
+		glfwPollEvents();
 	}
 }
 
@@ -100,7 +103,7 @@ void Game::gameLoop()
 	std::chrono::high_resolution_clock::time_point next_game_tick(start + std::chrono::microseconds(SKIP_TICKS));
 	while (!glfwWindowShouldClose(window))
 	{
-		glfwPollEvents();
+		//glfwPollEvents();
 		inputHandler->MouseScroll();
 
 		/* TODO: temp */

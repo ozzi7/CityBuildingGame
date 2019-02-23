@@ -22,8 +22,8 @@ glm::mat4 Camera::GetViewMatrix()
 // Top left position on Grid that is visible by camera
 glm::vec2 Camera::GridTopLeftVisible()
 {
-	float x = Position.x + lookat.x - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
-	float y = Position.y + lookat.y - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
+	float x = Position.x + lookat.x - ZoomLevel * 0.5f * SCREEN_RATIO * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
+	float y = Position.y + lookat.y - ZoomLevel * 0.5f * SCREEN_RATIO * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
 
 	return glm::vec2(x, y);
 }
@@ -31,8 +31,8 @@ glm::vec2 Camera::GridTopLeftVisible()
 // Top right position on Grid that is visible by camera
 glm::vec2 Camera::GridTopRightVisible()
 {
-	float x = Position.x + lookat.x + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
-	float y = Position.y + lookat.y + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
+	float x = Position.x + lookat.x + ZoomLevel * 0.5f * SCREEN_RATIO * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
+	float y = Position.y + lookat.y + ZoomLevel * 0.5f * SCREEN_RATIO * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
 
 	return glm::vec2(x, y);
 }
@@ -40,8 +40,8 @@ glm::vec2 Camera::GridTopRightVisible()
 // Bottom left position on Grid that is visible by camera
 glm::vec2 Camera::GridBottomLeftVisible()
 {
-	float x = Position.x + lookat.x - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
-	float y = Position.y + lookat.y - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
+	float x = Position.x + lookat.x - ZoomLevel * 0.5f * SCREEN_RATIO * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
+	float y = Position.y + lookat.y - ZoomLevel * 0.5f * SCREEN_RATIO * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
 
 	return glm::vec2(x, y);
 }
@@ -49,8 +49,8 @@ glm::vec2 Camera::GridBottomLeftVisible()
 // Bottom right position on Grid that is visible by camera
 glm::vec2 Camera::GridBottomRightVisible()
 {
-	float x = Position.x + lookat.x + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
-	float y = Position.y + lookat.y + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
+	float x = Position.x + lookat.x + ZoomLevel * 0.5f * SCREEN_RATIO * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
+	float y = Position.y + lookat.y + ZoomLevel * 0.5f * SCREEN_RATIO * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
 
 	return glm::vec2(x, y);
 }
@@ -58,50 +58,23 @@ glm::vec2 Camera::GridBottomRightVisible()
 // Current cursor position on Grid
 glm::vec2 Camera::CursorPositionOnGrid()
 {
-	glm::vec2 gridPosition;
-	float z = 0.0f;
-	float zOld = z;
+	float x, y, z;
+	double window_x, window_y;
 
-	gridPosition = cursorPosition(z);
+	glfwGetCursorPos(window, &window_x, &window_y);
+	x = (float)window_x;
+	y = SCR_HEIGHT - (float)window_y;
+	glReadPixels((int)x, (int)y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
+	
+	glm::vec3 window = glm::vec3(x, y, z);
+	glm::mat4 model = GetViewMatrix();
+	glm::mat4 projection = glm::ortho(-SCREEN_RATIO * ZoomLevel, SCREEN_RATIO * ZoomLevel, -1.0f * ZoomLevel, 1.0f * ZoomLevel, 0.0f, 200.0f);
+	glm::vec4 viewport = glm::vec4(0.0f, 0.0f, (float)SCR_WIDTH, (float)SCR_HEIGHT);
+	
+	glm::vec3 result = glm::unProject(window, model, projection, viewport);
 
-	std::cout << "(x|y) (" << gridPosition.x << "|" << gridPosition.y << ")" << std::endl;
-
-	// Outside of grid cases
-	if (gridPosition.y < 0)
-		gridPosition.y = 0;
-	if (gridPosition.x < 0)
-		gridPosition.x = 0;
-	if (gridPosition.y > (float)Grid->gridUnits.size() - 1)
-		gridPosition.y = (float)Grid->gridUnits.size() - 1;
-	if (gridPosition.x > (float)Grid->gridUnits[0].size() - 1)
-		gridPosition.x = (float)Grid->gridUnits[0].size() - 1;
-	z = Grid->gridUnits[(int)gridPosition.y][(int)gridPosition.x]->averageHeight;
-
-	// Reposition with average height of tile, until coordinates match 
-	while (z > zOld + 0.5f || z < zOld - 0.5f) 
-	{
-		gridPosition.x += z;
-		gridPosition.y -= z;
-
-		// Outside of grid cases
-		if (gridPosition.y < 0)
-			gridPosition.y = 0;
-		if (gridPosition.x < 0)
-			gridPosition.x = 0;
-		if (gridPosition.y > (float)Grid->gridUnits.size() - 1)
-			gridPosition.y = (float)Grid->gridUnits.size() - 1;
-		if (gridPosition.x > (float)Grid->gridUnits[0].size() - 1)
-			gridPosition.x = (float)Grid->gridUnits[0].size() - 1;
-
-		zOld = z;
-		z = Grid->gridUnits[(int)gridPosition.y][(int)gridPosition.x]->averageHeight;
-
-		std::cout << "Adjusted grid unit" << std::endl;
-	}
-
-	std::cout << "(x|y) adjusted (" << gridPosition.x << "|" << gridPosition.y << ") by height z " << z << std::endl;
-
-	return gridPosition;
+	// x and y are interchanged for some reason...
+	return glm::vec2(result.x, result.y);
 }
 
 void Camera::Scroll(Camera_Movement direction, float yOffset)
@@ -146,8 +119,8 @@ glm::vec2 Camera::cursorPosition(float z)
 	x *= (ZoomLevel / window_width) * 2.515f; // Adjust for zoom
 	y *= (ZoomLevel / window_width) * 2.515f; // 2.575 = magic number
 
-	x += z;	// Adjust for z height
-	y -= z;
+	x += 0.5f * z;	// Adjust for z height
+	y -= 0.5f * z;
 
 	x += Position.x + lookat.x; // Camera offset
 	y += Position.y + lookat.y;

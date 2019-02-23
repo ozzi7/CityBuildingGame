@@ -2,6 +2,7 @@
 
 #include <random>
 
+#include "globals.h"
 #include "grid.h"
 #include "chamaecyparis.h"
 #include "fir.h"
@@ -22,5 +23,6 @@ private:
 	std::random_device rd;
 	vector<vector<float>> treeMap;
 
+	void generateTerrain();
 	void generateFirs();
 };

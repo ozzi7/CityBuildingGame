@@ -13,17 +13,9 @@
 
 #include <glm/glm.hpp>
 
+#include "globals.h"
 #include "game.h"
 #include "input_handler.h"
-
-// settings
-const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1080;
-
-const unsigned int MAP_WIDTH = 50;
-const unsigned int MAP_HEIGHT = 50;
-
-const float SCREEN_RATIO = (float)SCR_WIDTH / (float)SCR_HEIGHT;
 
 Game game;
 GLFWwindow* window;
@@ -46,7 +38,7 @@ int main(int argc, char* argv[])
 
 	init_glfw();
 
-	game = Game(MAP_WIDTH, MAP_HEIGHT, SCREEN_RATIO, exe_path, window, &inputHandler);
+	game = Game(exe_path, window, &inputHandler);
 	game.StartGame();
 
 	glfwTerminate();
