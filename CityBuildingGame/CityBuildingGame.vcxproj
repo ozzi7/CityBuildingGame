@@ -166,6 +166,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="fir.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="globals.h" />
     <ClInclude Include="grass.h" />
     <ClInclude Include="grid.h" />
     <ClInclude Include="input_handler.h" />
@@ -184,6 +185,9 @@
     <ClInclude Include="tree.h" />
     <ClInclude Include="visitor.h" />
     <ClInclude Include="chamaecyparis.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

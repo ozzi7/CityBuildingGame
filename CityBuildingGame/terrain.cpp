@@ -12,10 +12,10 @@ void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::ve
 	if (currUpperLeftX != (int)upperLeft.x || currUpperLeftY != (int)upperLeft.y ||
 		currLowerRightX != (int)lowerRight.x || currLowerRightY != (int)lowerRight.y)
 	{
-		currUpperLeftX = upperLeft.x;
-		currUpperLeftY = upperLeft.y;
-		currLowerRightX = lowerRight.x;
-		currLowerRightY = lowerRight.y;
+		currUpperLeftX = (int)upperLeft.x;
+		currUpperLeftY = (int)upperLeft.y;
+		currLowerRightX = (int)lowerRight.x;
+		currLowerRightY = (int)lowerRight.y;
 		LoadVisibleGeometry(upperLeft, upperRight, lowerLeft, lowerRight);
 	}
 }
@@ -24,7 +24,7 @@ void Terrain::AddTexturesToGrid()
 
 }
 
-void Terrain::Draw(Shader &shaderTerrain)
+void Terrain::Draw()
 {
 	int vertexCount = ReloadGPUData();
 
@@ -308,7 +308,7 @@ void Terrain::InitOpenGL(Shader* terrain_shader, string exe_path)
 	LoadTextures(terrain_shader, exe_path);
 	GenerateBuffers();
 }
-void Terrain::LoadTextures(Shader * terrain_shader, string exe_path)
+void Terrain::LoadTextures(Shader* terrain_shader, string exe_path)
 {
 	Model grass = Model();
 	string texturesPath = exe_path + "/../terrain";

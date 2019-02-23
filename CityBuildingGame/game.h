@@ -21,7 +21,7 @@
 class Game
 {
 public:
-	Game(int, int, float, string, GLFWwindow*, InputHandler*);
+	Game(string, GLFWwindow*, InputHandler*);
 	Game();
 	~Game();
 
@@ -35,8 +35,6 @@ private:
 	Camera* camera;
 	GLFWwindow* window;
 	InputHandler* inputHandler;
-
-	float screenRatio;
 	
 	string exe_path;
 

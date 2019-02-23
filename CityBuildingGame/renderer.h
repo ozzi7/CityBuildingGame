@@ -51,6 +51,7 @@ public:
 		std::string texture_path;
 		std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
 
+		terrain_shader = new Shader("terrain.vert", "terrain.frag");
 		mesh_shader = new Shader("mesh_shader.vert", "mesh_shader.frag");
 		skinned_mesh_shader = new Shader("skinning.vert", "skinning.frag");
 		instanced_mesh_shader = new Shader("mesh_instanced.vert", "mesh_instanced.frag");
@@ -61,18 +62,12 @@ public:
 		model_chamaecyparis = new Model(texture_path, false);
 
 		/* fir init*/
-		//texture_path = exe_path + "/../models/fir2/fir.obj";
-		////model_fir = new Model(texture_path, false);
-		//instanced_model_fir = new InstancedModel(texture_path, false);
 		texture_path = exe_path + "/../models/fir3/fir2.dae";
-		//model_fir = new Model(texture_path, false);
 		instanced_model_fir = new InstancedModel(texture_path, false);
 
-
+		/* Grass init*/
 		texture_path = exe_path + "/../models/grass/test.dae";
 		instanced_model_grass = new InstancedModel(texture_path, false);
-
-		terrain_shader = new Shader("terrain.vert", "terrain.frag");
 
 		/* Palm init*/
 		texture_path = exe_path + "/../models/palm/palm1.obj";
@@ -152,11 +147,11 @@ public:
 		lightColor.x = 1.0f;
 		lightColor.y = 1.0f;
 		lightColor.z = 1.0f;
-		glm::vec3 diffuseColor = lightColor * glm::vec3(0.65f); // decrease the influence
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.7f); // decrease the influence
 		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.5f); // low influence
 		terrain_shader->setVec3("light.ambient", ambientColor);
 		terrain_shader->setVec3("light.diffuse", diffuseColor);
-		terrain_shader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		//terrain_shader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 		//terrain_shader->setVec3("light.position", glm::vec3(100.0f, 100.0f, 40.0f));//camera->Position);
 		terrain_shader->setVec3("light.direction", glm::vec3(-1.0, -1.0, -1.0));
 		terrain_shader->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
@@ -165,7 +160,7 @@ public:
 		glm::mat4 model = glm::mat4(1.0f);
 		terrain_shader->setMat4("model", model);
 
-		terrain->Draw(*terrain_shader);
+		terrain->Draw();
 	}
 	void RenderInstancedObjects()
 	{
@@ -186,8 +181,8 @@ public:
 		lightColor.x = 1.0f;
 		lightColor.y = 1.0f;
 		lightColor.z = 1.0f;
-		glm::vec3 diffuseColor = lightColor * glm::vec3(0.6f); // decrease the influence
-		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.8f); // low influence
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.7f); // decrease the influence
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.5f); // low influence
 		instanced_mesh_shader->setVec3("light.ambient", ambientColor);
 		instanced_mesh_shader->setVec3("light.diffuse", diffuseColor);
 		//terrain_shader->setVec3("light.position", glm::vec3(100.0f, 100.0f, 40.0f));//camera->Position);

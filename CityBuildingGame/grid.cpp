@@ -41,10 +41,10 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 	if (currUpperLeftX != (int)upperLeft.x || currUpperLeftY != (int)upperLeft.y ||
 		currLowerRightX != (int)lowerRight.x || currLowerRightY != (int)lowerRight.y)
 	{
-		currUpperLeftX = upperLeft.x;
-		currUpperLeftY = upperLeft.y;
-		currLowerRightX = lowerRight.x;
-		currLowerRightY = lowerRight.y;
+		currUpperLeftX = (int)upperLeft.x;
+		currUpperLeftY = (int)upperLeft.y;
+		currLowerRightX = (int)lowerRight.x;
+		currLowerRightY = (int)lowerRight.y;
 
 		int startX = min(min((int)upperLeft.x, int(lowerLeft.x)), min((int)upperRight.x, int(lowerRight.x)));
 		int endX = max(max((int)upperLeft.x, int(lowerLeft.x)), max((int)upperRight.x, int(lowerRight.x)));
