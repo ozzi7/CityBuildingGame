@@ -9,10 +9,11 @@ public:
 	Lumberjack(glm::vec3 aPosition, glm::vec3 aScale, float aRotation)
 		: BoneAnimated(aPosition, aScale, aRotation) {
 		model = glm::translate(model, position);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
+		//model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 		model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
-		model = glm::rotate(model, -3.1416f, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, -1.5708f, glm::vec3(0.0f, 0.0f, 1.0f));
+		//model = glm::rotate(model, -3.1416f, glm::vec3(1.0f, 0.0f, 0.0f));
+		//model = glm::rotate(model, -1.5708f, glm::vec3(0.0f, 0.0f, 1.0f));
+
 		//wayPoints.push_back(glm::vec3(3.63833, 6.81779, 1.181271));
 		//wayPoints.push_back(glm::vec3(3.86907, 6.58705, 1.230742));
 		//wayPoints.push_back(glm::vec3(3.63388, 5.73592, 1.352878));
@@ -33,10 +34,10 @@ public:
 	{
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, position);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
+		//model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 		model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
-		model = glm::rotate(model, -3.1416f, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, 1.5708f + rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+		//model = glm::rotate(model, -3.1416f, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 	}
 	/* Updates the position, rotation of the lumberjack*/
 	void UpdatePosition()
@@ -82,10 +83,10 @@ public:
 
 			position += translation;
 			rotation = std::atan2f(translation.y,translation.x);
-			if (translation.y < 0)
+			if (translation.x < 0)
 				rotation += 2 * 3.1415;
-			rotation = -rotation; // somehow roation direction is not from +x to +y but +x to -y.. 
-			rotation = rotation + 3.1415;
+			rotation = rotation - 3.1415f/2.0f; // somehow roation direction is not from +x to +y but +x to -y.. 
+			//rotation = rotation + 3.1415;
 			recalculateModelMatrix();
 		}
 		else {
