@@ -1,5 +1,5 @@
-#include "rendering/stb_image.h"
-#include "rendering/instanced_model.h"
+#include "stb_image.h"
+#include "instanced_model.h"
 
 using namespace std;
 

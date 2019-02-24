@@ -17,7 +17,7 @@
 #include "terrain/noise_gen.h"
 #include "rendering/shader.h"
 #include "rendering/model.h"
-#include "gameObjects/object.h"
+#include "object.h"
 
 class Terrain : Object
 {

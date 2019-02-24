@@ -6,9 +6,9 @@
 #include <algorithm>
 
 #include "terrain.h"
-#include "gameObjects/fir.h"
-#include "gameObjects/lumberjack.h"
-#include "gameObjects/grass.h"
+#include "fir.h"
+#include "lumberjack.h"
+#include "grass.h"
 
 using namespace std;
 

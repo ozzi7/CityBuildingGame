@@ -1,5 +1,5 @@
 #pragma once
-#include "gameObjects/object.h"
+#include "object.h"
 
 Object::Object(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 {

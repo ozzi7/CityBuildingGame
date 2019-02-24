@@ -1,5 +1,5 @@
 #pragma once
-#include "terrain/noise_gen.h"
+#include "terrain.h"
 
 NoiseGen::NoiseGen() {};
 

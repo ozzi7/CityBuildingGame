@@ -13,56 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Game objects">
-      <UniqueIdentifier>{b0599c32-bc38-4126-afc9-e17c0016d054}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="grid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="object.cpp">
-      <Filter>Source Files\Game objects</Filter>
-    </ClCompile>
-    <ClCompile Include="input_handler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="terrain\map_generator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="terrain\noise_gen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="terrain\terrain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="terrain\tree_generator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="rendering\instanced_model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="rendering\model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="rendering\skinned_mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gameObjects\object.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="triple_buffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
@@ -71,25 +21,34 @@
     <ClInclude Include="game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="input_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="globals.h">
+    <ClInclude Include="triple_buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="terrain\map_generator.h">
+    <ClInclude Include="gameObjects\bone_animated.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="terrain\noise_gen.h">
+    <ClInclude Include="gameObjects\fir.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="terrain\terrain.h">
+    <ClInclude Include="gameObjects\grass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="terrain\tree_generator.h">
+    <ClInclude Include="gameObjects\lumberjack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gameObjects\object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gameObjects\tree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="rendering\instanced_model.h">
@@ -113,69 +72,61 @@
     <ClInclude Include="rendering\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gameObjects\bone_animated.h">
+    <ClInclude Include="terrain\map_generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gameObjects\fir.h">
+    <ClInclude Include="terrain\noise_gen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gameObjects\grass.h">
+    <ClInclude Include="terrain\terrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gameObjects\lumberjack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="gameObjects\object.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="gameObjects\tree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="triple_buffer.h">
+    <ClInclude Include="terrain\tree_generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-    <None Include="shaders\materials.frag" />
-    <None Include="shaders\materials.vert" />
-    <None Include="shaders\mesh_instanced.frag" />
-    <None Include="shaders\mesh_instanced.vert" />
-    <None Include="shaders\mesh_instanced_depth.frag" />
-    <None Include="shaders\mesh_instanced_depth.vert" />
-    <None Include="shaders\mesh_shader.frag" />
-    <None Include="shaders\mesh_shader.vert" />
-    <None Include="shaders\shadow_mapping_depth.frag" />
-    <None Include="shaders\shadow_mapping_depth.vert" />
-    <None Include="shaders\skinning.frag" />
-    <None Include="shaders\skinning.vert" />
-    <None Include="shaders\terrain.frag" />
-    <None Include="shaders\terrain.vert" />
-    <None Include="x64\Debug\vc141.idb" />
-    <None Include="x64\Debug\vc141.pdb" />
-    <None Include="x64\Release\vc141.pdb" />
-    <None Include="Debug\CityBuildingGame.lastbuildstate" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="x64\Debug\CityBuildingGame.Build.CppClean.log" />
-    <Text Include="x64\Debug\CityBuildingGame.log" />
-    <Text Include="x64\Release\CityBuildingGame.Build.CppClean.log" />
-    <Text Include="x64\Release\CityBuildingGame.log" />
-    <Text Include="Debug\CityBuildingGame.log" />
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="x64\Release\camera.obj" />
-    <Object Include="x64\Release\game.obj" />
-    <Object Include="x64\Release\grid.obj" />
-    <Object Include="x64\Release\input_handler.obj" />
-    <Object Include="x64\Release\instanced_model.obj" />
-    <Object Include="x64\Release\main.obj" />
-    <Object Include="x64\Release\map_generator.obj" />
-    <Object Include="x64\Release\mesh.obj" />
-    <Object Include="x64\Release\model.obj" />
-    <Object Include="x64\Release\noise_gen.obj" />
-    <Object Include="x64\Release\object.obj" />
-    <Object Include="x64\Release\skinned_mesh.obj" />
-    <Object Include="x64\Release\terrain.obj" />
+    <ClCompile Include="camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input_handler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="triple_buffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gameObjects\object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\instanced_model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\skinned_mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="terrain\map_generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="terrain\noise_gen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="terrain\terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="terrain\tree_generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

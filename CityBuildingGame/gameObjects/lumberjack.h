@@ -1,5 +1,5 @@
 #pragma once
-#include "gameObjects/bone_animated.h"
+#include "bone_animated.h"
 #include <math.h> 
 
 class Lumberjack : public BoneAnimated

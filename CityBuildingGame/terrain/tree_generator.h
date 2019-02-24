@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
 
-#include "gameObjects/tree.h"
-#include "gameObjects/fir.h"
+#include <tree.h>
+#include "fir.h"
 
 class TreeGenerator
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include <gameObjects\object.h>
+#include <object.h>
 
 class BoneAnimated : public Object
 {

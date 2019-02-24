@@ -1,4 +1,4 @@
-#include "terrain/tree_generator.h"
+#include "tree_generator.h"
 
 
 

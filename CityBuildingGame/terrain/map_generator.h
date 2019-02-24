@@ -2,12 +2,12 @@
 
 #include <random>
 
-#include "globals.h"
+#include <globals.h>
 #include "grid.h"
-#include "gameObjects/fir.h"
-#include "gameObjects/palm.h"
-#include "gameObjects/lumberjack.h"
-#include "gameObjects/grass.h"
+#include "fir.h"
+#include "palm.h"
+#include "lumberjack.h"
+#include "grass.h"
 
 class MapGenerator {
 public:

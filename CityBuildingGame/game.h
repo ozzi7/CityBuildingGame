@@ -14,7 +14,7 @@
 
 #include "camera.h"
 #include "grid.h"
-#include "rendering/renderer.h"
+#include "renderer.h"
 #include "input_handler.h"
 #include "map_generator.h"
 
