@@ -37,6 +37,7 @@
     <ClInclude Include="rendering\shader.h" />
     <ClInclude Include="rendering\skinned_mesh.hpp" />
     <ClInclude Include="rendering\stb_image.h" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="terrain\map_generator.h" />
     <ClInclude Include="terrain\noise_gen.h" />
     <ClInclude Include="terrain\terrain.h" />
@@ -53,6 +54,10 @@
     <ClCompile Include="rendering\instanced_model.cpp" />
     <ClCompile Include="rendering\model.cpp" />
     <ClCompile Include="rendering\skinned_mesh.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="terrain\map_generator.cpp" />
     <ClCompile Include="terrain\noise_gen.cpp" />
     <ClCompile Include="terrain\terrain.cpp" />
@@ -147,7 +152,8 @@
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -182,6 +188,8 @@
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp14</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

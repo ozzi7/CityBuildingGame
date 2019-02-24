@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "input_handler.h"
 
 void InputHandler::Keypress(int button, int action)

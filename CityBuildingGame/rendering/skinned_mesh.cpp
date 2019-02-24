@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "skinned_mesh.hpp"
 #include "stb_image.h"
 
