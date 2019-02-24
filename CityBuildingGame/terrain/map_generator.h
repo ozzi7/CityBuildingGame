@@ -4,7 +4,6 @@
 
 #include "globals.h"
 #include "grid.h"
-#include "chamaecyparis.h"
 #include "gameObjects/fir.h"
 #include "gameObjects/palm.h"
 #include "gameObjects/lumberjack.h"

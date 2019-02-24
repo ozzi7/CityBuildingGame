@@ -1,6 +1,5 @@
 #pragma once
 #include "gameObjects/bone_animated"
-#include "visitor.h"
 #include <math.h> 
 
 class Lumberjack : public BoneAnimated
@@ -25,10 +24,7 @@ public:
 		//wayPoints.push_back(glm::vec3(4.44139, 3.56043, 1.508691));
 		//wayPoints.push_back(glm::vec3(4.84637, 3.82603, 1.508691));
 	};
-	void Accept(Visitor &v)
-	{
-		v.Visit(this);
-	};
+
 	/* Updates the model matrix */
 	void recalculateModelMatrix()
 	{

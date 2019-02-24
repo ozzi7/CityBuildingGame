@@ -1,7 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "object.h"
-#include "visitor.h"
 
 class Tree : public Object
 {

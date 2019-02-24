@@ -1,6 +1,5 @@
 #pragma once
 #include "tree.h"
-#include "visitor.h"
 
 class Grass : public Tree
 {
@@ -13,9 +12,5 @@ public:
 		model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));
 		model = glm::scale(model, scale);
 		model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-	};
-	void Accept(Visitor &v)
-	{
-		v.Visit(this);
 	};
 };

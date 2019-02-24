@@ -1,4 +1,4 @@
-#include "map_generator.h"
+#include "terrain/map_generator.h"
 
 
 MapGenerator::MapGenerator(Grid* aGrid)

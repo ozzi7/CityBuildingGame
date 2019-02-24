@@ -14,7 +14,7 @@
 #include <math.h>
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "noise_gen.h"
+#include "terrain/noise_gen.h"
 #include "rendering/shader.h"
 #include "rendering/model.h"
 #include "visitor.h"
