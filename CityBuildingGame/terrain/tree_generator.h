@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-#include <tree.h>
+#include "tree.h"
 #include "fir.h"
 
 class TreeGenerator

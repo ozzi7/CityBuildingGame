@@ -5,7 +5,6 @@
 #include <globals.h>
 #include "grid.h"
 #include "fir.h"
-#include "palm.h"
 #include "lumberjack.h"
 #include "grass.h"
 

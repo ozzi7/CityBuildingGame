@@ -7,7 +7,6 @@
 // Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
 
-#include "visitor.h"
 #include "terrain.h"
 #include "shader.h"
 #include "model.h"
@@ -15,9 +14,7 @@
 #include "instanced_model.h"
 
 #include "tree.h"
-#include "chamaecyparis.h"
 #include "fir.h"
-#include "palm.h"
 #include "lumberjack.h"
 #include "grass.h"
 
@@ -26,12 +23,10 @@ struct renderData {
 public:
 	vector<glm::mat4> models;
 };
-class Renderer : public Visitor
+class Renderer
 {
 public:
-	Model *model_chamaecyparis;
 	Model *model_fir;
-	Model *model_palm;
 
 	SkinnedMesh *mesh_lumberjack;
 	InstancedModel *instanced_model_fir;
@@ -57,10 +52,6 @@ public:
 		instanced_mesh_shader = new Shader("mesh_instanced.vert", "mesh_instanced.frag");
 		shadow_map_shader = new Shader("shadow_mapping_depth.vert", "shadow_mapping_depth.frag");
 
-		/* Chamaecyparis init*/
-		texture_path = exe_path + "/../models/Chamaecyparis/Tree Chamaecyparis N161216.3ds";
-		model_chamaecyparis = new Model(texture_path, false);
-
 		/* fir init*/
 		texture_path = exe_path + "/../models/fir3/fir2.dae";
 		instanced_model_fir = new InstancedModel(texture_path, false);
@@ -68,10 +59,6 @@ public:
 		/* Grass init*/
 		texture_path = exe_path + "/../models/grass/test.dae";
 		instanced_model_grass = new InstancedModel(texture_path, false);
-
-		/* Palm init*/
-		texture_path = exe_path + "/../models/palm/palm1.obj";
-		model_palm = new Model(texture_path, false);
 
 		/* lumberjack init*/
 		//texture_path = exe_path + "/../models/zombie/Zombie.fbx";
@@ -108,23 +95,9 @@ public:
 		glDepthMask(TRUE);
 	}
 	void Visit(Tree *tree) {};
-	void Visit(Chamaecyparis *chamaecyparis)
-	{
-		mesh_shader->use();
-		mesh_shader->setMat4("model", chamaecyparis->model);
-
-		model_chamaecyparis->Draw(*mesh_shader);
-	};
 	void Visit(Fir *fir)
 	{
 		dataFir.models.push_back(fir->model);
-	};
-	void Visit(Palm *palm)
-	{
-		mesh_shader->use();
-		mesh_shader->setMat4("model", palm->model);
-
-		model_palm->Draw(*mesh_shader);
 	};
 	void Visit(Grass *grass)
 	{
@@ -224,7 +197,6 @@ public:
 	}
 	~Renderer()
 	{
-		delete model_chamaecyparis;
 		delete model_fir;
 		delete mesh_lumberjack;
 		delete terrain_shader;
