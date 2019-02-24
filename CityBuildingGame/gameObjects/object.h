@@ -16,6 +16,6 @@ public:
 	
 	virtual void Accept(class Visitor &v) = 0;
 
-private: 
+protected:
 	void recalculateModelMatix();
 };

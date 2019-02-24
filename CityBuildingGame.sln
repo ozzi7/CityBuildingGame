@@ -6,22 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CityBuildingGame", "CityBuildingGame\CityBuildingGame.vcxproj", "{7BFA9DB1-C1C7-4774-B08F-6F86CDF05BEF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BA1CC948-9E99-4878-A1AB-C9BD999267F3}"
-	ProjectSection(SolutionItems) = preProject
-		CityBuildingGame\materials.frag = CityBuildingGame\materials.frag
-		CityBuildingGame\materials.vert = CityBuildingGame\materials.vert
-		CityBuildingGame\mesh_instanced.frag = CityBuildingGame\mesh_instanced.frag
-		CityBuildingGame\mesh_instanced.vert = CityBuildingGame\mesh_instanced.vert
-		CityBuildingGame\mesh_instanced_depth.frag = CityBuildingGame\mesh_instanced_depth.frag
-		CityBuildingGame\mesh_instanced_depth.vert = CityBuildingGame\mesh_instanced_depth.vert
-		CityBuildingGame\mesh_shader.frag = CityBuildingGame\mesh_shader.frag
-		CityBuildingGame\mesh_shader.vert = CityBuildingGame\mesh_shader.vert
-		CityBuildingGame\shadow_mapping_depth.frag = CityBuildingGame\shadow_mapping_depth.frag
-		CityBuildingGame\shadow_mapping_depth.vert = CityBuildingGame\shadow_mapping_depth.vert
-		CityBuildingGame\skinning.frag = CityBuildingGame\skinning.frag
-		CityBuildingGame\skinning.vert = CityBuildingGame\skinning.vert
-		CityBuildingGame\terrain.frag = CityBuildingGame\terrain.frag
-		CityBuildingGame\terrain.vert = CityBuildingGame\terrain.vert
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

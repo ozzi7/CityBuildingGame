@@ -6,6 +6,7 @@ Object::Object(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 	position = aPosition;
 	scale = aScale;
 	rotation = aRotation;
+
 	recalculateModelMatix();
 }
 Object::Object() {};

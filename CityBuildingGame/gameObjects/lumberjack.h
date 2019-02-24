@@ -1,11 +1,11 @@
 #pragma once
-#include "gameObjects/bone_animated"
+#include "gameObjects/bone_animated.h"
 #include <math.h> 
 
 class Lumberjack : public BoneAnimated
 {
 public:
-	Lumberjack(glm::vec3 aPosition, glm::vec3 aScale, float aRotation)
+	Lumberjack(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 		: BoneAnimated(aPosition, aScale, aRotation) {
 		model = glm::translate(model, position);
 		//model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
@@ -25,16 +25,6 @@ public:
 		//wayPoints.push_back(glm::vec3(4.84637, 3.82603, 1.508691));
 	};
 
-	/* Updates the model matrix */
-	void recalculateModelMatrix()
-	{
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, position);
-		//model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
-		model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
-		//model = glm::rotate(model, -3.1416f, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-	}
 	/* Updates the position, rotation of the lumberjack*/
 	void UpdatePosition()
 	{
@@ -78,12 +68,12 @@ public:
 			}
 
 			position += translation;
-			rotation = std::atan2f(translation.y,translation.x);
+			rotation.z = std::atan2f(translation.y,translation.x);
 			if (translation.x < 0)
 				rotation += 2 * 3.1415;
 			rotation = rotation - 3.1415f/2.0f; // somehow roation direction is not from +x to +y but +x to -y.. 
 			//rotation = rotation + 3.1415;
-			recalculateModelMatrix();
+			recalculateModelMatix();
 		}
 		else {
 			// arrived previously already
