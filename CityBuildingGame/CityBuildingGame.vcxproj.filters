@@ -13,24 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Game objects">
-      <UniqueIdentifier>{12c5ace5-9e3e-4299-bc45-ab9087395b03}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game objects">
       <UniqueIdentifier>{b0599c32-bc38-4126-afc9-e17c0016d054}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="terrain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mesh.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game.cpp">
@@ -39,17 +27,8 @@
     <ClCompile Include="grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="noise_gen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="skinned_mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="object.cpp">
       <Filter>Source Files\Game objects</Filter>
-    </ClCompile>
-    <ClCompile Include="instanced_model.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="input_handler.cpp">
       <Filter>Source Files</Filter>
@@ -57,75 +36,21 @@
     <ClCompile Include="camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="map_generator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="terrain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fir.h">
-      <Filter>Header Files\Game objects</Filter>
-    </ClInclude>
-    <ClInclude Include="tree.h">
-      <Filter>Header Files\Game objects</Filter>
-    </ClInclude>
     <ClInclude Include="grid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="noise_gen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="visitor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="object.h">
-      <Filter>Header Files\Game objects</Filter>
-    </ClInclude>
-    <ClInclude Include="chamaecyparis.h">
-      <Filter>Header Files\Game objects</Filter>
-    </ClInclude>
-    <ClInclude Include="palm.h">
-      <Filter>Header Files\Game objects</Filter>
-    </ClInclude>
-    <ClInclude Include="lumberjack.h">
-      <Filter>Header Files\Game objects</Filter>
-    </ClInclude>
-    <ClInclude Include="skinned_mesh.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="bone_animated.h">
-      <Filter>Header Files\Game objects</Filter>
-    </ClInclude>
-    <ClInclude Include="instanced_model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="grass.h">
-      <Filter>Header Files\Game objects</Filter>
-    </ClInclude>
     <ClInclude Include="input_handler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="map_generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="globals.h">

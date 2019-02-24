@@ -15,10 +15,10 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "noise_gen.h"
-#include "shader.h"
-#include "model.h"
+#include "rendering/shader.h"
+#include "rendering/model.h"
 #include "visitor.h"
-#include "object.h"
+#include "gameObjects/object.h"
 
 class Terrain : Object
 {

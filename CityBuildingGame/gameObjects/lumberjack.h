@@ -1,5 +1,5 @@
 #pragma once
-#include "bone_animated.h"
+#include "gameObjects/bone_animated"
 #include "visitor.h"
 #include <math.h> 
 

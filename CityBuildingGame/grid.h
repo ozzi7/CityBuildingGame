@@ -6,11 +6,10 @@
 #include <algorithm>
 
 #include "terrain.h"
-#include "chamaecyparis.h"
-#include "fir.h"
-#include "palm.h"
+#include "gameObjects/fir.h"
+#include "gameObjects/palm.h"
 #include "lumberjack.h"
-#include "grass.h"
+#include "gameObjects/grass.h"
 
 using namespace std;
 

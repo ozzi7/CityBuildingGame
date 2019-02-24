@@ -5,10 +5,10 @@
 #include "globals.h"
 #include "grid.h"
 #include "chamaecyparis.h"
-#include "fir.h"
-#include "palm.h"
+#include "gameObjects/fir.h"
+#include "gameObjects/palm.h"
 #include "lumberjack.h"
-#include "grass.h"
+#include "gameObjects/grass.h"
 
 class MapGenerator {
 public:
