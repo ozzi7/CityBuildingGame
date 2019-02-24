@@ -8,6 +8,7 @@
 !*/
 
 # Ignore files with extension `.class` & `.sm`
+*.db
 *.exe
 *.log
 *.tlog

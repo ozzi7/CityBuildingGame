@@ -8,7 +8,7 @@
 #include "terrain.h"
 #include "gameObjects/fir.h"
 #include "gameObjects/palm.h"
-#include "lumberjack.h"
+#include "gameObjects/lumberjack.h"
 #include "gameObjects/grass.h"
 
 using namespace std;

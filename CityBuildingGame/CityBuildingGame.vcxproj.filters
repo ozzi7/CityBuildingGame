@@ -47,9 +47,6 @@
     <ClInclude Include="grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="visitor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="input_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
