@@ -6,7 +6,6 @@ Camera::Camera() {};
 Camera::Camera(glm::vec3 position, GLFWwindow* aWindow)
 {
 	Position = position;
-	ZoomLevel = ZOOM_DEFAULT;
 	window = aWindow;
 	up = glm::vec3(-1.0f, 1.0f, 0.0f);
 	right = glm::vec3(1.0f, 1.0f, 0.0f);

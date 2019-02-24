@@ -12,8 +12,8 @@
 #include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "camera.h"
 #include "grid.h"
+#include "camera.h"
 #include "renderer.h"
 #include "input_handler.h"
 #include "map_generator.h"

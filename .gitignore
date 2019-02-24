@@ -296,3 +296,9 @@ x64/Release/CityBuildingGame.exe.lastcodeanalysissucceeded
 x64/models/fir3/.mayaSwatches/branch.png_hcm.swatch
 x64/models/fir3/.mayaSwatches/bark.jpg_hcm.swatch
 *.vcxproj
+
+/CodeGraphData/*
+
+
+CityBuildingGame/ClassDiagram.cd
+x64/Debug/CityBuildingGame.exe.lastcodeanalysissucceeded

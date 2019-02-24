@@ -30,7 +30,7 @@ class Camera
 {
 public:
 	glm::vec3 Position;
-	float ZoomLevel;
+	float ZoomLevel = ZOOM_DEFAULT;
 	Grid* Grid;
 
 	Camera();

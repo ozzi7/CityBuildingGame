@@ -35,7 +35,7 @@ public:
 	Shader *mesh_shader;
 	Shader *skinned_mesh_shader;
 	Shader *instanced_mesh_shader;
-	Shader *shadow_map_shader;
+	//Shader *shadow_map_shader;
 
 	float z = 0.0f;
 	renderData dataFir;
@@ -46,11 +46,11 @@ public:
 		std::string texture_path;
 		std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
 
-		terrain_shader = new Shader("terrain.vert", "terrain.frag");
-		mesh_shader = new Shader("mesh_shader.vert", "mesh_shader.frag");
-		skinned_mesh_shader = new Shader("skinning.vert", "skinning.frag");
-		instanced_mesh_shader = new Shader("mesh_instanced.vert", "mesh_instanced.frag");
-		shadow_map_shader = new Shader("shadow_mapping_depth.vert", "shadow_mapping_depth.frag");
+		terrain_shader = new Shader("shaders/terrain.vert", "shaders/terrain.frag");
+		mesh_shader = new Shader("shaders/mesh_shader.vert", "shaders/mesh_shader.frag");
+		skinned_mesh_shader = new Shader("shaders/skinning.vert", "shaders/skinning.frag");
+		instanced_mesh_shader = new Shader("shaders/mesh_instanced.vert", "shaders/mesh_instanced.frag");
+		//shadow_map_shader = new Shader("shadow_mapping_depth.vert", "shadow_mapping_depth.frag");
 
 		/* fir init*/
 		texture_path = exe_path + "/../models/fir3/fir2.dae";
