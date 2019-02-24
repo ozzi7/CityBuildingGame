@@ -16,7 +16,7 @@ void MapGenerator::GenerateMap()
 
 	grid->gridUnits[0][0]->movingObjects.push_back(
 		new Lumberjack(glm::vec3(0.5f, 0.5f, grid->gridUnits[0][0]->averageHeight),
-			glm::vec3(1, 1, 1), 0));
+			glm::vec3(1, 1, 1), glm::vec3(0, 0, 0)));
 }
 
 void MapGenerator::generateTerrain()
@@ -53,7 +53,7 @@ void MapGenerator::generateFirs()
 				grid->gridUnits[i][j]->objects.push_back(
 					new Fir(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 						glm::vec3(scale, scale, scale),
-						(float)rotation(gen)));
+						glm::vec3(0, 0, rotation(gen))));
 			}
 		}
 	}

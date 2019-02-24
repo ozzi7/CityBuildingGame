@@ -31,8 +31,6 @@ public:
 	void LoadTextures(Shader *shaderTerrain, string exePath);
 	void GenerateBuffers();
 	void InitOpenGL(Shader *shaderTerrain, string exePath);
-	void Accept(Visitor &v);
-
 	vector<vector<float>> heightmap;
 
 	/* Defines the size of renderData0, renderData1 (main memory buffers) in terms of tiles

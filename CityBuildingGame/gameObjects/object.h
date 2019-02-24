@@ -13,8 +13,6 @@ public:
 	glm::vec3 scale;
 	glm::vec3 rotation;
 	glm::mat4 model = glm::mat4(1.0f);
-	
-	virtual void Accept(class Visitor &v) = 0;
 
 protected:
 	void recalculateModelMatix();

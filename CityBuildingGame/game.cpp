@@ -54,7 +54,7 @@ void Game::renderLoop()
 		renderer->OpenGLStart();
 
 		/* Render terrain */
-		grid->terrain->Accept(*renderer);
+		//grid->terrain->Accept(*renderer);
 
 		/* TODO: write a class which handles 3 buffers and mutex to exchange*/
 		grid->visibleUnitsMutex.lock();
@@ -73,14 +73,14 @@ void Game::renderLoop()
 		grid->visibleUnitsMutex.unlock();
 
 		/* Render dynamic objects */
-		for (int i = 0; i < nofUnits; i++) {
+		/*for (int i = 0; i < nofUnits; i++) {
 			for (list<Object*>::iterator it = (*visibleUnitsTemp)[i]->objects.begin(); it != (*visibleUnitsTemp)[i]->objects.end(); ++it) {
 				(*it)->Accept(*renderer);
 			}
 			for (list<BoneAnimated*>::iterator it = (*visibleUnitsTemp)[i]->movingObjects.begin(); it != (*visibleUnitsTemp)[i]->movingObjects.end(); ++it) {
 				(*it)->Accept(*renderer);
 			}
-		}
+		}*/
 
 		/* Render instanced objects */
 		renderer->RenderInstancedObjects();
