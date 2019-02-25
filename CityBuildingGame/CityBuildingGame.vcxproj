@@ -53,6 +53,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="rendering\instanced_model.cpp" />
     <ClCompile Include="rendering\model.cpp" />
+    <ClCompile Include="rendering\shader.cpp" />
     <ClCompile Include="rendering\skinned_mesh.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

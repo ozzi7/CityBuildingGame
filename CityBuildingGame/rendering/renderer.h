@@ -1,10 +1,7 @@
 #pragma once
 
-// Include GLM, math library
 #include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
-
-// Include GLFW, implements openGL
 #include <GLFW/glfw3.h>
 
 #include "terrain.h"
@@ -26,7 +23,7 @@ public:
 class Renderer
 {
 public:
-	Model *model_fir;
+	//Model *model_fir;
 
 	SkinnedMesh *mesh_lumberjack;
 	InstancedModel *instanced_model_fir;
@@ -197,8 +194,8 @@ public:
 	}
 	~Renderer()
 	{
-		delete model_fir;
-		delete mesh_lumberjack;
-		delete terrain_shader;
+		//delete model_fir;
+		//delete mesh_lumberjack;
+		//delete terrain_shader;
 	}
 };
