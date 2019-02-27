@@ -15,7 +15,7 @@ void Grid::Init()
 	/* create gridUnits */
 	for (int i = 0; i < gridHeight; ++i)
 	{
-		vector<Unit*> temp = vector<Unit*>();
+		std::vector<Unit*> temp = std::vector<Unit*>();
 		for (int j = 0; j < gridWidth; ++j)
 		{
 			temp.push_back(new Unit());
@@ -31,9 +31,9 @@ void Grid::Init()
 	}
 
 	/*Initialize the vectors used for determining what to render*/
-	visibleUnits0 = new vector<Unit*>(maximumVisibleUnits);
-	visibleUnits1 = new vector<Unit*>(maximumVisibleUnits);
-	visibleUnits2 = new vector<Unit*>(maximumVisibleUnits);
+	visibleUnits0 = new std::vector<Unit*>(maximumVisibleUnits);
+	visibleUnits1 = new std::vector<Unit*>(maximumVisibleUnits);
+	visibleUnits2 = new std::vector<Unit*>(maximumVisibleUnits);
 }
 
 void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::vec2 &lowerLeft, glm::vec2 &lowerRight)
@@ -47,12 +47,12 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 		currLowerRightX = (int)lowerRight.x;
 		currLowerRightY = (int)lowerRight.y;
 
-		int startX = min(min((int)upperLeft.x, int(lowerLeft.x)), min((int)upperRight.x, int(lowerRight.x)));
-		int endX = max(max((int)upperLeft.x, int(lowerLeft.x)), max((int)upperRight.x, int(lowerRight.x)));
-		int startY = min(min((int)upperLeft.y, int(lowerLeft.y)), min((int)upperRight.y, int(lowerRight.y)));
-		int endY = max(max((int)upperLeft.y, int(lowerLeft.y)), max((int)upperRight.y, int(lowerRight.y)));
+		int startX = std::min(std::min((int)upperLeft.x, int(lowerLeft.x)), std::min((int)upperRight.x, int(lowerRight.x)));
+		int endX = std::max(std::max((int)upperLeft.x, int(lowerLeft.x)), std::max((int)upperRight.x, int(lowerRight.x)));
+		int startY = std::min(std::min((int)upperLeft.y, int(lowerLeft.y)), std::min((int)upperRight.y, int(lowerRight.y)));
+		int endY = std::max(std::max((int)upperLeft.y, int(lowerLeft.y)), std::max((int)upperRight.y, int(lowerRight.y)));
 
-		vector<Unit*> *visibleUnitsTemp;
+		std::vector<Unit*> *visibleUnitsTemp;
 		visibleUnitsMutex.lock();
 		if (visibleUnitsToFill == 0)
 			visibleUnitsTemp = visibleUnits0;
@@ -63,9 +63,9 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 		visibleUnitsMutex.unlock();
 
 		int index = 0;
-		for (int i = max(0, startY + 1); i <= min(gridHeight - 1, endY); ++i)
+		for (int i = std::max(0, startY + 1); i <= std::min(gridHeight - 1, endY); ++i)
 		{
-			for (int j = max(0, startX + 1); j <= min(gridWidth - 1, endX); ++j)
+			for (int j = std::max(0, startX + 1); j <= std::min(gridWidth - 1, endX); ++j)
 			{
 				if (index < maximumVisibleUnits)
 				{
@@ -143,7 +143,7 @@ Grid::~Grid() {
 }
 
 Unit::Unit() {
-	objects = list<Object*>();
+	objects = std::list<Object*>();
 }
 Unit::~Unit() {
 	for (auto it = objects.begin(); it != objects.end(); ++it)

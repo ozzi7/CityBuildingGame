@@ -4,7 +4,7 @@
 
 NoiseGen::NoiseGen() {};
 
-void NoiseGen::GeneratePerlinNoise(vector<vector<float>> &pHeightmap, int pHeight, int pWidth,
+void NoiseGen::GeneratePerlinNoise(std::vector<std::vector<float>> &pHeightmap, int pHeight, int pWidth,
 		float minimumHeight, float maximumHeight, int octaveCount)
 	{
 		width = pWidth;
@@ -15,7 +15,7 @@ void NoiseGen::GeneratePerlinNoise(vector<vector<float>> &pHeightmap, int pHeigh
 		//generate smooth noise
 		for (int i = 0; i < octaveCount; i++)
 		{
-			vector<vector<float>> smoothNoise = vector<vector<float>>(pHeight, vector<float>(pWidth, 0));
+			std::vector<std::vector<float>> smoothNoise = std::vector<std::vector<float>>(pHeight, std::vector<float>(pWidth, 0));
 			for (auto &j : smoothNoise)
 				fill(j.begin(), j.end(), 0);
 			GenerateSmoothNoise(pHeightmap, smoothNoise, i);
@@ -26,7 +26,7 @@ void NoiseGen::GeneratePerlinNoise(vector<vector<float>> &pHeightmap, int pHeigh
 
 		Rescale(pHeightmap, minimumHeight, maximumHeight);
 	}
-void NoiseGen::CombineNoiseMaps(vector<vector<float>> &pHeightmap, int octaveCount)
+void NoiseGen::CombineNoiseMaps(std::vector<std::vector<float>> &pHeightmap, int octaveCount)
 {
 	float persistence = 0.5f;
 	float amplitude = 1.0f;
@@ -53,7 +53,7 @@ void NoiseGen::CombineNoiseMaps(vector<vector<float>> &pHeightmap, int octaveCou
 	}
 }
 
-void NoiseGen::GenerateWhiteNoise(vector<vector<float>> &pHeightmap)
+void NoiseGen::GenerateWhiteNoise(std::vector<std::vector<float>> &pHeightmap)
 {
 	srand((unsigned)time(0)); // seed random numbers
 
@@ -65,8 +65,8 @@ void NoiseGen::GenerateWhiteNoise(vector<vector<float>> &pHeightmap)
 		}
 	}
 }
-void NoiseGen::GenerateSmoothNoise(vector<vector<float>> &baseNoise,
-	vector<vector<float>> &smoothNoise, int octave)
+void NoiseGen::GenerateSmoothNoise(std::vector<std::vector<float>> &baseNoise,
+	std::vector<std::vector<float>> &smoothNoise, int octave)
 {
 	int samplePeriod = 1 << octave; // calculates 2 ^ k
 	float sampleFrequency = 1.0f / samplePeriod;
@@ -103,7 +103,7 @@ float NoiseGen::Interpolate(float x0, float x1, float alpha)
 {
 	return x0 * (1 - alpha) + alpha * x1;
 }
-void NoiseGen::Rescale(vector<vector<float>> &pHeightmap, float minHeight, float maxHeight)
+void NoiseGen::Rescale(std::vector<std::vector<float>> &pHeightmap, float minHeight, float maxHeight)
 {
 	//normalisation
 	for (int i = 0; i < height; i++)

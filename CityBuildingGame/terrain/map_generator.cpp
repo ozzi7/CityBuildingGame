@@ -23,7 +23,7 @@ void MapGenerator::GenerateMap()
 void MapGenerator::generateTerrain()
 {
 	NoiseGen noise_gen;
-	vector<vector<float>> heightmap = vector<vector<float>>(grid->gridHeight + 1, vector<float>(grid->gridWidth + 1, 0));
+	std::vector<std::vector<float>> heightmap = std::vector<std::vector<float>>(grid->gridHeight + 1, std::vector<float>(grid->gridWidth + 1, 0));
 	noise_gen.GeneratePerlinNoise(heightmap, grid->gridHeight + 1, grid->gridWidth + 1, -HILL_HEIGHT * 0.7f, HILL_HEIGHT * 0.7f, 6);
 
 	grid->terrain->heightmap = heightmap;
@@ -40,7 +40,7 @@ void MapGenerator::generateFirs()
 	std::uniform_real_distribution<> rotation(0, glm::two_pi<float>());
 
 	/* create trees using noise */
-	treeMap = vector<vector<float>>(grid->gridHeight, vector<float>(grid->gridWidth, 0));
+	treeMap = std::vector<std::vector<float>>(grid->gridHeight, std::vector<float>(grid->gridWidth, 0));
 	noiseGen.GeneratePerlinNoise(treeMap, grid->gridHeight, grid->gridWidth, 0.0f, 5.0f + FIR_DENSITY, 3);
 
 	for (int i = 0; i < grid->gridHeight; ++i) {

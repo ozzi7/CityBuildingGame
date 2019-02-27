@@ -4,6 +4,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include <GLFW/glfw3.h>
 
+#include "globals.h"
 #include "terrain.h"
 #include "shader.h"
 #include "model.h"
@@ -18,7 +19,7 @@
 /* could add shader, mesh, texture path,.. here*/
 struct renderData {
 public:
-	vector<glm::mat4> models;
+	std::vector<glm::mat4> models;
 };
 class Renderer
 {
@@ -38,10 +39,11 @@ public:
 	renderData dataFir;
 	renderData dataGrass;
 
-	Renderer(std::string exe_path)
+	Renderer()
 	{
+		std::string root_path = Path;
 		std::string texture_path;
-		std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
+		std::replace(root_path.begin(), root_path.end(), '\\', '/');
 
 		terrain_shader = new Shader("shaders/terrain.vert", "shaders/terrain.frag");
 		mesh_shader = new Shader("shaders/mesh_shader.vert", "shaders/mesh_shader.frag");
@@ -50,19 +52,19 @@ public:
 		//shadow_map_shader = new Shader("shadow_mapping_depth.vert", "shadow_mapping_depth.frag");
 
 		/* fir init*/
-		texture_path = exe_path + "/../models/fir3/fir2.dae";
+		texture_path = root_path + "/../models/fir3/fir2.dae";
 		instanced_model_fir = new InstancedModel(texture_path, false);
 
 		/* Grass init*/
-		texture_path = exe_path + "/../models/grass/test.dae";
+		texture_path = root_path + "/../models/grass/test.dae";
 		instanced_model_grass = new InstancedModel(texture_path, false);
 
 		/* lumberjack init*/
-		//texture_path = exe_path + "/../models/zombie/Zombie.fbx";
+		//texture_path = root_path + "/../models/zombie/Zombie.fbx";
 		mesh_lumberjack = new SkinnedMesh();
-		//texture_path = exe_path + "/../models/minotaur/animation/Minotaur@Walk.dae";
-		//texture_path = exe_path + "/../models/mario/test_walk.dae";
-		texture_path = exe_path + "/../models/lumberjack/lumberjack.dae";
+		//texture_path = root_path + "/../models/minotaur/animation/Minotaur@Walk.dae";
+		//texture_path = root_path + "/../models/mario/test_walk.dae";
+		texture_path = root_path + "/../models/lumberjack/lumberjack.dae";
 		mesh_lumberjack->LoadMesh(texture_path);
 		mesh_lumberjack->PrecalculateBoneTransforms();	
 	}

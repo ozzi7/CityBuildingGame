@@ -3,8 +3,7 @@
 
 Game::Game(){};
 
-Game::Game(string aExePath, GLFWwindow* aWindow, InputHandler* aInputHandler) {
-	exe_path = aExePath;
+Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	window = aWindow;
 	inputHandler = aInputHandler;
 
@@ -42,9 +41,9 @@ void Game::renderLoop()
 {
 	//glfwMakeContextCurrent(window);
 
-	renderer = new Renderer(exe_path);
+	renderer = new Renderer();
 	
-	grid->terrain->InitOpenGL(renderer->terrain_shader, exe_path);
+	grid->terrain->InitOpenGL(renderer->terrain_shader);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -60,7 +59,7 @@ void Game::renderLoop()
 		/* TODO: write a class which handles 3 buffers and mutex to exchange*/
 		grid->visibleUnitsMutex.lock();
 		grid->visibleUnitsRendering = grid->visibleUnitsToRender;
-		vector<Unit*> *visibleUnitsTemp;
+		std::vector<Unit*> *visibleUnitsTemp;
 		if (grid->visibleUnitsToRender == 0) {
 			visibleUnitsTemp = grid->visibleUnits0;
 		}
@@ -110,7 +109,7 @@ void Game::gameLoop()
 		/* TODO: temp */
 		for (int i = 0; i < grid->gridUnits.size(); i++) {
 			for (int j = 0; j < grid->gridUnits[i].size(); j++) {
-				for (list<BoneAnimated*>::iterator it = grid->gridUnits[i][j]->movingObjects.begin(); 
+				for (std::list<BoneAnimated*>::iterator it = grid->gridUnits[i][j]->movingObjects.begin();
 					it != grid->gridUnits[i][j]->movingObjects.end(); ++it) {
 					(*it)->UpdatePosition();
 					//std::cout << (*it)->position[0] << " | " <<

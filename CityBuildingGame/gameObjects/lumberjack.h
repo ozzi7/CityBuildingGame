@@ -80,7 +80,7 @@ public:
 		}
 
 	}
-	vector<glm::vec3> wayPoints; // TODO: for tests only, center point of grid units on path
+	std::vector<glm::vec3> wayPoints; // TODO: for tests only, center point of grid units on path
 
 private:
 	float z = 0.0f;
