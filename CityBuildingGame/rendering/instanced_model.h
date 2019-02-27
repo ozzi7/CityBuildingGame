@@ -16,7 +16,6 @@
 #include <map>
 #include <vector>
 
-using namespace std;
 struct imVertex {
 	glm::vec3 Position;
 	glm::vec3 Normal;
@@ -25,19 +24,19 @@ struct imVertex {
 
 struct imTexture {
 	unsigned int id;
-	string type;
-	string path;
+	std::string type;
+	std::string path;
 };
 
 class InstancedMesh {
 public:
-	vector<imVertex> vertices;
-	vector<unsigned int> indices;
-	vector<imTexture> textures;
+	std::vector<imVertex> vertices;
+	std::vector<unsigned int> indices;
+	std::vector<imTexture> textures;
 	unsigned int VAO;
 
 	// constructor
-	InstancedMesh(vector<imVertex> vertices, vector<unsigned int> indices, vector<imTexture> textures)
+	InstancedMesh(std::vector<imVertex> vertices, std::vector<unsigned int> indices, std::vector<imTexture> textures)
 	{
 		this->vertices = vertices;
 		this->indices = indices;
@@ -56,7 +55,7 @@ public:
 		glActiveTexture(GL_TEXTURE0);
 	}
 
-	void Bind(Shader &shader, vector<glm::mat4> &models)
+	void Bind(Shader &shader, std::vector<glm::mat4> &models)
 	{
 		glBindVertexArray(VAO);
 
@@ -69,8 +68,8 @@ public:
 		{
 			glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
 											  // retrieve texture number (the N in diffuse_textureN)
-			string number;
-			string name = textures[i].type;
+			std::string number;
+			std::string name = textures[i].type;
 			if (name == "texture_diffuse")
 				number = std::to_string(diffuseNr++);
 			else if (name == "texture_specular")
@@ -150,23 +149,23 @@ class InstancedModel
 {
 public:
 	/*  Model Data */
-	vector<imTexture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
-	vector<InstancedMesh> meshes;
-	string directory;
+	std::vector<imTexture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
+	std::vector<InstancedMesh> meshes;
+	std::string directory;
 	bool gammaCorrection;
 
 	/*  Functions   */
 	// constructor, expects a filepath to a 3D model.	
 	InstancedModel();
-	InstancedModel(const string &path, bool gamma);
+	InstancedModel(const std::string &path, bool gamma);
 
-	void InstancedModel::Draw(Shader &shader, vector<glm::mat4> &models);
-	unsigned int TextureFromFile(const char *path, const string &directory, bool gamma = false);
+	void InstancedModel::Draw(Shader &shader, std::vector<glm::mat4> &models);
+	unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
 
 private:
 	/*  Functions   */
 	// loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
-	void loadModel(string const &path);
+	void loadModel(std::string const &path);
 
 	// processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
 	void processNode(aiNode *node, const aiScene *scene);
@@ -175,5 +174,5 @@ private:
 
 	// checks all material textures of a given type and loads the textures if they're not loaded yet.
 	// the required info is returned as a Texture struct.
-	vector<imTexture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName);
+	std::vector<imTexture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
 };

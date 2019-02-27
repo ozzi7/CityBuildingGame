@@ -2,15 +2,13 @@
 #include "stb_image.h"
 #include "instanced_model.h"
 
-using namespace std;
-
 InstancedModel::InstancedModel() {}
-InstancedModel::InstancedModel(const string &path, bool gamma = false) : gammaCorrection(gamma)
+InstancedModel::InstancedModel(const std::string &path, bool gamma = false) : gammaCorrection(gamma)
 {
 	loadModel(path);
 }
 
-void InstancedModel::Draw(Shader &shader, vector<glm::mat4> &models)
+void InstancedModel::Draw(Shader &shader, std::vector<glm::mat4> &models)
 {
 	shader.use();
 	for (unsigned int i = 0; i < meshes.size(); i++)
@@ -20,7 +18,7 @@ void InstancedModel::Draw(Shader &shader, vector<glm::mat4> &models)
 	}
 }
 // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
-void InstancedModel::loadModel(string const &path)
+void InstancedModel::loadModel(std::string const &path)
 {
 	// read file via ASSIMP
 	Assimp::Importer importer;
@@ -28,7 +26,7 @@ void InstancedModel::loadModel(string const &path)
 	// check for errors
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 	{
-		cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
+		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
 		return;
 	}
 	// retrieve the directory path of the filepath
@@ -59,9 +57,9 @@ void InstancedModel::processNode(aiNode *node, const aiScene *scene)
 InstancedMesh InstancedModel::processMesh(aiMesh *mesh, const aiScene *scene)
 {
 	// data to fill
-	vector<imVertex> vertices;
-	vector<unsigned int> indices;
-	vector<imTexture> textures;
+	std::vector<imVertex> vertices;
+	std::vector<unsigned int> indices;
+	std::vector<imTexture> textures;
 
 	// Walk through each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
@@ -111,10 +109,10 @@ InstancedMesh InstancedModel::processMesh(aiMesh *mesh, const aiScene *scene)
 	// normal: texture_normalN
 
 	// 1. diffuse maps
-	vector<imTexture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+	std::vector<imTexture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	// 2. specular maps
-	vector<imTexture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+	std::vector<imTexture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	// 3. normal maps
 	std::vector<imTexture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
@@ -129,9 +127,9 @@ InstancedMesh InstancedModel::processMesh(aiMesh *mesh, const aiScene *scene)
 
 // checks all material textures of a given type and loads the textures if they're not loaded yet.
 // the required info is returned as a Texture struct.
-vector<imTexture> InstancedModel::loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName)
+std::vector<imTexture> InstancedModel::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
 {
-	vector<imTexture> textures;
+	std::vector<imTexture> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
@@ -161,9 +159,9 @@ vector<imTexture> InstancedModel::loadMaterialTextures(aiMaterial *mat, aiTextur
 }
 
 // utility function for loading a 2D texture from file
-unsigned int InstancedModel::TextureFromFile(const char *path, const string &directory, bool gamma)
+unsigned int InstancedModel::TextureFromFile(const char *path, const std::string &directory, bool gamma)
 {
-	string filename = string(path);
+	std::string filename = std::string(path);
 	filename = directory + '/' + filename;
 
 	unsigned int textureID;

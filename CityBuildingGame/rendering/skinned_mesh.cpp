@@ -506,7 +506,7 @@ void SkinnedMesh::PrecalculateBoneTransforms()
 	animDuration = m_pScene->mAnimations[0]->mChannels[0]->mPositionKeys[numPosKeys - 1].mTime;
 	for (float tick = 0.0f; tick < animDuration; tick += (1.0f / TRANSFORMS_PER_SECOND))
 	{
-		vector<glm::mat4> Transform;
+		std::vector<glm::mat4> Transform;
 		BoneTransform(tick, Transform);
 		for(int i = 0; i < Transform.size(); ++i)
 			Transform[i] = glm::transpose(Transform[i]);

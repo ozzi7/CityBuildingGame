@@ -21,7 +21,7 @@
 class Game
 {
 public:
-	Game(string, GLFWwindow*, InputHandler*);
+	Game(GLFWwindow*, InputHandler*);
 	Game();
 	~Game();
 
@@ -36,8 +36,6 @@ private:
 	GLFWwindow* window;
 	InputHandler* inputHandler;
 	
-	string exe_path;
-
 	// timing
 	float deltaTime = 0.0f;	// time between current frame and last frame
 	float lastFrame = 0.0f;

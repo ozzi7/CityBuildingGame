@@ -33,14 +33,18 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 int main(int argc, char* argv[])
 {
-	// store path for resources
-	std::string exe_path = std::string(argv[0]);
-	exe_path = exe_path.substr(0, exe_path.find_last_of("\\/"));
-	std::replace(exe_path.begin(), exe_path.end(), '\\', '/');
+
+	Path = std::string(argv[0]);
+	Path = Path.substr(0, Path.find_last_of("\\/"));
+	std::replace(Path.begin(), Path.end(), '\\', '/');
+
+	static std::string path = std::string(argv[0]);
+	path = path.substr(0, path.find_last_of("\\/"));
+	std::replace(path.begin(), path.end(), '\\', '/');
 
 	init_glfw();
 
-	game = Game(exe_path, window, &inputHandler);
+	game = Game(window, &inputHandler);
 	game.StartGame();
 
 	glfwTerminate();

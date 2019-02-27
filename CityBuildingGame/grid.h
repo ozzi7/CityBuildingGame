@@ -10,16 +10,14 @@
 #include "lumberjack.h"
 #include "grass.h"
 
-using namespace std;
-
 /* Represents a grid subunit */
 class Unit
 {
 public:
 	bool occupied = false;
 	float averageHeight = 0;
-	list<Object*> objects;
-	list<BoneAnimated*> movingObjects; // TODO doesnt have to coincide with bone animated.. hmm
+	std::list<Object*> objects;
+	std::list<BoneAnimated*> movingObjects; // TODO doesnt have to coincide with bone animated.. hmm
 	Unit();
 	~Unit();
 };
@@ -35,15 +33,15 @@ public:
 
 	void UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::vec2 &lowerLeft, glm::vec2 &lowerRight);
 
-	vector<vector<Unit*>> gridUnits;
+	std::vector<std::vector<Unit*>> gridUnits;
 
 	/* Used for rendering */
-	mutex visibleUnitsMutex;
+	std::mutex visibleUnitsMutex;
 	int maximumVisibleUnits = 600 * 500; // maximum number of units stored in visibleUnits0 and 1
 
-	vector<Unit*> *visibleUnits0;
-	vector<Unit*> *visibleUnits1;
-	vector<Unit*> *visibleUnits2;
+	std::vector<Unit*> *visibleUnits0;
+	std::vector<Unit*> *visibleUnits1;
+	std::vector<Unit*> *visibleUnits2;
 	int visibleUnitsSizeToRender = 0;
 	int visibleUnitsRendering = 0;
 	int visibleUnitsToRender = 0;

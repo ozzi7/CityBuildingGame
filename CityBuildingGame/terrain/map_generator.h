@@ -19,7 +19,7 @@ private:
 
 	NoiseGen noiseGen;
 	std::random_device rd;
-	vector<vector<float>> treeMap;
+	std::vector<std::vector<float>> treeMap;
 
 	void generateTerrain();
 	void generateFirs();

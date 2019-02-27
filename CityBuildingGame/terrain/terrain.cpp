@@ -84,7 +84,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	/* parameters: corners of visible grid on (x/y/z=0) plane */
 	/* Create geometry data for visible area */
 
-	vector<GLfloat> *renderDataTemp;
+	std::vector<GLfloat> *renderDataTemp;
 	renderDataMutex.lock();
 	if (currRenderData)
 		renderDataTemp = renderData0;
@@ -94,14 +94,14 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 
 	/* Load GPU data for visible area */
 	int index = 0;
-	int startX = min(min((int)upperLeft.x, int(lowerLeft.x)), min((int)upperRight.x, int(lowerRight.x)));
-	int endX = max(max((int)upperLeft.x, int(lowerLeft.x)), max((int)upperRight.x, int(lowerRight.x)));
-	int startY = min(min((int)upperLeft.y, int(lowerLeft.y)), min((int)upperRight.y, int(lowerRight.y)));
-	int endY = max(max((int)upperLeft.y, int(lowerLeft.y)), max((int)upperRight.y, int(lowerRight.y)));
+	int startX = std::min(std::min((int)upperLeft.x, int(lowerLeft.x)), std::min((int)upperRight.x, int(lowerRight.x)));
+	int endX = std::max(std::max((int)upperLeft.x, int(lowerLeft.x)), std::max((int)upperRight.x, int(lowerRight.x)));
+	int startY = std::min(std::min((int)upperLeft.y, int(lowerLeft.y)), std::min((int)upperRight.y, int(lowerRight.y)));
+	int endY = std::max(std::max((int)upperLeft.y, int(lowerLeft.y)), std::max((int)upperRight.y, int(lowerRight.y)));
 
-	for (int i = max(0, startY+1); i <= min(gridHeight-1, endY); ++i)
+	for (int i = std::max(0, startY+1); i <= std::min(gridHeight-1, endY); ++i)
 	{
-		for (int j = max(0, startX+1); j <= min(gridWidth-1, endX); ++j)
+		for (int j = std::max(0, startX+1); j <= std::min(gridWidth-1, endX); ++j)
 		{
 			if (index < maximumVisibleUnits*48)
 			{
@@ -208,8 +208,8 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 void Terrain::CreateGeometry()
 {
 	/* Create normals, areas for triangles using explicit cross product formula*/
-	triangleNormals = vector<glm::vec3>(gridWidth*gridHeight * 2);
-	triangleArea = vector<float>(gridWidth*gridHeight * 2);
+	triangleNormals = std::vector<glm::vec3>(gridWidth*gridHeight * 2);
+	triangleArea = std::vector<float>(gridWidth*gridHeight * 2);
 	for (int i = 0; i < gridHeight; ++i)
 	{
 		for (int j = 0; j < gridWidth; ++j)
@@ -234,7 +234,7 @@ void Terrain::CreateGeometry()
 	}
 
 	/* Create vertex normals, currently weighted by area of neighbor triangle not angle (should be similar in this case)*/
-	vertexNormals = vector<glm::vec3>((gridWidth+1)*(gridHeight+1));
+	vertexNormals = std::vector<glm::vec3>((gridWidth+1)*(gridHeight+1));
 	for (int i = 0; i < gridHeight + 1; ++i)
 	{
 		for (int j = 0; j < gridWidth + 1; ++j)
@@ -299,16 +299,16 @@ void Terrain::CreateGeometry()
 		}
 	}
 }
-void Terrain::InitOpenGL(Shader* terrain_shader, string exe_path)
+void Terrain::InitOpenGL(Shader* terrain_shader)
 {
 	terrain_shader->use();
-	LoadTextures(terrain_shader, exe_path);
+	LoadTextures(terrain_shader);
 	GenerateBuffers();
 }
-void Terrain::LoadTextures(Shader* terrain_shader, string exe_path)
+void Terrain::LoadTextures(Shader* terrain_shader)
 {
 	Model grass = Model();
-	string texturesPath = exe_path + "/../terrain";
+	std::string texturesPath = Path + "/../terrain";
 	texture_id_grass = grass.TextureFromFile(texture_grass.c_str(), texturesPath);
 
 	terrain_shader->setInt("texture1", 0);
