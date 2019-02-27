@@ -61,10 +61,7 @@ public:
 		instanced_model_grass = new InstancedModel(texture_path, false);
 
 		/* lumberjack init*/
-		//texture_path = exe_path + "/../models/zombie/Zombie.fbx";
 		mesh_lumberjack = new SkinnedMesh();
-		//texture_path = exe_path + "/../models/minotaur/animation/Minotaur@Walk.dae";
-		//texture_path = exe_path + "/../models/mario/test_walk.dae";
 		texture_path = exe_path + "/../models/lumberjack/lumberjack.dae";
 		mesh_lumberjack->LoadMesh(texture_path);
 		mesh_lumberjack->PrecalculateBoneTransforms();	
