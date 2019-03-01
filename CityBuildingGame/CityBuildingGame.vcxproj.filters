@@ -87,10 +87,10 @@
     <ClInclude Include="utility\buffer_element.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utility\triple_buffer.h">
+    <ClInclude Include="rendering\render_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\render_data.h">
+    <ClInclude Include="utility\triple_buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -138,9 +138,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="rendering\shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="utility\triple_buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="utility\buffer_element.cpp">

@@ -67,7 +67,6 @@
     <ClCompile Include="terrain\terrain.cpp" />
     <ClCompile Include="terrain\tree_generator.cpp" />
     <ClCompile Include="utility\buffer_element.cpp" />
-    <ClCompile Include="utility\triple_buffer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFA9DB1-C1C7-4774-B08F-6F86CDF05BEF}</ProjectGuid>

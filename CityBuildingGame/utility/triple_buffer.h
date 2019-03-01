@@ -5,6 +5,7 @@ TODO2: We don't need to create new data we could use the existing objects and ov
 #pragma once
 #include <vector>
 #include <mutex>
+#include <render_data.h>
 
 /*
 
@@ -24,12 +25,36 @@ template <class T>
 class TripleBuffer
 {
 public:
-	TripleBuffer();
-	~TripleBuffer();
-
-	void ExchangeProducerBuffer(); // call this after production cycle
-	void ExchangeConsumerBuffer(); // call this before consumption cycle
-	T GetConsumerBuffer();
+	TripleBuffer<T>::TripleBuffer() {
+		for (int i = 0; i < 3; ++i) {
+			buffers.push_back(new T);
+		}
+	}
+	TripleBuffer<T>::~TripleBuffer() {
+		delete buffers[0];
+		delete buffers[1];
+		delete buffers[2];
+	}
+	void TripleBuffer<T>::ExchangeProducerBuffer()  // call this after production cycle
+	{
+		bufferMutex.lock();
+		std::swap(consumerBufferID, idleBuffer);
+		newDataReady = true;
+		bufferMutex.unlock();
+	}
+	void TripleBuffer<T>::ExchangeConsumerBuffer()  // call this before consumption cycle
+	{
+		bufferMutex.lock();
+		if (newDataReady) {
+			std::swap(idleBuffer, producerBufferID);
+			newDataReady = false;
+		}
+		bufferMutex.unlock();
+	}
+	T TripleBuffer<T>::GetConsumerBuffer()
+	{
+		return buffers[consumerBufferID];
+	}
 
 	std::mutex bufferMutex;
 	std::vector<T*> buffers;
