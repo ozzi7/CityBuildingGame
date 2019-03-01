@@ -1,8 +1,8 @@
 #pragma once
-
 #include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
-#include "render_data.h"
+
+enum RenderObjType { gameObject, fir, grass, lumberjack, tree, boneAnimated };
 
 class GameObject
 {

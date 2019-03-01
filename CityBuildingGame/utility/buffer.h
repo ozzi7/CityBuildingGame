@@ -10,5 +10,7 @@ public:
 	~Buffer();
 
 	template <class T>
-	void AddElement(T entry);
+	void ClearData();
+	template <class T>
+	void SaveData(T entry);
 };

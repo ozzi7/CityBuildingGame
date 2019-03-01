@@ -1,11 +1,20 @@
 #include "stdafx.h"
 #include "render_data.h"
-#include <game_object.h>
 
 RenderBuffer::RenderBuffer() {};
-void RenderBuffer::SaveRenderData(GameObject* obj) {
-	//switch (obj->type) {
-	//	//case Rendertype: cout << '1';
-	//	//case 2: cout << '2';
-	//}
+void RenderBuffer::SaveData(GameObject* obj) {
+	switch (obj->type) {
+		case tree: break;
+			firModels.push_back(obj->model);
+			break;
+		case grass: 
+			grassModels.push_back(obj->model); 
+			break;
+		default: break;
+	}
+}
+void RenderBuffer::ClearData()
+{
+	firModels.clear();
+	grassModels.clear();
 }

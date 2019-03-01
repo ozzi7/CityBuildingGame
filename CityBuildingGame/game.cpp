@@ -25,8 +25,8 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 }
 Game::~Game()
 {
-	delete grid;
-	delete renderer;
+	// delete grid;
+	// delete renderer;
 }
 
 void Game::StartGame()
@@ -92,14 +92,14 @@ void Game::gameLoop()
 
 		/* Extract data for the renderer*/
 		RenderBuffer* producerBuffer = renderBuffers->GetProducerBuffer();
-		for (int i = 0; i < grid->visibleUnits.size(); i++) {
+		for (int i = 0; i < grid->nofElements; i++) {
 			for (std::list<GameObject*>::iterator it = grid->visibleUnits[i]->objects.begin();
 				it != grid->visibleUnits[i]->objects.end(); ++it) {
-				producerBuffer->SaveRenderData(*it);
+				producerBuffer->SaveData(*it);
 			}
 			for (std::list<BoneAnimated*>::iterator it = grid->visibleUnits[i]->movingObjects.begin();
 				it != grid->visibleUnits[i]->movingObjects.end(); ++it) {
-				producerBuffer->SaveRenderData(*it);
+				producerBuffer->SaveData(*it);
 			}
 		}
 		std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::microseconds>(next_game_tick - std::chrono::high_resolution_clock::now()));

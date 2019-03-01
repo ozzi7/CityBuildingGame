@@ -50,12 +50,12 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 		int startY = std::min(std::min((int)upperLeft.y, int(lowerLeft.y)), std::min((int)upperRight.y, int(lowerRight.y)));
 		int endY = std::max(std::max((int)upperLeft.y, int(lowerLeft.y)), std::max((int)upperRight.y, int(lowerRight.y)));
 
-		int index = 0;
+		nofElements = 0;
 		for (int i = std::max(0, startY + 1); i <= std::min(gridHeight - 1, endY); ++i)
 		{
 			for (int j = std::max(0, startX + 1); j <= std::min(gridWidth - 1, endX); ++j)
 			{
-				if (index < maximumVisibleUnits)
+				if (nofElements < maximumVisibleUnits)
 				{
 					/* Check if the point is inside the rectangle*/
 					glm::vec2 AM = glm::vec2(j - upperLeft.x, i - upperLeft.y);
@@ -65,7 +65,7 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 					if ((0 <= glm::dot(AM, AB)) && (glm::dot(AM, AB) < glm::dot(AB, AB)) &&
 						(glm::dot(AM, AD) < glm::dot(AD, AD)) && 0 <= glm::dot(AM, AD))
 					{
-						visibleUnits[index++] = gridUnits[i][j];
+						visibleUnits[nofElements++] = gridUnits[i][j];
 					}
 				}
 				else

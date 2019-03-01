@@ -1,13 +1,13 @@
 #pragma once
 #include <vector>
 #include "buffer.h"
-
-enum RenderObjType { gameObject, fir, grass, lumberjack, tree,  boneAnimated };
+#include <game_object.h>
 
 class RenderBuffer : public Buffer {
 public:
 	RenderBuffer();
-	void SaveRenderData(GameObject*);
+	void SaveData(GameObject*);
+	void ClearData();
 
 	std::vector<glm::mat4> firModels;
 	std::vector<glm::mat4> grassModels;
