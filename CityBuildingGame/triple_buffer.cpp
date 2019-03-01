@@ -3,74 +3,46 @@
 
 using namespace std;
 
-TripleBuffer::TripleBuffer(int maxCapacity)
+TripleBuffer::TripleBuffer()
 {
-	maxElements = maxCapacity;
+	TripleBuffer::TripleBuffer(INT32_MAX);
+}
 
-	buffer0 = new vector<class T*>();
-	buffer1 = new vector<class T*>();
-	buffer2 = new vector<class T*>();
+TripleBuffer::TripleBuffer(int aMaxElements)
+{
+	maxElements = aMaxElements;
+
+	buffers = std::vector<std::vector<class T*>>();
+
+	for (auto i = 0; i < 3; ++i) {
+		buffers.push_back(std::vector<class T*>());
+	}
 }
 TripleBuffer::~TripleBuffer() {};
-void TripleBuffer::AddData(class T*)
+void TripleBuffer::AddElement(class T* element)
 {
-	if(
+	if (buffers[consumerBufferID].size() < maxElements) {
+		buffers[consumerBufferID].push_back(element);
+	}
 }
-void TripleBuffer::ExchangeBuffers()
+void TripleBuffer::AddSubElement(class T* element)
+{
+	if (element.type == Fir) {
+		buffers[producerBufferID][0]push_back(element);
+	}
+	if[consumerBufferID].size() < maxElements) {
+		buffers[consumerBufferID].push_back(element);
+	}
+}
+void TripleBuffer::ExchangeProducerBuffer()
 {
 	bufferMutex.lock();
-	swap(buffer0, buffer1);
+	std::swap(consumerBufferID, idleBuffer);
+	bufferMutex.unlock();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/986*/////////////////////////////////6/98
+void TripleBuffer::ExchangeConsumerBuffer()
+{
+	bufferMutex.lock();
+	std::swap(idleBuffer, producerBufferID);
+	bufferMutex.unlock();
+}

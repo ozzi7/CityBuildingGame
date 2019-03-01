@@ -35,17 +35,8 @@ public:
 
 	std::vector<std::vector<Unit*>> gridUnits;
 
-	/* Used for rendering */
-	std::mutex visibleUnitsMutex;
-	int maximumVisibleUnits = 600 * 500; // maximum number of units stored in visibleUnits0 and 1
-
-	std::vector<Unit*> *visibleUnits0;
-	std::vector<Unit*> *visibleUnits1;
-	std::vector<Unit*> *visibleUnits2;
-	int visibleUnitsSizeToRender = 0;
-	int visibleUnitsRendering = 0;
-	int visibleUnitsToRender = 0;
-	int visibleUnitsToFill = 1;
+	std::vector<Unit*> visibleUnits;
+	int maximumVisibleUnits = 600 * 500; // maximum number of units stored in visibleUnits
 	int currUpperLeftX = 0;
 	int currUpperLeftY = 0;
 	int currLowerRightX = 0;

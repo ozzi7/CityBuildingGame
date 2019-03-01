@@ -8,6 +8,8 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	inputHandler = aInputHandler;
 
 	grid = new Grid(MAP_WIDTH, MAP_HEIGHT);
+	renderBuffer = new TripleBuffer(1000);
+
 	camera = new Camera(glm::vec3(50.0f + MAP_HEIGHT * 0.5f, -50.0f + MAP_WIDTH * 0.5f, 50.0f), window);
 
 	inputHandler->Camera = camera;
@@ -23,14 +25,12 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 }
 Game::~Game()
 {
-	//delete grid;
-	//delete renderer;
+	delete grid;
+	delete renderer;
 }
 
 void Game::StartGame()
 {
-	//glfwMakeContextCurrent(NULL);
-
 	std::thread threadGameLoop(&Game::gameLoop, this);
 	
 	renderLoop();
@@ -39,8 +39,6 @@ void Game::StartGame()
 
 void Game::renderLoop()
 {
-	//glfwMakeContextCurrent(window);
-
 	renderer = new Renderer();
 	
 	grid->terrain->InitOpenGL(renderer->terrain_shader);
@@ -52,38 +50,7 @@ void Game::renderLoop()
 
 		renderer->SetMatrices(projection, view);
 		renderer->OpenGLStart();
-
-		/* Render terrain */
-		//grid->terrain->Accept(*renderer);
-
-		/* TODO: write a class which handles 3 buffers and mutex to exchange*/
-		grid->visibleUnitsMutex.lock();
-		grid->visibleUnitsRendering = grid->visibleUnitsToRender;
-		std::vector<Unit*> *visibleUnitsTemp;
-		if (grid->visibleUnitsToRender == 0) {
-			visibleUnitsTemp = grid->visibleUnits0;
-		}
-		else if (grid->visibleUnitsToRender == 1) {
-			visibleUnitsTemp = grid->visibleUnits1;
-		}
-		else if (grid->visibleUnitsToRender == 2) {
-			visibleUnitsTemp = grid->visibleUnits2;
-		}
-		int nofUnits = grid->visibleUnitsSizeToRender;
-		grid->visibleUnitsMutex.unlock();
-
-		/* Render dynamic objects */
-		/*for (int i = 0; i < nofUnits; i++) {
-			for (list<Object*>::iterator it = (*visibleUnitsTemp)[i]->objects.begin(); it != (*visibleUnitsTemp)[i]->objects.end(); ++it) {
-				(*it)->Accept(*renderer);
-			}
-			for (list<BoneAnimated*>::iterator it = (*visibleUnitsTemp)[i]->movingObjects.begin(); it != (*visibleUnitsTemp)[i]->movingObjects.end(); ++it) {
-				(*it)->Accept(*renderer);
-			}
-		}*/
-
-		/* Render instanced objects */
-		renderer->RenderInstancedObjects();
+		renderer->Render();
 
 		glfwSwapBuffers(window);
 
@@ -112,9 +79,6 @@ void Game::gameLoop()
 				for (std::list<BoneAnimated*>::iterator it = grid->gridUnits[i][j]->movingObjects.begin();
 					it != grid->gridUnits[i][j]->movingObjects.end(); ++it) {
 					(*it)->UpdatePosition();
-					//std::cout << (*it)->position[0] << " | " <<
-					//	(*it)->position[1] << " | " << 
-					//	(*it)->position[2] << endl;
 				}
 			}
 		}
@@ -124,6 +88,16 @@ void Game::gameLoop()
 		grid->UpdateVisibleList(camera->GridTopLeftVisible(), camera->GridTopRightVisible(), camera->GridBottomLeftVisible(),
 			camera->GridBottomRightVisible());
 
+		for (int i = 0; i < grid->visibleUnits.size(); i++) {
+			for (std::list<Object*>::iterator it = grid->visibleUnits[i]->objects.begin();
+				it != grid->visibleUnits[i][j]->objects.end(); ++it) {
+				(*it)->SaveRenderData();
+			}
+			for (std::list<BoneAnimated*>::iterator it = grid->visibleUnits[i][j]->movingObjects.begin();
+				it != grid->visibleUnits[i][j]->movingObjects.end(); ++it) {
+				(*it)->SaveRenderData();
+			}
+		}
 		std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::microseconds>(next_game_tick - std::chrono::high_resolution_clock::now()));
 		next_game_tick = (next_game_tick + std::chrono::microseconds(SKIP_TICKS));
 		loops++;

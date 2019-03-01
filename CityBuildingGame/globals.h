@@ -1,6 +1,6 @@
 #pragma once
 
-#include<string>
+#include <string>
 
 // user settings
 const unsigned int SCR_WIDTH = 1920;
@@ -16,7 +16,7 @@ const float SCROLL_SPEED = 1.0f;
 const float VISIBLE_RANGE = 1.4f;	// ~1.6 is entire screen
 const float ZOOM_DEFAULT = 10.0f;
 
-static std::string Path;
+extern std::string Path;
 
 
 const float SCREEN_RATIO = (float)SCR_WIDTH / (float)SCR_HEIGHT;

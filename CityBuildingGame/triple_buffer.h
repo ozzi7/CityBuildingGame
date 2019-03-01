@@ -1,11 +1,10 @@
 /*TODO: To speed things up we could have separate triple buffers for objects that rarely
-move, only scrolling would invalidate them (or creating/destructing) */
+move, only scrolling would invalidate them (or creating/destructing) 
+TODO2: We don't need to create new data we could use the existing objects and overwrite the fields if this is faster */
 
 #pragma once
 #include <vector>
 #include <mutex>
-
-using namespace std;
 
 /*
 
@@ -29,17 +28,19 @@ public:
 	~TripleBuffer();
 
 	void AddElement(class T* element);
-	void ExchangeBuffers();
-	
-	int maxElements = INT32_MAX;
+	void AddSubElement(class T* element);
+	void ExchangeProducerBuffer(); // call this after production cycle
+	void ExchangeConsumerBuffer(); // call this before consumption cycle
 
-	mutex bufferMutex;
-	vector<vector<class T*>> buffers;
+	int maxElements = 0;
+
+	std::mutex bufferMutex;
+	std::vector<std::vector<class T*>> buffers;
 
 	// this allows us to keep old data in the buffer without clearing it
 	int consumerBufferSize = 0; 
 
 	int consumerBufferID = 0;
-	int nextConsumerBufferID = 0;
-	int producerBufferID = 1;
+	int producerBufferID = 1; 
+	int idleBuffer = 2;
 };

@@ -16,11 +16,6 @@
 #include "lumberjack.h"
 #include "grass.h"
 
-/* could add shader, mesh, texture path,.. here*/
-struct renderData {
-public:
-	std::vector<glm::mat4> models;
-};
 class Renderer
 {
 public:
