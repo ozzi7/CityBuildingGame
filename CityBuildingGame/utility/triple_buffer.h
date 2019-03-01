@@ -58,6 +58,7 @@ public:
 	}
 	T* TripleBuffer<T>::GetProducerBuffer()
 	{
+		buffers[producerBufferID]->ClearData();
 		return buffers[producerBufferID];
 	}
 	std::mutex bufferMutex;

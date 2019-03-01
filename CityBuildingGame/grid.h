@@ -36,6 +36,7 @@ public:
 	std::vector<std::vector<Unit*>> gridUnits;
 
 	std::vector<Unit*> visibleUnits;
+	int nofElements = 0;
 	int maximumVisibleUnits = 600 * 500; // maximum number of units stored in visibleUnits
 	int currUpperLeftX = 0;
 	int currUpperLeftY = 0;
