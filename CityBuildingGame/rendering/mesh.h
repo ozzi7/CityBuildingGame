@@ -43,7 +43,6 @@ protected:
 	/*  Render data  */
 	unsigned int VBO, EBO;
 
-private:
 	// initializes all the buffer objects/arrays
 	void setupMesh();
 };
