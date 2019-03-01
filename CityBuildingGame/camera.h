@@ -1,5 +1,4 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -52,6 +51,4 @@ private:
 	glm::vec3 lookat;
 	GLFWwindow* window;
 };
-
-#endif
 

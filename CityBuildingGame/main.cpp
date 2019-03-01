@@ -30,6 +30,8 @@ void window_focus_callback(GLFWwindow *window, int focused);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
+std::string Path;
+
 
 int main(int argc, char* argv[])
 {
@@ -37,10 +39,6 @@ int main(int argc, char* argv[])
 	Path = std::string(argv[0]);
 	Path = Path.substr(0, Path.find_last_of("\\/"));
 	std::replace(Path.begin(), Path.end(), '\\', '/');
-
-	static std::string path = std::string(argv[0]);
-	path = path.substr(0, path.find_last_of("\\/"));
-	std::replace(path.begin(), path.end(), '\\', '/');
 
 	init_glfw();
 
