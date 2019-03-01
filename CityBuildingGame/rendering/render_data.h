@@ -1,6 +1,6 @@
 #pragma once
-#include "buffer_element.h"
 #include <vector>
+#include "buffer_element.h"
 
 class RenderBufferElement : public BufferElement {
 public:
