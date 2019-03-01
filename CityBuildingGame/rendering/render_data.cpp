@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "render_data.h"
-#include <game_object.h>
 
 RenderBuffer::RenderBuffer() {};
 void RenderBuffer::SaveRenderData(GameObject* obj) {

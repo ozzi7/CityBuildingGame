@@ -71,6 +71,22 @@
     <ClCompile Include="terrain\tree_generator.cpp" />
     <ClCompile Include="utility\buffer.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\materials.frag" />
+    <None Include="shaders\materials.vert" />
+    <None Include="shaders\mesh_instanced.frag" />
+    <None Include="shaders\mesh_instanced.vert" />
+    <None Include="shaders\mesh_instanced_depth.frag" />
+    <None Include="shaders\mesh_instanced_depth.vert" />
+    <None Include="shaders\mesh_shader.frag" />
+    <None Include="shaders\mesh_shader.vert" />
+    <None Include="shaders\shadow_mapping_depth.frag" />
+    <None Include="shaders\shadow_mapping_depth.vert" />
+    <None Include="shaders\skinning.frag" />
+    <None Include="shaders\skinning.vert" />
+    <None Include="shaders\terrain.frag" />
+    <None Include="shaders\terrain.vert" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFA9DB1-C1C7-4774-B08F-6F86CDF05BEF}</ProjectGuid>
     <RootNamespace>CityBuildingGame</RootNamespace>
