@@ -26,7 +26,6 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 Game::~Game()
 {
 	// delete grid;
-	// delete renderer;
 }
 
 void Game::StartGame()
@@ -57,6 +56,7 @@ void Game::renderLoop()
 
 		glfwPollEvents();
 	}
+	delete renderer;
 }
 
 void Game::gameLoop()
