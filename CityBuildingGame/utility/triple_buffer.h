@@ -51,11 +51,15 @@ public:
 		}
 		bufferMutex.unlock();
 	}
-	T TripleBuffer<T>::GetConsumerBuffer()
+	
+	T* TripleBuffer<T>::GetConsumerBuffer()
 	{
 		return buffers[consumerBufferID];
 	}
-
+	T* TripleBuffer<T>::GetProducerBuffer()
+	{
+		return buffers[producerBufferID];
+	}
 	std::mutex bufferMutex;
 	std::vector<T*> buffers;
 

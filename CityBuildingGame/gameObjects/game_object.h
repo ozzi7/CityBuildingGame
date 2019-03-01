@@ -4,11 +4,12 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "render_data.h"
 
-class Object
+class GameObject
 {
 public:
-	Object();
-	Object(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation);
+	RenderObjType type = gameObject;
+	GameObject();
+	GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation);
 
 	glm::vec3 position;
 	glm::vec3 scale;

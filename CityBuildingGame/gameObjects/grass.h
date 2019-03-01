@@ -4,6 +4,8 @@
 class Grass : public Tree
 {
 public:
+	RenderObjType type = grass;
+
 	Grass(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 		: Tree(aPosition, aScale, aRotation) {
 		//model = glm::translate(model, position);

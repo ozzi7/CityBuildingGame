@@ -5,6 +5,8 @@
 class Lumberjack : public BoneAnimated
 {
 public:
+	RenderObjType type = lumberjack;
+
 	Lumberjack(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 		: BoneAnimated(aPosition, aScale, aRotation) {
 		model = glm::translate(model, position);

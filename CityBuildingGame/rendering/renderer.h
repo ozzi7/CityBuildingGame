@@ -87,9 +87,9 @@ public:
 		glEnable(GL_MULTISAMPLE);
 		glDepthMask(TRUE);
 	}
-	void RenderGameObjects(RenderBufferElement *rBufferElement)
+	void RenderGameObjects(RenderBuffer* renderBuffer)
 	{
-		RenderInstancedObjects(rBufferElement);
+		RenderInstancedObjects(renderBuffer);
 	}
 	void Visit(Tree *tree) {};
 	/*void Visit(Fir *fir)
@@ -132,7 +132,7 @@ public:
 
 		terrain->Draw();
 	}
-	void RenderInstancedObjects(RenderBufferElement *rBufferElement)
+	void RenderInstancedObjects(RenderBuffer* renderBuffer)
 	{
 		glDepthMask(FALSE);
 		glEnable(GL_BLEND);
@@ -154,8 +154,8 @@ public:
 		instanced_mesh_shader->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
 
 		/*draw instanced objects*/
-		instanced_model_fir->Draw(*instanced_mesh_shader, rBufferElement->firModels); // note shader.use() is in model
-		instanced_model_grass->Draw(*instanced_mesh_shader, rBufferElement->grassModels); // note shader.use() is in model
+		instanced_model_fir->Draw(*instanced_mesh_shader, renderBuffer->firModels); // note shader.use() is in model
+		instanced_model_grass->Draw(*instanced_mesh_shader, renderBuffer->grassModels); // note shader.use() is in model
 
 	}
 	void RenderDepthMap()

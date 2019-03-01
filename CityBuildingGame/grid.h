@@ -16,7 +16,7 @@ class Unit
 public:
 	bool occupied = false;
 	float averageHeight = 0;
-	std::list<Object*> objects;
+	std::list<GameObject*> objects;
 	std::list<BoneAnimated*> movingObjects; // TODO doesnt have to coincide with bone animated.. hmm
 	Unit();
 	~Unit();

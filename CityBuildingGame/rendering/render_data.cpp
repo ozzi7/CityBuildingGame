@@ -1,4 +1,11 @@
 #include "stdafx.h"
 #include "render_data.h"
+#include <game_object.h>
 
-RenderBufferElement::RenderBufferElement() {};
+RenderBuffer::RenderBuffer() {};
+void RenderBuffer::SaveRenderData(GameObject* obj) {
+	//switch (obj->type) {
+	//	//case Rendertype: cout << '1';
+	//	//case 2: cout << '2';
+	//}
+}

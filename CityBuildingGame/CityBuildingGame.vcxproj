@@ -19,15 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="gameObjects\game_object.h" />
     <ClInclude Include="rendering\render_data.h" />
-    <ClInclude Include="utility\buffer_element.h" />
+    <ClInclude Include="utility\buffer.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameObjects\bone_animated.h" />
     <ClInclude Include="gameObjects\fir.h" />
     <ClInclude Include="gameObjects\grass.h" />
     <ClInclude Include="gameObjects\lumberjack.h" />
-    <ClInclude Include="gameObjects\object.h" />
     <ClInclude Include="gameObjects\tree.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="grid.h" />
@@ -50,7 +50,7 @@
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="game.cpp" />
-    <ClCompile Include="gameObjects\object.cpp" />
+    <ClCompile Include="gameObjects\game_object.cpp" />
     <ClCompile Include="rendering\render_data.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="input_handler.cpp" />
@@ -69,12 +69,12 @@
     <ClCompile Include="terrain\noise_gen.cpp" />
     <ClCompile Include="terrain\terrain.cpp" />
     <ClCompile Include="terrain\tree_generator.cpp" />
-    <ClCompile Include="utility\buffer_element.cpp" />
+    <ClCompile Include="utility\buffer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFA9DB1-C1C7-4774-B08F-6F86CDF05BEF}</ProjectGuid>
     <RootNamespace>CityBuildingGame</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -155,7 +155,7 @@
       <ShowIncludes>false</ShowIncludes>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp14</LanguageStandard>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
@@ -193,7 +193,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\utility;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp14</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>

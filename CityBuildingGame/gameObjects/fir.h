@@ -4,6 +4,7 @@
 class Fir: public Tree
 {
 public:
+	RenderObjType type = fir;
 	Fir(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation) 
 		: Tree(aPosition, aScale, aRotation) {
 

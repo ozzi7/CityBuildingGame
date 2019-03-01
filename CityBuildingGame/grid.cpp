@@ -101,7 +101,7 @@ Grid::~Grid() {
 }
 
 Unit::Unit() {
-	objects = std::list<Object*>();
+	objects = std::list<GameObject*>();
 	movingObjects = std::list<BoneAnimated*>();
 }
 Unit::~Unit() {

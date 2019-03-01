@@ -18,9 +18,9 @@
 #include "terrain/noise_gen.h"
 #include "rendering/shader.h"
 #include "rendering/model.h"
-#include "object.h"
+#include "game_object.h"
 
-class Terrain : Object
+class Terrain : GameObject
 {
 public:
 	Terrain(int gridHeight, int gridWidth);

@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #pragma once
-#include "object.h"
+#include "game_object.h"
 
-Object::Object(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
+GameObject::GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 {
 	position = aPosition;
 	scale = aScale;
@@ -10,9 +10,9 @@ Object::Object(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 
 	recalculateModelMatix();
 }
-Object::Object() {};
+GameObject::GameObject() {};
 
-void Object::recalculateModelMatix()
+void GameObject::recalculateModelMatix()
 {
 	model = glm::mat4(1.0f);
 	model = glm::translate(model, position);
