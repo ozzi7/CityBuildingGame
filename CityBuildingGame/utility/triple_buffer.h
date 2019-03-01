@@ -31,9 +31,12 @@ public:
 	void AddElement(T element);
 	void ExchangeProducerBuffer(); // call this after production cycle
 	void ExchangeConsumerBuffer(); // call this before consumption cycle
+	BufferElement* GetConsumerBuffer();
 
 	std::mutex bufferMutex;
 	std::vector<BufferElement*> buffers;
+
+	int newDataReady = false;
 
 	int consumerBufferID = 0;
 	int producerBufferID = 1; 

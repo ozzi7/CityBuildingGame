@@ -22,11 +22,18 @@ void TripleBuffer::ExchangeProducerBuffer()
 {
 	bufferMutex.lock();
 	std::swap(consumerBufferID, idleBuffer);
+	newDataReady = true;
 	bufferMutex.unlock();
 }
 void TripleBuffer::ExchangeConsumerBuffer()
 {
 	bufferMutex.lock();
-	std::swap(idleBuffer, producerBufferID);
+	if (newDataReady) {
+		std::swap(idleBuffer, producerBufferID);
+	}
 	bufferMutex.unlock();
+}
+BufferElement* TripleBuffer::GetConsumerBuffer()
+{
+	return buffers[consumerBufferID];
 }

@@ -50,7 +50,9 @@ void Game::renderLoop()
 
 		renderer->SetMatrices(projection, view);
 		renderer->OpenGLStart();
-		//renderer->Render();
+		
+		renderBuffer->ExchangeConsumerBuffer();
+		renderer->Render();
 
 		glfwSwapBuffers(window);
 

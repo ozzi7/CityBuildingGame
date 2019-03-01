@@ -15,6 +15,7 @@
 #include "fir.h"
 #include "lumberjack.h"
 #include "grass.h"
+#include "triple_buffer.h"
 
 class Renderer
 {
@@ -86,6 +87,10 @@ public:
 		glEnable(GL_MULTISAMPLE);
 		glDepthMask(TRUE);
 	}
+	void Render(TripleBuffer *renderBuffer)
+	{
+		RenderInstancedObjects(renderBuffer);
+	}
 	void Visit(Tree *tree) {};
 	/*void Visit(Fir *fir)
 	{
@@ -127,38 +132,35 @@ public:
 
 		terrain->Draw();
 	}
-	void RenderInstancedObjects()
+	void RenderInstancedObjects(TripleBuffer *renderBuffer)
 	{
-		//glDepthMask(FALSE);
-		///*Use of continuous alpha values requires blending*/
-		//glEnable(GL_BLEND);
-		////glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		////glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
-		////glBlendFunc(GL_ONE, GL_ONE);
-		////glBlendFunc(GL_ONE, GL_ONE);
+		glDepthMask(FALSE);
+		/*Use of continuous alpha values requires blending*/
+		glEnable(GL_BLEND);
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+		//glBlendFunc(GL_ONE, GL_ONE);
+		//glBlendFunc(GL_ONE, GL_ONE);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		//instanced_mesh_shader->use();
-		//instanced_model_grass->Draw(*instanced_mesh_shader, dataGrass.models); // note shader.use() is in model
+		instanced_mesh_shader->use();
+		instanced_model_grass->Draw(*instanced_mesh_shader, renderBuffer->grassModels); // note shader.use() is in model
 
-		///*set the light source*/
-		//glm::vec3 lightColor;
-		//lightColor.x = 1.0f;
-		//lightColor.y = 1.0f;
-		//lightColor.z = 1.0f;
-		//glm::vec3 diffuseColor = lightColor * glm::vec3(0.7f); // decrease the influence
-		//glm::vec3 ambientColor = diffuseColor * glm::vec3(0.5f); // low influence
-		//instanced_mesh_shader->setVec3("light.ambient", ambientColor);
-		//instanced_mesh_shader->setVec3("light.diffuse", diffuseColor);
-		////terrain_shader->setVec3("light.position", glm::vec3(100.0f, 100.0f, 40.0f));//camera->Position);
-		//instanced_mesh_shader->setVec3("light.direction", glm::vec3(-1.0, -1.0, -1.0));
-		//instanced_mesh_shader->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
+		/*set the light source*/
+		glm::vec3 lightColor;
+		lightColor.x = 1.0f;
+		lightColor.y = 1.0f;
+		lightColor.z = 1.0f;
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.7f); // decrease the influence
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.5f); // low influence
+		instanced_mesh_shader->setVec3("light.ambient", ambientColor);
+		instanced_mesh_shader->setVec3("light.diffuse", diffuseColor);
+		//terrain_shader->setVec3("light.position", glm::vec3(100.0f, 100.0f, 40.0f));//camera->Position);
+		instanced_mesh_shader->setVec3("light.direction", glm::vec3(-1.0, -1.0, -1.0));
+		instanced_mesh_shader->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
 
-		///*draw instanced objects*/
-		//instanced_model_fir->Draw(*instanced_mesh_shader, dataFir.models); // note shader.use() is in model
-
-		//dataGrass.models.clear();
-		//dataFir.models.clear();
+		/*draw instanced objects*/
+		instanced_model_fir->Draw(*instanced_mesh_shader, renderBuffer->firModels); // note shader.use() is in model
 	}
 	void RenderDepthMap()
 	{
