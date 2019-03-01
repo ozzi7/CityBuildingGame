@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "triple_buffer.h"
 
-using namespace std;
-
 template <class T>
 TripleBuffer<T>::TripleBuffer() {
 	for (int i = 0; i < 3; ++i) {
