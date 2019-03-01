@@ -1,10 +1,10 @@
 #pragma once
 #include <game_object.h>
+#include "visitor.h"
 
 class BoneAnimated : public GameObject
 {
 public:
-	RenderObjType type = boneAnimated;
 	BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 		: GameObject(aPosition, aScale, aRotation) {};
 

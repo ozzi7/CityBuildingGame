@@ -1,12 +1,11 @@
 #pragma once
 #include "bone_animated.h"
 #include <math.h> 
+#include "visitor.h"
 
 class Lumberjack : public BoneAnimated
 {
 public:
-	RenderObjType type = lumberjack;
-
 	Lumberjack(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 		: BoneAnimated(aPosition, aScale, aRotation) {
 		model = glm::translate(model, position);
@@ -26,7 +25,10 @@ public:
 		//wayPoints.push_back(glm::vec3(4.44139, 3.56043, 1.508691));
 		//wayPoints.push_back(glm::vec3(4.84637, 3.82603, 1.508691));
 	};
-
+	void Accept(Visitor &v)
+	{
+		v.Visit(this);
+	};
 	/* Updates the position, rotation of the lumberjack*/
 	void UpdatePosition()
 	{

@@ -46,6 +46,7 @@
     <ClInclude Include="terrain\terrain.h" />
     <ClInclude Include="terrain\tree_generator.h" />
     <ClInclude Include="utility\triple_buffer.h" />
+    <ClInclude Include="visitor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />

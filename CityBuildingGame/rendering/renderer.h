@@ -155,7 +155,7 @@ public:
 
 		/*draw instanced objects*/
 		instanced_model_fir->Draw(*instanced_mesh_shader, renderBuffer->firModels); // note shader.use() is in model
-		instanced_model_grass->Draw(*instanced_mesh_shader, renderBuffer->grassModels); // note shader.use() is in model
+		//instanced_model_grass->Draw(*instanced_mesh_shader, renderBuffer->grassModels); // note shader.use() is in model
 
 	}
 	void RenderDepthMap()

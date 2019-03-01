@@ -50,8 +50,7 @@ void Game::renderLoop()
 
 		renderer->SetMatrices(projection, view);
 		renderer->OpenGLStart();
-		
-		renderBuffers->ExchangeConsumerBuffer();
+
 		renderer->RenderGameObjects(renderBuffers->GetConsumerBuffer());
 
 		glfwSwapBuffers(window);
@@ -95,13 +94,15 @@ void Game::gameLoop()
 		for (int i = 0; i < grid->nofElements; i++) {
 			for (std::list<GameObject*>::iterator it = grid->visibleUnits[i]->objects.begin();
 				it != grid->visibleUnits[i]->objects.end(); ++it) {
-				producerBuffer->SaveData(*it);
+				(*it)->Accept(*producerBuffer);
 			}
 			for (std::list<BoneAnimated*>::iterator it = grid->visibleUnits[i]->movingObjects.begin();
 				it != grid->visibleUnits[i]->movingObjects.end(); ++it) {
-				producerBuffer->SaveData(*it);
+				(*it)->Accept(*producerBuffer);
 			}
 		}
+		renderBuffers->ExchangeProducerBuffer();
+
 		std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::microseconds>(next_game_tick - std::chrono::high_resolution_clock::now()));
 		next_game_tick = (next_game_tick + std::chrono::microseconds(SKIP_TICKS));
 		loops++;

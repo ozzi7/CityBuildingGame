@@ -7,7 +7,6 @@ GameObject::GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotatio
 	position = aPosition;
 	scale = aScale;
 	rotation = aRotation;
-
 	recalculateModelMatix();
 }
 GameObject::GameObject() {};

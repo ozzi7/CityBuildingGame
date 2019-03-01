@@ -49,5 +49,6 @@
     <ClInclude Include="utility\triple_buffer.h" />
     <ClInclude Include="utility\buffer.h" />
     <ClInclude Include="gameObjects\game_object.h" />
+    <ClInclude Include="visitor.h" />
   </ItemGroup>
 </Project>

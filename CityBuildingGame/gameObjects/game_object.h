@@ -1,13 +1,11 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
-
-enum RenderObjType { gameObject, fir, grass, lumberjack, tree, boneAnimated };
+#include "visitor.h"
 
 class GameObject
 {
 public:
-	RenderObjType type = gameObject;
 	GameObject();
 	GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation);
 
@@ -15,6 +13,8 @@ public:
 	glm::vec3 scale;
 	glm::vec3 rotation;
 	glm::mat4 model = glm::mat4(1.0f);
+
+	virtual void Accept(class Visitor &v) = 0;
 
 protected:
 	void recalculateModelMatix();

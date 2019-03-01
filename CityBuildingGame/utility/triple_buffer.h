@@ -24,6 +24,17 @@ There must be an atomic operation to exchange the pointers to the buffers. The t
 template <class T>
 class TripleBuffer
 {
+protected:
+	void TripleBuffer<T>::exchangeConsumerBuffer()  // call this before consumption cycle
+	{
+		bufferMutex.lock();
+		if (newDataReady) {
+			std::swap(idleBuffer, consumerBufferID);
+			newDataReady = false;
+		}
+		bufferMutex.unlock();
+	}
+
 public:
 	TripleBuffer<T>::TripleBuffer() {
 		for (int i = 0; i < 3; ++i) {
@@ -38,22 +49,13 @@ public:
 	void TripleBuffer<T>::ExchangeProducerBuffer()  // call this after production cycle
 	{
 		bufferMutex.lock();
-		std::swap(consumerBufferID, idleBuffer);
+		std::swap(producerBufferID, idleBuffer);
 		newDataReady = true;
 		bufferMutex.unlock();
 	}
-	void TripleBuffer<T>::ExchangeConsumerBuffer()  // call this before consumption cycle
-	{
-		bufferMutex.lock();
-		if (newDataReady) {
-			std::swap(idleBuffer, producerBufferID);
-			newDataReady = false;
-		}
-		bufferMutex.unlock();
-	}
-	
 	T* TripleBuffer<T>::GetConsumerBuffer()
 	{
+		exchangeConsumerBuffer();
 		return buffers[consumerBufferID];
 	}
 	T* TripleBuffer<T>::GetProducerBuffer()

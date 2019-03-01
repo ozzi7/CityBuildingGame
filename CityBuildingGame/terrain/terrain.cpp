@@ -299,6 +299,10 @@ void Terrain::CreateGeometry()
 		}
 	}
 }
+void Terrain::Accept(Visitor &v)
+{
+	v.Visit(this);
+}
 void Terrain::InitOpenGL(Shader* terrain_shader)
 {
 	terrain_shader->use();
