@@ -31,9 +31,7 @@ void Grid::Init()
 	}
 
 	/*Initialize the vectors used for determining what to render*/
-	visibleUnits0 = new std::vector<Unit*>(maximumVisibleUnits);
-	visibleUnits1 = new std::vector<Unit*>(maximumVisibleUnits);
-	visibleUnits2 = new std::vector<Unit*>(maximumVisibleUnits);
+	visibleUnits = std::vector<Unit*>(maximumVisibleUnits);
 }
 
 void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::vec2 &lowerLeft, glm::vec2 &lowerRight)
@@ -52,16 +50,6 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 		int startY = std::min(std::min((int)upperLeft.y, int(lowerLeft.y)), std::min((int)upperRight.y, int(lowerRight.y)));
 		int endY = std::max(std::max((int)upperLeft.y, int(lowerLeft.y)), std::max((int)upperRight.y, int(lowerRight.y)));
 
-		std::vector<Unit*> *visibleUnitsTemp;
-		visibleUnitsMutex.lock();
-		if (visibleUnitsToFill == 0)
-			visibleUnitsTemp = visibleUnits0;
-		else if (visibleUnitsToFill == 1)
-			visibleUnitsTemp = visibleUnits1;
-		else
-			visibleUnitsTemp = visibleUnits2;
-		visibleUnitsMutex.unlock();
-
 		int index = 0;
 		for (int i = std::max(0, startY + 1); i <= std::min(gridHeight - 1, endY); ++i)
 		{
@@ -77,43 +65,13 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 					if ((0 <= glm::dot(AM, AB)) && (glm::dot(AM, AB) < glm::dot(AB, AB)) &&
 						(glm::dot(AM, AD) < glm::dot(AD, AD)) && 0 <= glm::dot(AM, AD))
 					{
-						(*visibleUnitsTemp)[index++] = gridUnits[i][j];
+						visibleUnits[index++] = gridUnits[i][j];
 					}
 				}
 				else
-					goto end;
+					return;
 			}
 		}
-	end:
-		visibleUnitsMutex.lock();	
-		visibleUnitsToRender = visibleUnitsToFill;
-		if (visibleUnitsRendering == 0 && visibleUnitsToFill == 1)
-		{
-			visibleUnitsToFill = 2;
-		}
-		else if (visibleUnitsRendering == 0 && visibleUnitsToFill == 2)
-		{
-			visibleUnitsToFill = 1;
-		}
-		else if (visibleUnitsRendering == 1 && visibleUnitsToFill == 0)
-		{
-			visibleUnitsToFill = 2;
-		}
-		else if (visibleUnitsRendering == 1 && visibleUnitsToFill == 2)
-		{
-			visibleUnitsToFill = 0;
-		}
-		else if (visibleUnitsRendering == 2 && visibleUnitsToFill == 0)
-		{
-			visibleUnitsToFill = 1;
-		}
-		else if (visibleUnitsRendering == 2 && visibleUnitsToFill == 1)
-		{
-			visibleUnitsToFill = 0;
-		}
-
-		visibleUnitsSizeToRender = index;
-		visibleUnitsMutex.unlock();
 	}
 }
 /* Return height of any point on the grid */
@@ -144,8 +102,11 @@ Grid::~Grid() {
 
 Unit::Unit() {
 	objects = std::list<Object*>();
+	movingObjects = std::list<BoneAnimated*>();
 }
 Unit::~Unit() {
 	for (auto it = objects.begin(); it != objects.end(); ++it)
+		delete (*it);
+	for (auto it = movingObjects.begin(); it != movingObjects.end(); ++it)
 		delete (*it);
 }
