@@ -84,6 +84,7 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="rendering\instanced_mesh.h">
     <ClInclude Include="utility\buffer_element.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -140,6 +141,10 @@
     <ClCompile Include="rendering\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rendering\instanced_mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\mesh.cpp">
     <ClCompile Include="utility\buffer_element.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

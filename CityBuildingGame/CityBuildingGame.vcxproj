@@ -32,6 +32,7 @@
     <ClInclude Include="globals.h" />
     <ClInclude Include="grid.h" />
     <ClInclude Include="input_handler.h" />
+    <ClInclude Include="rendering\instanced_mesh.h" />
     <ClInclude Include="rendering\instanced_model.h" />
     <ClInclude Include="rendering\mesh.h" />
     <ClInclude Include="rendering\model.h" />
@@ -53,8 +54,10 @@
     <ClCompile Include="rendering\render_data.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="input_handler.cpp" />
+    <ClCompile Include="rendering\instanced_mesh.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="rendering\instanced_model.cpp" />
+    <ClCompile Include="rendering\mesh.cpp" />
     <ClCompile Include="rendering\model.cpp" />
     <ClCompile Include="rendering\shader.cpp" />
     <ClCompile Include="rendering\skinned_mesh.cpp" />
@@ -152,7 +155,7 @@
       <ShowIncludes>false</ShowIncludes>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
@@ -190,7 +193,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\utility;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>

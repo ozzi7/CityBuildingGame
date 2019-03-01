@@ -23,11 +23,13 @@ Model::Model(const std::string& path)
 	// process ASSIMP's root node recursively
 	processNode(scene->mRootNode, scene);
 }
-void Model::Draw(Shader shader)
+void Model::Draw(Shader& shader)
 {
 	for (unsigned int i = 0; i < meshes.size(); i++)
-		meshes[i].Draw(shader);
-	
+	{
+		meshes[i].Bind(shader);
+		meshes[i].Draw();
+	}
 }
 
 // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
@@ -83,15 +85,15 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 		else
 			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 		// tangent
-		vector.x = mesh->mTangents[i].x;
-		vector.y = mesh->mTangents[i].y;
-		vector.z = mesh->mTangents[i].z;
-		vertex.Tangent = vector;
-		// bitangent
-		vector.x = mesh->mBitangents[i].x;
-		vector.y = mesh->mBitangents[i].y;
-		vector.z = mesh->mBitangents[i].z;
-		vertex.Bitangent = vector;
+		//vector.x = mesh->mTangents[i].x;
+		//vector.y = mesh->mTangents[i].y;
+		//vector.z = mesh->mTangents[i].z;
+		//vertex.Tangent = vector;
+		//// bitangent
+		//vector.x = mesh->mBitangents[i].x;
+		//vector.y = mesh->mBitangents[i].y;
+		//vector.z = mesh->mBitangents[i].z;
+		//vertex.Bitangent = vector;
 		vertices.push_back(vertex);
 	}
 	// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
