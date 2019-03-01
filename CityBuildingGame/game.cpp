@@ -8,7 +8,7 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	inputHandler = aInputHandler;
 
 	grid = new Grid(MAP_WIDTH, MAP_HEIGHT);
-	renderBuffer = new TripleBuffer();
+	renderBuffer = new TripleBuffer<RenderBufferElement*>();
 
 	camera = new Camera(glm::vec3(50.0f + MAP_HEIGHT * 0.5f, -50.0f + MAP_WIDTH * 0.5f, 50.0f), window);
 
@@ -52,7 +52,7 @@ void Game::renderLoop()
 		renderer->OpenGLStart();
 		
 		renderBuffer->ExchangeConsumerBuffer();
-		renderer->Render();
+		renderer->RenderGameObjects(renderBuffer->GetConsumerBuffer());
 
 		glfwSwapBuffers(window);
 

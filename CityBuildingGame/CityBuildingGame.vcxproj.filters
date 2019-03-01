@@ -84,9 +84,6 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\render_triple_buffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="utility\buffer_element.h">
       <Filter>Header Files</Filter>
     </ClInclude>

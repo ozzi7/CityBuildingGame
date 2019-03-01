@@ -87,9 +87,9 @@ public:
 		glEnable(GL_MULTISAMPLE);
 		glDepthMask(TRUE);
 	}
-	void Render(TripleBuffer *renderBuffer)
+	void RenderGameObjects(RenderBufferElement *rBufferElement)
 	{
-		RenderInstancedObjects(renderBuffer);
+		RenderInstancedObjects(rBufferElement);
 	}
 	void Visit(Tree *tree) {};
 	/*void Visit(Fir *fir)
@@ -132,19 +132,13 @@ public:
 
 		terrain->Draw();
 	}
-	void RenderInstancedObjects(TripleBuffer *renderBuffer)
+	void RenderInstancedObjects(RenderBufferElement *rBufferElement)
 	{
 		glDepthMask(FALSE);
-		/*Use of continuous alpha values requires blending*/
 		glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
-		//glBlendFunc(GL_ONE, GL_ONE);
-		//glBlendFunc(GL_ONE, GL_ONE);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		instanced_mesh_shader->use();
-		instanced_model_grass->Draw(*instanced_mesh_shader, renderBuffer->grassModels); // note shader.use() is in model
 
 		/*set the light source*/
 		glm::vec3 lightColor;
@@ -160,7 +154,9 @@ public:
 		instanced_mesh_shader->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
 
 		/*draw instanced objects*/
-		instanced_model_fir->Draw(*instanced_mesh_shader, renderBuffer->firModels); // note shader.use() is in model
+		instanced_model_fir->Draw(*instanced_mesh_shader, rBufferElement->firModels); // note shader.use() is in model
+		instanced_model_grass->Draw(*instanced_mesh_shader, rBufferElement->grassModels); // note shader.use() is in model
+
 	}
 	void RenderDepthMap()
 	{

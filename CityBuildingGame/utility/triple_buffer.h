@@ -5,7 +5,6 @@ TODO2: We don't need to create new data we could use the existing objects and ov
 #pragma once
 #include <vector>
 #include <mutex>
-#include "buffer_element.h"
 
 /*
 
@@ -21,22 +20,21 @@ If the gameloop runs faster the render thread will simply skip the rendering of 
 There must be an atomic operation to exchange the pointers to the buffers. The two threads never have to wait for each other.
 
 */
+template <class T>
 class TripleBuffer
 {
 public:
 	TripleBuffer();
 	~TripleBuffer();
 
-	template <class T>
-	void AddElement(T element);
 	void ExchangeProducerBuffer(); // call this after production cycle
 	void ExchangeConsumerBuffer(); // call this before consumption cycle
-	BufferElement* GetConsumerBuffer();
+	T GetConsumerBuffer();
 
 	std::mutex bufferMutex;
-	std::vector<BufferElement*> buffers;
+	std::vector<T*> buffers;
 
-	int newDataReady = false;
+	bool newDataReady = false;
 
 	int consumerBufferID = 0;
 	int producerBufferID = 1; 

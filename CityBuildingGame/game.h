@@ -36,7 +36,7 @@ private:
 	Camera* camera;
 	GLFWwindow* window;
 	InputHandler* inputHandler;
-	TripleBuffer* renderBuffer;
+	TripleBuffer<RenderBufferElement*>* renderBuffer;
 
 	// timing
 	float deltaTime = 0.0f;	// time between current frame and last frame
