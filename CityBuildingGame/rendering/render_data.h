@@ -1,12 +1,10 @@
 #pragma once
+#include "buffer_element.h"
 #include <vector>
-#include <triple_buffer.h>
 
-#include <glm/glm.hpp>
-#include "glm/gtc/matrix_transform.hpp"
-
-class RenderData {
+class RenderBufferElement : public BufferElement {
 public:
+	RenderBufferElement();
 	std::vector<glm::mat4> firModels;
 	std::vector<glm::mat4> grassModels;
 };

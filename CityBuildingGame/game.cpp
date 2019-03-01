@@ -8,7 +8,7 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	inputHandler = aInputHandler;
 
 	grid = new Grid(MAP_WIDTH, MAP_HEIGHT);
-	renderBuffer = new TripleBuffer(1000);
+	renderBuffer = new TripleBuffer();
 
 	camera = new Camera(glm::vec3(50.0f + MAP_HEIGHT * 0.5f, -50.0f + MAP_WIDTH * 0.5f, 50.0f), window);
 
@@ -50,7 +50,7 @@ void Game::renderLoop()
 
 		renderer->SetMatrices(projection, view);
 		renderer->OpenGLStart();
-		renderer->Render();
+		//renderer->Render();
 
 		glfwSwapBuffers(window);
 
@@ -90,12 +90,12 @@ void Game::gameLoop()
 
 		for (int i = 0; i < grid->visibleUnits.size(); i++) {
 			for (std::list<Object*>::iterator it = grid->visibleUnits[i]->objects.begin();
-				it != grid->visibleUnits[i][j]->objects.end(); ++it) {
-				(*it)->SaveRenderData();
+				it != grid->visibleUnits[i]->objects.end(); ++it) {
+				//(*it)->SaveRenderData();
 			}
-			for (std::list<BoneAnimated*>::iterator it = grid->visibleUnits[i][j]->movingObjects.begin();
-				it != grid->visibleUnits[i][j]->movingObjects.end(); ++it) {
-				(*it)->SaveRenderData();
+			for (std::list<BoneAnimated*>::iterator it = grid->visibleUnits[i]->movingObjects.begin();
+				it != grid->visibleUnits[i]->movingObjects.end(); ++it) {
+				//(*it)->SaveRenderData();
 			}
 		}
 		std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::microseconds>(next_game_tick - std::chrono::high_resolution_clock::now()));

@@ -5,6 +5,7 @@ TODO2: We don't need to create new data we could use the existing objects and ov
 #pragma once
 #include <vector>
 #include <mutex>
+#include "buffer_element.h"
 
 /*
 
@@ -24,21 +25,15 @@ class TripleBuffer
 {
 public:
 	TripleBuffer();
-	TripleBuffer(int maxCapacity);
 	~TripleBuffer();
 
-	void AddElement(class T* element);
-	void AddSubElement(class T* element);
+	template <class T>
+	void AddElement(T element);
 	void ExchangeProducerBuffer(); // call this after production cycle
 	void ExchangeConsumerBuffer(); // call this before consumption cycle
 
-	int maxElements = 0;
-
 	std::mutex bufferMutex;
-	std::vector<std::vector<class T*>> buffers;
-
-	// this allows us to keep old data in the buffer without clearing it
-	int consumerBufferSize = 0; 
+	std::vector<BufferElement*> buffers;
 
 	int consumerBufferID = 0;
 	int producerBufferID = 1; 

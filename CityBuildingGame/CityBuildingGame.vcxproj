@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="rendering\render_data.h" />
+    <ClInclude Include="utility\buffer_element.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameObjects\bone_animated.h" />
@@ -34,6 +36,7 @@
     <ClInclude Include="rendering\mesh.h" />
     <ClInclude Include="rendering\model.h" />
     <ClInclude Include="rendering\renderer.h" />
+    <ClInclude Include="rendering\render_triple_buffer.h" />
     <ClInclude Include="rendering\shader.h" />
     <ClInclude Include="rendering\skinned_mesh.hpp" />
     <ClInclude Include="rendering\stb_image.h" />
@@ -42,12 +45,13 @@
     <ClInclude Include="terrain\noise_gen.h" />
     <ClInclude Include="terrain\terrain.h" />
     <ClInclude Include="terrain\tree_generator.h" />
-    <ClInclude Include="triple_buffer.h" />
+    <ClInclude Include="utility\triple_buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameObjects\object.cpp" />
+    <ClCompile Include="rendering\render_data.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="input_handler.cpp" />
     <ClCompile Include="main.cpp" />
@@ -63,7 +67,8 @@
     <ClCompile Include="terrain\noise_gen.cpp" />
     <ClCompile Include="terrain\terrain.cpp" />
     <ClCompile Include="terrain\tree_generator.cpp" />
-    <ClCompile Include="triple_buffer.cpp" />
+    <ClCompile Include="utility\buffer_element.cpp" />
+    <ClCompile Include="utility\triple_buffer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFA9DB1-C1C7-4774-B08F-6F86CDF05BEF}</ProjectGuid>
@@ -145,7 +150,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\utility;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ShowIncludes>false</ShowIncludes>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
@@ -184,7 +189,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\utility;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp14</LanguageStandard>
