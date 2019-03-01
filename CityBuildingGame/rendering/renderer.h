@@ -15,12 +15,8 @@
 #include "fir.h"
 #include "lumberjack.h"
 #include "grass.h"
+#include "triple_buffer.h"
 
-/* could add shader, mesh, texture path,.. here*/
-struct renderData {
-public:
-	std::vector<glm::mat4> models;
-};
 class Renderer
 {
 public:
@@ -36,8 +32,6 @@ public:
 	//Shader *shadow_map_shader;
 
 	float z = 0.0f;
-	renderData dataFir;
-	renderData dataGrass;
 
 	Renderer()
 	{
@@ -93,15 +87,19 @@ public:
 		glEnable(GL_MULTISAMPLE);
 		glDepthMask(TRUE);
 	}
+	void RenderGameObjects(RenderBufferElement *rBufferElement)
+	{
+		RenderInstancedObjects(rBufferElement);
+	}
 	void Visit(Tree *tree) {};
-	void Visit(Fir *fir)
+	/*void Visit(Fir *fir)
 	{
 		dataFir.models.push_back(fir->model);
 	};
 	void Visit(Grass *grass)
 	{
 		dataGrass.models.push_back(grass->model);
-	}
+	}*/
 	void Visit(Lumberjack *lumberjack)
 	{
 		skinned_mesh_shader->use();
@@ -134,19 +132,13 @@ public:
 
 		terrain->Draw();
 	}
-	void RenderInstancedObjects()
+	void RenderInstancedObjects(RenderBufferElement *rBufferElement)
 	{
 		glDepthMask(FALSE);
-		/*Use of continuous alpha values requires blending*/
 		glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
-		//glBlendFunc(GL_ONE, GL_ONE);
-		//glBlendFunc(GL_ONE, GL_ONE);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		instanced_mesh_shader->use();
-		instanced_model_grass->Draw(*instanced_mesh_shader, dataGrass.models); // note shader.use() is in model
 
 		/*set the light source*/
 		glm::vec3 lightColor;
@@ -162,10 +154,9 @@ public:
 		instanced_mesh_shader->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
 
 		/*draw instanced objects*/
-		instanced_model_fir->Draw(*instanced_mesh_shader, dataFir.models); // note shader.use() is in model
+		instanced_model_fir->Draw(*instanced_mesh_shader, rBufferElement->firModels); // note shader.use() is in model
+		instanced_model_grass->Draw(*instanced_mesh_shader, rBufferElement->grassModels); // note shader.use() is in model
 
-		dataGrass.models.clear();
-		dataFir.models.clear();
 	}
 	void RenderDepthMap()
 	{

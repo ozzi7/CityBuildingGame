@@ -1,6 +1,6 @@
 #pragma once
 
-#include<string>
+#include <string>
 
 // user settings
 const unsigned int SCR_WIDTH = 1920;
