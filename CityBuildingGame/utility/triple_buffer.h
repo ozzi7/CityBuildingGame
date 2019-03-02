@@ -1,6 +1,7 @@
 /*TODO: To speed things up we could have separate triple buffers for objects that rarely
 move, only scrolling would invalidate them (or creating/destructing) 
-TODO2: We don't need to create new data we could use the existing objects and overwrite the fields if this is faster */
+TODO2: Don't resize internal datastructures all the time 
+Note: For more than one consumer => Add additional locks when getting buffer*/
 
 #pragma once
 #include <vector>
