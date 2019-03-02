@@ -9,15 +9,12 @@ MapGenerator::MapGenerator(Grid* aGrid)
 
 void MapGenerator::GenerateMap() 
 {
-	//std::uniform_real_distribution<> scale_grass(0.9, 1.2);
-	//std::uniform_real_distribution<> pos_offset_grass(-0.5, 0.5);
-
 	generateTerrain();
 	generateTrees();
 
 	grid->gridUnits[0][0]->movingObjects.push_back(
 		new Lumberjack(glm::vec3(0.5f, 0.5f, grid->gridUnits[0][0]->averageHeight),
-			glm::vec3(1, 1, 1), glm::vec3(0, 0, 0)));
+			glm::vec3(0.014f, 0.014f, 0.014f), glm::vec3(0, 0, 0)));
 }
 
 void MapGenerator::generateTerrain()

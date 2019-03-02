@@ -8,19 +8,6 @@ class Lumberjack : public BoneAnimated
 public:
 	Lumberjack(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 		: BoneAnimated(aPosition, aScale, aRotation) {
-		model = glm::translate(model, position);
-		model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
-
-		//wayPoints.push_back(glm::vec3(3.63833, 6.81779, 1.181271));
-		//wayPoints.push_back(glm::vec3(3.86907, 6.58705, 1.230742));
-		//wayPoints.push_back(glm::vec3(3.63388, 5.73592, 1.352878));
-		//wayPoints.push_back(glm::vec3(3.55535, 4.78177, 1.477088));
-		//wayPoints.push_back(glm::vec3(3.18281, 4.01433, 1.477088));
-		//wayPoints.push_back(glm::vec3(2.8589, 3.22502, 1.489148));
-		//wayPoints.push_back(glm::vec3(3.3160, 3.29101, 1.464005));
-		//wayPoints.push_back(glm::vec3(3.86888, 3.44896, 1.464005));
-		//wayPoints.push_back(glm::vec3(4.44139, 3.56043, 1.508691));
-		//wayPoints.push_back(glm::vec3(4.84637, 3.82603, 1.508691));
 	};
 	void Accept(Visitor &v)
 	{
@@ -71,8 +58,8 @@ public:
 			position += translation;
 			rotation.z = std::atan2f(translation.y,translation.x);
 			if (translation.x < 0)
-				rotation += 2 * 3.1415;
-			rotation = rotation - 3.1415f/2.0f; // somehow roation direction is not from +x to +y but +x to -y.. 
+				rotation.z += 2 * 3.1415;
+			rotation.z = rotation.z - 3.1415f/2.0f; // somehow roation direction is not from +x to +y but +x to -y.. 
 			//rotation = rotation + 3.1415;
 			recalculateModelMatix();
 		}
@@ -86,6 +73,6 @@ public:
 private:
 	float z = 0.0f;
 	int wayPointIndex = 0;
-	float walkingSpeed = 0.004f; // TODO: depends on model size.. 
+	float walkingSpeed = 0.005f; // TODO: depends on model size.. 
 	float maxRotation = 0.1f;
 };

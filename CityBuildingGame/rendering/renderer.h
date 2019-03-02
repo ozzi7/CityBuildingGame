@@ -98,15 +98,8 @@ public:
 	void Render(RenderBuffer* renderBuffer)
 	{
 		RenderTerrain(renderBuffer);
+		RenderBoneAnimated(renderBuffer);
 		RenderInstancedObjects(renderBuffer);
-	}
-	void Visit(Lumberjack* lumberjack)
-	{
-		skinned_mesh_shader->use();
-		z = z + 0.0011f; // TODO: speed of animation doesnt belong here...
-		mesh_lumberjack->BindBoneTransform(z, skinned_mesh_shader);
-		skinned_mesh_shader->setMat4("model", lumberjack->model);
-		mesh_lumberjack->Render(*skinned_mesh_shader);
 	}
 	void RenderTerrain(RenderBuffer* renderBuffer)
 	{
@@ -119,9 +112,9 @@ public:
 	}
 	void RenderInstancedObjects(RenderBuffer* renderBuffer)
 	{
-		//glDepthMask(FALSE);
-		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glDepthMask(FALSE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		instanced_mesh_shader->use();
 		instanced_mesh_shader->setVec3("light.ambient", ambientLight);
@@ -133,6 +126,17 @@ public:
 		instanced_model_oak->Draw(*instanced_mesh_shader, renderBuffer->oakModels); // note shader.use() is in model
 		instanced_model_spruce->Draw(*instanced_mesh_shader, renderBuffer->spruceModels); // note shader.use() is in model
 		instanced_model_juniper->Draw(*instanced_mesh_shader, renderBuffer->juniperModels); // note shader.use() is in model
+	}
+	void RenderBoneAnimated(RenderBuffer* renderBuffer)
+	{
+		skinned_mesh_shader->use();
+		z = z + 0.0011f; // TODO: speed of animation doesnt belong here...
+		mesh_lumberjack->BindBoneTransform(z, skinned_mesh_shader);
+
+		for (int i = 0; i < renderBuffer->lumberjackModels.size(); ++i) {
+			skinned_mesh_shader->setMat4("model", renderBuffer->lumberjackModels[i]);
+			mesh_lumberjack->Render(*skinned_mesh_shader);
+		}
 	}
 	void RenderDepthMap()
 	{

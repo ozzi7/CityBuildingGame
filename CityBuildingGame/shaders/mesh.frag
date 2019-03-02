@@ -22,8 +22,6 @@ uniform Light light;
 void main()
 {
 	vec4 texel = texture(material.diffuse, TexCoords);
-	if(texel.a < 0.15)
-	discard;
 
 	vec4 texColor = texture(material.diffuse, TexCoords);
 
