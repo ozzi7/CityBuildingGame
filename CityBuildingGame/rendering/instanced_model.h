@@ -29,5 +29,4 @@ private:
 
 	std::vector<InstancedMesh> meshes;
 	void processNode(aiNode *node, const aiScene *scene);
-	InstancedMesh processMesh(aiMesh *mesh, const aiScene *scene);
 };

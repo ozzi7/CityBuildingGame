@@ -41,8 +41,14 @@ void Model::processNode(aiNode *node, const aiScene *scene)
 	{
 		// the node object only contains indices to index the actual objects in the scene. 
 		// the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
-		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		meshes.push_back(processMesh(mesh, scene));
+		std::vector<Vertex> vertices;
+		std::vector<unsigned int> indices;
+		std::vector<Texture> textures;
+		aiMesh* aimesh = scene->mMeshes[node->mMeshes[i]];
+
+		processMesh(aimesh, scene, &vertices, &indices, &textures);
+		Mesh mesh = Mesh(vertices, indices, textures);
+		meshes.push_back(mesh);
 	}
 	// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -51,12 +57,8 @@ void Model::processNode(aiNode *node, const aiScene *scene)
 	}
 }
 
-Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
+void Model::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>* vertices, std::vector<unsigned int>* indices, std::vector<Texture>* textures)
 {
-	// data to fill
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
-	std::vector<Texture> textures;
 
 	// Walk through each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
@@ -95,7 +97,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 		//vector.y = mesh->mBitangents[i].y;
 		//vector.z = mesh->mBitangents[i].z;
 		//vertex.Bitangent = vector;
-		vertices.push_back(vertex);
+		vertices->push_back(vertex);
 	}
 	// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
@@ -103,7 +105,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 		aiFace face = mesh->mFaces[i];
 		// retrieve all indices of the face and store them in the indices vector
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
-			indices.push_back(face.mIndices[j]);
+			indices->push_back(face.mIndices[j]);
 	}
 	// process materials
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
@@ -116,19 +118,17 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 
 	// 1. diffuse maps
 	std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+	textures->insert(textures->end(), diffuseMaps.begin(), diffuseMaps.end());
 	// 2. specular maps
 	std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+	textures->insert(textures->end(), specularMaps.begin(), specularMaps.end());
 	// 3. normal maps
 	std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
-	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+	textures->insert(textures->end(), normalMaps.begin(), normalMaps.end());
 	// 4. height maps
 	std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
-	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+	textures->insert(textures->end(), heightMaps.begin(), heightMaps.end());
 
-	// return a mesh object created from the extracted mesh data
-	return Mesh(vertices, indices, textures);
 }
 
 // checks all material textures of a given type and loads the textures if they're not loaded yet.
