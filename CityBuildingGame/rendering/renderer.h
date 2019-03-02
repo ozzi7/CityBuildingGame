@@ -16,19 +16,23 @@
 #include "lumberjack.h"
 #include "triple_buffer.h"
 
+struct LightSource
+{
+	glm::vec3 Direction;
+	glm::vec3 Color;
+};
+
 class Renderer
 {
 public:
-	//Model *model_fir;
+	SkinnedMesh* mesh_lumberjack;
+	InstancedModel* instanced_model_fir;
+	Shader* terrain_shader;
+	Shader* skinned_mesh_shader;
+	Shader* instanced_mesh_shader;
 
-	SkinnedMesh *mesh_lumberjack;
-	InstancedModel *instanced_model_fir;
-	InstancedModel *instanced_model_grass;
-	Shader *terrain_shader;
-	Shader *mesh_shader;
-	Shader *skinned_mesh_shader;
-	Shader *instanced_mesh_shader;
-	//Shader *shadow_map_shader;
+	LightSource directionalLight;
+	glm::vec3 ambientLight;
 
 	float z = 0.0f;
 
@@ -39,31 +43,26 @@ public:
 		std::replace(root_path.begin(), root_path.end(), '\\', '/');
 
 		terrain_shader = new Shader("shaders/terrain.vert", "shaders/terrain.frag");
-		mesh_shader = new Shader("shaders/mesh_shader.vert", "shaders/mesh_shader.frag");
 		skinned_mesh_shader = new Shader("shaders/skinning.vert", "shaders/skinning.frag");
 		instanced_mesh_shader = new Shader("shaders/mesh_instanced.vert", "shaders/mesh_instanced.frag");
-		//shadow_map_shader = new Shader("shadow_mapping_depth.vert", "shadow_mapping_depth.frag");
 
 		/* fir init*/
-		//texture_path = root_path + "/../models/fir3/fir2.dae";
 		texture_path = root_path + "/../models/testtree/testtree.dae";
 		instanced_model_fir = new InstancedModel(texture_path);
 
 		/* lumberjack init*/
-		//texture_path = root_path + "/../models/zombie/Zombie.fbx";
-		mesh_lumberjack = new SkinnedMesh();
-		//texture_path = root_path + "/../models/minotaur/animation/Minotaur@Walk.dae";
-		//texture_path = root_path + "/../models/mario/test_walk.dae";
 		texture_path = root_path + "/../models/lumberjack/lumberjack.dae";
+		mesh_lumberjack = new SkinnedMesh();
 		mesh_lumberjack->LoadMesh(texture_path);
-		mesh_lumberjack->PrecalculateBoneTransforms();	
+		mesh_lumberjack->PrecalculateBoneTransforms();
+
+		directionalLight.Color = { 0.8f, 0.8f, 0.8f };
+		directionalLight.Direction = { -1.0f, -1.0f, -1.0f };
+
+		ambientLight = { 0.2f, 0.2f, 0.2f };
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
 	{
-		mesh_shader->use();
-		mesh_shader->setMat4("projection", aProjection);
-		mesh_shader->setMat4("view", aView);
-
 		terrain_shader->use();
 		terrain_shader->setMat4("projection", aProjection);
 		terrain_shader->setMat4("view", aView);
@@ -94,25 +93,15 @@ public:
 		z = z + 0.0011f; // TODO: speed of animation doesnt belong here...
 		mesh_lumberjack->BindBoneTransform(z, skinned_mesh_shader);
 		skinned_mesh_shader->setMat4("model", lumberjack->model);
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		mesh_lumberjack->Render(*skinned_mesh_shader);
 	}
-	void RenderTerrain(RenderBuffer *renderBuffer)
+	void RenderTerrain(RenderBuffer* renderBuffer)
 	{
 		terrain_shader->use();
-
-		glm::vec3 lightColor;
-		lightColor.x = 1.0f;
-		lightColor.y = 1.0f;
-		lightColor.z = 1.0f;
-		glm::vec3 diffuseColor = lightColor * glm::vec3(0.7f); // decrease the influence
-		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.5f); // low influence
-		terrain_shader->setVec3("light.ambient", ambientColor);
-		terrain_shader->setVec3("light.diffuse", diffuseColor);
-		//terrain_shader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		//terrain_shader->setVec3("light.position", glm::vec3(100.0f, 100.0f, 40.0f));//camera->Position);
-		terrain_shader->setVec3("light.direction", glm::vec3(-1.0, -1.0, -1.0));
-		terrain_shader->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
+		terrain_shader->setVec3("light.ambient", ambientLight);
+		terrain_shader->setVec3("light.diffuse", directionalLight.Color);
+		terrain_shader->setVec3("light.direction", directionalLight.Direction);
+		//terrain_shader->setVec3("viewPos", glm::vec3(1, 1, 1));
 
 		// calculate the model matrix for each object and pass it to shader before drawing
 		glm::mat4 model = glm::mat4(1.0f);
@@ -127,17 +116,9 @@ public:
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		instanced_mesh_shader->use();
-
-		/*set the light source*/
-		glm::vec3 lightColor;
-		lightColor.x = 1.0f;
-		lightColor.y = 1.0f;
-		lightColor.z = 1.0f;
-		glm::vec3 diffuseColor = lightColor * glm::vec3(0.7f); // decrease the influence
-		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.5f); // low influence
-		instanced_mesh_shader->setVec3("light.ambient", ambientColor);
-		instanced_mesh_shader->setVec3("light.diffuse", diffuseColor);
-		instanced_mesh_shader->setVec3("light.direction", glm::vec3(-1.0, -1.0, -1.0));
+		instanced_mesh_shader->setVec3("light.ambient", ambientLight);
+		instanced_mesh_shader->setVec3("light.diffuse", directionalLight.Color);
+		instanced_mesh_shader->setVec3("light.direction", directionalLight.Direction);
 		instanced_mesh_shader->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
 
 		/*draw instanced objects*/
