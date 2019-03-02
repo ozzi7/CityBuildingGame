@@ -6,7 +6,6 @@
 #include "grid.h"
 #include "fir.h"
 #include "lumberjack.h"
-#include "grass.h"
 
 class MapGenerator {
 public:

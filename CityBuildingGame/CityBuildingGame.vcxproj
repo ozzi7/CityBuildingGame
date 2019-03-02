@@ -26,7 +26,6 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="gameObjects\bone_animated.h" />
     <ClInclude Include="gameObjects\fir.h" />
-    <ClInclude Include="gameObjects\grass.h" />
     <ClInclude Include="gameObjects\lumberjack.h" />
     <ClInclude Include="gameObjects\tree.h" />
     <ClInclude Include="globals.h" />

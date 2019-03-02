@@ -8,16 +8,10 @@ void RenderBuffer::Visit(GameObject* obj) {
 void RenderBuffer::Visit(Fir* obj) {
 	firModels.push_back(obj->model);
 }
-void RenderBuffer::Visit(Grass* obj) {
-	grassModels.push_back(obj->model);
-}
 void RenderBuffer::Visit(Lumberjack* obj) {
 }
-void RenderBuffer::Visit(Chamaecyparis* obj) {
-}
-void RenderBuffer::Visit(Palm* obj) {
-}
 void RenderBuffer::Visit(Terrain* obj) {
+
 	terrain = obj;
 }
 void RenderBuffer::Visit(Tree* obj) {

@@ -14,7 +14,6 @@
 #include "tree.h"
 #include "fir.h"
 #include "lumberjack.h"
-#include "grass.h"
 #include "triple_buffer.h"
 
 class Renderer
@@ -46,12 +45,9 @@ public:
 		//shadow_map_shader = new Shader("shadow_mapping_depth.vert", "shadow_mapping_depth.frag");
 
 		/* fir init*/
-		texture_path = root_path + "/../models/fir3/fir2.dae";
+		//texture_path = root_path + "/../models/fir3/fir2.dae";
+		texture_path = root_path + "/../models/testtree/testtree.dae";
 		instanced_model_fir = new InstancedModel(texture_path);
-
-		/* Grass init*/
-		texture_path = root_path + "/../models/grass/test.dae";
-		//instanced_model_grass = new InstancedModel(texture_path);
 
 		/* lumberjack init*/
 		//texture_path = root_path + "/../models/zombie/Zombie.fbx";
@@ -92,15 +88,6 @@ public:
 		RenderTerrain(renderBuffer);
 		RenderInstancedObjects(renderBuffer);
 	}
-	void Visit(Tree *tree) {};
-	/*void Visit(Fir *fir)
-	{
-		dataFir.models.push_back(fir->model);
-	};
-	void Visit(Grass *grass)
-	{
-		dataGrass.models.push_back(grass->model);
-	}*/
 	void Visit(Lumberjack *lumberjack)
 	{
 		skinned_mesh_shader->use();
@@ -150,14 +137,11 @@ public:
 		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.5f); // low influence
 		instanced_mesh_shader->setVec3("light.ambient", ambientColor);
 		instanced_mesh_shader->setVec3("light.diffuse", diffuseColor);
-		//terrain_shader->setVec3("light.position", glm::vec3(100.0f, 100.0f, 40.0f));//camera->Position);
 		instanced_mesh_shader->setVec3("light.direction", glm::vec3(-1.0, -1.0, -1.0));
 		instanced_mesh_shader->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
 
 		/*draw instanced objects*/
 		instanced_model_fir->Draw(*instanced_mesh_shader, renderBuffer->firModels); // note shader.use() is in model
-		//instanced_model_grass->Draw(*instanced_mesh_shader, renderBuffer->grassModels); // note shader.use() is in model
-
 	}
 	void RenderDepthMap()
 	{

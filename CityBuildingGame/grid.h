@@ -8,7 +8,6 @@
 #include "terrain.h"
 #include "fir.h"
 #include "lumberjack.h"
-#include "grass.h"
 
 /* Represents a grid subunit */
 class Unit
