@@ -26,7 +26,6 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameObjects\bone_animated.h" />
-    <ClInclude Include="gameObjects\fir.h" />
     <ClInclude Include="gameObjects\lumberjack.h" />
     <ClInclude Include="gameObjects\tree.h" />
     <ClInclude Include="globals.h" />
@@ -49,6 +48,10 @@
     <ClInclude Include="utility\buffer.h" />
     <ClInclude Include="visitor.h" />
     <ClInclude Include="gameObjects\game_object.h" />
+    <ClInclude Include="gameObjects\juniper.h" />
+    <ClInclude Include="gameObjects\oak.h" />
+    <ClInclude Include="gameObjects\spruce.h" />
+    <ClInclude Include="gameObjects\pine.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\materials.frag" />

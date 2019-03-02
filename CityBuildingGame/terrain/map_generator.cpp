@@ -13,7 +13,7 @@ void MapGenerator::GenerateMap()
 	//std::uniform_real_distribution<> pos_offset_grass(-0.5, 0.5);
 
 	generateTerrain();
-	generateFirs();
+	generateTrees();
 
 	grid->gridUnits[0][0]->movingObjects.push_back(
 		new Lumberjack(glm::vec3(0.5f, 0.5f, grid->gridUnits[0][0]->averageHeight),
@@ -32,7 +32,7 @@ void MapGenerator::generateTerrain()
 	grid->Init();
 }
 
-void MapGenerator::generateFirs()
+void MapGenerator::generateTrees()
 {
 	std::mt19937 gen(rd());
 	std::chi_squared_distribution<> scale_tree(1.0f);
@@ -45,19 +45,34 @@ void MapGenerator::generateFirs()
 
 	for (int i = 0; i < grid->gridHeight; ++i) {
 		for (int j = 0; j < grid->gridWidth; ++j) {
-			if (treeMap[i][j] >= 5) {
-				float scale = 1.0f - (float)scale_tree(gen);
-				while (scale < 0.1f) {scale = 1.0f - (float)scale_tree(gen); }
-				float posX = j + 0.5f + (float)pos_offset_tree(gen);
-				float posY = i + 0.5f + (float)pos_offset_tree(gen);
-
+			float scale = 1.0f - (float)scale_tree(gen);
+			while (scale < 0.1f) { scale = 1.0f - (float)scale_tree(gen); }
+			float posX = j + 0.5f + (float)pos_offset_tree(gen);
+			float posY = i + 0.5f + (float)pos_offset_tree(gen);
+			if (treeMap[i][j] >= 7) {
 				grid->gridUnits[i][j]->objects.push_back(
-					new Fir(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
+					new Oak(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
+						glm::vec3(scale*0.01f, scale*0.01f, scale*0.01f),
+						glm::vec3(1.5707963f, 0, rotation(gen))));
+			}
+			else if (treeMap[i][j] >= 4) {
+				grid->gridUnits[i][j]->objects.push_back(
+					new Pine(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
+						glm::vec3(scale*0.01f, scale*0.01f, scale*0.01f),
+						glm::vec3(1.5707963f, 0, rotation(gen))));
+			}
+			else if (treeMap[i][j] >= 2) {
+				grid->gridUnits[i][j]->objects.push_back(
+					new Spruce(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
+						glm::vec3(scale*0.01f, scale*0.01f, scale*0.01f),
+						glm::vec3(1.5707963f, 0, rotation(gen))));
+			}
+			else if (treeMap[i][j] >= 0) {
+				grid->gridUnits[i][j]->objects.push_back(
+					new Juniper(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 						glm::vec3(scale*0.01f, scale*0.01f, scale*0.01f),
 						glm::vec3(1.5707963f, 0, rotation(gen))));
 			}
 		}
 	}
 }
-
-

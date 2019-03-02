@@ -46,7 +46,7 @@ void InputHandler::Mouseclick(int button, int action)
 		else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		{
 			Grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->objects.push_back(
-				new Fir(glm::vec3(cursor_position),
+				new Pine(glm::vec3(cursor_position),
 					glm::vec3(1.0f, 1.0f, 1.0f),
 					glm::vec3(1.0f, 0.0f, 0.0f)));
 		}

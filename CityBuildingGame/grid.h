@@ -6,7 +6,10 @@
 #include <algorithm>
 
 #include "terrain.h"
-#include "fir.h"
+#include "oak.h"
+#include "spruce.h"
+#include "juniper.h"
+#include "pine.h"
 #include "lumberjack.h"
 
 /* Represents a grid subunit */

@@ -3,20 +3,29 @@
 #include "buffer.h"
 #include <game_object.h>
 #include <lumberjack.h>
-#include <fir.h>
+#include <spruce.h>
+#include <juniper.h>
+#include <oak.h>
+#include <pine.h>
 
 class RenderBuffer : public Buffer, public Visitor {
 public:
 	RenderBuffer();
 	void Visit(GameObject*);
-	void Visit(Fir*);
+	void Visit(Spruce*);
+	void Visit(Oak*);
+	void Visit(Pine*);
+	void Visit(Juniper*);
 	void Visit(Lumberjack*);
 	void Visit(Terrain* obj);
 	void Visit(Tree* obj);
 
 	void ClearData();
 
-	std::vector<glm::mat4> firModels;
-	std::vector<glm::mat4> grassModels;
+	std::vector<glm::mat4> pineModels;
+	std::vector<glm::mat4> spruceModels;
+	std::vector<glm::mat4> juniperModels;
+	std::vector<glm::mat4> oakModels;
+
 	Terrain* terrain; // TODO: 
 };

@@ -12,7 +12,6 @@
 #include "instanced_model.h"
 
 #include "tree.h"
-#include "fir.h"
 #include "lumberjack.h"
 #include "triple_buffer.h"
 
@@ -26,10 +25,13 @@ class Renderer
 {
 public:
 	SkinnedMesh* mesh_lumberjack;
-	InstancedModel* instanced_model_fir;
 	Shader* terrain_shader;
 	Shader* skinned_mesh_shader;
 	Shader* instanced_mesh_shader;
+	InstancedModel *instanced_model_pine;
+	InstancedModel *instanced_model_juniper;
+	InstancedModel *instanced_model_spruce;
+	InstancedModel *instanced_model_oak;
 
 	LightSource directionalLight;
 	glm::vec3 ambientLight;
@@ -46,11 +48,21 @@ public:
 		skinned_mesh_shader = new Shader("shaders/skinning.vert", "shaders/skinning.frag");
 		instanced_mesh_shader = new Shader("shaders/mesh_instanced.vert", "shaders/mesh_instanced.frag");
 
-		/* fir init*/
-		texture_path = root_path + "/../models/testtree/testtree.dae";
-		instanced_model_fir = new InstancedModel(texture_path);
+		/* vegetation*/
+		texture_path = root_path + "/../models/pine/pine.dae";
+		instanced_model_pine = new InstancedModel(texture_path);
+
+		texture_path = root_path + "/../models/juniper/juniper.dae";
+		instanced_model_juniper = new InstancedModel(texture_path);
+
+		texture_path = root_path + "/../models/spruce/spruce.dae";
+		instanced_model_spruce = new InstancedModel(texture_path);
+
+		texture_path = root_path + "/../models/oak/oak.dae";
+		instanced_model_oak = new InstancedModel(texture_path);
 
 		/* lumberjack init*/
+		mesh_lumberjack = new SkinnedMesh();
 		texture_path = root_path + "/../models/lumberjack/lumberjack.dae";
 		mesh_lumberjack = new SkinnedMesh();
 		mesh_lumberjack->LoadMesh(texture_path);
@@ -122,7 +134,10 @@ public:
 		instanced_mesh_shader->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
 
 		/*draw instanced objects*/
-		instanced_model_fir->Draw(*instanced_mesh_shader, renderBuffer->firModels); // note shader.use() is in model
+		instanced_model_pine->Draw(*instanced_mesh_shader, renderBuffer->pineModels); // note shader.use() is in model
+		instanced_model_oak->Draw(*instanced_mesh_shader, renderBuffer->oakModels); // note shader.use() is in model
+		instanced_model_spruce->Draw(*instanced_mesh_shader, renderBuffer->spruceModels); // note shader.use() is in model
+		instanced_model_juniper->Draw(*instanced_mesh_shader, renderBuffer->juniperModels); // note shader.use() is in model
 	}
 	void RenderDepthMap()
 	{
