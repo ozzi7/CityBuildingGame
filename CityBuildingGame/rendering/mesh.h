@@ -38,7 +38,7 @@ public:
 
 	// render the mesh
 	void Draw();
-
+	
 protected:
 	/*  Render data  */
 	unsigned int VBO, EBO;

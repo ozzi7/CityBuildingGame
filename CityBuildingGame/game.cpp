@@ -61,7 +61,7 @@ void Game::renderLoop()
 
 void Game::gameLoop()
 {
-	const int TICKS_PER_SECOND = 240;
+	const int TICKS_PER_SECOND = 100;
 	const int SKIP_TICKS = 1000000 / TICKS_PER_SECOND; // microseconds
 
 
