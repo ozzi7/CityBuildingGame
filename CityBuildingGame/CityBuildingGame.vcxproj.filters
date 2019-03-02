@@ -54,19 +54,10 @@
     <ClInclude Include="gameObjects\pine.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\materials.frag" />
-    <None Include="shaders\materials.vert" />
-    <None Include="shaders\mesh_instanced.frag" />
-    <None Include="shaders\mesh_instanced.vert" />
-    <None Include="shaders\mesh_instanced_depth.frag" />
-    <None Include="shaders\mesh_instanced_depth.vert" />
-    <None Include="shaders\mesh_shader.frag" />
-    <None Include="shaders\mesh_shader.vert" />
-    <None Include="shaders\shadow_mapping_depth.frag" />
-    <None Include="shaders\shadow_mapping_depth.vert" />
     <None Include="shaders\skinning.frag" />
     <None Include="shaders\skinning.vert" />
-    <None Include="shaders\terrain.frag" />
     <None Include="shaders\terrain.vert" />
+    <None Include="shaders\mesh.frag" />
+    <None Include="shaders\mesh.vert" />
   </ItemGroup>
 </Project>

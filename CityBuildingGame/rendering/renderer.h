@@ -44,9 +44,9 @@ public:
 		std::string texture_path;
 		std::replace(root_path.begin(), root_path.end(), '\\', '/');
 
-		terrain_shader = new Shader("shaders/terrain.vert", "shaders/terrain.frag");
+		terrain_shader = new Shader("shaders/terrain.vert", "shaders/mesh.frag");
 		skinned_mesh_shader = new Shader("shaders/skinning.vert", "shaders/skinning.frag");
-		instanced_mesh_shader = new Shader("shaders/mesh_instanced.vert", "shaders/mesh_instanced.frag");
+		instanced_mesh_shader = new Shader("shaders/mesh.vert", "shaders/mesh.frag");
 
 		/* vegetation*/
 		texture_path = root_path + "/../models/pine/pine.dae";
@@ -71,13 +71,14 @@ public:
 		directionalLight.Color = { 0.8f, 0.8f, 0.8f };
 		directionalLight.Direction = { -1.0f, -1.0f, -1.0f };
 
-		ambientLight = { 0.2f, 0.2f, 0.2f };
+		ambientLight = { 0.3f, 0.3f, 0.3f };
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
 	{
 		terrain_shader->use();
 		terrain_shader->setMat4("projection", aProjection);
 		terrain_shader->setMat4("view", aView);
+		terrain_shader->setMat4("model", glm::mat4(1.0f));
 
 		skinned_mesh_shader->use();
 		skinned_mesh_shader->setMat4("projection", aProjection);
@@ -99,7 +100,7 @@ public:
 		RenderTerrain(renderBuffer);
 		RenderInstancedObjects(renderBuffer);
 	}
-	void Visit(Lumberjack *lumberjack)
+	void Visit(Lumberjack* lumberjack)
 	{
 		skinned_mesh_shader->use();
 		z = z + 0.0011f; // TODO: speed of animation doesnt belong here...
@@ -113,25 +114,19 @@ public:
 		terrain_shader->setVec3("light.ambient", ambientLight);
 		terrain_shader->setVec3("light.diffuse", directionalLight.Color);
 		terrain_shader->setVec3("light.direction", directionalLight.Direction);
-		//terrain_shader->setVec3("viewPos", glm::vec3(1, 1, 1));
-
-		// calculate the model matrix for each object and pass it to shader before drawing
-		glm::mat4 model = glm::mat4(1.0f);
-		terrain_shader->setMat4("model", model);
 
 		renderBuffer->terrain->Draw();
 	}
 	void RenderInstancedObjects(RenderBuffer* renderBuffer)
 	{
-		glDepthMask(FALSE);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glDepthMask(FALSE);
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		instanced_mesh_shader->use();
 		instanced_mesh_shader->setVec3("light.ambient", ambientLight);
 		instanced_mesh_shader->setVec3("light.diffuse", directionalLight.Color);
 		instanced_mesh_shader->setVec3("light.direction", directionalLight.Direction);
-		instanced_mesh_shader->setVec3("viewPos", glm::vec3(10.0f, 10.0f, 10.0f));
 
 		/*draw instanced objects*/
 		instanced_model_pine->Draw(*instanced_mesh_shader, renderBuffer->pineModels); // note shader.use() is in model

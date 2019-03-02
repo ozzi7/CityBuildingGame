@@ -16,12 +16,15 @@ struct Light {
 in vec3 Normal;
 in vec2 TexCoords;
 
-uniform vec3 viewPos;
 uniform Material material;
 uniform Light light;
 
 void main()
 {
+	vec4 texel = texture(material.diffuse, TexCoords);
+	if(texel.a < 0.15)
+	discard;
+
 	vec4 texColor = texture(material.diffuse, TexCoords);
 
     vec3 ambient = light.ambient * texColor.rgb;
