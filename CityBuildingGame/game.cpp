@@ -50,7 +50,7 @@ void Game::renderLoop()
 		renderer->SetMatrices(projection, view);
 		renderer->OpenGLStart();
 
-		renderer->RenderGameObjects(renderBuffers->GetConsumerBuffer());
+		renderer->Render(renderBuffers->GetConsumerBuffer());
 
 		glfwSwapBuffers(window);
 
@@ -101,6 +101,7 @@ void Game::gameLoop()
 				(*it)->Accept(*producerBuffer);
 			}
 		}
+		grid->terrain->Accept(*producerBuffer); // TODO
 		renderBuffers->ExchangeProducerBuffer();
 
 		std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::microseconds>(next_game_tick - std::chrono::high_resolution_clock::now()));

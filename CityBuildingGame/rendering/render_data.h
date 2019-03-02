@@ -22,4 +22,5 @@ public:
 
 	std::vector<glm::mat4> firModels;
 	std::vector<glm::mat4> grassModels;
+	Terrain* terrain; // TODO: 
 };

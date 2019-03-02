@@ -87,8 +87,9 @@ public:
 		glEnable(GL_MULTISAMPLE);
 		glDepthMask(TRUE);
 	}
-	void RenderGameObjects(RenderBuffer* renderBuffer)
+	void Render(RenderBuffer* renderBuffer)
 	{
+		RenderTerrain(renderBuffer);
 		RenderInstancedObjects(renderBuffer);
 	}
 	void Visit(Tree *tree) {};
@@ -109,7 +110,7 @@ public:
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		mesh_lumberjack->Render(*skinned_mesh_shader);
 	}
-	void Visit(Terrain *terrain)
+	void RenderTerrain(RenderBuffer *renderBuffer)
 	{
 		terrain_shader->use();
 
@@ -130,7 +131,7 @@ public:
 		glm::mat4 model = glm::mat4(1.0f);
 		terrain_shader->setMat4("model", model);
 
-		terrain->Draw();
+		renderBuffer->terrain->Draw();
 	}
 	void RenderInstancedObjects(RenderBuffer* renderBuffer)
 	{

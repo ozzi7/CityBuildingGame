@@ -18,6 +18,7 @@ void RenderBuffer::Visit(Chamaecyparis* obj) {
 void RenderBuffer::Visit(Palm* obj) {
 }
 void RenderBuffer::Visit(Terrain* obj) {
+	terrain = obj;
 }
 void RenderBuffer::Visit(Tree* obj) {
 }
