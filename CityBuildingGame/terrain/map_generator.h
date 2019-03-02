@@ -4,7 +4,10 @@
 
 #include <globals.h>
 #include "grid.h"
-#include "fir.h"
+#include "oak.h"
+#include "juniper.h"
+#include "spruce.h"
+#include "pine.h"
 #include "lumberjack.h"
 
 class MapGenerator {
@@ -21,5 +24,5 @@ private:
 	std::vector<std::vector<float>> treeMap;
 
 	void generateTerrain();
-	void generateFirs();
+	void generateTrees();
 };

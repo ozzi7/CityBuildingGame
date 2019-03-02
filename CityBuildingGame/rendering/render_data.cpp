@@ -5,8 +5,17 @@ RenderBuffer::RenderBuffer() {};
 void RenderBuffer::Visit(GameObject* obj) {
 
 }
-void RenderBuffer::Visit(Fir* obj) {
-	firModels.push_back(obj->model);
+void RenderBuffer::Visit(Pine* obj) {
+	pineModels.push_back(obj->model);
+}
+void RenderBuffer::Visit(Spruce* obj) {
+	spruceModels.push_back(obj->model);
+}
+void RenderBuffer::Visit(Oak* obj) {
+	oakModels.push_back(obj->model);
+}
+void RenderBuffer::Visit(Juniper* obj) {
+	juniperModels.push_back(obj->model);
 }
 void RenderBuffer::Visit(Lumberjack* obj) {
 }
@@ -18,6 +27,8 @@ void RenderBuffer::Visit(Tree* obj) {
 }
 void RenderBuffer::ClearData()
 {
-	firModels.clear();
-	grassModels.clear();
+	pineModels.clear();
+	spruceModels.clear();
+	juniperModels.clear();
+	oakModels.clear();
 }
