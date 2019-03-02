@@ -51,7 +51,7 @@ public:
 
 		/* Grass init*/
 		texture_path = root_path + "/../models/grass/test.dae";
-		instanced_model_grass = new InstancedModel(texture_path);
+		//instanced_model_grass = new InstancedModel(texture_path);
 
 		/* lumberjack init*/
 		//texture_path = root_path + "/../models/zombie/Zombie.fbx";

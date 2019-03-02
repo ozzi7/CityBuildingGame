@@ -21,7 +21,6 @@
 class InstancedModel: public Model
 {
 public:
-	// constructor, expects a filepath to a 3D model.	
 	InstancedModel();
 	InstancedModel(const std::string& path);
 
@@ -29,4 +28,6 @@ public:
 private:
 
 	std::vector<InstancedMesh> meshes;
+	void processNode(aiNode *node, const aiScene *scene);
+	InstancedMesh processMesh(aiMesh *mesh, const aiScene *scene);
 };
