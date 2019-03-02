@@ -91,7 +91,7 @@ void Game::gameLoop()
 
 		/* Extract data for the renderer*/
 		RenderBuffer* producerBuffer = renderBuffers->GetProducerBuffer();
-		for (int i = 0; i < grid->nofElements; i++) {
+		for (int i = 0; i < grid->nofVisibleUnits; i++) {
 			for (std::list<GameObject*>::iterator it = grid->visibleUnits[i]->objects.begin();
 				it != grid->visibleUnits[i]->objects.end(); ++it) {
 				(*it)->Accept(*producerBuffer);

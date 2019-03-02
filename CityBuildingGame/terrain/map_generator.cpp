@@ -53,8 +53,8 @@ void MapGenerator::generateFirs()
 
 				grid->gridUnits[i][j]->objects.push_back(
 					new Fir(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
-						glm::vec3(scale, scale, scale),
-						glm::vec3(0, 0, rotation(gen))));
+						glm::vec3(scale*0.3f, scale*0.3f, scale*0.3f),
+						glm::vec3(1.5707963f, 0, rotation(gen))));
 			}
 		}
 	}
