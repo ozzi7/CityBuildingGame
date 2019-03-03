@@ -22,7 +22,7 @@ void NoiseGen::GeneratePerlinNoise(std::vector<std::vector<float>> &pHeightmap, 
 			smoothNoiseList.push_back(smoothNoise);
 		}
 
-		CombineNoiseMaps(pHeightmap, octaveCount);
+		CombineNoiseMaps(pHeightmap, octaveCount, persistence);
 
 		Rescale(pHeightmap, minimumHeight, maximumHeight);
 	}

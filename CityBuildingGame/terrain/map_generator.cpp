@@ -21,7 +21,7 @@ void MapGenerator::generateTerrain()
 {
 	NoiseGen noise_gen;
 	std::vector<std::vector<float>> heightmap = std::vector<std::vector<float>>(grid->gridHeight + 1, std::vector<float>(grid->gridWidth + 1, 0));
-	noise_gen.GeneratePerlinNoise(heightmap, grid->gridHeight + 1, grid->gridWidth + 1, -HILL_HEIGHT * 0.7f, HILL_HEIGHT * 0.7f, 6);
+	noise_gen.GeneratePerlinNoise(heightmap, grid->gridHeight + 1, grid->gridWidth + 1, 0.0f, HILL_HEIGHT, 6, PERSISTENCE);
 	flattenMap(heightmap);
 		
 	grid->terrain->heightmap = heightmap;
@@ -39,7 +39,7 @@ void MapGenerator::generateTrees()
 
 	/* create trees using noise */
 	treeMap = std::vector<std::vector<float>>(grid->gridHeight, std::vector<float>(grid->gridWidth, 0));
-	noiseGen.GeneratePerlinNoise(treeMap, grid->gridHeight, grid->gridWidth, 0.0f, 1.0f, 3);
+	noiseGen.GeneratePerlinNoise(treeMap, grid->gridHeight, grid->gridWidth, 0.0f, 10.0f, 6, 0.7f);
 
 	for (int i = 0; i < grid->gridHeight; ++i) {
 		for (int j = 0; j < grid->gridWidth; ++j) {
@@ -78,7 +78,7 @@ void MapGenerator::generateTrees()
 void MapGenerator::flattenMap(std::vector<std::vector<float>> &pHeightmap)
 {
 	float thresholdValley = getHeightAtPercentage(pHeightmap, VALLEY_PERCENTAGE);
-	float thresholdPlateau = getHeightAtPercentage(pHeightmap, 1- PLATEAU_PERCENTAGE);
+	float thresholdPlateau = getHeightAtPercentage(pHeightmap, 100 - PLATEAU_PERCENTAGE);
 
 	/* cut off */
 	for (int i = 0; i < pHeightmap.size(); i++)
