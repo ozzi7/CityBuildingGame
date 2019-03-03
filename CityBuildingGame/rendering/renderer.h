@@ -122,43 +122,45 @@ public:
 	}
 	void RenderTerrain(RenderBuffer* renderBuffer)
 	{
+		Shader* shader;
 		if (ShadowPass) 
 		{
-			shadow_shader->use();
+			shader = shadow_shader;
+			shader->use();
 		}
 		else
 		{
-			terrain_shader->use();
-			terrain_shader->setVec3("light.ambient", ambientLight);
-			terrain_shader->setVec3("light.diffuse", directionalLight.Color);
-			terrain_shader->setVec3("light.direction", directionalLight.Direction);
+			shader = terrain_shader;
+			shader->use();
+			shader->setVec3("light.ambient", ambientLight);
+			shader->setVec3("light.diffuse", directionalLight.Color);
+			shader->setVec3("light.direction", directionalLight.Direction);
 		}
 
 		renderBuffer->terrain->Draw();
 	}
 	void RenderInstancedObjects(RenderBuffer* renderBuffer)
 	{
-		//glDepthMask(FALSE);
-		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+		Shader* shader;
 		if (ShadowPass)
 		{
-			shadow_shader->use();
+			shader = shadow_shader;
+			shader->use();
 		}
 		else
 		{
-			instanced_mesh_shader->use();
-			instanced_mesh_shader->setVec3("light.ambient", ambientLight);
-			instanced_mesh_shader->setVec3("light.diffuse", directionalLight.Color);
-			instanced_mesh_shader->setVec3("light.direction", directionalLight.Direction);
+			shader = instanced_mesh_shader;
+			shader->use();
+			shader->setVec3("light.ambient", ambientLight);
+			shader->setVec3("light.diffuse", directionalLight.Color);
+			shader->setVec3("light.direction", directionalLight.Direction);
 		}
 
 		/*draw instanced objects*/
-		instanced_model_pine->Draw(*instanced_mesh_shader, renderBuffer->pineModels); // note shader.use() is in model
-		instanced_model_oak->Draw(*instanced_mesh_shader, renderBuffer->oakModels); // note shader.use() is in model
-		instanced_model_spruce->Draw(*instanced_mesh_shader, renderBuffer->spruceModels); // note shader.use() is in model
-		instanced_model_juniper->Draw(*instanced_mesh_shader, renderBuffer->juniperModels); // note shader.use() is in model
+		instanced_model_pine->Draw(*shader, renderBuffer->pineModels);
+		instanced_model_oak->Draw(*shader, renderBuffer->oakModels);
+		instanced_model_spruce->Draw(*shader, renderBuffer->spruceModels);
+		instanced_model_juniper->Draw(*shader, renderBuffer->juniperModels);
 	}
 	void RenderBoneAnimated(RenderBuffer* renderBuffer)
 	{
