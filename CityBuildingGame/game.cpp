@@ -39,18 +39,41 @@ void Game::StartGame()
 void Game::renderLoop()
 {
 	renderer = new Renderer();
+	shadow = new Shadow();
+	glm::mat4 projection;
+	glm::mat4 view;
+	glm::mat4 lightSpaceMatrix;
 	
+	//lightSource = new Camera(glm::vec3(-50.0f, -50.0f, 50.0f), window);
 	grid->terrain->InitOpenGL(renderer->terrain_shader);
+	shadow->InitShadowMap();
 
 	while (!glfwWindowShouldClose(window))
 	{
-		glm::mat4 projection = camera->GetProjectionMatrix();
-		glm::mat4 view = camera->GetViewMatrix();
+		// Shadow pass
+		shadow->BindShadowMap();
 
-		renderer->SetMatrices(projection, view);
-		renderer->OpenGLStart();
+		projection = glm::ortho(-0.0f, 0.0f, -0.0f, 0.0f, 0.0f, 1.0f);
+		view = glm::lookAt(glm::vec3(50.0f, 50.0f, -50.0f), glm::vec3(50.0f, 50.0f, -50.0f) + renderer->directionalLight.Direction, glm::vec3(-1.0f, 1.0f, 0.0f));
+		lightSpaceMatrix = projection * view;
+		
+		renderer->ShadowPass = true;
+		renderer->SetMatrices(projection, view, lightSpaceMatrix);
 
 		renderer->Render(renderBuffers->GetConsumerBuffer());
+
+
+		// Render pass
+		renderer->ShadowPass = false;
+		renderer->OpenGLStart();
+
+		projection = camera->GetProjectionMatrix();
+		view = camera->GetViewMatrix();
+
+		renderer->SetMatrices(projection, view, lightSpaceMatrix);
+
+		renderer->Render(renderBuffers->GetConsumerBuffer());
+
 
 		glfwSwapBuffers(window);
 

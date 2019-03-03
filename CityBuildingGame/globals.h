@@ -6,8 +6,12 @@
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 
-const unsigned int MAP_WIDTH = 400;
-const unsigned int MAP_HEIGHT = 200;
+const unsigned int MAP_WIDTH = 50;
+const unsigned int MAP_HEIGHT = 50;
+
+// rendering
+const unsigned int SHADOW_WIDTH = 1024;
+const unsigned int SHADOW_HEIGHT = 1024;
 
 /* map generation */
 const float PINE_DENSITY = 5.0f;		// ~ 0 - 10

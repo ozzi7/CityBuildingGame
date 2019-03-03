@@ -10,7 +10,7 @@ MapGenerator::MapGenerator(Grid* aGrid)
 void MapGenerator::GenerateMap() 
 {
 	generateTerrain();
-	//generateTrees();
+	generateTrees();
 
 	grid->gridUnits[0][0]->movingObjects.push_back(
 		new Lumberjack(glm::vec3(0.5f, 0.5f, grid->gridUnits[0][0]->averageHeight),

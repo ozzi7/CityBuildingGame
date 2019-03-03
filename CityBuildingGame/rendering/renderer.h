@@ -10,6 +10,7 @@
 #include "model.h"
 #include "skinned_mesh.hpp"
 #include "instanced_model.h"
+#include "shadow.h"
 
 #include "tree.h"
 #include "lumberjack.h"
@@ -28,6 +29,7 @@ public:
 	Shader* terrain_shader;
 	Shader* skinned_mesh_shader;
 	Shader* instanced_mesh_shader;
+	Shader* shadow_shader;
 	InstancedModel *instanced_model_pine;
 	InstancedModel *instanced_model_juniper;
 	InstancedModel *instanced_model_spruce;
@@ -36,6 +38,7 @@ public:
 	LightSource directionalLight;
 	glm::vec3 ambientLight;
 
+	bool ShadowPass = false;
 	float z = 0.0f;
 
 	Renderer()
@@ -47,6 +50,8 @@ public:
 		terrain_shader = new Shader("shaders/terrain.vert", "shaders/mesh.frag");
 		skinned_mesh_shader = new Shader("shaders/skinning.vert", "shaders/skinning.frag");
 		instanced_mesh_shader = new Shader("shaders/mesh.vert", "shaders/mesh.frag");
+
+		shadow_shader = new Shader("shaders/shadow_depth.vert", "shaders/shadow_depth.frag");
 
 		/* vegetation*/
 		texture_path = root_path + "/../models/pine/pine.dae";
@@ -71,28 +76,42 @@ public:
 		directionalLight.Color = { 0.8f, 0.8f, 0.8f };
 		directionalLight.Direction = { -1.0f, -1.0f, -1.0f };
 
-		ambientLight = { 0.3f, 0.3f, 0.3f };
+		ambientLight = { 0.2f, 0.2f, 0.2f };
 	}
-	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView)
+	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix)
 	{
-		terrain_shader->use();
-		terrain_shader->setMat4("projection", aProjection);
-		terrain_shader->setMat4("view", aView);
-		terrain_shader->setMat4("model", glm::mat4(1.0f));
+		if (ShadowPass)
+		{
+			shadow_shader->use();
+			shadow_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+		}
+		else
+		{
+			terrain_shader->use();
+			terrain_shader->setMat4("projection", aProjection);
+			terrain_shader->setMat4("view", aView);
+			terrain_shader->setMat4("model", glm::mat4(1.0f));
+			terrain_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+			terrain_shader->setInt("shadowMap", 1);
 
-		skinned_mesh_shader->use();
-		skinned_mesh_shader->setMat4("projection", aProjection);
-		skinned_mesh_shader->setMat4("view", aView);
+			skinned_mesh_shader->use();
+			skinned_mesh_shader->setMat4("projection", aProjection);
+			skinned_mesh_shader->setMat4("view", aView);
+			skinned_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+			skinned_mesh_shader->setInt("shadowMap", 1);
 
-		instanced_mesh_shader->use();
-		instanced_mesh_shader->setMat4("projection", aProjection);
-		instanced_mesh_shader->setMat4("view", aView);
+			instanced_mesh_shader->use();
+			instanced_mesh_shader->setMat4("projection", aProjection);
+			instanced_mesh_shader->setMat4("view", aView);
+			instanced_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+			instanced_mesh_shader->setInt("shadowMap", 1);
+		}
 	}
 	void OpenGLStart() {
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_MULTISAMPLE);
 		glDepthMask(TRUE);
 	}
 	void Render(RenderBuffer* renderBuffer)
@@ -103,10 +122,17 @@ public:
 	}
 	void RenderTerrain(RenderBuffer* renderBuffer)
 	{
-		terrain_shader->use();
-		terrain_shader->setVec3("light.ambient", ambientLight);
-		terrain_shader->setVec3("light.diffuse", directionalLight.Color);
-		terrain_shader->setVec3("light.direction", directionalLight.Direction);
+		if (ShadowPass) 
+		{
+			shadow_shader->use();
+		}
+		else
+		{
+			terrain_shader->use();
+			terrain_shader->setVec3("light.ambient", ambientLight);
+			terrain_shader->setVec3("light.diffuse", directionalLight.Color);
+			terrain_shader->setVec3("light.direction", directionalLight.Direction);
+		}
 
 		renderBuffer->terrain->Draw();
 	}
@@ -116,10 +142,17 @@ public:
 		//glEnable(GL_BLEND);
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		instanced_mesh_shader->use();
-		instanced_mesh_shader->setVec3("light.ambient", ambientLight);
-		instanced_mesh_shader->setVec3("light.diffuse", directionalLight.Color);
-		instanced_mesh_shader->setVec3("light.direction", directionalLight.Direction);
+		if (ShadowPass)
+		{
+			shadow_shader->use();
+		}
+		else
+		{
+			instanced_mesh_shader->use();
+			instanced_mesh_shader->setVec3("light.ambient", ambientLight);
+			instanced_mesh_shader->setVec3("light.diffuse", directionalLight.Color);
+			instanced_mesh_shader->setVec3("light.direction", directionalLight.Direction);
+		}
 
 		/*draw instanced objects*/
 		instanced_model_pine->Draw(*instanced_mesh_shader, renderBuffer->pineModels); // note shader.use() is in model
@@ -138,33 +171,7 @@ public:
 			mesh_lumberjack->Render(*skinned_mesh_shader);
 		}
 	}
-	void RenderDepthMap()
-	{
-		//// 1. render depth of scene to texture (from light's perspective)
-		//// --------------------------------------------------------------
-		//glm::mat4 lightProjection, lightView;
-		//glm::mat4 lightSpaceMatrix;
-		//float near_plane = 1.0f, far_plane = 7.5f;
-		//lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-		//lightView = glm::lookAt(glm::vec3(-2.0f, 4.0f, -1.0f), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
-		//lightSpaceMatrix = lightProjection * lightView;
 
-		//// render scene from light's point of view
-		//shadow_map_shader->use();
-		//shadow_map_shader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
-
-		//glViewport(0, 0, 1024, 1024);
-		//glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-		//glClear(GL_DEPTH_BUFFER_BIT);
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, woodTexture);
-		//renderScene(simpleDepthShader);
-		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		//// reset viewport
-		//glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
 	~Renderer()
 	{
 		//delete model_fir;

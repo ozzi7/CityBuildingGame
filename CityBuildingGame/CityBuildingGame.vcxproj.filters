@@ -20,6 +20,7 @@
     <ClCompile Include="terrain\tree_generator.cpp" />
     <ClCompile Include="utility\buffer.cpp" />
     <ClCompile Include="gameObjects\game_object.cpp" />
+    <ClCompile Include="rendering\shadow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
@@ -52,6 +53,7 @@
     <ClInclude Include="gameObjects\oak.h" />
     <ClInclude Include="gameObjects\spruce.h" />
     <ClInclude Include="gameObjects\pine.h" />
+    <ClInclude Include="rendering\shadow.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\skinning.frag" />
@@ -59,5 +61,7 @@
     <None Include="shaders\terrain.vert" />
     <None Include="shaders\mesh.frag" />
     <None Include="shaders\mesh.vert" />
+    <None Include="shaders\shadow_depth.frag" />
+    <None Include="shaders\shadow_depth.vert" />
   </ItemGroup>
 </Project>
