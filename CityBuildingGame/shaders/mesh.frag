@@ -21,12 +21,10 @@ uniform Light light;
 
 void main()
 {
-	vec4 texel = texture(material.diffuse, TexCoords);
-	if(texel.a < 0.15)
-	discard;
-
 	vec4 texColor = texture(material.diffuse, TexCoords);
-
+	if(texColor.a < 0.05)
+		discard;
+		
     vec3 ambient = light.ambient * texColor.rgb;
 
 	vec3 norm = normalize(Normal);
