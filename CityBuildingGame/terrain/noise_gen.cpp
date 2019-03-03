@@ -5,7 +5,7 @@
 NoiseGen::NoiseGen() {};
 
 void NoiseGen::GeneratePerlinNoise(std::vector<std::vector<float>> &pHeightmap, int pHeight, int pWidth,
-		float minimumHeight, float maximumHeight, int octaveCount)
+		float minimumHeight, float maximumHeight, int octaveCount, float persistence)
 	{
 		width = pWidth;
 		height = pHeight;
@@ -26,9 +26,9 @@ void NoiseGen::GeneratePerlinNoise(std::vector<std::vector<float>> &pHeightmap, 
 
 		Rescale(pHeightmap, minimumHeight, maximumHeight);
 	}
-void NoiseGen::CombineNoiseMaps(std::vector<std::vector<float>> &pHeightmap, int octaveCount)
+void NoiseGen::CombineNoiseMaps(std::vector<std::vector<float>> &pHeightmap, int octaveCount, float aPersistence)
 {
-	float persistence = 0.5f;
+	float persistence = aPersistence;
 	float amplitude = 1.0f;
 
 	//blend noise together

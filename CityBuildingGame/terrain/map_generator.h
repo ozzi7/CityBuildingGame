@@ -25,4 +25,6 @@ private:
 
 	void generateTerrain();
 	void generateTrees();
+	void flattenMap(std::vector<std::vector<float>> &pHeightmap);
+	float getHeightAtPercentage(std::vector<std::vector<float>> &pHeightmap, float percentage);
 };

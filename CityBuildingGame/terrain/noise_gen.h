@@ -8,9 +8,9 @@ public:
 	NoiseGen();
 	~NoiseGen();
 	void GeneratePerlinNoise(std::vector<std::vector<float>> &pHeightmap, int pHeight, int pWidth,
-		float minimumHeight, float maximumHeight, int octaveCount);
+		float minimumHeight, float maximumHeight, int octaveCount, float persistence);
 
-	void CombineNoiseMaps(std::vector<std::vector<float>> &pHeightmap,int octaveCount);
+	void CombineNoiseMaps(std::vector<std::vector<float>> &pHeightmap, int octaveCount, float aPersistence);
 
 private:
 	int width, height;
