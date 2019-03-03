@@ -9,6 +9,7 @@
 #include "spruce.h"
 #include "pine.h"
 #include "lumberjack.h"
+#include <cmath>
 
 class MapGenerator {
 public:
@@ -27,4 +28,5 @@ private:
 	void generateTrees();
 	void flattenMap(std::vector<std::vector<float>> &pHeightmap);
 	float getHeightAtPercentage(std::vector<std::vector<float>> &pHeightmap, float percentage);
+	float getGaussianPDFValue(float mean, float stddev, float x);
 };
