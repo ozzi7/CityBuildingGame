@@ -26,6 +26,7 @@ public:
 	std::vector<glm::mat4> spruceModels;
 	std::vector<glm::mat4> juniperModels;
 	std::vector<glm::mat4> oakModels;
+	std::vector<glm::mat4> lumberjackModels;
 
 	Terrain* terrain; // TODO: 
 };
