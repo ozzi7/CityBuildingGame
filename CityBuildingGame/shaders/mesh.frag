@@ -22,7 +22,7 @@ uniform Light light;
 void main()
 {
 	vec4 texColor = texture(material.diffuse, TexCoords);
-	if(texColor.a < 0.05)
+	if(texColor.a < 0.1)
 		discard;
 		
     vec3 ambient = light.ambient * texColor.rgb;
