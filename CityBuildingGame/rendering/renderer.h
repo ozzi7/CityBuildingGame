@@ -92,19 +92,19 @@ public:
 			terrain_shader->setMat4("view", aView);
 			terrain_shader->setMat4("model", glm::mat4(1.0f));
 			terrain_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
-			terrain_shader->setInt("shadowMap", 1);
+			terrain_shader->setInt("shadowMap", 15);
 
 			skinned_mesh_shader->use();
 			skinned_mesh_shader->setMat4("projection", aProjection);
 			skinned_mesh_shader->setMat4("view", aView);
 			skinned_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
-			skinned_mesh_shader->setInt("shadowMap", 1);
+			skinned_mesh_shader->setInt("shadowMap", 15);
 
 			instanced_mesh_shader->use();
 			instanced_mesh_shader->setMat4("projection", aProjection);
 			instanced_mesh_shader->setMat4("view", aView);
 			instanced_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
-			instanced_mesh_shader->setInt("shadowMap", 1);
+			instanced_mesh_shader->setInt("shadowMap", 15);
 		}
 	}
 	void OpenGLStart() {
@@ -127,6 +127,7 @@ public:
 		{
 			shader = shadow_shader;
 			shader->use();
+			glClear(GL_DEPTH_BUFFER_BIT);
 		}
 		else
 		{
@@ -135,8 +136,19 @@ public:
 			shader->setVec3("light.ambient", ambientLight);
 			shader->setVec3("light.diffuse", directionalLight.Color);
 			shader->setVec3("light.direction", directionalLight.Direction);
+			shader->setInt("shadowMap", 15);
 		}
+		/*draw instanced objects*/
+		glActiveTexture(GL_TEXTURE0 + 1); // active proper texture unit before binding
+										  // retrieve texture number (the N in diffuse_textureN)
+										  // now set the sampler to the correct texture unit
+		glUniform1i(glGetUniformLocation(shader->ID, "shadowMap"), 15);
+		// and finally bind the texture
+		glBindTexture(GL_TEXTURE_2D, 0);
 
+		glBindTexture(GL_TEXTURE_2D, 1);
+		glBindTexture(GL_TEXTURE_2D, 2);
+		glBindTexture(GL_TEXTURE_2D, 15);
 		renderBuffer->terrain->Draw();
 	}
 	void RenderInstancedObjects(RenderBuffer* renderBuffer)
@@ -146,6 +158,7 @@ public:
 		{
 			shader = shadow_shader;
 			shader->use();
+			glClear(GL_DEPTH_BUFFER_BIT);
 		}
 		else
 		{
@@ -157,6 +170,16 @@ public:
 		}
 
 		/*draw instanced objects*/
+		glActiveTexture(GL_TEXTURE0 + 2); // active proper texture unit before binding
+										  // retrieve texture number (the N in diffuse_textureN)
+		// now set the sampler to the correct texture unit
+		glUniform1i(glGetUniformLocation(shader->ID, "shadowMap"), 15);
+		// and finally bind the texture
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glBindTexture(GL_TEXTURE_2D, 1);
+		glBindTexture(GL_TEXTURE_2D, 2);
+		glBindTexture(GL_TEXTURE_2D, 15);
 		instanced_model_pine->Draw(*shader, renderBuffer->pineModels);
 		instanced_model_oak->Draw(*shader, renderBuffer->oakModels);
 		instanced_model_spruce->Draw(*shader, renderBuffer->spruceModels);
