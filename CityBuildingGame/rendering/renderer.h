@@ -70,7 +70,7 @@ public:
 
 		/* lumberjack init*/
 		mesh_lumberjack = new SkinnedMesh();
-		texture_path = root_path + "/../models/lumberjack/lumberjack_new.dae";
+		texture_path = root_path + "/../models/lumberjack/lumberjack.dae";
 		mesh_lumberjack = new SkinnedMesh();
 		mesh_lumberjack->LoadMesh(texture_path);
 		mesh_lumberjack->PrecalculateBoneTransforms();
