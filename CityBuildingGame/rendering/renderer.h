@@ -30,6 +30,7 @@ public:
 	Shader* skinned_mesh_shader;
 	Shader* instanced_mesh_shader;
 	Shader* shadow_shader;
+	Shader* shadow_shader_instanced;
 	InstancedModel *instanced_model_pine;
 	InstancedModel *instanced_model_juniper;
 	InstancedModel *instanced_model_spruce;
@@ -52,6 +53,7 @@ public:
 		instanced_mesh_shader = new Shader("shaders/mesh.vert", "shaders/mesh.frag");
 
 		shadow_shader = new Shader("shaders/shadow_depth.vert", "shaders/shadow_depth.frag");
+		shadow_shader_instanced = new Shader("shaders/shadow_depth_instanced.vert", "shaders/shadow_depth.frag");
 
 		/* vegetation*/
 		texture_path = root_path + "/../models/pine/pine.dae";
@@ -109,8 +111,8 @@ public:
 	void Render(RenderBuffer* renderBuffer)
 	{
 		RenderTerrain(renderBuffer);
-		RenderBoneAnimated(renderBuffer);
 		RenderInstancedObjects(renderBuffer);
+		RenderBoneAnimated(renderBuffer);
 	}
 	void RenderTerrain(RenderBuffer* renderBuffer)
 	{
@@ -135,7 +137,7 @@ public:
 		Shader* shader;
 		if (ShadowPass)
 		{
-			shader = shadow_shader;
+			shader = shadow_shader_instanced;
 			shader->use();
 		}
 		else

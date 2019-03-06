@@ -81,6 +81,7 @@
     <None Include="shaders\mesh.vert" />
     <None Include="shaders\shadow_depth.frag" />
     <None Include="shaders\shadow_depth.vert" />
+    <None Include="shaders\shadow_depth_instanced.vert" />
     <None Include="shaders\skinning.frag" />
     <None Include="shaders\skinning.vert" />
     <None Include="shaders\terrain.vert" />

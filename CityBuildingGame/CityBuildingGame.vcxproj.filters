@@ -63,5 +63,6 @@
     <None Include="shaders\mesh.vert" />
     <None Include="shaders\shadow_depth.frag" />
     <None Include="shaders\shadow_depth.vert" />
+    <None Include="shaders\shadow_depth_instanced.vert" />
   </ItemGroup>
 </Project>
