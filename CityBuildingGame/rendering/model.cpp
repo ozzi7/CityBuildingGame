@@ -165,7 +165,7 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType 
 }
 
 // utility function for loading a 2D texture from file
-unsigned int Model::TextureFromFile(const char *path, const std::string &directory)
+unsigned int Model::TextureFromFile(const char* path, const std::string& directory)
 {
 	std::string filename = std::string(path);
 	filename = directory + '/' + filename;
@@ -178,20 +178,31 @@ unsigned int Model::TextureFromFile(const char *path, const std::string &directo
 	if (data)
 	{
 		GLenum format;
+		GLenum internalformat;
 		if (nrComponents == 1)
+		{
 			format = GL_RED;
+			internalformat = GL_RED;
+		}
 		else if (nrComponents == 3)
+		{
 			format = GL_RGB;
+			internalformat = GL_RGB;
+		}
 		else if (nrComponents == 4)
+		{
 			format = GL_RGBA;
+			internalformat = GL_RGBA8;
+		}
 
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalformat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		//glGenerateMipmap(GL_TEXTURE_2D);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		stbi_image_free(data);

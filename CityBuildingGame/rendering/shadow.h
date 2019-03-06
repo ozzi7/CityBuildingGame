@@ -8,6 +8,7 @@ public:
 
 	void InitShadowMap();
 	void BindShadowMap();
+	void UnbindShadowMap();
 
 private:
 	unsigned int depthMapFBO;

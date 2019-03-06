@@ -83,6 +83,10 @@ void init_glfw()
 		std::cout << "Failed to init GLEW" << std::endl;
 		exit(EXIT_FAILURE);
 	}
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(1);
+	glDepthFunc(GL_LESS);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -98,7 +102,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	inputHandler.Mousewheel((float)yoffset);
 }
 
-void window_focus_callback(GLFWwindow *window, int focused)
+void window_focus_callback(GLFWwindow* window, int focused)
 {
 	inputHandler.WindowFocus(focused);
 }

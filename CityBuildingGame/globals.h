@@ -6,8 +6,8 @@
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 
-const unsigned int MAP_WIDTH = 40;
-const unsigned int MAP_HEIGHT = 30;
+const unsigned int MAP_WIDTH = 100;
+const unsigned int MAP_HEIGHT = 80;
 
 // rendering
 const unsigned int SHADOW_WIDTH = 1024;

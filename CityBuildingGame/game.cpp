@@ -53,27 +53,26 @@ void Game::renderLoop()
 		// Shadow pass
 		shadow->BindShadowMap();
 
-		projection = glm::ortho(-0.0f, 0.0f, -0.0f, 0.0f, 0.0f, 1.0f);
-		view = glm::lookAt(glm::vec3(50.0f, 50.0f, -50.0f), glm::vec3(50.0f, 50.0f, -50.0f) + renderer->directionalLight.Direction, glm::vec3(-1.0f, 1.0f, 0.0f));
+		projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 200.0f);
+		view = camera->GetViewMatrix();
 		lightSpaceMatrix = projection * view;
 		
 		renderer->ShadowPass = true;
 		renderer->SetMatrices(projection, view, lightSpaceMatrix);
-
 		renderer->Render(renderBuffers->GetConsumerBuffer());
+
+		//glfwSwapBuffers(window);
 
 
 		// Render pass
-		renderer->ShadowPass = false;
-		renderer->OpenGLStart();
+		shadow->UnbindShadowMap();
 
 		projection = camera->GetProjectionMatrix();
 		view = camera->GetViewMatrix();
 
+		renderer->ShadowPass = false;
 		renderer->SetMatrices(projection, view, lightSpaceMatrix);
-
 		renderer->Render(renderBuffers->GetConsumerBuffer());
-
 
 		glfwSwapBuffers(window);
 
