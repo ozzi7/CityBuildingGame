@@ -44,9 +44,7 @@ public:
 
 	Renderer()
 	{
-		std::string root_path = Path;
 		std::string texture_path;
-		std::replace(root_path.begin(), root_path.end(), '\\', '/');
 
 		terrain_shader = new Shader("shaders/terrain.vert", "shaders/mesh.frag");
 		skinned_mesh_shader = new Shader("shaders/skinning.vert", "shaders/skinning.frag");
@@ -56,21 +54,21 @@ public:
 		shadow_shader_instanced = new Shader("shaders/shadow_depth_instanced.vert", "shaders/shadow_depth.frag");
 
 		/* vegetation*/
-		texture_path = root_path + "/../models/pine/pine.dae";
+		texture_path = Path + "/../models/pine/pine.dae";
 		instanced_model_pine = new InstancedModel(texture_path);
 
-		texture_path = root_path + "/../models/juniper/juniper.dae";
+		texture_path = Path + "/../models/juniper/juniper.dae";
 		instanced_model_juniper = new InstancedModel(texture_path);
 
-		texture_path = root_path + "/../models/spruce/spruce.dae";
+		texture_path = Path + "/../models/spruce/spruce.dae";
 		instanced_model_spruce = new InstancedModel(texture_path);
 
-		texture_path = root_path + "/../models/oak/oak.dae";
+		texture_path = Path + "/../models/oak/oak.dae";
 		instanced_model_oak = new InstancedModel(texture_path);
 
 		/* lumberjack init*/
 		mesh_lumberjack = new SkinnedMesh();
-		texture_path = root_path + "/../models/lumberjack/lumberjack.dae";
+		texture_path = Path + "/../models/lumberjack/lumberjack.dae";
 		mesh_lumberjack = new SkinnedMesh();
 		mesh_lumberjack->LoadMesh(texture_path);
 		mesh_lumberjack->PrecalculateBoneTransforms();
@@ -86,6 +84,9 @@ public:
 		{
 			shadow_shader->use();
 			shadow_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+
+			//shadow_shader_instanced->use();
+			//shadow_shader_instanced->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
 		}
 		else
 		{
@@ -94,7 +95,7 @@ public:
 			terrain_shader->setMat4("view", aView);
 			terrain_shader->setMat4("model", glm::mat4(1.0f));
 			terrain_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
-			terrain_shader->setInt("shadowMap", 15);
+			terrain_shader->setInt("shadowMap", 13);
 
 			skinned_mesh_shader->use();
 			skinned_mesh_shader->setMat4("projection", aProjection);
@@ -105,7 +106,7 @@ public:
 			instanced_mesh_shader->setMat4("projection", aProjection);
 			instanced_mesh_shader->setMat4("view", aView);
 			instanced_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
-			instanced_mesh_shader->setInt("shadowMap", 15);
+			instanced_mesh_shader->setInt("shadowMap", 13);
 		}
 	}
 	void Render(RenderBuffer* renderBuffer)
@@ -116,20 +117,10 @@ public:
 	}
 	void RenderTerrain(RenderBuffer* renderBuffer)
 	{
-		Shader* shader;
-		if (ShadowPass) 
-		{
-			shader = shadow_shader;
-			shader->use();
-		}
-		else
-		{
-			shader = terrain_shader;
-			shader->use();
-			shader->setVec3("light.ambient", ambientLight);
-			shader->setVec3("light.diffuse", directionalLight.Color);
-			shader->setVec3("light.direction", directionalLight.Direction);
-		}
+		terrain_shader->use();
+		terrain_shader->setVec3("light.ambient", ambientLight);
+		terrain_shader->setVec3("light.diffuse", directionalLight.Color);
+		terrain_shader->setVec3("light.direction", directionalLight.Direction);
 		renderBuffer->terrain->Draw();
 	}
 	void RenderInstancedObjects(RenderBuffer* renderBuffer)

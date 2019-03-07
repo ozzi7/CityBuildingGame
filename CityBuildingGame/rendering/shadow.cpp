@@ -35,6 +35,4 @@ void Shadow::UnbindShadowMap()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glActiveTexture(GL_TEXTURE0 + depthMap);
-	//glBindTexture(GL_TEXTURE_2D, depthMap);
 }
