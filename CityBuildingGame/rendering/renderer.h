@@ -69,14 +69,13 @@ public:
 		/* lumberjack init*/
 		mesh_lumberjack = new SkinnedMesh();
 		texture_path = Path + "/../models/lumberjack/lumberjack.dae";
-		mesh_lumberjack = new SkinnedMesh();
 		mesh_lumberjack->LoadMesh(texture_path);
 		mesh_lumberjack->PrecalculateBoneTransforms();
 
-		directionalLight.Color = { 0.8f, 0.8f, 0.8f };
+		directionalLight.Color = { 0.7f, 0.7f, 0.7f };
 		directionalLight.Direction = { -1.0f, -1.0f, -1.0f };
 
-		ambientLight = { 0.2f, 0.2f, 0.2f };
+		ambientLight = { 0.4f, 0.4f, 0.4f };
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix)
 	{

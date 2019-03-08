@@ -59,7 +59,7 @@ void Game::renderLoop()
 		//projection = glm::ortho<float>(-10, 10, -10, 10, -10, 20);//camera->GetProjectionMatrix(); // ratio 1?
 		//projection = glm::ortho(-20.0f, 40.0f, -40.0f, 20.0f, -5.0f, 200.0f);
 		view = camera->GetViewMatrix();
-		glm::mat4 view = glm::lookAt(glm::vec3(20.0,20,20.0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+		glm::mat4 view = glm::lookAt(camera->Position+ glm::vec3(20.0,20,0.0), camera->Position + camera->lookat, glm::vec3(0, 0, 1));
 		lightSpaceMatrix = projection * view;
 
 		renderer->ShadowPass = true;

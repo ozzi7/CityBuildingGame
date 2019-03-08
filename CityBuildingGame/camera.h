@@ -31,7 +31,7 @@ public:
 	glm::vec3 Position;
 	float ZoomLevel = ZOOM_DEFAULT;
 	Grid* Grid;
-
+	glm::vec3 lookat; // TODO:
 	Camera();
 	Camera(glm::vec3 position, GLFWwindow* window);
 
@@ -48,7 +48,7 @@ public:
 private:
 	glm::vec3 up;
 	glm::vec3 right;
-	glm::vec3 lookat;
+	//glm::vec3 lookat;
 	GLFWwindow* window;
 };
 
