@@ -85,8 +85,8 @@ public:
 			shadow_shader->use();
 			shadow_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
 
-			//shadow_shader_instanced->use();
-			//shadow_shader_instanced->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+			shadow_shader_instanced->use();
+			shadow_shader_instanced->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
 		}
 		else
 		{
@@ -117,11 +117,13 @@ public:
 	}
 	void RenderTerrain(RenderBuffer* renderBuffer)
 	{
-		terrain_shader->use();
-		terrain_shader->setVec3("light.ambient", ambientLight);
-		terrain_shader->setVec3("light.diffuse", directionalLight.Color);
-		terrain_shader->setVec3("light.direction", directionalLight.Direction);
-		renderBuffer->terrain->Draw();
+		if (!ShadowPass) {
+			terrain_shader->use();
+			terrain_shader->setVec3("light.ambient", ambientLight);
+			terrain_shader->setVec3("light.diffuse", directionalLight.Color);
+			terrain_shader->setVec3("light.direction", directionalLight.Direction);
+			renderBuffer->terrain->Draw();
+		}
 	}
 	void RenderInstancedObjects(RenderBuffer* renderBuffer)
 	{

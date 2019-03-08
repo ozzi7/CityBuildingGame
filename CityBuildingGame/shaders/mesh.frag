@@ -53,4 +53,5 @@ void main()
     float shadow = ShadowCalculation();
 	vec3 result = diffuse * (1 - shadow) + ambient;
     FragColor = vec4(result, texColor.a);
+	//FragColor = vec4(vec3(1.0-shadow), texColor.a);
 }
