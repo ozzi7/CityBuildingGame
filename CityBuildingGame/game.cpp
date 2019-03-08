@@ -48,7 +48,7 @@ void Game::renderLoop()
 	grid->terrain->InitOpenGL(renderer->terrain_shader);
 	shadow->InitShadowMap();
 
-	float variableShadows = 0.01f;
+	float variableShadows = 0.05f;
 	float offsetX = -40.0f;
 	float offsetY = -40.0f;
 
@@ -70,6 +70,8 @@ void Game::renderLoop()
 
 		offsetX += variableShadows;
 		offsetY += variableShadows;
+
+		renderer->directionalLight.Color = glm::vec3((offsetX+80.0f) * 2.2/ 792.0f, (offsetX + 80.0f) * 1.9/ 792.0f, (offsetX + 80.0f) * 2/ 792.0f);
 		if (offsetX > 120.0f) {
 			offsetX = -60.0f;
 			offsetY = -60.0f;
