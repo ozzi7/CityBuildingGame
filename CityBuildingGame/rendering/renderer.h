@@ -116,7 +116,7 @@ public:
 	}
 	void RenderTerrain(RenderBuffer* renderBuffer)
 	{
-		if (!ShadowPass) {
+		if (!ShadowPass) { // don't calculate terrain shadows
 			terrain_shader->use();
 			terrain_shader->setVec3("light.ambient", ambientLight);
 			terrain_shader->setVec3("light.diffuse", directionalLight.Color);
