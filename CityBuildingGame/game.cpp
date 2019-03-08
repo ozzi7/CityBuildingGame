@@ -49,8 +49,8 @@ void Game::renderLoop()
 	shadow->InitShadowMap();
 
 	float variableShadows = 0.01f;
-	float offsetX = -60.0f;
-	float offsetY = -60.0f;
+	float offsetX = -40.0f;
+	float offsetY = -40.0f;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -60,6 +60,10 @@ void Game::renderLoop()
 		//camera->Scroll(RIGHT, 20);
 		//camera->Scroll(UP, 20);
 		projection = camera->GetProjectionMatrix(); // TODO: change this to capture larger window
+
+		float projectionIncrease = 1.2f; // TODO: test, projection also depends on view, which right now is moving.. 
+		projection = glm::ortho(-SCREEN_RATIO * camera->ZoomLevel*projectionIncrease, SCREEN_RATIO * camera->ZoomLevel*projectionIncrease,
+			-1.0f * camera->ZoomLevel *projectionIncrease, 1.0f * camera->ZoomLevel*projectionIncrease, 0.0f, 200.0f);
 		//projection = glm::ortho<float>(-10, 10, -10, 10, -10, 20);//camera->GetProjectionMatrix(); // ratio 1?
 		//projection = glm::ortho(-20.0f, 40.0f, -40.0f, 20.0f, -5.0f, 200.0f);
 		view = camera->GetViewMatrix();
