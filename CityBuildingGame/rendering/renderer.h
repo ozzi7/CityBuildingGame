@@ -72,7 +72,7 @@ public:
 		mesh_lumberjack->LoadMesh(texture_path);
 		mesh_lumberjack->PrecalculateBoneTransforms();
 
-		directionalLight.Color = { 0.7f, 0.7f, 0.7f };
+		directionalLight.Color = { 1.0f, 0.8f, 0.0f };
 		directionalLight.Direction = { -1.0f, -1.0f, -1.0f };
 
 		ambientLight = { 0.4f, 0.4f, 0.4f };

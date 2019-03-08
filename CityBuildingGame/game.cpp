@@ -48,6 +48,10 @@ void Game::renderLoop()
 	grid->terrain->InitOpenGL(renderer->terrain_shader);
 	shadow->InitShadowMap();
 
+	float variableShadows = 0.01f;
+	float offsetX = -60.0f;
+	float offsetY = -60.0f;
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// Shadow pass
@@ -55,11 +59,19 @@ void Game::renderLoop()
 
 		//camera->Scroll(RIGHT, 20);
 		//camera->Scroll(UP, 20);
-		projection = camera->GetProjectionMatrix();
+		projection = camera->GetProjectionMatrix(); // TODO: change this to capture larger window
 		//projection = glm::ortho<float>(-10, 10, -10, 10, -10, 20);//camera->GetProjectionMatrix(); // ratio 1?
 		//projection = glm::ortho(-20.0f, 40.0f, -40.0f, 20.0f, -5.0f, 200.0f);
 		view = camera->GetViewMatrix();
-		glm::mat4 view = glm::lookAt(camera->Position+ glm::vec3(20.0,20.0,0.0), camera->Position + camera->lookat, glm::vec3(0.0, 0.0, 1.0));
+
+		offsetX += variableShadows;
+		offsetY += variableShadows;
+		if (offsetX > 120.0f) {
+			offsetX = -60.0f;
+			offsetY = -60.0f;
+		}
+		glm::mat4 view = glm::lookAt(camera->Position+ glm::vec3(-60.0+ offsetX,-60.0+ offsetY,0.0),
+			camera->Position + camera->lookat, glm::vec3(0.0, 0.0, 1.0));
 		lightSpaceMatrix = projection * view;
 
 		renderer->ShadowPass = true;
