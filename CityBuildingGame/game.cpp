@@ -61,7 +61,7 @@ void Game::renderLoop()
 		//camera->Scroll(UP, 20);
 		projection = camera->GetProjectionMatrix(); // TODO: change this to capture larger window
 
-		float projectionIncrease = 1.2f; // TODO: test, projection also depends on view, which right now is moving.. 
+		float projectionIncrease = 1.0f; // TODO: test, projection also depends on view, which right now is moving.. 
 		projection = glm::ortho(-SCREEN_RATIO * camera->ZoomLevel*projectionIncrease, SCREEN_RATIO * camera->ZoomLevel*projectionIncrease,
 			-1.0f * camera->ZoomLevel *projectionIncrease, 1.0f * camera->ZoomLevel*projectionIncrease, 0.0f, 200.0f);
 		//projection = glm::ortho<float>(-10, 10, -10, 10, -10, 20);//camera->GetProjectionMatrix(); // ratio 1?
@@ -71,7 +71,7 @@ void Game::renderLoop()
 		offsetX += variableShadows;
 		offsetY += variableShadows;
 
-		renderer->directionalLight.Color = glm::vec3((offsetX+80.0f) * 2.2/ 792.0f, (offsetX + 80.0f) * 1.9/ 792.0f, (offsetX + 80.0f) * 2/ 792.0f);
+		renderer->directionalLight.Color = glm::vec3(1.0f,1.0f,1.0f);
 		if (offsetX > 120.0f) {
 			offsetX = -60.0f;
 			offsetY = -60.0f;

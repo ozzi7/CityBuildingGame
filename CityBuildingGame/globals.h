@@ -6,8 +6,8 @@
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 
-const unsigned int MAP_WIDTH = 400;
-const unsigned int MAP_HEIGHT = 300;
+const unsigned int MAP_WIDTH = 40;
+const unsigned int MAP_HEIGHT = 30;
 
 // rendering
 const unsigned int SHADOW_WIDTH = 1024;
@@ -25,7 +25,7 @@ const float SPRUCE_GAUSSIAN_MEAN_PERCENTAGE = 72.0f;		// [0 - 100]
 
 // high variance => tree can grow at a larger spectrum of height around its mean
 const float PINE_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
-const float JUNIPER_GAUSSIAN_VARIANCE_PERCENTAGE = 1.0f;		// ~ [0 - 100]
+const float JUNIPER_GAUSSIAN_VARIANCE_PERCENTAGE = 1.0f;		// [0 - 100]
 const float OAK_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 const float SPRUCE_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 

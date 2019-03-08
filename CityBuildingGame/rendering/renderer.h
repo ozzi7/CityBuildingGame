@@ -72,10 +72,10 @@ public:
 		mesh_lumberjack->LoadMesh(texture_path);
 		mesh_lumberjack->PrecalculateBoneTransforms();
 
-		directionalLight.Color = { 1.0f, 0.8f, 0.0f };
+		directionalLight.Color = { 1.0f, 1.0f, 1.0f };
 		directionalLight.Direction = { -1.0f, -1.0f, -1.0f };
 
-		ambientLight = { 0.4f, 0.4f, 0.4f };
+		ambientLight = { 0.5f, 0.5f, 0.5f };
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix)
 	{
