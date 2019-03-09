@@ -15,9 +15,9 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "globals.h"
-#include "terrain/noise_gen.h"
-#include "rendering/shader.h"
-#include "rendering/model.h"
+#include "noise_gen.h"
+#include "shader.h"
+#include "model.h"
 #include "game_object.h"
 
 class Terrain : GameObject

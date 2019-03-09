@@ -6,13 +6,8 @@
     <ClCompile Include="rendering\render_data.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="input_handler.cpp" />
-    <ClCompile Include="rendering\instanced_mesh.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="rendering\instanced_model.cpp" />
-    <ClCompile Include="rendering\mesh.cpp" />
-    <ClCompile Include="rendering\model.cpp" />
     <ClCompile Include="rendering\shader.cpp" />
-    <ClCompile Include="rendering\skinned_mesh.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="terrain\map_generator.cpp" />
     <ClCompile Include="terrain\noise_gen.cpp" />
@@ -21,8 +16,12 @@
     <ClCompile Include="utility\buffer.cpp" />
     <ClCompile Include="gameObjects\game_object.cpp" />
     <ClCompile Include="rendering\shadow.cpp" />
-    <ClCompile Include="gameObjects\lumberjack.cpp" />
-    <ClCompile Include="gameObjects\bone_animated.cpp" />
+    <ClCompile Include="rendering\meshes\instanced_mesh.cpp" />
+    <ClCompile Include="rendering\meshes\instanced_model.cpp" />
+    <ClCompile Include="rendering\meshes\mesh.cpp" />
+    <ClCompile Include="rendering\meshes\model.cpp" />
+    <ClCompile Include="rendering\meshes\skinned_mesh.cpp" />
+    <ClCompile Include="skinned_model.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
@@ -34,13 +33,8 @@
     <ClInclude Include="globals.h" />
     <ClInclude Include="grid.h" />
     <ClInclude Include="input_handler.h" />
-    <ClInclude Include="rendering\instanced_mesh.h" />
-    <ClInclude Include="rendering\instanced_model.h" />
-    <ClInclude Include="rendering\mesh.h" />
-    <ClInclude Include="rendering\model.h" />
     <ClInclude Include="rendering\renderer.h" />
     <ClInclude Include="rendering\shader.h" />
-    <ClInclude Include="rendering\skinned_mesh.hpp" />
     <ClInclude Include="rendering\stb_image.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="terrain\map_generator.h" />
@@ -56,15 +50,21 @@
     <ClInclude Include="gameObjects\spruce.h" />
     <ClInclude Include="gameObjects\pine.h" />
     <ClInclude Include="rendering\shadow.h" />
+    <ClInclude Include="rendering\meshes\instanced_mesh.h" />
+    <ClInclude Include="rendering\meshes\instanced_model.h" />
+    <ClInclude Include="rendering\meshes\mesh.h" />
+    <ClInclude Include="rendering\meshes\model.h" />
+    <ClInclude Include="skinned_model.h" />
+    <ClInclude Include="rendering\meshes\skinned_mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\skinning.frag" />
     <None Include="shaders\skinning.vert" />
-    <None Include="shaders\terrain.vert" />
     <None Include="shaders\mesh.frag" />
-    <None Include="shaders\mesh.vert" />
     <None Include="shaders\shadow_depth.frag" />
     <None Include="shaders\shadow_depth.vert" />
     <None Include="shaders\shadow_depth_instanced.vert" />
+    <None Include="shaders\mesh_instanced.vert" />
+    <None Include="shaders\mesh.vert" />
   </ItemGroup>
 </Project>

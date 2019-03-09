@@ -8,7 +8,7 @@
 #include "terrain.h"
 #include "shader.h"
 #include "model.h"
-#include "skinned_mesh.hpp"
+#include "skinned_mesh.h"
 #include "instanced_model.h"
 #include "shadow.h"
 
@@ -46,9 +46,9 @@ public:
 	{
 		std::string texture_path;
 
-		terrain_shader = new Shader("shaders/terrain.vert", "shaders/mesh.frag");
+		terrain_shader = new Shader("shaders/mesh.vert", "shaders/mesh.frag");
 		skinned_mesh_shader = new Shader("shaders/skinning.vert", "shaders/skinning.frag");
-		instanced_mesh_shader = new Shader("shaders/mesh.vert", "shaders/mesh.frag");
+		instanced_mesh_shader = new Shader("shaders/mesh_instanced.vert", "shaders/mesh.frag");
 
 		shadow_shader = new Shader("shaders/shadow_depth.vert", "shaders/shadow_depth.frag");
 		shadow_shader_instanced = new Shader("shaders/shadow_depth_instanced.vert", "shaders/shadow_depth.frag");

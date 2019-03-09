@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "skinned_mesh.hpp"
+#include "skinned_mesh.h"
 #include "stb_image.h"
 
 #include <iostream>

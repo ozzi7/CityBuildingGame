@@ -44,6 +44,5 @@ protected:
 	// the required info is returned as a Texture struct.
 	std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 
-private:
 	std::vector<Mesh> meshes;
 };
