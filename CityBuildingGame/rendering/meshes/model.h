@@ -26,12 +26,14 @@ public:
 
 	// draws the model, and thus all its meshes
 	void Draw(Shader& shader);
-	unsigned int TextureFromFile(const char* path, const std::string& directory);
+	unsigned int TextureFromFile(const std::string& path);
 
 protected:
-	
+	void init(const std::string& path);
+
 	// processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
 	void processNode(aiNode* node, const aiScene* scene);
+	void virtual addMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
 	//  vertices, indicies, textures are return values
 	void processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>* vertices, std::vector<unsigned int>* indices, std::vector<Texture>* textures);
 
@@ -42,7 +44,7 @@ protected:
 
 	// checks all material textures of a given type and loads the textures if they're not loaded yet.
 	// the required info is returned as a Texture struct.
-	std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+	std::vector<Texture> loadMaterialTextures(const aiMaterial* mat, aiTextureType type, std::string typeName);
 
 	std::vector<Mesh> meshes;
 };

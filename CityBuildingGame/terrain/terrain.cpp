@@ -312,8 +312,7 @@ void Terrain::InitOpenGL(Shader* terrain_shader)
 void Terrain::LoadTextures(Shader* terrain_shader)
 {
 	Model grass = Model();
-	std::string texturesPath = Path + "/../terrain";
-	texture_id_grass = grass.TextureFromFile(texture_grass.c_str(), texturesPath);
+	texture_id_grass = grass.TextureFromFile(Path + "/../terrain/" + texture_grass.c_str());
 
 	terrain_shader->setInt("texture1", 0);
 }

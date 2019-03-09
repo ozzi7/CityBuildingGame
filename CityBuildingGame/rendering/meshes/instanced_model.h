@@ -25,8 +25,8 @@ public:
 	InstancedModel(const std::string& path);
 
 	void InstancedModel::Draw(Shader& shader, std::vector<glm::mat4>& models);
-private:
 
+private:
 	std::vector<InstancedMesh> meshes;
-	void processNode(aiNode *node, const aiScene *scene);
+	void addMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
 };

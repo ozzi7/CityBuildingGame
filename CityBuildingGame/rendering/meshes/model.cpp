@@ -6,6 +6,11 @@
 Model::Model() {}
 Model::Model(const std::string& path)
 {
+	init(path);
+}
+
+void Model::init(const std::string& path)
+{
 	// read file via ASSIMP
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
@@ -32,7 +37,6 @@ void Model::Draw(Shader& shader)
 		meshes[i].Draw();
 	}
 }
-
 // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
 void Model::processNode(aiNode *node, const aiScene *scene)
 {
@@ -47,14 +51,19 @@ void Model::processNode(aiNode *node, const aiScene *scene)
 		aiMesh* aimesh = scene->mMeshes[node->mMeshes[i]];
 
 		processMesh(aimesh, scene, &vertices, &indices, &textures);
-		Mesh mesh = Mesh(vertices, indices, textures);
-		meshes.push_back(mesh);
+		addMesh(vertices, indices, textures);
 	}
 	// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
 		processNode(node->mChildren[i], scene);
 	}
+}
+
+void Model::addMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
+{
+	Mesh mesh = Mesh(vertices, indices, textures);
+	meshes.push_back(mesh);
 }
 
 void Model::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>* vertices, std::vector<unsigned int>* indices, std::vector<Texture>* textures)
@@ -133,7 +142,7 @@ void Model::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>*
 
 // checks all material textures of a given type and loads the textures if they're not loaded yet.
 // the required info is returned as a Texture struct.
-std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+std::vector<Texture> Model::loadMaterialTextures(const aiMaterial* mat, aiTextureType type, std::string typeName)
 {
 	std::vector<Texture> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
@@ -154,7 +163,7 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType 
 		if (!skip)
 		{   // if texture hasn't been loaded already, load it
 			Texture texture;
-			texture.id = TextureFromFile(str.C_Str(), this->directory);
+			texture.id = TextureFromFile(this->directory + "/" + std::string(str.C_Str()));
 			texture.type = typeName;
 			texture.path = str.C_Str();
 			textures.push_back(texture);
@@ -165,38 +174,27 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType 
 }
 
 // utility function for loading a 2D texture from file
-unsigned int Model::TextureFromFile(const char* path, const std::string& directory)
+unsigned int Model::TextureFromFile(const std::string& path)
 {
-	std::string filename = std::string(path);
-	filename = directory + '/' + filename;
-
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
 
 	int width, height, nrComponents;
-	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+	unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrComponents, 0);
 	if (data)
 	{
 		GLenum format;
-		GLenum internalformat;
 		if (nrComponents == 1)
-		{
 			format = GL_RED;
-			internalformat = GL_RED;
-		}
+
 		else if (nrComponents == 3)
-		{
 			format = GL_RGB;
-			internalformat = GL_RGB;
-		}
+
 		else if (nrComponents == 4)
-		{
 			format = GL_RGBA;
-			internalformat = GL_RGBA8;
-		}
 
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, internalformat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		//glGenerateMipmap(GL_TEXTURE_2D);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -215,3 +213,5 @@ unsigned int Model::TextureFromFile(const char* path, const std::string& directo
 
 	return textureID;
 }
+
+

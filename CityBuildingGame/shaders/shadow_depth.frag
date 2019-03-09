@@ -13,6 +13,4 @@ void main()
 	vec4 texColor = texture(material.diffuse, TexCoords);
 	if(texColor.a < 0.5)
 		discard;
-	else
-		gl_FragDepth = gl_FragCoord.z;
 }  

@@ -26,7 +26,6 @@
     <ClInclude Include="gameObjects\spruce.h" />
     <ClInclude Include="rendering\render_data.h" />
     <ClInclude Include="rendering\shadow.h" />
-    <ClInclude Include="skinned_model.h" />
     <ClInclude Include="utility\buffer.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="game.h" />
@@ -69,7 +68,6 @@
     <ClCompile Include="rendering\shader.cpp" />
     <ClCompile Include="rendering\meshes\skinned_mesh.cpp" />
     <ClCompile Include="rendering\shadow.cpp" />
-    <ClCompile Include="skinned_model.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -86,9 +84,9 @@
     <None Include="shaders\shadow_depth.frag" />
     <None Include="shaders\shadow_depth.vert" />
     <None Include="shaders\shadow_depth_instanced.vert" />
-    <None Include="shaders\skinning.frag" />
-    <None Include="shaders\skinning.vert" />
+    <None Include="shaders\mesh_skinned.vert" />
     <None Include="shaders\mesh.vert" />
+    <None Include="shaders\shadow_depth_skinned.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7BFA9DB1-C1C7-4774-B08F-6F86CDF05BEF}</ProjectGuid>
