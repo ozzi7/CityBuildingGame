@@ -37,7 +37,7 @@ void InputHandler::Mouseclick(int button, int action)
 						for (std::list<BoneAnimated*>::iterator it = Grid->gridUnits[i][j]->movingObjects.begin();
 							it != Grid->gridUnits[i][j]->movingObjects.end(); ++it) {
 							// to create path to walk
-							static_cast<Lumberjack*>(*it)->wayPoints.push_back(cursor_position);
+							//static_cast<Lumberjack*>(*it)->wayPoints.push_back(cursor_position);
 						}
 					}
 				}

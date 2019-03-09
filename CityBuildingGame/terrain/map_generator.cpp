@@ -12,9 +12,29 @@ void MapGenerator::GenerateMap()
 	generateTerrain();
 	generateTrees();
 
-	grid->gridUnits[0][0]->movingObjects.push_back(
-		new Lumberjack(glm::vec3(0.5f, 0.5f, grid->gridUnits[0][0]->averageHeight),
-			glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>())));
+	Lumberjack *lumbydumby = new Lumberjack(glm::vec3(0.5f, 0.5f, grid->gridUnits[0][0]->averageHeight),
+		glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
+	
+	std::vector<glm::vec2> path = std::vector<glm::vec2>();
+	path.push_back(glm::vec2(0.5f, 0.5f));
+	path.push_back(glm::vec2(2.5f, 1.5f));
+	path.push_back(glm::vec2(3.5f, 1.5f));
+	path.push_back(glm::vec2(3.5f, 3.5f));
+	path.push_back(glm::vec2(1.5f, 3.5f));
+	path.push_back(glm::vec2(0.5f, 1.5f));
+	path.push_back(glm::vec2(0.5f, 0.5f));
+	path.push_back(glm::vec2(10.5f, 0.5f));
+	path.push_back(glm::vec2(10.5f, 1.5f));
+	path.push_back(glm::vec2(9.5f, 1.5f));
+	path.push_back(glm::vec2(9.5f, 0.5f));
+	path.push_back(glm::vec2(10.5f, 0.5f));
+	path.push_back(glm::vec2(10.5f, 1.5f));
+	path.push_back(glm::vec2(9.5f, 1.5f));
+	//path.push_back(glm::vec2(10.5f, 10.5f));
+	//path.push_back(glm::vec2(12.5f, 12.5f));
+
+	lumbydumby->SetNewPath(path);
+	grid->gridUnits[0][0]->movingObjects.push_back(lumbydumby);
 }
 
 void MapGenerator::generateTerrain()
