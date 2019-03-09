@@ -21,6 +21,8 @@
     <ClCompile Include="utility\buffer.cpp" />
     <ClCompile Include="gameObjects\game_object.cpp" />
     <ClCompile Include="rendering\shadow.cpp" />
+    <ClCompile Include="gameObjects\lumberjack.cpp" />
+    <ClCompile Include="gameObjects\bone_animated.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />

@@ -54,7 +54,9 @@
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="gameObjects\bone_animated.cpp" />
     <ClCompile Include="gameObjects\game_object.cpp" />
+    <ClCompile Include="gameObjects\lumberjack.cpp" />
     <ClCompile Include="rendering\render_data.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="input_handler.cpp" />
