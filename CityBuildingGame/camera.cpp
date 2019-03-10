@@ -20,9 +20,22 @@ glm::mat4 Camera::GetViewMatrix()
 	return glm::lookAt(Position, Position + lookat, up);
 }
 
+glm::mat4 Camera::GetLightViewMatrix()
+{
+	//return glm::lookAt(DirectionalLight.Position, DirectionalLight.Position + lookat, glm::vec3(0.0, 0.0, 1.0));
+	return glm::lookAt(Position + DirectionalLight.PositionOffset, Position + lookat, glm::vec3(0.0, 0.0, 1.0));
+
+}
+
 glm::mat4 Camera::GetProjectionMatrix()
 {
-	return glm::ortho(-SCREEN_RATIO * ZoomLevel, SCREEN_RATIO * ZoomLevel, -1.0f * ZoomLevel, 1.0f * ZoomLevel, 0.0f, 200.0f);
+	return glm::ortho(-SCREEN_RATIO * ZoomLevel, SCREEN_RATIO * ZoomLevel, -1.0f * ZoomLevel, ZoomLevel, 0.0f, 200.0f);
+}
+
+glm::mat4 Camera::GetLightProjectionMatrix()
+{
+	return glm::ortho(-SCREEN_RATIO * ZoomLevel * projectionIncrease, SCREEN_RATIO * ZoomLevel * projectionIncrease, -1.0f * ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, 0.0f, 200.0f);
+
 }
 
 // Top left position on Grid that is visible by camera
@@ -102,5 +115,18 @@ void Camera::Zoom(float yOffset)
 		ZoomLevel = ZOOM_MIN;
 	if (ZoomLevel >= ZOOM_MAX)
 		ZoomLevel = ZOOM_MAX;
+}
+
+void Camera::UpdateLightDirection()
+{
+	/*float distance = 
+		sqrt(
+		pow((lookat.x - Position.x + DirectionalLight.PositionOffset.x), 2) +
+		pow((lookat.y - Position.y + DirectionalLight.PositionOffset.y), 2) +
+		pow((lookat.z - Position.z + DirectionalLight.PositionOffset.z), 2));*/
+
+	DirectionalLight.Direction.x = ((lookat.x - (Position.x + DirectionalLight.PositionOffset.x)));
+	DirectionalLight.Direction.y = ((lookat.y - (Position.y + DirectionalLight.PositionOffset.y)));
+	DirectionalLight.Direction.z = ((lookat.z - (Position.z + DirectionalLight.PositionOffset.z)));
 }
 

@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "globals.h"
+#include "camera.h"
 #include "terrain.h"
 #include "shader.h"
 #include "model.h"
@@ -16,16 +17,11 @@
 #include "lumberjack.h"
 #include "triple_buffer.h"
 
-struct LightSource
-{
-	glm::vec3 PositionOffset;
-	glm::vec3 Direction;
-	glm::vec3 Color;
-};
-
 class Renderer
 {
 public:
+	Camera& camera;
+
 	SkinnedMesh* mesh_lumberjack;
 	Shader* terrain_shader;
 	Shader* skinned_mesh_shader;
@@ -38,14 +34,14 @@ public:
 	InstancedModel* instanced_model_spruce;
 	InstancedModel* instanced_model_oak;
 
-	LightSource directionalLight;
 	glm::vec3 ambientLight;
 
 	bool ShadowPass = false;
 	float z = 0.0f;
 
-	Renderer()
+	Renderer(Camera& aCamera) : camera(aCamera)
 	{
+
 		std::string model_path;
 
 		terrain_shader = new Shader("shaders/mesh.vert", "shaders/mesh.frag");
@@ -98,18 +94,27 @@ public:
 			terrain_shader->setMat4("model", glm::mat4(1.0f));
 			terrain_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
 			terrain_shader->setInt("shadowMap", 13);
+			terrain_shader->setVec3("light.ambient", ambientLight);
+			terrain_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
+			terrain_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
 
 			skinned_mesh_shader->use();
 			skinned_mesh_shader->setMat4("projection", aProjection);
 			skinned_mesh_shader->setMat4("view", aView);
 			skinned_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
 			skinned_mesh_shader->setInt("shadowMap", 13);
+			skinned_mesh_shader->setVec3("light.ambient", ambientLight);
+			skinned_mesh_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
+			skinned_mesh_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
 
 			instanced_mesh_shader->use();
 			instanced_mesh_shader->setMat4("projection", aProjection);
 			instanced_mesh_shader->setMat4("view", aView);
 			instanced_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
 			instanced_mesh_shader->setInt("shadowMap", 13);
+			instanced_mesh_shader->setVec3("light.ambient", ambientLight);
+			instanced_mesh_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
+			instanced_mesh_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
 		}
 	}
 	void Render(RenderBuffer* renderBuffer)
@@ -124,9 +129,6 @@ private:
 	{
 		if (!ShadowPass) { // don't calculate terrain shadows
 			terrain_shader->use();
-			terrain_shader->setVec3("light.ambient", ambientLight);
-			terrain_shader->setVec3("light.diffuse", directionalLight.Color);
-			terrain_shader->setVec3("light.direction", directionalLight.Direction);
 			renderBuffer->terrain->Draw();
 		}
 	}
@@ -134,18 +136,10 @@ private:
 	{
 		Shader* shader;
 		if (ShadowPass)
-		{
 			shader = shadow_instanced_shader;
-			shader->use();
-		}
 		else
-		{
 			shader = instanced_mesh_shader;
-			shader->use();
-			shader->setVec3("light.ambient", ambientLight);
-			shader->setVec3("light.diffuse", directionalLight.Color);
-			shader->setVec3("light.direction", directionalLight.Direction);
-		}
+		shader->use();
 		instanced_model_pine->Draw(*shader, renderBuffer->pineModels);
 		instanced_model_oak->Draw(*shader, renderBuffer->oakModels);
 		instanced_model_spruce->Draw(*shader, renderBuffer->spruceModels);
@@ -155,18 +149,10 @@ private:
 	{
 		Shader* shader;
 		if (ShadowPass)
-		{
 			shader = shadow_skinned_shader;
-			shader->use();
-		}
 		else
-		{
 			shader = skinned_mesh_shader;
-			shader->use();
-			shader->setVec3("light.ambient", ambientLight);
-			shader->setVec3("light.diffuse", directionalLight.Color);
-			shader->setVec3("light.direction", directionalLight.Direction);
-		}
+		shader->use();
 		z = z + 0.0011f; // TODO: speed of animation doesnt belong here...
 		mesh_lumberjack->BindBoneTransform(z, shader);
 

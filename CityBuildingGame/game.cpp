@@ -41,14 +41,15 @@ void Game::StartGame()
 
 void Game::renderLoop()
 {
-	renderer = new Renderer();
+	renderer = new Renderer(*camera);
 	shadow = new Shadow();
 	glm::mat4 projection;
 	glm::mat4 view;
 	glm::mat4 lightSpaceMatrix;
 	
-	renderer->directionalLight.Color = { 1.0f, 1.0f, 1.0f };
-	renderer->directionalLight.PositionOffset = { -100.0f, 200.0f, 20.0f };
+	camera->DirectionalLight.Color = { 1.0f, 1.0f, 1.0f };
+	camera->DirectionalLight.PositionOffset = glm::vec3{ 0.0f, 50.0f, 10.0f };
+	camera->UpdateLightDirection();
 
 	grid->terrain->InitOpenGL(renderer->terrain_shader);
 	shadow->InitShadowMap();
@@ -57,18 +58,9 @@ void Game::renderLoop()
 	{
 		// Shadow pass
 		shadow->BindShadowMap();
-
-		//projection = camera->GetProjectionMatrix(); // TODO: change this to capture larger window
-
-		float projectionIncrease = 1.5f; // TODO: test, projection also depends on view, which right now is moving.. 
-		projection = glm::ortho(-SCREEN_RATIO * camera->ZoomLevel * projectionIncrease, SCREEN_RATIO * camera->ZoomLevel * projectionIncrease,
-			-1.0f * camera->ZoomLevel * projectionIncrease, 1.0f * camera->ZoomLevel * projectionIncrease, 0.0f, 200.0f);
-		//view = camera->GetViewMatrix();
-
-		glm::mat4 view = glm::lookAt(camera->Position + renderer->directionalLight.PositionOffset,
-			camera->Position + camera->lookat, glm::vec3(0.0f, 0.0f, 1.0f));
+		projection = camera->GetLightProjectionMatrix();
+		view = camera->GetLightViewMatrix();
 		lightSpaceMatrix = projection * view;
-		renderer->directionalLight.Direction = glm::normalize((camera->Position + renderer->directionalLight.PositionOffset) - camera->lookat);
 
 		renderer->ShadowPass = true;
 		renderer->SetMatrices(projection, view, lightSpaceMatrix);
