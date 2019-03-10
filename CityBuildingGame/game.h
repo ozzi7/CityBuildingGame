@@ -19,6 +19,7 @@
 #include "input_handler.h"
 #include "map_generator.h"
 
+
 class Game
 {
 public:
@@ -39,6 +40,7 @@ private:
 	GLFWwindow* window;
 	InputHandler* inputHandler;
 	TripleBuffer<RenderBuffer>* renderBuffers;
+
 
 	// timing
 	float deltaTime = 0.0f;	// time between current frame and last frame

@@ -20,6 +20,8 @@ private:
 	bool hasArrived = false;
 	bool proxyHasArrived = false;
 
+	int gridX = 0;
+	int gridY = 0;
 	glm::vec2 proxyObjectPos = glm::vec2(0.0f,0.0f);
 	std::vector<glm::vec2> wayPoints;
 	int proxyWPIdx = 0;
@@ -31,4 +33,5 @@ private:
 	float distanceToProxy = 1.0f;
 
 	void updateProxyPosition(float speed = -1.0f);
+	void updateGridUnit();
 };
