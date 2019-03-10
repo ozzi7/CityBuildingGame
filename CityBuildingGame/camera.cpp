@@ -34,7 +34,7 @@ glm::mat4 Camera::GetProjectionMatrix()
 
 glm::mat4 Camera::GetLightProjectionMatrix()
 {
-	return glm::ortho(-SCREEN_RATIO * ZoomLevel * projectionIncrease, SCREEN_RATIO * ZoomLevel * projectionIncrease, -1.0f * ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, 0.0f, 200.0f);
+	return glm::ortho(-ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, -1.0f * ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, 0.0f, 200.0f);
 
 }
 
