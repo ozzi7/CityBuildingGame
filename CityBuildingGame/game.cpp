@@ -150,7 +150,7 @@ void Game::gameLoop()
 				grid->gridUnits[e->toY][e->toX]->movingObjects.push_back(toMove); // could use event type here
 			}
 			else {
-				if(e->posY+1 < grid->gridWidth && e->posX + 1 < grid->gridHeight){
+				if(e->posX+1 < grid->gridWidth && e->posY + 1 < grid->gridHeight){
 					if (grid->gridUnits[e->posY][e->posX]->occupied == false &&
 						grid->gridUnits[e->posY + 1][e->posX]->occupied == false &&
 						grid->gridUnits[e->posY + 1][e->posX + 1]->occupied == false &&
