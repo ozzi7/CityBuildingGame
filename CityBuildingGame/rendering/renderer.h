@@ -36,7 +36,6 @@ public:
 
 	glm::vec3 ambientLight;
 
-	bool ShadowPass = false;
 	float z = 0.0f;
 
 	Renderer(Camera& aCamera) : camera(aCamera)
@@ -73,50 +72,57 @@ public:
 
 		ambientLight = { 0.3f, 0.3f, 0.3f };
 	}
-	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix)
+	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix, unsigned int shadowMapID)
 	{
-		if (ShadowPass)
-		{
-			shadow_shader->use();
-			shadow_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+		terrain_shader->use();
+		terrain_shader->setMat4("projection", aProjection);
+		terrain_shader->setMat4("view", aView);
+		terrain_shader->setMat4("model", glm::mat4(1.0f));
+		terrain_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+		terrain_shader->setInt("shadowMap", shadowMapID);
+		terrain_shader->setVec3("light.ambient", ambientLight);
+		terrain_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
+		terrain_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
 
-			shadow_instanced_shader->use();
-			shadow_instanced_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+		skinned_mesh_shader->use();
+		skinned_mesh_shader->setMat4("projection", aProjection);
+		skinned_mesh_shader->setMat4("view", aView);
+		skinned_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+		skinned_mesh_shader->setInt("shadowMap", shadowMapID);
+		skinned_mesh_shader->setVec3("light.ambient", ambientLight);
+		skinned_mesh_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
+		skinned_mesh_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
 
-			shadow_skinned_shader->use();
-			shadow_skinned_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
-		}
-		else
-		{
-			terrain_shader->use();
-			terrain_shader->setMat4("projection", aProjection);
-			terrain_shader->setMat4("view", aView);
-			terrain_shader->setMat4("model", glm::mat4(1.0f));
-			terrain_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
-			terrain_shader->setInt("shadowMap", 13);
-			terrain_shader->setVec3("light.ambient", ambientLight);
-			terrain_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
-			terrain_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
-
-			skinned_mesh_shader->use();
-			skinned_mesh_shader->setMat4("projection", aProjection);
-			skinned_mesh_shader->setMat4("view", aView);
-			skinned_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
-			skinned_mesh_shader->setInt("shadowMap", 13);
-			skinned_mesh_shader->setVec3("light.ambient", ambientLight);
-			skinned_mesh_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
-			skinned_mesh_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
-
-			instanced_mesh_shader->use();
-			instanced_mesh_shader->setMat4("projection", aProjection);
-			instanced_mesh_shader->setMat4("view", aView);
-			instanced_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
-			instanced_mesh_shader->setInt("shadowMap", 13);
-			instanced_mesh_shader->setVec3("light.ambient", ambientLight);
-			instanced_mesh_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
-			instanced_mesh_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
-		}
+		instanced_mesh_shader->use();
+		instanced_mesh_shader->setMat4("projection", aProjection);
+		instanced_mesh_shader->setMat4("view", aView);
+		instanced_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+		instanced_mesh_shader->setInt("shadowMap", shadowMapID);
+		instanced_mesh_shader->setVec3("light.ambient", ambientLight);
+		instanced_mesh_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
+		instanced_mesh_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
 	}
+
+	void SetShadowMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix)
+	{
+		shadow_shader->use();
+		shadow_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+
+		shadow_instanced_shader->use();
+		shadow_instanced_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+
+		shadow_skinned_shader->use();
+		shadow_skinned_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
+	}
+	void CalculateShadow(RenderBuffer* renderBuffer)
+	{
+		// don't calculate terrain shadows
+		shadowPass = true;
+		renderInstancedObjects(renderBuffer);
+		renderBoneAnimated(renderBuffer);
+		shadowPass = false;
+	}
+
 	void Render(RenderBuffer* renderBuffer)
 	{
 		renderTerrain(renderBuffer);
@@ -125,17 +131,17 @@ public:
 	}
 
 private:
+	bool shadowPass = false;
+
 	void renderTerrain(RenderBuffer* renderBuffer)
 	{
-		if (!ShadowPass) { // don't calculate terrain shadows
-			terrain_shader->use();
-			renderBuffer->terrain->Draw();
-		}
+		terrain_shader->use();
+		renderBuffer->terrain->Draw();
 	}
 	void renderInstancedObjects(RenderBuffer* renderBuffer)
 	{
 		Shader* shader;
-		if (ShadowPass)
+		if (shadowPass)
 			shader = shadow_instanced_shader;
 		else
 			shader = instanced_mesh_shader;
@@ -148,7 +154,7 @@ private:
 	void renderBoneAnimated(RenderBuffer* renderBuffer)
 	{
 		Shader* shader;
-		if (ShadowPass)
+		if (shadowPass)
 			shader = shadow_skinned_shader;
 		else
 			shader = skinned_mesh_shader;

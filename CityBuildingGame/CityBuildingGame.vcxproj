@@ -88,6 +88,9 @@
     <ClCompile Include="utility\buffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\blur_filter.vert" />
+    <None Include="shaders\blur_filter_horizontal.frag" />
+    <None Include="shaders\blur_filter_vertical.frag" />
     <None Include="shaders\mesh.frag" />
     <None Include="shaders\mesh_instanced.vert" />
     <None Include="shaders\shadow_depth.frag" />

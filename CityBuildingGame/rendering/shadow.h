@@ -9,9 +9,10 @@ public:
 	void InitShadowMap();
 	void BindShadowMap();
 	void UnbindShadowMap();
+	unsigned int DepthMap;
 
 private:
 	unsigned int depthMapFBO;
-	unsigned int depthMap;
+
 };
 
