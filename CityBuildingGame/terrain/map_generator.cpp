@@ -104,32 +104,32 @@ void MapGenerator::generateTrees()
 			int chosenTree = dist(gen); 
 
 			float scale = 1.0f - (float)scale_tree(gen);
-			while (scale < 0.1f) { scale = 1.0f - (float)scale_tree(gen); }
+			while (scale < 0.4f) { scale = 1.0f - (float)scale_tree(gen); }
 			float posX = j + 0.5f + (float)pos_offset_tree(gen);
 			float posY = i + 0.5f + (float)pos_offset_tree(gen);
 
 			if (chosenTree == 0 && isPine) {
 				grid->gridUnits[i][j]->objects.push_back(
 					new Pine(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
-						glm::vec3(scale*0.01f, scale*0.01f, scale*0.01f),
+						glm::vec3(scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR),
 						glm::vec3(1.5707963f, 0, rotation(gen))));
 			}
 			else if (chosenTree <= 1 && isJuniper) {
 				grid->gridUnits[i][j]->objects.push_back(
 					new Juniper(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
-						glm::vec3(scale*0.01f, scale*0.01f, scale*0.01f),
+						glm::vec3(scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR),
 						glm::vec3(1.5707963f, 0, rotation(gen))));
 			}
 			else if (chosenTree <= 2 && isSpruce) {
 				grid->gridUnits[i][j]->objects.push_back(
 					new Spruce(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
-						glm::vec3(scale*0.01f, scale*0.01f, scale*0.01f),
+						glm::vec3(scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR),
 						glm::vec3(1.5707963f, 0, rotation(gen))));
 			}
 			else if (chosenTree <= 3 && isOak) {
 				grid->gridUnits[i][j]->objects.push_back(
 					new Oak(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
-						glm::vec3(scale*0.01f, scale*0.01f, scale*0.01f),
+						glm::vec3(scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR),
 						glm::vec3(1.5707963f, 0, rotation(gen))));
 			}
 		}
