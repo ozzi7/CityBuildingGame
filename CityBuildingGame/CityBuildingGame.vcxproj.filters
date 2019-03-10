@@ -26,6 +26,8 @@
     <ClCompile Include="gameObjects\lumberjack.cpp" />
     <ClCompile Include="events\event_handler.cpp" />
     <ClCompile Include="events\event.cpp" />
+    <ClCompile Include="gameObjects\bone_animated.cpp" />
+    <ClCompile Include="gameObjects\lumberjack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
@@ -58,7 +60,6 @@
     <ClInclude Include="rendering\meshes\instanced_model.h" />
     <ClInclude Include="rendering\meshes\mesh.h" />
     <ClInclude Include="rendering\meshes\model.h" />
-    <ClInclude Include="skinned_model.h" />
     <ClInclude Include="rendering\meshes\skinned_mesh.h" />
     <ClInclude Include="events\event_handler.h" />
     <ClInclude Include="events\blockingconcurrentqueue.h" />
@@ -66,13 +67,13 @@
     <ClInclude Include="events\event.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\skinning.frag" />
-    <None Include="shaders\skinning.vert" />
     <None Include="shaders\mesh.frag" />
     <None Include="shaders\shadow_depth.frag" />
     <None Include="shaders\shadow_depth.vert" />
     <None Include="shaders\shadow_depth_instanced.vert" />
     <None Include="shaders\mesh_instanced.vert" />
     <None Include="shaders\mesh.vert" />
+    <None Include="shaders\mesh_skinned.vert" />
+    <None Include="shaders\shadow_depth_skinned.vert" />
   </ItemGroup>
 </Project>

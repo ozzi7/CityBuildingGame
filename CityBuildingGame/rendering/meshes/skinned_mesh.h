@@ -26,11 +26,7 @@ public:
 
 	bool LoadMesh(const std::string& fileName);
 	void Render(Shader shader);
-
-	unsigned int NumBones() const
-	{
-		return m_NumBones;
-	}
+	
 	void PrecalculateBoneTransforms();
 	void BindBoneTransform(float timeInSeconds, Shader* shader);
 
@@ -53,7 +49,6 @@ private:
 
 	struct VertexBoneData
 	{
-		/* de pastrat numarul de elemente al IDs & Weights */
 		unsigned int IDs[NUM_BONES_PER_VERTEX];
 		float Weights[NUM_BONES_PER_VERTEX];
 

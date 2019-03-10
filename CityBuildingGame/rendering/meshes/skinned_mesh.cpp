@@ -5,8 +5,8 @@
 #include <iostream>
 
 #define POSITION_LOCATION    0
-#define TEX_COORD_LOCATION   1
-#define NORMAL_LOCATION      2
+#define NORMAL_LOCATION      1
+#define TEX_COORD_LOCATION   2
 #define BONE_ID_LOCATION     3
 #define BONE_WEIGHT_LOCATION 4
 
