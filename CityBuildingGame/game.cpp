@@ -150,10 +150,21 @@ void Game::gameLoop()
 				grid->gridUnits[e->toY][e->toX]->movingObjects.push_back(toMove); // could use event type here
 			}
 			else {
-				grid->gridUnits[e->posY][e->posX]->objects.push_back(new Dwelling(glm::vec3(e->posX+1.0f, e->posY+1.0f,
-					grid->GetHeight(e->posX + 1.0f, e->posY + 1.0f)),
-					glm::vec3(1.0f, 1.0f, 1.0f),
-					glm::vec3(0.0f, 0.0f, 0.0f)));
+				if(e->posY+1 < grid->gridWidth && e->posX + 1 < grid->gridHeight){
+					if (grid->gridUnits[e->posY][e->posX]->occupied == false &&
+						grid->gridUnits[e->posY + 1][e->posX]->occupied == false &&
+						grid->gridUnits[e->posY + 1][e->posX + 1]->occupied == false &&
+						grid->gridUnits[e->posY][e->posX + 1]->occupied == false) {
+						grid->gridUnits[e->posY][e->posX]->objects.push_back(new Dwelling(glm::vec3(e->posX + 1.0f, e->posY + 1.0f,
+							grid->GetHeight(e->posX + 1.0f, e->posY + 1.0f)),
+							glm::vec3(0.14f, 0.14f, 0.14f),
+							glm::vec3(0.0f, 0.0f, 0.0f)));
+						grid->gridUnits[e->posY][e->posX]->occupied = true;
+						grid->gridUnits[e->posY + 1][e->posX + 1]->occupied = true;
+						grid->gridUnits[e->posY + 1][e->posX + 1]->occupied = true;
+						grid->gridUnits[e->posY][e->posX + 1]->occupied = true;
+					}
+				}
 			}
 			e = unitEventHandler->GetEvent(); 
 		}

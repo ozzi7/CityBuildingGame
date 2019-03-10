@@ -33,6 +33,8 @@ public:
 	InstancedModel* instanced_model_juniper;
 	InstancedModel* instanced_model_spruce;
 	InstancedModel* instanced_model_oak;
+	InstancedModel* instanced_model_dwelling;
+	InstancedModel* instanced_model_lumberjack_hut;
 
 	glm::vec3 ambientLight;
 
@@ -52,7 +54,14 @@ public:
 		shadow_instanced_shader = new Shader("shaders/shadow_depth_instanced.vert", "shaders/shadow_depth.frag");
 		shadow_skinned_shader = new Shader("shaders/shadow_depth_skinned.vert", "shaders/shadow_depth.frag");
 
-		/* vegetation*/
+		/* buildings */
+		model_path = Path + "/../models/buildings/dwelling/dwelling.dae";
+		instanced_model_dwelling = new InstancedModel(model_path);
+
+		/*model_path = Path + "/../models/buildings/lumberjack_hut/lumberjack_hut.dae";
+		instanced_model_dwelling = new InstancedModel(model_path);*/
+
+		/* vegetation */
 		model_path = Path + "/../models/pine/pine.dae";
 		instanced_model_pine = new InstancedModel(model_path);
 
@@ -93,7 +102,7 @@ public:
 			terrain_shader->setMat4("view", aView);
 			terrain_shader->setMat4("model", glm::mat4(1.0f));
 			terrain_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
-			terrain_shader->setInt("shadowMap", 13);
+			terrain_shader->setInt("shadowMap", 14);
 			terrain_shader->setVec3("light.ambient", ambientLight);
 			terrain_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
 			terrain_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
@@ -102,7 +111,7 @@ public:
 			skinned_mesh_shader->setMat4("projection", aProjection);
 			skinned_mesh_shader->setMat4("view", aView);
 			skinned_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
-			skinned_mesh_shader->setInt("shadowMap", 13);
+			skinned_mesh_shader->setInt("shadowMap", 14);
 			skinned_mesh_shader->setVec3("light.ambient", ambientLight);
 			skinned_mesh_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
 			skinned_mesh_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
@@ -111,7 +120,7 @@ public:
 			instanced_mesh_shader->setMat4("projection", aProjection);
 			instanced_mesh_shader->setMat4("view", aView);
 			instanced_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
-			instanced_mesh_shader->setInt("shadowMap", 13);
+			instanced_mesh_shader->setInt("shadowMap", 14);
 			instanced_mesh_shader->setVec3("light.ambient", ambientLight);
 			instanced_mesh_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
 			instanced_mesh_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
@@ -144,6 +153,8 @@ private:
 		instanced_model_oak->Draw(*shader, renderBuffer->oakModels);
 		instanced_model_spruce->Draw(*shader, renderBuffer->spruceModels);
 		instanced_model_juniper->Draw(*shader, renderBuffer->juniperModels);
+		//instanced_model_juniper->Draw(*shader, renderBuffer->lumberjackHutModels);
+		instanced_model_dwelling->Draw(*shader, renderBuffer->dwellingModels);
 	}
 	void renderBoneAnimated(RenderBuffer* renderBuffer)
 	{

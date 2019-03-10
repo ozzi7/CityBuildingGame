@@ -21,11 +21,10 @@ void RenderBuffer::Visit(Lumberjack* obj) {
 	lumberjackModels.push_back(obj->model);
 }
 void RenderBuffer::Visit(LumberjackHut* obj) {
-	
-
+	lumberjackHutModels.push_back(obj->model);
 }
 void RenderBuffer::Visit(Dwelling* obj) {
-
+	dwellingModels.push_back(obj->model);
 }
 void RenderBuffer::Visit(Building* obj) {
 	
@@ -43,4 +42,6 @@ void RenderBuffer::ClearData()
 	juniperModels.clear();
 	oakModels.clear();
 	lumberjackModels.clear();
+	lumberjackHutModels.clear();
+	dwellingModels.clear();
 }
