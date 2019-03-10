@@ -22,6 +22,10 @@ void RenderBuffer::Visit(Lumberjack* obj) {
 }
 void RenderBuffer::Visit(LumberjackHut* obj) {
 	
+
+}
+void RenderBuffer::Visit(Dwelling* obj) {
+
 }
 void RenderBuffer::Visit(Building* obj) {
 	

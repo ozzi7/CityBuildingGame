@@ -150,7 +150,10 @@ void Game::gameLoop()
 				grid->gridUnits[e->toY][e->toX]->movingObjects.push_back(toMove); // could use event type here
 			}
 			else {
-
+				grid->gridUnits[e->posY][e->posX]->objects.push_back(new Dwelling(glm::vec3(e->posX+1.0f, e->posY+1.0f,
+					grid->GetHeight(e->posX + 1.0f, e->posY + 1.0f)),
+					glm::vec3(1.0f, 1.0f, 1.0f),
+					glm::vec3(0.0f, 0.0f, 0.0f)));
 			}
 			e = unitEventHandler->GetEvent(); 
 		}

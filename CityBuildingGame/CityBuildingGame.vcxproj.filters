@@ -28,6 +28,7 @@
     <ClCompile Include="gameObjects\bone_animated.cpp" />
     <ClCompile Include="gameObjects\lumberjack.cpp" />
     <ClCompile Include="gameObjects\lumberjack_hut.cpp" />
+    <ClCompile Include="gameObjects\dwelling.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
@@ -67,6 +68,7 @@
     <ClInclude Include="events\event.h" />
     <ClInclude Include="gameObjects\building.h" />
     <ClInclude Include="gameObjects\lumberjack_hut.h" />
+    <ClInclude Include="gameObjects\dwelling.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />
