@@ -19,6 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="events\blockingconcurrentqueue.h" />
+    <ClInclude Include="events\concurrentqueue.h" />
+    <ClInclude Include="events\event_handler.h" />
+    <ClInclude Include="events\event.h" />
     <ClInclude Include="gameObjects\game_object.h" />
     <ClInclude Include="gameObjects\juniper.h" />
     <ClInclude Include="gameObjects\oak.h" />
@@ -54,6 +58,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="events\event_handler.cpp" />
+    <ClCompile Include="events\event.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameObjects\bone_animated.cpp" />
     <ClCompile Include="gameObjects\game_object.cpp" />
@@ -170,7 +176,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\utility;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;$(SolutionDir)\CityBuildingGame\rendering\meshes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\events;$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\utility;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;$(SolutionDir)\CityBuildingGame\rendering\meshes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ShowIncludes>false</ShowIncludes>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
@@ -209,7 +215,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\utility;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;$(SolutionDir)\CityBuildingGame\rendering\meshes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\events;$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\utility;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;$(SolutionDir)\CityBuildingGame\rendering\meshes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp14</LanguageStandard>

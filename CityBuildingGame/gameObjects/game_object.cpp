@@ -2,6 +2,8 @@
 #pragma once
 #include "game_object.h"
 
+extern EventHandler* unitEventHandler; // ?? save in every object?! same with grid?
+
 GameObject::GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 {
 	position = aPosition;

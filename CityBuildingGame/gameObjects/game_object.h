@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
 #include "visitor.h"
+#include <event_handler.h>
 
 class GameObject
 {
@@ -15,6 +16,9 @@ public:
 	glm::mat4 model = glm::mat4(1.0f);
 
 	virtual void Accept(class Visitor &v) = 0;
+
+	/* this is the index into the list contained in the unit */
+	int unitIdx = 0;
 
 protected:
 	void recalculateModelMatix();

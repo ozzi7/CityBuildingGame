@@ -30,8 +30,6 @@ void MapGenerator::GenerateMap()
 	path.push_back(glm::vec2(10.5f, 0.5f));
 	path.push_back(glm::vec2(10.5f, 1.5f));
 	path.push_back(glm::vec2(9.5f, 1.5f));
-	//path.push_back(glm::vec2(10.5f, 10.5f));
-	//path.push_back(glm::vec2(12.5f, 12.5f));
 
 	lumbydumby->SetNewPath(path);
 	grid->gridUnits[0][0]->movingObjects.push_back(lumbydumby);

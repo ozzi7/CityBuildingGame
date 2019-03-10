@@ -3,10 +3,11 @@
 #include <bone_animated.h>
 #include <grid.h>
 
+
 BoneAnimated::BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation) 
 	: GameObject(aPosition, aScale, aRotation) {}
 
-void BoneAnimated::UpdatePosition(Grid * grid) // Grid * grid
+void BoneAnimated::UpdatePosition(Grid * grid) 
 {	
 	if (!proxyHasArrived) {
 		updateProxyPosition();
@@ -41,6 +42,7 @@ void BoneAnimated::UpdatePosition(Grid * grid) // Grid * grid
 		rotation.z = rotation.z - glm::half_pi<float>(); // somehow roation direction is not from +x to +y but +x to -y.. 
 												  //rotation = rotation + 3.1415;
 		recalculateModelMatix();
+		updateGridUnit();
 	}
 }
 
@@ -103,4 +105,12 @@ void BoneAnimated::SetNewPath(std::vector<glm::vec2> aWayPoints)
 void BoneAnimated::UpdatePath(std::vector<glm::vec2> aWayPoints)
 {
 	// TODO (if the path changes without having arrived yet..maybe we can merge it with setnewpath..)
+}
+void BoneAnimated::updateGridUnit()
+{
+	if ((int)position.x != gridX || (int)position.y != gridY) {
+		unitEventHandler->AddEvent(new Event(MoveObjectEvent, gridX, gridY, (int)position.x, (int)position.y, unitIdx));
+		gridX = (int)position.x;
+		gridY = (int)position.y;
+	}
 }

@@ -1,11 +1,14 @@
 #include "stdafx.h"
 #include "game.h"
 
+EventHandler* unitEventHandler; // ?? save in every object?! same with grid?
+
 Game::Game(){};
 
 Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	window = aWindow;
 	inputHandler = aInputHandler;
+	unitEventHandler = new EventHandler();
 
 	grid = new Grid(MAP_WIDTH, MAP_HEIGHT);
 	renderBuffers = new TripleBuffer<RenderBuffer>();
@@ -119,12 +122,14 @@ void Game::gameLoop()
 		//glfwPollEvents();
 		inputHandler->MouseScroll();
 
-		/* TODO: temp */
 		for (int i = 0; i < grid->gridUnits.size(); i++) {
 			for (int j = 0; j < grid->gridUnits[i].size(); j++) {
+				int idx = 0;
 				for (std::list<BoneAnimated*>::iterator it = grid->gridUnits[i][j]->movingObjects.begin();
 					it != grid->gridUnits[i][j]->movingObjects.end(); ++it) {
 					(*it)->UpdatePosition(grid);
+					(*it)->unitIdx = idx;
+					idx++;
 				}
 			}
 		}
@@ -149,6 +154,27 @@ void Game::gameLoop()
 		grid->terrain->Accept(*producerBuffer); // TODO
 		renderBuffers->ExchangeProducerBuffer();
 
+
+		/*Handle all object moving, deleting, creating, no locks needed because no other thread is currently doing anything..*/
+		Event * e = unitEventHandler->GetEvent();
+		BoneAnimated * toMove = NULL;
+		while (e != NULL) {
+			/* removes element by index, could use pointers instead but... */
+			int count = 0;
+			for (auto it = grid->gridUnits[e->fromY][e->fromX]->movingObjects.begin(); it !=
+				grid->gridUnits[e->fromY][e->fromX]->movingObjects.end(); ++it) {
+				if (count == e->index) {
+					toMove = (*it);
+					grid->gridUnits[e->fromY][e->fromX]->movingObjects.erase(it);
+					break;
+				}
+				count++;
+			}
+	
+			grid->gridUnits[e->toY][e->toX]->movingObjects.push_back(toMove); // could use event type here
+			e = unitEventHandler->GetEvent(); 
+		}
+		
 		std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::microseconds>(next_game_tick - std::chrono::high_resolution_clock::now()));
 		next_game_tick = (next_game_tick + std::chrono::microseconds(SKIP_TICKS));
 		loops++;
