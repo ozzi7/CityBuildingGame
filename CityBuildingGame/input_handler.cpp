@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "input_handler.h"
+#include "event_handler.h"
 
 void InputHandler::Keypress(int button, int action)
 {
@@ -27,28 +28,30 @@ void InputHandler::Mouseclick(int button, int action)
 
 		// Test Code
 		glm::vec3 cursor_position = Camera->CursorPositionOnGrid();
-		if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+		if (cursor_position.x >= 0 && cursor_position.y >= 0 && Grid->gridUnits.at((int)cursor_position.y).at((int)cursor_position.x))
 		{
-			if (cursor_position.x >= 0 && cursor_position.y >= 0 && Grid->gridUnits.at((int)cursor_position.y).at((int)cursor_position.x)) 
+			if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 			{
+				unitEventHandler->AddEvent(new Event(CreateBuilding, (int)cursor_position.x, (int)cursor_position.y));
 				/* TODO: temp */
-				for (int i = 0; i < Grid->gridUnits.size(); i++) {
-					for (int j = 0; j < Grid->gridUnits[i].size(); j++) {
-						for (std::list<BoneAnimated*>::iterator it = Grid->gridUnits[i][j]->movingObjects.begin();
-							it != Grid->gridUnits[i][j]->movingObjects.end(); ++it) {
+				//for (int i = 0; i < Grid->gridUnits.size(); i++) {
+				//	for (int j = 0; j < Grid->gridUnits[i].size(); j++) {
+						//for (std::list<BoneAnimated*>::iterator it = Grid->gridUnits[i][j]->movingObjects.begin();
+						//	it != Grid->gridUnits[i][j]->movingObjects.end(); ++it) {
 							// to create path to walk
 							//static_cast<Lumberjack*>(*it)->wayPoints.push_back(cursor_position);
-						}
-					}
-				}
+
+					/*	}
+					}*/
+					//}
 			}
-		}
-		else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-		{
-			Grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->objects.push_back(
-				new Pine(glm::vec3(cursor_position),
-					glm::vec3(0.01f, 0.01f, 0.01f),
-					glm::vec3(1.5707963f, 0.0f, 0.0f)));
+			else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+			{
+				Grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->objects.push_back(
+					new Pine(glm::vec3(cursor_position),
+						glm::vec3(0.01f, 0.01f, 0.01f),
+						glm::vec3(1.5707963f, 0.0f, 0.0f)));
+			}
 		}
 	}
 }

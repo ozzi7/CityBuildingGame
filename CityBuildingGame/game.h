@@ -18,7 +18,7 @@
 #include "renderer.h"
 #include "input_handler.h"
 #include "map_generator.h"
-
+#include <dwelling.h>
 
 class Game
 {

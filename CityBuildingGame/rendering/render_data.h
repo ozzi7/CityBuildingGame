@@ -7,6 +7,8 @@
 #include <juniper.h>
 #include <oak.h>
 #include <pine.h>
+#include <lumberjack_hut.h>
+#include <dwelling.h>
 
 class RenderBuffer : public Buffer, public Visitor {
 public:
@@ -21,6 +23,7 @@ public:
 	void Visit(Tree* obj);
 	void Visit(Building* obj);
 	void Visit(LumberjackHut* obj);
+	void Visit(Dwelling* obj);
 
 	void ClearData();
 
@@ -29,6 +32,8 @@ public:
 	std::vector<glm::mat4> juniperModels;
 	std::vector<glm::mat4> oakModels;
 	std::vector<glm::mat4> lumberjackModels;
+	std::vector<glm::mat4> lumberjackHutModels;
+	std::vector<glm::mat4> dwellingModels;
 
 	Terrain* terrain; // TODO: 
 };

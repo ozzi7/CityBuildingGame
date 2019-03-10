@@ -33,6 +33,8 @@ public:
 	InstancedModel* instanced_model_juniper;
 	InstancedModel* instanced_model_spruce;
 	InstancedModel* instanced_model_oak;
+	InstancedModel* instanced_model_dwelling;
+	InstancedModel* instanced_model_lumberjack_hut;
 
 	glm::vec3 ambientLight;
 
@@ -51,7 +53,14 @@ public:
 		shadow_instanced_shader = new Shader("shaders/shadow_depth_instanced.vert", "shaders/shadow_depth.frag");
 		shadow_skinned_shader = new Shader("shaders/shadow_depth_skinned.vert", "shaders/shadow_depth.frag");
 
-		/* vegetation*/
+		/* buildings */
+		model_path = Path + "/../models/buildings/dwelling/dwelling.dae";
+		instanced_model_dwelling = new InstancedModel(model_path);
+
+		/*model_path = Path + "/../models/buildings/lumberjack_hut/lumberjack_hut.dae";
+		instanced_model_dwelling = new InstancedModel(model_path);*/
+
+		/* vegetation */
 		model_path = Path + "/../models/pine/pine.dae";
 		instanced_model_pine = new InstancedModel(model_path);
 
@@ -150,6 +159,8 @@ private:
 		instanced_model_oak->Draw(*shader, renderBuffer->oakModels);
 		instanced_model_spruce->Draw(*shader, renderBuffer->spruceModels);
 		instanced_model_juniper->Draw(*shader, renderBuffer->juniperModels);
+		//instanced_model_juniper->Draw(*shader, renderBuffer->lumberjackHutModels);
+		instanced_model_dwelling->Draw(*shader, renderBuffer->dwellingModels);
 	}
 	void renderBoneAnimated(RenderBuffer* renderBuffer)
 	{
