@@ -7,6 +7,8 @@ class Spruce;
 class Pine;
 class Terrain;
 class Lumberjack;
+class Building;
+class LumberjackHut;
 
 class Visitor
 {
@@ -18,4 +20,6 @@ public:
 	virtual void Visit(Juniper* juniper) = 0;
 	virtual void Visit(Terrain* terrain) = 0;
 	virtual void Visit(Lumberjack* lumberjack) = 0;
+	virtual void Visit(Building* building) = 0;
+	virtual void Visit(LumberjackHut* lumberjackHut) = 0;
 };

@@ -12,4 +12,12 @@ Event::Event(eventType MoveObject, int aFromX, int aFromY, int aToX, int aToY, i
 	toX = aToX;
 	toY = aToY;
 	index = aIndex;
+	eventID = MoveObject;
+};
+Event::Event(eventType CreateBuilding, int aPosX, int aPosY)
+{
+	// doesnt belong here
+	posX = aPosX;
+	posY = aPosY;
+	eventID = CreateBuilding;
 };

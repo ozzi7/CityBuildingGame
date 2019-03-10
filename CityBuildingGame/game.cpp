@@ -134,19 +134,24 @@ void Game::gameLoop()
 		Event * e = unitEventHandler->GetEvent();
 		BoneAnimated * toMove = NULL;
 		while (e != NULL) {
-			/* removes element by index, could use pointers instead but... */
-			int count = 0;
-			for (auto it = grid->gridUnits[e->fromY][e->fromX]->movingObjects.begin(); it !=
-				grid->gridUnits[e->fromY][e->fromX]->movingObjects.end(); ++it) {
-				if (count == e->index) {
-					toMove = (*it);
-					grid->gridUnits[e->fromY][e->fromX]->movingObjects.erase(it);
-					break;
+			if (e->eventID == MoveObjectEvent)
+			{
+				/* removes element by index, could use pointers instead but... */
+				int count = 0;
+				for (auto it = grid->gridUnits[e->fromY][e->fromX]->movingObjects.begin(); it !=
+					grid->gridUnits[e->fromY][e->fromX]->movingObjects.end(); ++it) {
+					if (count == e->index) {
+						toMove = (*it);
+						grid->gridUnits[e->fromY][e->fromX]->movingObjects.erase(it);
+						break;
+					}
+					count++;
 				}
-				count++;
+				grid->gridUnits[e->toY][e->toX]->movingObjects.push_back(toMove); // could use event type here
 			}
-	
-			grid->gridUnits[e->toY][e->toX]->movingObjects.push_back(toMove); // could use event type here
+			else {
+
+			}
 			e = unitEventHandler->GetEvent(); 
 		}
 		

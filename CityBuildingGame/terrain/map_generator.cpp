@@ -104,7 +104,7 @@ void MapGenerator::generateTrees()
 			int chosenTree = dist(gen); 
 
 			float scale = 1.0f - (float)scale_tree(gen);
-			while (scale < 0.4f) { scale = 1.0f - (float)scale_tree(gen); }
+			while (scale < SMALL_TREE_CUTOFF_PERCENTAGE*0.01F) { scale = 1.0f - (float)scale_tree(gen); }
 			float posX = j + 0.5f + (float)pos_offset_tree(gen);
 			float posY = i + 0.5f + (float)pos_offset_tree(gen);
 

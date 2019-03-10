@@ -19,6 +19,8 @@ public:
 	void Visit(Lumberjack*);
 	void Visit(Terrain* obj);
 	void Visit(Tree* obj);
+	void Visit(Building* obj);
+	void Visit(LumberjackHut* obj);
 
 	void ClearData();
 

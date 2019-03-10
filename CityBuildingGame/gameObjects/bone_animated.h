@@ -1,7 +1,6 @@
 #pragma once
 #include <game_object.h>
 #include "visitor.h"
-//#include <grid.h>
 #include <math.h> 
 #include <vector>
 

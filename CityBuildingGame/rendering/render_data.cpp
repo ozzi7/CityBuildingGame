@@ -20,6 +20,12 @@ void RenderBuffer::Visit(Juniper* obj) {
 void RenderBuffer::Visit(Lumberjack* obj) {
 	lumberjackModels.push_back(obj->model);
 }
+void RenderBuffer::Visit(LumberjackHut* obj) {
+	
+}
+void RenderBuffer::Visit(Building* obj) {
+	
+}
 void RenderBuffer::Visit(Terrain* obj) {
 
 	terrain = obj;
