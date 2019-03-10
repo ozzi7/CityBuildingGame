@@ -27,7 +27,7 @@ void main()
     BoneTransform += gBones[aBoneIDs[2]] * aWeights[2];
     BoneTransform += gBones[aBoneIDs[3]] * aWeights[3];
 
-	FragPos = vec3(model * vec4(aPos, 1.0));
+	FragPos = vec3(model * BoneTransform * vec4(aPos, 1.0));
     Normal = (model * BoneTransform * vec4(aNormal, 0.0)).xyz;
 	TexCoords = aTexCoord;
 	FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0);

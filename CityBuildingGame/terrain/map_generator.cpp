@@ -52,7 +52,7 @@ void MapGenerator::generateTrees()
 {
 	std::mt19937 gen(rd());
 	std::chi_squared_distribution<> scale_tree(1.0f);
-	std::uniform_real_distribution<> pos_offset_tree(-0.45f, 0.45f);
+	std::uniform_real_distribution<> pos_offset_tree(-0.3f, 0.3f);
 	std::uniform_real_distribution<> rotation(0, glm::two_pi<float>());
 
 	/* create trees using noise */
