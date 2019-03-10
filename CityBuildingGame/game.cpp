@@ -44,49 +44,32 @@ void Game::renderLoop()
 	glm::mat4 view;
 	glm::mat4 lightSpaceMatrix;
 	
-	//lightSource = new Camera(glm::vec3(-50.0f, -50.0f, 50.0f), window);
+	renderer->directionalLight.Color = { 1.0f, 1.0f, 1.0f };
+	renderer->directionalLight.PositionOffset = { -100.0f, 200.0f, 20.0f };
+
 	grid->terrain->InitOpenGL(renderer->terrain_shader);
 	shadow->InitShadowMap();
-
-	float variableShadows = 0.05f;
-	float offsetX = -40.0f;
-	float offsetY = -40.0f;
 
 	while (!glfwWindowShouldClose(window))
 	{
 		// Shadow pass
 		shadow->BindShadowMap();
 
-		//camera->Scroll(RIGHT, 20);
-		//camera->Scroll(UP, 20);
-		projection = camera->GetProjectionMatrix(); // TODO: change this to capture larger window
+		//projection = camera->GetProjectionMatrix(); // TODO: change this to capture larger window
 
-		float projectionIncrease = 1.0f; // TODO: test, projection also depends on view, which right now is moving.. 
-		projection = glm::ortho(-SCREEN_RATIO * camera->ZoomLevel*projectionIncrease, SCREEN_RATIO * camera->ZoomLevel*projectionIncrease,
-			-1.0f * camera->ZoomLevel *projectionIncrease, 1.0f * camera->ZoomLevel*projectionIncrease, 0.0f, 200.0f);
-		//projection = glm::ortho<float>(-10, 10, -10, 10, -10, 20);//camera->GetProjectionMatrix(); // ratio 1?
-		//projection = glm::ortho(-20.0f, 40.0f, -40.0f, 20.0f, -5.0f, 200.0f);
-		view = camera->GetViewMatrix();
+		float projectionIncrease = 1.5f; // TODO: test, projection also depends on view, which right now is moving.. 
+		projection = glm::ortho(-SCREEN_RATIO * camera->ZoomLevel * projectionIncrease, SCREEN_RATIO * camera->ZoomLevel * projectionIncrease,
+			-1.0f * camera->ZoomLevel * projectionIncrease, 1.0f * camera->ZoomLevel * projectionIncrease, 0.0f, 200.0f);
+		//view = camera->GetViewMatrix();
 
-		offsetX += variableShadows;
-		offsetY += variableShadows;
-
-		renderer->directionalLight.Color = glm::vec3(1.0f,1.0f,1.0f);
-		if (offsetX > 120.0f) {
-			offsetX = -60.0f;
-			offsetY = -60.0f;
-		}
-		glm::mat4 view = glm::lookAt(camera->Position+ glm::vec3(-60.0+ offsetX,-60.0+ offsetY,0.0),
-			camera->Position + camera->lookat, glm::vec3(0.0, 0.0, 1.0));
+		glm::mat4 view = glm::lookAt(camera->Position + renderer->directionalLight.PositionOffset,
+			camera->Position + camera->lookat, glm::vec3(0.0f, 0.0f, 1.0f));
 		lightSpaceMatrix = projection * view;
+		renderer->directionalLight.Direction = glm::normalize((camera->Position + renderer->directionalLight.PositionOffset) - camera->lookat);
 
 		renderer->ShadowPass = true;
 		renderer->SetMatrices(projection, view, lightSpaceMatrix);
 		renderer->Render(renderBuffers->GetConsumerBuffer());
-		//camera->Scroll(DOWN, 20);
-		//camera->Scroll(LEFT, 20);
-		//glfwSwapBuffers(window);
-
 
 		// Render pass
 		shadow->UnbindShadowMap();

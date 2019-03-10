@@ -18,6 +18,7 @@
 
 struct LightSource
 {
+	glm::vec3 PositionOffset;
 	glm::vec3 Direction;
 	glm::vec3 Color;
 };
@@ -74,10 +75,7 @@ public:
 		mesh_lumberjack->LoadMesh(model_path);
 		mesh_lumberjack->PrecalculateBoneTransforms();
 
-		directionalLight.Color = { 1.0f, 1.0f, 1.0f };
-		directionalLight.Direction = { -1.0f, -1.0f, -1.0f };
-
-		ambientLight = { 0.5f, 0.5f, 0.5f };
+		ambientLight = { 0.3f, 0.3f, 0.3f };
 	}
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix)
 	{
@@ -116,11 +114,13 @@ public:
 	}
 	void Render(RenderBuffer* renderBuffer)
 	{
-		RenderTerrain(renderBuffer);
-		RenderInstancedObjects(renderBuffer);
-		RenderBoneAnimated(renderBuffer);
+		renderTerrain(renderBuffer);
+		renderInstancedObjects(renderBuffer);
+		renderBoneAnimated(renderBuffer);
 	}
-	void RenderTerrain(RenderBuffer* renderBuffer)
+
+private:
+	void renderTerrain(RenderBuffer* renderBuffer)
 	{
 		if (!ShadowPass) { // don't calculate terrain shadows
 			terrain_shader->use();
@@ -130,7 +130,7 @@ public:
 			renderBuffer->terrain->Draw();
 		}
 	}
-	void RenderInstancedObjects(RenderBuffer* renderBuffer)
+	void renderInstancedObjects(RenderBuffer* renderBuffer)
 	{
 		Shader* shader;
 		if (ShadowPass)
@@ -151,7 +151,7 @@ public:
 		instanced_model_spruce->Draw(*shader, renderBuffer->spruceModels);
 		instanced_model_juniper->Draw(*shader, renderBuffer->juniperModels);
 	}
-	void RenderBoneAnimated(RenderBuffer* renderBuffer)
+	void renderBoneAnimated(RenderBuffer* renderBuffer)
 	{
 		Shader* shader;
 		if (ShadowPass)
@@ -174,12 +174,5 @@ public:
 			shader->setMat4("model", renderBuffer->lumberjackModels[i]);
 			mesh_lumberjack->Render(*shader);
 		}
-	}
-
-	~Renderer()
-	{
-		//delete model_fir;
-		//delete mesh_lumberjack;
-		//delete terrain_shader;
 	}
 };
