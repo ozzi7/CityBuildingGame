@@ -62,17 +62,15 @@ void Game::renderLoop()
 		view = camera->GetLightViewMatrix();
 		lightSpaceMatrix = projection * view;
 
-		renderer->ShadowPass = true;
-		renderer->SetMatrices(projection, view, lightSpaceMatrix);
-		renderer->Render(renderBuffers->GetConsumerBuffer());
+		renderer->SetShadowMatrices(projection, view, lightSpaceMatrix);
+		renderer->CalculateShadow(renderBuffers->GetConsumerBuffer());
 
 		// Render pass
 		shadow->UnbindShadowMap();
 		projection = camera->GetProjectionMatrix();
 		view = camera->GetViewMatrix();
 
-		renderer->ShadowPass = false;
-		renderer->SetMatrices(projection, view, lightSpaceMatrix);
+		renderer->SetMatrices(projection, view, lightSpaceMatrix, shadow->DepthMap);
 		renderer->Render(renderBuffers->GetConsumerBuffer());
 
 		glfwSwapBuffers(window);
