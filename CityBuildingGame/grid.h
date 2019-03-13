@@ -10,7 +10,6 @@
 #include "spruce.h"
 #include "juniper.h"
 #include "pine.h"
-//#include "lumberjack.h"
 #include "bone_animated.h"
 
 /* Represents a grid subunit */

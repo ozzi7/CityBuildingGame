@@ -109,7 +109,7 @@ void BoneAnimated::UpdatePath(std::vector<glm::vec2> aWayPoints)
 void BoneAnimated::updateGridUnit()
 {
 	if ((int)position.x != gridX || (int)position.y != gridY) {
-		unitEventHandler->AddEvent(new Event(MoveObjectEvent, gridX, gridY, (int)position.x, (int)position.y, unitIdx));
+		unitEventHandler->AddEvent(new MoveEvent(gridX, gridY, (int)position.x, (int)position.y, unitIdx));
 		gridX = (int)position.x;
 		gridY = (int)position.y;
 	}

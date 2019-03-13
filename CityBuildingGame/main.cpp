@@ -19,6 +19,7 @@
 #include "game.h"
 #include "input_handler.h"
 
+
 Game game;
 GLFWwindow* window;
 InputHandler inputHandler;

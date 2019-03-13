@@ -8,9 +8,9 @@ Game::Game(){};
 Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	window = aWindow;
 	inputHandler = aInputHandler;
-	unitEventHandler = new EventHandler();
 
 	grid = new Grid(MAP_WIDTH, MAP_HEIGHT);
+	unitEventHandler = new EventHandler(grid);
 	renderBuffers = new TripleBuffer<RenderBuffer>();
 
 	camera = new Camera(glm::vec3(50.0f + MAP_HEIGHT * 0.5f, -50.0f + MAP_WIDTH * 0.5f, 50.0f), window);
@@ -90,6 +90,7 @@ void Game::gameLoop()
 
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 	std::chrono::high_resolution_clock::time_point next_game_tick(start + std::chrono::microseconds(SKIP_TICKS));
+
 	while (!glfwWindowShouldClose(window))
 	{
 		//glfwPollEvents();
@@ -129,43 +130,7 @@ void Game::gameLoop()
 
 
 		/*Handle all object moving, deleting, creating, no locks needed because no other thread is currently doing anything..*/
-		Event * e = unitEventHandler->GetEvent();
-		BoneAnimated * toMove = NULL;
-		while (e != NULL) {
-			if (e->eventID == MoveObjectEvent)
-			{
-				/* removes element by index, could use pointers instead but... */
-				int count = 0;
-				for (auto it = grid->gridUnits[e->fromY][e->fromX]->movingObjects.begin(); it !=
-					grid->gridUnits[e->fromY][e->fromX]->movingObjects.end(); ++it) {
-					if (count == e->index) {
-						toMove = (*it);
-						grid->gridUnits[e->fromY][e->fromX]->movingObjects.erase(it);
-						break;
-					}
-					count++;
-				}
-				grid->gridUnits[e->toY][e->toX]->movingObjects.push_back(toMove); // could use event type here
-			}
-			else {
-				if(e->posX+1 < grid->gridWidth && e->posY + 1 < grid->gridHeight){
-					if (grid->gridUnits[e->posY][e->posX]->occupied == false &&
-						grid->gridUnits[e->posY + 1][e->posX]->occupied == false &&
-						grid->gridUnits[e->posY + 1][e->posX + 1]->occupied == false &&
-						grid->gridUnits[e->posY][e->posX + 1]->occupied == false) {
-						grid->gridUnits[e->posY][e->posX]->objects.push_back(new Dwelling(glm::vec3(e->posX + 1.0f, e->posY + 1.0f,
-							grid->GetHeight(e->posX + 1.0f, e->posY + 1.0f)),
-							glm::vec3(0.14f, 0.14f, 0.14f),
-							glm::vec3(0.0f, 0.0f, 0.0f)));
-						grid->gridUnits[e->posY][e->posX]->occupied = true;
-						grid->gridUnits[e->posY + 1][e->posX + 1]->occupied = true;
-						grid->gridUnits[e->posY + 1][e->posX + 1]->occupied = true;
-						grid->gridUnits[e->posY][e->posX + 1]->occupied = true;
-					}
-				}
-			}
-			e = unitEventHandler->GetEvent(); 
-		}
+		while (unitEventHandler->ProcessEvent());
 		
 		std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::microseconds>(next_game_tick - std::chrono::high_resolution_clock::now()));
 		next_game_tick = (next_game_tick + std::chrono::microseconds(SKIP_TICKS));

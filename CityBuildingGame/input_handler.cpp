@@ -32,7 +32,7 @@ void InputHandler::Mouseclick(int button, int action)
 		{
 			if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 			{
-				unitEventHandler->AddEvent(new Event(CreateBuilding, (int)cursor_position.x, (int)cursor_position.y));
+				unitEventHandler->AddEvent(new CreateBuildingEvent(DwellingID, (int)cursor_position.x, (int)cursor_position.y));
 				/* TODO: temp */
 				//for (int i = 0; i < Grid->gridUnits.size(); i++) {
 				//	for (int j = 0; j < Grid->gridUnits[i].size(); j++) {

@@ -11,8 +11,8 @@ const unsigned int MAP_WIDTH = 35;
 const unsigned int MAP_HEIGHT = 40;
 
 // rendering
-const unsigned int SHADOW_WIDTH = 1024;
-const unsigned int SHADOW_HEIGHT = 1024;
+const unsigned int SHADOW_WIDTH = 1920;
+const unsigned int SHADOW_HEIGHT = 1080;
 
 /* vegetation generation */
 // the higher the tree persistence the higher the frequency of trees => easier to find all types of resources nearby

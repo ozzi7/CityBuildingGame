@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #pragma once
 #include "game_object.h"
+#include "event_handler.h"
 
 extern EventHandler* unitEventHandler; // ?? save in every object?! same with grid?
 
