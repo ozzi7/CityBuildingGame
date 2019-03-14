@@ -12,27 +12,29 @@ void MapGenerator::GenerateMap()
 	generateTerrain();
 	generateTrees();
 
-	Lumberjack *lumbydumby = new Lumberjack(glm::vec3(0.5f, 0.5f, grid->gridUnits[0][0]->averageHeight),
+	int x = 10;
+	int y = 5;
+
+	Lumberjack* lumbydumby = new Lumberjack(glm::vec3(0.5f, 0.5f, grid->gridUnits[0][0]->averageHeight),
 		glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
 	
-	std::vector<glm::vec2> path = std::vector<glm::vec2>();
-	path.push_back(glm::vec2(0.5f, 0.5f));
-	path.push_back(glm::vec2(2.5f, 1.5f));
-	path.push_back(glm::vec2(3.5f, 1.5f));
-	path.push_back(glm::vec2(3.5f, 3.5f));
-	path.push_back(glm::vec2(1.5f, 3.5f));
-	path.push_back(glm::vec2(0.5f, 1.5f));
-	path.push_back(glm::vec2(0.5f, 0.5f));
-	path.push_back(glm::vec2(10.5f, 0.5f));
-	path.push_back(glm::vec2(10.5f, 1.5f));
-	path.push_back(glm::vec2(9.5f, 1.5f));
-	path.push_back(glm::vec2(9.5f, 0.5f));
-	path.push_back(glm::vec2(10.5f, 0.5f));
-	path.push_back(glm::vec2(10.5f, 1.5f));
-	path.push_back(glm::vec2(9.5f, 1.5f));
+	Lumberjack* lumbydumbygoal = new Lumberjack(glm::vec3(x+0.5f, y+0.5f, grid->gridUnits[y][x]->averageHeight),
+		glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
 
-	lumbydumby->SetNewPath(path);
+	std::vector<glm::vec2> pathVector = std::vector<glm::vec2>();
+	Pathfinding pathfinding = Pathfinding(grid, Coordinate(0, 0), Coordinate(5, 3));
+	pathfinding.CalculatePath();
+	std::list<Coordinate> path = pathfinding.GetPath();
+	for (std::list<Coordinate>::iterator it = path.begin(); it != path.end(); ++it)
+	{
+		pathVector.push_back(glm::vec2((*it).first, (*it).second));
+		std::cout << ' ' << (*it).first << '|' << (*it).second;
+	}
+	std::cout << '\n';
+
+	lumbydumby->SetNewPath(pathVector);
 	grid->gridUnits[0][0]->movingObjects.push_back(lumbydumby);
+	grid->gridUnits[y][x]->objects.push_back(lumbydumbygoal);
 }
 
 void MapGenerator::generateTerrain()
@@ -113,24 +115,28 @@ void MapGenerator::generateTrees()
 					new Pine(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 						glm::vec3(scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR),
 						glm::vec3(1.5707963f, 0, rotation(gen))));
+				grid->gridUnits[i][j]->occupied = true;
 			}
 			else if (chosenTree <= 1 && isJuniper) {
 				grid->gridUnits[i][j]->objects.push_back(
 					new Juniper(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 						glm::vec3(scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR),
 						glm::vec3(1.5707963f, 0, rotation(gen))));
+				grid->gridUnits[i][j]->occupied = true;
 			}
 			else if (chosenTree <= 2 && isSpruce) {
 				grid->gridUnits[i][j]->objects.push_back(
 					new Spruce(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 						glm::vec3(scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR),
 						glm::vec3(1.5707963f, 0, rotation(gen))));
+				grid->gridUnits[i][j]->occupied = true;
 			}
 			else if (chosenTree <= 3 && isOak) {
 				grid->gridUnits[i][j]->objects.push_back(
 					new Oak(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 						glm::vec3(scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR),
 						glm::vec3(1.5707963f, 0, rotation(gen))));
+				grid->gridUnits[i][j]->occupied = true;
 			}
 		}
 	}

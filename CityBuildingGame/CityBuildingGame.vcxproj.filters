@@ -30,6 +30,7 @@
     <ClCompile Include="gameObjects\dwelling.cpp" />
     <ClCompile Include="events\create_building_event.cpp" />
     <ClCompile Include="events\move_event.cpp" />
+    <ClCompile Include="pathfinding.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
@@ -73,6 +74,7 @@
     <ClInclude Include="events\move_event.h" />
     <ClInclude Include="events\event_visitor.h" />
     <ClInclude Include="visitor.h" />
+    <ClInclude Include="pathfinding.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

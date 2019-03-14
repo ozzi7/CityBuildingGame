@@ -7,7 +7,7 @@
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 
-const unsigned int MAP_WIDTH = 35;
+const unsigned int MAP_WIDTH = 25;
 const unsigned int MAP_HEIGHT = 40;
 
 // rendering
@@ -30,12 +30,12 @@ const float JUNIPER_GAUSSIAN_VARIANCE_PERCENTAGE = 1.0f;		// [0 - 100]
 const float OAK_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 const float SPRUCE_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 
-const float TREE_SCALE_FACTOR = 0.011; // to resize all trees
+const float TREE_SCALE_FACTOR = 0.011f; // to resize all trees
 const float SMALL_TREE_CUTOFF_PERCENTAGE = 30.0f; // [0,100), removes midget trees
-const float PINE_DENSITY = 0.8f;		// [0 - 100]
-const float JUNIPER_DENSITY = 0.2f;		// [0 - 100]
-const float OAK_DENSITY = 0.8f;		// [0 - 100]
-const float SPRUCE_DENSITY= 0.8f;		// [0 - 100]
+const float PINE_DENSITY = 0.4f;		// [0 - 100]
+const float JUNIPER_DENSITY = 0.1f;		// [0 - 100]
+const float OAK_DENSITY = 0.4f;		// [0 - 100]
+const float SPRUCE_DENSITY= 0.4f;		// [0 - 100]
 
 /* terrain generation */
 const float HILL_HEIGHT = 15.0f;	// ~ 0 - 15

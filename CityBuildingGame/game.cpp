@@ -9,7 +9,7 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	window = aWindow;
 	inputHandler = aInputHandler;
 
-	grid = new Grid(MAP_WIDTH, MAP_HEIGHT);
+	grid = new Grid(MAP_HEIGHT, MAP_WIDTH);
 	unitEventHandler = new EventHandler(grid);
 	renderBuffers = new TripleBuffer<RenderBuffer>();
 

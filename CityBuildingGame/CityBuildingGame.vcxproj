@@ -34,6 +34,7 @@
     <ClInclude Include="gameObjects\oak.h" />
     <ClInclude Include="gameObjects\pine.h" />
     <ClInclude Include="gameObjects\spruce.h" />
+    <ClInclude Include="pathfinding.h" />
     <ClInclude Include="rendering\render_data.h" />
     <ClInclude Include="rendering\shadow.h" />
     <ClInclude Include="utility\buffer.h" />
@@ -72,6 +73,7 @@
     <ClCompile Include="gameObjects\game_object.cpp" />
     <ClCompile Include="gameObjects\lumberjack.cpp" />
     <ClCompile Include="gameObjects\lumberjack_hut.cpp" />
+    <ClCompile Include="pathfinding.cpp" />
     <ClCompile Include="rendering\render_data.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="input_handler.cpp" />
