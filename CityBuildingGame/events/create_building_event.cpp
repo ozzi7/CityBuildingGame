@@ -2,7 +2,7 @@
 #pragma once
 #include "create_building_event.h"
 
-CreateBuildingEvent::CreateBuildingEvent(BuildingType aBuildingType, int aPosX, int aPosY)
+CreateBuildingEvent::CreateBuildingEvent(BuildingType aBuildingType, float aPosX, float aPosY)
 {
 	posX = aPosX;
 	posY = aPosY;

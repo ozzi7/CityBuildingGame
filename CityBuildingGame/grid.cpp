@@ -96,6 +96,23 @@ float Grid::GetHeight(float posX, float posY)
 		return ((1-offsetX)*m + (1-offsetY) * n) + terrain->heightmap[i + 1][j + 1];;
 	}
 }
+/* Check if area is flat within a rectangle of the grid*/
+bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY)
+{
+	bool isFlat = true;
+	float height = terrain->heightmap[fromY][fromX];
+	for (int i = fromY; i <= toY; ++i) {
+		for (int j = fromX; j <= toX; ++j) {
+			if (terrain->heightmap[i][j] != height)
+			{
+				isFlat = false;
+				i = toY; // alternative to goto: 
+				break;
+			}
+		}
+	}
+	return isFlat;
+}
 Grid::~Grid() {
 	delete terrain;
 }

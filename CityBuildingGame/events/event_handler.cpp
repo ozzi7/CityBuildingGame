@@ -23,7 +23,7 @@ Event * EventHandler::GetEvent()
 	}
 	else
 	{
-		return NULL; // ??
+		return NULL;
 	}
 }
 bool EventHandler::ProcessEvent()
@@ -39,34 +39,59 @@ bool EventHandler::ProcessEvent()
 void EventHandler::Visit(MoveEvent * aMoveEvent)
 {
 	/* removes element by index, could use pointers instead but... */
-	int count = 0;
 	BoneAnimated * toMove = NULL;
 	for (auto it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.begin(); it !=
 		grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.end(); ++it) {
-		if (count == aMoveEvent->index) {
+		if ((*it) == aMoveEvent->gameObject) {
 			toMove = (*it);
 			grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.erase(it);
 			break;
 		}
-		count++;
 	}
 	grid->gridUnits[aMoveEvent->toY][aMoveEvent->toX]->movingObjects.push_back(toMove);
 }
 void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 {
-	if (aCreateBuildingEvent->posX + 1 < grid->gridWidth && aCreateBuildingEvent->posY + 1 < grid->gridHeight) {
-		if (grid->gridUnits[aCreateBuildingEvent->posY][aCreateBuildingEvent->posX]->occupied == false &&
-			grid->gridUnits[aCreateBuildingEvent->posY + 1][aCreateBuildingEvent->posX]->occupied == false &&
-			grid->gridUnits[aCreateBuildingEvent->posY + 1][aCreateBuildingEvent->posX + 1]->occupied == false &&
-			grid->gridUnits[aCreateBuildingEvent->posY][aCreateBuildingEvent->posX + 1]->occupied == false) {
-			grid->gridUnits[aCreateBuildingEvent->posY][aCreateBuildingEvent->posX]->objects.push_back(new Dwelling(glm::vec3(aCreateBuildingEvent->posX + 1.0f, aCreateBuildingEvent->posY + 1.0f,
-				grid->GetHeight(aCreateBuildingEvent->posX + 1.0f, aCreateBuildingEvent->posY + 1.0f)),
-				glm::vec3(0.14f, 0.14f, 0.14f),
-				glm::vec3(0.0f, 0.0f, 0.0f)));
-			grid->gridUnits[aCreateBuildingEvent->posY][aCreateBuildingEvent->posX]->occupied = true;
-			grid->gridUnits[aCreateBuildingEvent->posY + 1][aCreateBuildingEvent->posX + 1]->occupied = true;
-			grid->gridUnits[aCreateBuildingEvent->posY + 1][aCreateBuildingEvent->posX + 1]->occupied = true;
-			grid->gridUnits[aCreateBuildingEvent->posY][aCreateBuildingEvent->posX + 1]->occupied = true;
-		}
+	int buildingCenterX = round(aCreateBuildingEvent->posX);
+	int buildingCenterY = round(aCreateBuildingEvent->posY);
+
+	switch (aCreateBuildingEvent->buildingType) {
+		case LumberjackHutID:
+			break;
+		case DwellingID:
+			// Dwelling 2x2
+			if (buildingCenterX < grid->gridWidth && buildingCenterY < grid->gridHeight &&
+				buildingCenterX - 1 > 0 && buildingCenterY - 1 > 0) {
+				if (!grid->gridUnits[buildingCenterY - 1][buildingCenterX - 1]->occupied &&
+					!grid->gridUnits[buildingCenterY - 1][buildingCenterX]->occupied &&
+					!grid->gridUnits[buildingCenterY][buildingCenterX]->occupied &&
+					!grid->gridUnits[buildingCenterY][buildingCenterX - 1]->occupied) {
+					if (grid->IsAreaFlat(buildingCenterX - 1, buildingCenterX, buildingCenterY - 1, buildingCenterY))
+					{
+						grid->gridUnits[buildingCenterY - 1][buildingCenterX - 1]->objects.push_back(
+							new Dwelling(glm::vec3(buildingCenterX, buildingCenterY,
+								grid->GetHeight(buildingCenterX, buildingCenterY)),
+								glm::vec3(0.14f, 0.14f, 0.14f),
+								glm::vec3(0.0f, 0.0f, 0.0f)));
+						grid->gridUnits[buildingCenterY - 1][buildingCenterX - 1]->occupied = true;
+						grid->gridUnits[buildingCenterY - 1][buildingCenterX]->occupied = true;
+						grid->gridUnits[buildingCenterY][buildingCenterX]->occupied = true;
+						grid->gridUnits[buildingCenterY][buildingCenterX - 1]->occupied = true;
+					}
+					else {
+						// the area is not completely flat
+					}
+				}
+				else
+				{
+					// occupied grid units
+				}
+			}
+			else {
+				// building outside the grid
+			}
+				
+			break;
 	}
+	
 }
