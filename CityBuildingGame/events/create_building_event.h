@@ -6,12 +6,12 @@ enum BuildingType { LumberjackHutID, DwellingID};
 class CreateBuildingEvent : public Event
 {
 public:
-	CreateBuildingEvent(BuildingType buildingType, int posX, int posY);
+	CreateBuildingEvent(BuildingType buildingType, float posX, float posY);
 	
 	void CreateBuildingEvent::Accept(EventVisitor* eventVisitor);
 	
 	BuildingType buildingType;
 
-	int posX;
-	int posY;
+	float posX;
+	float posY;
 };

@@ -1,10 +1,12 @@
 #pragma once
 #include <event.h>
 
+class GameObject;
+
 class MoveEvent : public Event
 {
 public:
-	MoveEvent(int aFromX, int aFromY, int aToX, int aToY, int aIndex);
+	MoveEvent(int aFromX, int aFromY, int aToX, int aToY, GameObject * aGameObject);
 	void MoveEvent::Accept(EventVisitor* eventVisitor);
 
 	int fromX;
@@ -13,5 +15,5 @@ public:
 	int toX;
 	int toY;
 
-	int index;
+	GameObject * gameObject;
 };

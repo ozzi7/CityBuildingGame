@@ -106,7 +106,7 @@ void MapGenerator::generateTrees()
 			int chosenTree = dist(gen); 
 
 			float scale = 1.0f - (float)scale_tree(gen);
-			while (scale < SMALL_TREE_CUTOFF_PERCENTAGE*0.01F) { scale = 1.0f - (float)scale_tree(gen); }
+			while (scale < SMALL_TREE_CUTOFF_PERCENTAGE*0.01f) { scale = 1.0f - (float)scale_tree(gen); }
 			float posX = j + 0.5f + (float)pos_offset_tree(gen);
 			float posY = i + 0.5f + (float)pos_offset_tree(gen);
 
@@ -138,6 +138,7 @@ void MapGenerator::generateTrees()
 						glm::vec3(1.5707963f, 0, rotation(gen))));
 				grid->gridUnits[i][j]->occupied = true;
 			}
+			grid->gridUnits[i][j]->occupied = true;
 		}
 	}
 }

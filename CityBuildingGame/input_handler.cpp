@@ -32,25 +32,14 @@ void InputHandler::Mouseclick(int button, int action)
 		{
 			if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 			{
-				unitEventHandler->AddEvent(new CreateBuildingEvent(DwellingID, (int)cursor_position.x, (int)cursor_position.y));
-				/* TODO: temp */
-				//for (int i = 0; i < Grid->gridUnits.size(); i++) {
-				//	for (int j = 0; j < Grid->gridUnits[i].size(); j++) {
-						//for (std::list<BoneAnimated*>::iterator it = Grid->gridUnits[i][j]->movingObjects.begin();
-						//	it != Grid->gridUnits[i][j]->movingObjects.end(); ++it) {
-							// to create path to walk
-							//static_cast<Lumberjack*>(*it)->wayPoints.push_back(cursor_position);
-
-					/*	}
-					}*/
-					//}
-			}
-			else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-			{
 				Grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->objects.push_back(
 					new Pine(glm::vec3(cursor_position),
 						glm::vec3(0.01f, 0.01f, 0.01f),
 						glm::vec3(1.5707963f, 0.0f, 0.0f)));
+			}
+			else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+			{
+				unitEventHandler->AddEvent(new CreateBuildingEvent(DwellingID, cursor_position.x, cursor_position.y));
 			}
 		}
 	}
