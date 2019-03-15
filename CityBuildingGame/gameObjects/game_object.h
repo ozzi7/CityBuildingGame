@@ -20,9 +20,6 @@ public:
 
 	virtual void Accept(class Visitor &v) = 0;
 
-	/* this is the index into the list contained in the unit */
-	int unitIdx = 0;
-
 protected:
 	void recalculateModelMatix();
 };

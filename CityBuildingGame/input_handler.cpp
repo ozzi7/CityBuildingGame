@@ -39,7 +39,7 @@ void InputHandler::Mouseclick(int button, int action)
 			}
 			else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 			{
-				unitEventHandler->AddEvent(new CreateBuildingEvent(DwellingID, cursor_position.x, cursor_position.y));
+				unitEventHandler->AddEvent(new CreateBuildingEvent(LumberjackHutID, cursor_position.x, cursor_position.y));
 			}
 		}
 	}

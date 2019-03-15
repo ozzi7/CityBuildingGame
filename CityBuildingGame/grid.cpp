@@ -74,7 +74,8 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 		}
 	}
 }
-/* Return height of any point on the grid */
+/* Return height of any point on the grid 
+Note: No out of bounds checking*/
 float Grid::GetHeight(float posX, float posY)
 {
 	// top left i+1 j, bottom right i, j+1
@@ -96,17 +97,19 @@ float Grid::GetHeight(float posX, float posY)
 		return ((1-offsetX)*m + (1-offsetY) * n) + terrain->heightmap[i + 1][j + 1];;
 	}
 }
-/* Check if area is flat within a rectangle of the grid*/
+/* Check if area is flat within a rectangle of the grid
+Input for a 2x2 building is (0,1, 0,1) but accesses heightmap (0,2, 0,2)
+Note: includes the points, no out of bounds checking*/
 bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY)
 {
 	bool isFlat = true;
 	float height = terrain->heightmap[fromY][fromX];
-	for (int i = fromY; i <= toY; ++i) {
-		for (int j = fromX; j <= toX; ++j) {
+	for (int i = fromY; i <= toY + 1; ++i) {
+		for (int j = fromX; j <= toX + 1; ++j) {
 			if (terrain->heightmap[i][j] != height)
 			{
 				isFlat = false;
-				i = toY; // alternative to goto: 
+				i = toY+1; // alternative to goto: 
 				break;
 			}
 		}
