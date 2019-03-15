@@ -4,8 +4,8 @@
 #include <event_handler.h>
 
 // user settings
-const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1080;
+const unsigned int DEFAULT_SCREEN_WIDTH = 1920;
+const unsigned int DEFAULT_SCREEN_HEIGHT = 1080;
 
 const unsigned int MAP_WIDTH = 25;
 const unsigned int MAP_HEIGHT = 40;
@@ -55,6 +55,8 @@ const float ZOOM_DEFAULT = 10.0f;
 
 extern std::string Path;
 
-const float SCREEN_RATIO = (float)SCR_WIDTH / (float)SCR_HEIGHT;
+extern unsigned int ScreenWidth;
+extern unsigned int ScreenHeight;
+extern float ScreenRatio;
 
 extern EventHandler* unitEventHandler; // ?? save in every object?! same with grid?

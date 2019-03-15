@@ -33,6 +33,6 @@ void Shadow::BindShadowMap()
 void Shadow::UnbindShadowMap()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+	glViewport(0, 0, ScreenWidth, ScreenHeight);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

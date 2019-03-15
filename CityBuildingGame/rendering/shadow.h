@@ -13,6 +13,5 @@ public:
 
 private:
 	unsigned int depthMapFBO;
-
 };
 

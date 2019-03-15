@@ -32,12 +32,19 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 std::string Path;
+unsigned int ScreenWidth;
+unsigned int ScreenHeight;
+float ScreenRatio;
 
 int main(int argc, char* argv[])
 {
 	Path = std::string(argv[0]);
 	Path = Path.substr(0, Path.find_last_of("\\/"));
 	std::replace(Path.begin(), Path.end(), '\\', '/');
+
+	ScreenWidth = DEFAULT_SCREEN_WIDTH;
+	ScreenHeight = DEFAULT_SCREEN_HEIGHT;
+	ScreenRatio = (float)ScreenWidth / (float)ScreenHeight;
 
 	init_glfw();
 
@@ -57,7 +64,7 @@ void init_glfw()
 	//glfwWindowHint(GLFW_SAMPLES, 4); /* MSAA */
 
 	// glfw window creation
-	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "CityBuildingGame", NULL, NULL);
+	window = glfwCreateWindow(ScreenWidth, ScreenHeight, "CityBuildingGame", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -93,9 +100,9 @@ void init_glfw()
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-	// make sure the viewport matches the new window dimensions; note that width and 
-	// height will be significantly larger than specified on retina displays.
-	glViewport(0, 0, width, height);
+	ScreenWidth = width;
+	ScreenHeight = height;
+	ScreenRatio = (float)ScreenWidth / (float)ScreenHeight;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
