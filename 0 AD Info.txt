@@ -1,0 +1,8 @@
+clone github of 0ad
+meshes in \binaries\data\mods\public\art\meshes
+and textures in
+\binaries\data\mods\public\art\textures\skins\
+
+open .dae in blender and reapply the texture(s), select object and press tab, then a to select all, 
+go to uv editor select all and open the texture.. in the object mode press N and select texture shading
+export as collada, selection only, uv texture copy

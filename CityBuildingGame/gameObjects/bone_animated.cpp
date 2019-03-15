@@ -89,7 +89,7 @@ void BoneAnimated::updateProxyPosition(float speed)
 		proxyHasArrived = true;
 	}
 }
-/*NOTE: a path from x to y must contain x*/
+/*NOTE: a path from x to y must contain x and y*/
 void BoneAnimated::SetNewPath(std::vector<glm::vec2> aWayPoints)
 {
 	wayPoints = aWayPoints;
