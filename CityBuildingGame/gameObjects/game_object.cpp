@@ -4,13 +4,28 @@
 #include "event_handler.h"
 
 
+/*TODO: problem with using pos.x for grid coordinate is that for buildings and larger objects it will be wrong*/
 GameObject::GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 {
 	position = aPosition;
 	scale = aScale;
 	rotation = aRotation;
 	recalculateModelMatix();
+
+	gridX = (int)position.x,
+	gridY = (int)position.y;
 }
+GameObject::GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, int aGridX, int aGridY)
+{
+	position = aPosition;
+	scale = aScale;
+	rotation = aRotation;
+	recalculateModelMatix();
+
+	gridX = aGridX;
+	gridY = aGridY;
+}
+
 GameObject::GameObject() {};
 
 void GameObject::recalculateModelMatix()

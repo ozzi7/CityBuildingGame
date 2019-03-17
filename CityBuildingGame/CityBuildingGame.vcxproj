@@ -69,6 +69,7 @@
     <ClCompile Include="events\move_event.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameObjects\bone_animated.cpp" />
+    <ClCompile Include="gameObjects\building.cpp" />
     <ClCompile Include="gameObjects\dwelling.cpp" />
     <ClCompile Include="gameObjects\game_object.cpp" />
     <ClCompile Include="gameObjects\lumberjack.cpp" />

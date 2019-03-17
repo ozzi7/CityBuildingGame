@@ -68,7 +68,7 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			// Dwelling 2x2
 			if (buildingCenterX < grid->gridWidth && buildingCenterY < grid->gridHeight &&
 				buildingCenterX - 1 >= 0 && buildingCenterY - 1 >= 0) {
-				if (!grid->gridUnits[buildingCenterY - 1][buildingCenterX - 1]->occupied &&
+				if (!grid->gridUnits[buildingCenterY - 1][buildingCenterX - 1]->occupied && // TODO: use size_x, size_y to check
 					!grid->gridUnits[buildingCenterY - 1][buildingCenterX]->occupied &&
 					!grid->gridUnits[buildingCenterY][buildingCenterX]->occupied &&
 					!grid->gridUnits[buildingCenterY][buildingCenterX - 1]->occupied) {
@@ -79,7 +79,8 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 							new Dwelling(glm::vec3(buildingCenterX, buildingCenterY,
 								grid->GetHeight(buildingCenterX, buildingCenterY)),
 								glm::vec3(0.012f, 0.006f, 0.012f),
-								glm::vec3(glm::half_pi<float>(),0.0f,0.0f)));
+								glm::vec3(glm::half_pi<float>(),0.0f,0.0f),
+								buildingCenterX, buildingCenterY));
 						grid->gridUnits[buildingCenterY - 1][buildingCenterX - 1]->occupied = true;
 						grid->gridUnits[buildingCenterY - 1][buildingCenterX]->occupied = true;
 						grid->gridUnits[buildingCenterY][buildingCenterX]->occupied = true;
@@ -138,7 +139,8 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 							new Dwelling(glm::vec3(buildingCenterX, buildingCenterY,
 								grid->GetHeight(buildingCenterX, buildingCenterY)),
 								glm::vec3(0.14f, 0.14f, 0.14f),
-								glm::vec3(0.0f, 0.0f, 0.0f)));
+								glm::vec3(0.0f, 0.0f, 0.0f),
+							buildingCenterX, buildingCenterY));
 						grid->gridUnits[buildingCenterY - 1][buildingCenterX - 1]->occupied = true;
 						grid->gridUnits[buildingCenterY - 1][buildingCenterX]->occupied = true;
 						grid->gridUnits[buildingCenterY][buildingCenterX]->occupied = true;

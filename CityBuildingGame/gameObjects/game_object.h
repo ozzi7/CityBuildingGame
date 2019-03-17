@@ -12,11 +12,15 @@ class GameObject
 public:
 	GameObject();
 	GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation);
+	GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, int aGridX, int aGridY);
 
 	glm::vec3 position;
 	glm::vec3 scale;
 	glm::vec3 rotation;
 	glm::mat4 model = glm::mat4(1.0f);
+
+	int gridX = -1; // this must be set, otherwise crash pls
+	int gridY = -1;
 
 	virtual void Accept(class Visitor &v) = 0;
 

@@ -4,12 +4,12 @@
 #include <grid.h>
 
 
-BoneAnimated::BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation) 
-	: GameObject(aPosition, aScale, aRotation) {
-	gridX = (int)position.x;
-	gridY = (int)position.y;
+BoneAnimated::BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, int aGridX, int aGridY)
+	: GameObject(aPosition, aScale, aRotation, aGridX, aGridY) {
 }
-
+BoneAnimated::BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
+	: GameObject(aPosition, aScale, aRotation) {
+}
 void BoneAnimated::UpdatePosition(Grid * grid) 
 {	
 	if (!proxyHasArrived) {

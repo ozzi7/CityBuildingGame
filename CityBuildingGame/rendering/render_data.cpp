@@ -23,10 +23,24 @@ void RenderBuffer::Visit(Lumberjack* obj) {
 	}
 }
 void RenderBuffer::Visit(LumberjackHut* obj) {
-	lumberjackHutModels.push_back(obj->model);
+	switch (obj->growth) {
+	case 0:
+		buildingOutlineModels.insert(buildingOutlineModels.end(), obj->buildingOutlines.begin(), obj->buildingOutlines.end());
+		break;
+	case 1:
+		lumberjackHutModels.push_back(obj->model);
+		break;
+	}
 }
 void RenderBuffer::Visit(Dwelling* obj) {
-	dwellingModels.push_back(obj->model);
+	switch (obj->growth) {
+	case 0:
+		buildingOutlineModels.insert(buildingOutlineModels.end(), obj->buildingOutlines.begin(), obj->buildingOutlines.end());
+		break;
+	case 1:
+		dwellingModels_growth1.push_back(obj->model);
+		break;
+	}
 }
 void RenderBuffer::Visit(Building* obj) {
 	
@@ -45,5 +59,6 @@ void RenderBuffer::ClearData()
 	oakModels.clear();
 	lumberjackModels.clear();
 	lumberjackHutModels.clear();
-	dwellingModels.clear();
+	dwellingModels_growth1.clear();
+	buildingOutlineModels.clear();
 }

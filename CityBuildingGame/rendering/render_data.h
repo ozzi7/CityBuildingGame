@@ -33,7 +33,8 @@ public:
 	std::vector<glm::mat4> oakModels;
 	std::vector<glm::mat4> lumberjackModels;
 	std::vector<glm::mat4> lumberjackHutModels;
-	std::vector<glm::mat4> dwellingModels;
+	std::vector<glm::mat4> dwellingModels_growth1;
+	std::vector<glm::mat4> buildingOutlineModels;
 
-	Terrain* terrain; // TODO: 
+	Terrain* terrain; // TODO:
 };

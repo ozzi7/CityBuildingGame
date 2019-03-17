@@ -10,6 +10,7 @@ class BoneAnimated : public GameObject
 {
 public:
 	BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation);
+	BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, int aGridX, int aGridY);
 
 	void UpdatePosition(Grid * grid);
 	void SetNewPath(std::vector<glm::vec2> aWayPoints);

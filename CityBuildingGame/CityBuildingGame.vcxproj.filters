@@ -31,6 +31,7 @@
     <ClCompile Include="events\create_building_event.cpp" />
     <ClCompile Include="events\move_event.cpp" />
     <ClCompile Include="pathfinding.cpp" />
+    <ClCompile Include="gameObjects\building.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />

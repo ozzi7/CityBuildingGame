@@ -7,8 +7,9 @@ class Grid;
 class Dwelling : public Building
 {
 public:
-	Dwelling(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation);
+	Dwelling(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, int aGridX, int aGridY);
 	void Accept(Visitor &v);
+
 private:
 
 };
