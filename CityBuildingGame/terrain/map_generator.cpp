@@ -12,14 +12,16 @@ void MapGenerator::GenerateMap()
 	generateTerrain();
 	generateTrees();
 
-	int x = 30;
-	int y = 20;
+	int xStart = 30;
+	int yStart = 40;
+	int xDestination = 10;
+	int yDestination = 10;
 
-	Lumberjack* lumbydumby = new Lumberjack(glm::vec3(0.5f, 0.5f, grid->gridUnits[0][0]->averageHeight),
+	Lumberjack* lumbydumby = new Lumberjack(glm::vec3(xStart + 0.5f, yStart + 0.5f, grid->gridUnits[yStart][xStart]->averageHeight),
 		glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
 
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
-	Pathfinding pathfinding = Pathfinding(grid, Coordinate(0, 0), Coordinate(x, y));
+	Pathfinding pathfinding = Pathfinding(grid, Coordinate(xStart, yStart), Coordinate(xDestination, yDestination));
 	pathfinding.CalculatePath();
 	std::list<Coordinate> path = pathfinding.GetPath();
 	std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
@@ -38,8 +40,8 @@ void MapGenerator::GenerateMap()
 	}
 	std::cout << '\n';
 
-	lumbydumby->SetNewPath(pathVector);
-	grid->gridUnits[0][0]->movingObjects.push_back(lumbydumby);
+	//lumbydumby->SetNewPath(pathVector);
+	grid->gridUnits[yStart][xStart]->movingObjects.push_back(lumbydumby);
 }
 
 void MapGenerator::generateTerrain()

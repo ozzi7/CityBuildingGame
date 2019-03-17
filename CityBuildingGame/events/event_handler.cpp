@@ -105,7 +105,7 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 					glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
 				grid->gridUnits[2][2]->movingObjects.push_back(lumby);
 
-				Pathfinding path = Pathfinding(grid, Coordinate(2, 2), Coordinate(buildingCenterX, buildingCenterY));
+				Pathfinding path = Pathfinding(grid, Coordinate(2, 2), Coordinate(buildingCenterX, buildingCenterY - 1));
 				path.CalculatePath();
 				std::list<Coordinate>pathShorts = path.GetPath();
 				std::vector<glm::vec2> glmPath;
