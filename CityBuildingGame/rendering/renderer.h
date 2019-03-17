@@ -54,7 +54,7 @@ public:
 		shadow_skinned_shader = new Shader("shaders/shadow_depth_skinned.vert", "shaders/shadow_depth.frag");
 
 		/* buildings */
-		model_path = Path + "/../models/buildings/dwelling/dwelling.dae";
+		model_path = Path + "/../models/buildings/dwelling/dwelling_1.dae";
 		instanced_model_dwelling = new InstancedModel(model_path);
 
 		/*model_path = Path + "/../models/buildings/lumberjack_hut/lumberjack_hut.dae";
@@ -74,7 +74,7 @@ public:
 		instanced_model_oak = new InstancedModel(model_path);
 
 		/* lumberjack init*/
-		model_path = Path + "/../models/lumberjack/lumberjack.DAE";
+		model_path = Path + "/../models/lumberjack/lumberjack.dae";
 		mesh_lumberjack = new SkinnedMesh();
 		mesh_lumberjack->LoadMesh(model_path);
 		mesh_lumberjack->PrecalculateBoneTransforms();

@@ -78,8 +78,8 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 						grid->gridUnits[buildingCenterY][buildingCenterX]->objects.push_back(
 							new Dwelling(glm::vec3(buildingCenterX, buildingCenterY,
 								grid->GetHeight(buildingCenterX, buildingCenterY)),
-								glm::vec3(0.14f, 0.14f, 0.14f),
-								glm::vec3(0.0f, 0.0f, 0.0f)));
+								glm::vec3(0.012f, 0.006f, 0.012f),
+								glm::vec3(glm::half_pi<float>(),0.0f,0.0f)));
 						grid->gridUnits[buildingCenterY - 1][buildingCenterX - 1]->occupied = true;
 						grid->gridUnits[buildingCenterY - 1][buildingCenterX]->occupied = true;
 						grid->gridUnits[buildingCenterY][buildingCenterX]->occupied = true;
@@ -121,6 +121,9 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 		break;
 
 		case DwellingID:
+		{
+			bool success = false;
+
 			// Dwelling 2x2
 			if (buildingCenterX < grid->gridWidth && buildingCenterY < grid->gridHeight &&
 				buildingCenterX - 1 >= 0 && buildingCenterY - 1 >= 0) {
@@ -140,6 +143,7 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 						grid->gridUnits[buildingCenterY - 1][buildingCenterX]->occupied = true;
 						grid->gridUnits[buildingCenterY][buildingCenterX]->occupied = true;
 						grid->gridUnits[buildingCenterY][buildingCenterX - 1]->occupied = true;
+						success = true;
 					}
 					else {
 						// the area is not completely flat
@@ -153,7 +157,26 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			else {
 				// building outside the grid
 			}
-				
+			if (success)
+			{
+				// then also create a lumberjack
+				Lumberjack* lumby = new Lumberjack(glm::vec3(2 + 0.5f, 2 + 0.5f, grid->gridUnits[2][2]->averageHeight),
+					glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
+				grid->gridUnits[2][2]->movingObjects.push_back(lumby);
+
+				Pathfinding path = Pathfinding(grid, Coordinate(2, 2), Coordinate(buildingCenterX, buildingCenterY));
+				path.CalculatePath();
+				std::list<Coordinate>pathShorts = path.GetPath();
+				std::vector<glm::vec2> glmPath;
+				glmPath.push_back(glm::vec2(2.5f, 2.5f));
+				for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
+				{
+					glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
+				}
+				lumby->SetNewPath(glmPath);
+
+			}
 			break;
+		}
 	}	
 }

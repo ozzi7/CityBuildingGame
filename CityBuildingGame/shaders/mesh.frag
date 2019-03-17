@@ -33,7 +33,7 @@ float ShadowCalculation()
     // get depth of current fragment from light's perspective
     float currentDepth = projCoords.z;
 
-	float bias = 0.0005; // to remove shadow acne.. 0.005 -> detached shadows
+	float bias = 0.00005; // to remove shadow acne.. 0.005 -> detached shadows
     // check whether current frag pos is in shadow
     float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
 
