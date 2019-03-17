@@ -41,11 +41,13 @@ void Pathfinding::CalculatePath()
 std::list<Coordinate> Pathfinding::GetPath()
 {
 	std::list<std::pair<unsigned short, unsigned short>> path;
-	while (current->parent != nullptr) {
-		path.push_front(current->coordinate);
-		current = current->parent;
-	};
-	
+	if (pathFound)
+	{
+		while (current->parent != nullptr) {
+			path.push_front(current->coordinate);
+			current = current->parent;
+		};
+	}
 	return path;
 }
 
