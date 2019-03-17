@@ -74,7 +74,7 @@ public:
 		instanced_model_oak = new InstancedModel(model_path);
 
 		/* lumberjack init*/
-		model_path = Path + "/../models/lumberjack/lumberjack.dae";
+		model_path = Path + "/../models/lumberjack/lumberjack.DAE";
 		mesh_lumberjack = new SkinnedMesh();
 		mesh_lumberjack->LoadMesh(model_path);
 		mesh_lumberjack->PrecalculateBoneTransforms();
