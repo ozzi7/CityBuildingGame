@@ -27,10 +27,10 @@ struct Node
 struct NodeCompare {
 	bool operator() (const Node* node1, const Node* node2)
 	{
-		//if (node1->distanceTotal > node2->distanceTotal)
-		//	return true;
-		//if (node1->distanceTotal < node2->distanceTotal)
-		//	return false;
+		if (node1->distanceTotal > node2->distanceTotal)
+			return true;
+		if (node1->distanceTotal < node2->distanceTotal)
+			return false;
 
 		//double distance1 =
 		//	std::sqrt(
