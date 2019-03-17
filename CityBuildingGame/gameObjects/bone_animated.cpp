@@ -6,9 +6,8 @@
 
 BoneAnimated::BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation) 
 	: GameObject(aPosition, aScale, aRotation) {
-	std::vector<glm::vec2> path = std::vector<glm::vec2>();
-	path.push_back(glm::vec2(aPosition.x, aPosition.y));
-	SetNewPath(path);
+	gridX = (int)position.x;
+	gridY = (int)position.y;
 }
 
 void BoneAnimated::UpdatePosition(Grid * grid) 
@@ -105,6 +104,7 @@ void BoneAnimated::SetNewPath(std::vector<glm::vec2> aWayPoints)
 	}
 	else if (wayPoints.size() >= 2) {
 		proxyObjectPos = glm::vec2(wayPoints[0].x, wayPoints[0].y);
+		proxyHasArrived = false;
 		updateProxyPosition(1.0f); // set initial proxy position
 		hasArrived = false;
 	}

@@ -15,9 +15,10 @@ public:
 	void SetNewPath(std::vector<glm::vec2> aWayPoints);
 	void UpdatePath(std::vector<glm::vec2> aWayPoints);
 
+	bool visible = true;
 private:
-	bool hasArrived = false;
-	bool proxyHasArrived = false;
+	bool hasArrived = true;
+	bool proxyHasArrived = true;
 
 	int gridX = 0;
 	int gridY = 0;

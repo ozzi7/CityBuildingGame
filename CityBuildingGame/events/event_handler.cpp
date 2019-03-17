@@ -44,12 +44,16 @@ void EventHandler::Visit(MoveEvent * aMoveEvent)
 	for (auto it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.begin(); it !=
 		grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.end(); ++it) {
 		if ((*it) == aMoveEvent->gameObject) {
-			toMove = (*it);
-			grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.erase(it);
+			toMove = *it;
+			it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.erase(it);
 			break;
 		}
 	}
-	grid->gridUnits[aMoveEvent->toY][aMoveEvent->toX]->movingObjects.push_back(toMove);
+	if (toMove == NULL)
+		// should not happen
+		bool problem = true;
+	else
+		grid->gridUnits[aMoveEvent->toY][aMoveEvent->toX]->movingObjects.push_back(toMove);
 }
 void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 {
@@ -105,9 +109,10 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 				path.CalculatePath();
 				std::list<Coordinate>pathShorts = path.GetPath();
 				std::vector<glm::vec2> glmPath;
+				glmPath.push_back(glm::vec2(2.5f, 2.5f));
 				for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
 				{
-					glmPath.push_back(glm::vec2((*it).first + 0.5f, (*it).second) + 0.5f);
+					glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
 				}
 				lumby->SetNewPath(glmPath);
 

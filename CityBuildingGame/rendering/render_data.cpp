@@ -18,7 +18,9 @@ void RenderBuffer::Visit(Juniper* obj) {
 	juniperModels.push_back(obj->model);
 }
 void RenderBuffer::Visit(Lumberjack* obj) {
-	lumberjackModels.push_back(obj->model);
+	if (obj->visible) {
+		lumberjackModels.push_back(obj->model);
+	}
 }
 void RenderBuffer::Visit(LumberjackHut* obj) {
 	lumberjackHutModels.push_back(obj->model);
