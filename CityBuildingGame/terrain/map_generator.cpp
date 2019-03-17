@@ -12,29 +12,34 @@ void MapGenerator::GenerateMap()
 	generateTerrain();
 	generateTrees();
 
-	int x = 10;
-	int y = 5;
+	int x = 30;
+	int y = 20;
 
 	Lumberjack* lumbydumby = new Lumberjack(glm::vec3(0.5f, 0.5f, grid->gridUnits[0][0]->averageHeight),
 		glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
-	
-	Lumberjack* lumbydumbygoal = new Lumberjack(glm::vec3(x+0.5f, y+0.5f, grid->gridUnits[y][x]->averageHeight),
-		glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
 
-	std::vector<glm::vec2> pathVector = std::vector<glm::vec2>();
-	Pathfinding pathfinding = Pathfinding(grid, Coordinate(0, 0), Coordinate(5, 3));
+	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
+	Pathfinding pathfinding = Pathfinding(grid, Coordinate(0, 0), Coordinate(x, y));
 	pathfinding.CalculatePath();
 	std::list<Coordinate> path = pathfinding.GetPath();
+	std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
+	std::chrono::microseconds total = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+	std::cout << "Path calculated and returned in " << total.count() << " microseconds \n";
+
+	std::vector<glm::vec2> pathVector = std::vector<glm::vec2>();
 	for (std::list<Coordinate>::iterator it = path.begin(); it != path.end(); ++it)
 	{
 		pathVector.push_back(glm::vec2((*it).first, (*it).second));
 		std::cout << ' ' << (*it).first << '|' << (*it).second;
+
+		Lumberjack* pathLumby = new Lumberjack(glm::vec3((*it).first + 0.5f, (*it).second + 0.5f, grid->gridUnits[(*it).second][(*it).first]->averageHeight),
+			glm::vec3(0.003f, 0.003f, 0.003f), glm::vec3(0, 0, glm::pi<float>()));
+		grid->gridUnits[(*it).second][(*it).first]->movingObjects.push_back(pathLumby);
 	}
 	std::cout << '\n';
 
 	lumbydumby->SetNewPath(pathVector);
 	grid->gridUnits[0][0]->movingObjects.push_back(lumbydumby);
-	grid->gridUnits[y][x]->objects.push_back(lumbydumbygoal);
 }
 
 void MapGenerator::generateTerrain()

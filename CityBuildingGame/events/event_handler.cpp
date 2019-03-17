@@ -5,6 +5,7 @@
 #include <lumberjack.h>
 #include <bone_animated.h>
 #include <dwelling.h>
+#include "pathfinding.h"
 
 EventHandler::EventHandler(Grid * aGrid)
 {
@@ -96,8 +97,19 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			if (success)
 			{
 				// then also create a lumberjack
-				grid->gridUnits[2][2]->movingObjects.push_back(new Lumberjack(glm::vec3(2 + 0.5f, 2 + 0.5f, grid->gridUnits[2][2]->averageHeight),
-					glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>())));
+				Lumberjack* lumby = new Lumberjack(glm::vec3(2 + 0.5f, 2 + 0.5f, grid->gridUnits[2][2]->averageHeight),
+					glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
+				grid->gridUnits[2][2]->movingObjects.push_back(lumby);
+
+				Pathfinding path = Pathfinding(grid, Coordinate(2, 2), Coordinate(buildingCenterX, buildingCenterY));
+				path.CalculatePath();
+				std::list<Coordinate>pathShorts = path.GetPath();
+				std::vector<glm::vec2> glmPath;
+				for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
+				{
+					glmPath.push_back(glm::vec2((*it).first + 0.5f, (*it).second) + 0.5f);
+				}
+				lumby->SetNewPath(glmPath);
 
 			}
 		}

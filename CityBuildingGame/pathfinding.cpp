@@ -82,7 +82,8 @@ void Pathfinding::createNode(const Coordinate coordinate)
 	node->distanceTotal = node->distanceToStart + node->distanceToDestination;
 	node->parent = current;
 	node->destination = destination->coordinate;
-	adjustParentNode(node);
+	//adjustParentNode(node); TODO
+	//std::cout << "Inserting " << coordinate.first << '|' << coordinate.second << '\n';
 	open.push(node);
 }
 

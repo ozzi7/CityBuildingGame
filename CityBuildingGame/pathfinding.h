@@ -32,12 +32,12 @@ struct NodeCompare {
 		if (node1->distanceTotal < node2->distanceTotal)
 			return false;
 
-		float distance1 = 
+		double distance1 =
 			std::sqrt(
-				std::pow((node1->coordinate.first - node1->destination.first),2) +
+				std::pow((node1->coordinate.first - node1->destination.first), 2) +
 				std::pow((node1->coordinate.second - node1->destination.second), 2)
-				);
-		float distance2 =
+			);
+		double distance2 =
 			std::sqrt(
 				std::pow((node2->coordinate.first - node1->destination.first), 2) +
 				std::pow((node2->coordinate.second - node1->destination.second), 2)
@@ -45,11 +45,17 @@ struct NodeCompare {
 
 		if (distance1 > distance2)
 			return true;
-		if (distance2 > distance1)
-			return false;
+		//if (distance1 < distance2)
+		return false;
 
 		//if (node1->coordinate.first > node2->coordinate.first)
 		//	return true;
+		//if (node1->coordinate.first < node2->coordinate.first)
+		//	return false;
+		//if (node1->coordinate.second > node2->coordinate.second)
+		//	return true;
+		//if (node1->coordinate.second < node2->coordinate.second)
+		//	return false;
 
 		//int xDistance1 = std::abs(node1->coordinate.first - node1->destination.first);
 		//int yDistance1 = std::abs(node1->coordinate.second - node1->destination.second);

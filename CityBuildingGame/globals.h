@@ -7,8 +7,8 @@
 const unsigned int DEFAULT_SCREEN_WIDTH = 1920;
 const unsigned int DEFAULT_SCREEN_HEIGHT = 1080;
 
-const unsigned int MAP_WIDTH = 25;
-const unsigned int MAP_HEIGHT = 40;
+const unsigned int MAP_WIDTH = 100;
+const unsigned int MAP_HEIGHT = 100;
 
 // rendering
 const unsigned int SHADOW_WIDTH = 1920;

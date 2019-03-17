@@ -4,6 +4,7 @@
 #include <move_event.h>
 #include <create_building_event.h>
 
+
 class Grid;
 
 class EventHandler : public EventVisitor {
