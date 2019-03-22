@@ -28,7 +28,7 @@ void InputHandler::Mouseclick(int button, int action)
 
 		// Test Code
 		glm::vec3 cursor_position = Camera->CursorPositionOnGrid();
-		if (cursor_position.x >= 0 && cursor_position.y >= 0 && Grid->gridHeight > (int)cursor_position.y && Grid->gridHeight > (int)cursor_position.x)
+		if (cursor_position.x >= 0 && cursor_position.y >= 0 && Grid->gridHeight > (int)cursor_position.y && Grid->gridWidth > (int)cursor_position.x)
 		{
 			if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 			{
