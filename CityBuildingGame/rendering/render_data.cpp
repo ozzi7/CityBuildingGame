@@ -23,7 +23,7 @@ void RenderBuffer::Visit(Lumberjack* obj) {
 	}
 }
 void RenderBuffer::Visit(LumberjackHut* obj) {
-	switch (obj->growth) {
+	switch (obj->evolutionStage) {
 	case 0:
 		buildingOutlineModels.insert(buildingOutlineModels.end(), obj->buildingOutlines.begin(), obj->buildingOutlines.end());
 		break;
@@ -33,7 +33,7 @@ void RenderBuffer::Visit(LumberjackHut* obj) {
 	}
 }
 void RenderBuffer::Visit(Dwelling* obj) {
-	switch (obj->growth) {
+	switch (obj->evolutionStage) {
 	case 0:
 		buildingOutlineModels.insert(buildingOutlineModels.end(), obj->buildingOutlines.begin(), obj->buildingOutlines.end());
 		break;

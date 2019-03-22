@@ -8,7 +8,7 @@ Dwelling::Dwelling(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, i
 
 	sizeX = 2;
 	sizeY = 2;
-	growth = 0;
+	evolutionStage = 0;
 
 	Building::createBuildingOutline();
 };

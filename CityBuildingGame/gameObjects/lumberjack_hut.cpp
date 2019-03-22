@@ -8,7 +8,8 @@ LumberjackHut::LumberjackHut(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aR
 
 	sizeX = 2;
 	sizeY = 2;
-	growth = 0;
+	startX = gridX - sizeX / 2;
+	evolutionStage = 0;
 
 };
 void LumberjackHut::Accept(Visitor &v)

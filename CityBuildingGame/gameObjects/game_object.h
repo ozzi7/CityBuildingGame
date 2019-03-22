@@ -12,7 +12,6 @@ class GameObject
 public:
 	GameObject();
 	GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation);
-	GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, int aGridX, int aGridY);
 
 	glm::vec3 position;
 	glm::vec3 scale;

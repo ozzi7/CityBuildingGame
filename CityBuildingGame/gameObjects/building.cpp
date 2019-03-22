@@ -5,13 +5,15 @@
 
 
 Building::Building(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, int aGridX, int aGridY)
-	: GameObject(aPosition, aScale, aRotation, aGridX, aGridY) {
+	: GameObject(aPosition, aScale, aRotation) {
+
 };
 void Building::createBuildingOutline()
 {
 	// position.z;  floor must be flat so this is correct height either way
 	// TODO: simplify
 	// bottom right line where y = 0
+
 	for (int i = gridX - sizeX/2; i < sizeX + gridX - sizeX / 2; ++i)
 	{
 		model = glm::mat4(1.0f);
