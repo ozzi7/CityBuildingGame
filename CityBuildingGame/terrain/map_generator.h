@@ -1,7 +1,6 @@
 #pragma once
 
 #include <random>
-
 #include <globals.h>
 #include "grid.h"
 #include "oak.h"
@@ -9,9 +8,9 @@
 #include "spruce.h"
 #include "pine.h"
 #include "lumberjack.h"
-#include "pathfinding.h"
-#include "pathfinding_object.h"
 #include <cmath>
+#include <pathfinding.h>
+#include <pathfinding_object.h>
 
 class MapGenerator {
 public:

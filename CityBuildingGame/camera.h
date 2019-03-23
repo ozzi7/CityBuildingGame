@@ -57,7 +57,7 @@ public:
 	void Zoom(float);
 	void UpdateLightDirection();		// Call this after LightSource Position update
 
-	float projectionIncrease = 1.5f;
+	float projectionIncrease = 2.0f;
 
 private:
 	glm::vec3 up;

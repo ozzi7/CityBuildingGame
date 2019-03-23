@@ -5,8 +5,8 @@
 #include <forward_list>
 #include <algorithm>
 
-#include "grid.h"
-#include "globals.h"
+#include <grid.h>
+#include <globals.h>
 
 #define max(x,y) ((x) > (y) ? (x) : (y))
 

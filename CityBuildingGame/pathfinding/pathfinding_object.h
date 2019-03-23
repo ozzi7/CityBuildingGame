@@ -3,8 +3,8 @@
 #include <queue>
 #include <forward_list>
 
-#include "grid.h"
-#include "globals.h"
+#include <grid.h>
+#include <globals.h>
 
 typedef std::pair<unsigned short, unsigned short> Coordinate;
 

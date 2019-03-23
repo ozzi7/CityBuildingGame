@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "pathfinding_object.h"
 
-inline PathfindingObject::PathfindingObject(Grid * aGrid, const Coordinate XYstart)
+PathfindingObject::PathfindingObject(Grid * aGrid, const Coordinate XYstart)
 {
 	grid = aGrid;
 
@@ -14,7 +14,7 @@ inline PathfindingObject::PathfindingObject(Grid * aGrid, const Coordinate XYsta
 	current = start;
 }
 
-inline PathfindingObject::~PathfindingObject()
+PathfindingObject::~PathfindingObject()
 {
 	for (NodeObject* node : closed)
 	{
@@ -29,13 +29,13 @@ inline PathfindingObject::~PathfindingObject()
 	delete destination;
 }
 
-inline void PathfindingObject::FindClosestTree()
+void PathfindingObject::FindClosestTree()
 {
 	objectType = tree;
 	calculatePath();
 }
 
-inline std::list<Coordinate> PathfindingObject::GetPath()
+std::list<Coordinate> PathfindingObject::GetPath()
 {
 	std::list<std::pair<unsigned short, unsigned short>> path;
 	if (objectFound)
@@ -49,7 +49,7 @@ inline std::list<Coordinate> PathfindingObject::GetPath()
 	return path;
 }
 
-inline void PathfindingObject::calculatePath()
+void PathfindingObject::calculatePath()
 {
 	while (!objectFound)
 	{
@@ -67,7 +67,7 @@ inline void PathfindingObject::calculatePath()
 	}
 }
 
-inline void PathfindingObject::createNode(const Coordinate coordinate)
+void PathfindingObject::createNode(const Coordinate coordinate)
 {
 	if (!visited[coordinate.first][coordinate.second])
 	{
