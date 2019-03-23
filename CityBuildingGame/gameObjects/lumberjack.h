@@ -9,7 +9,8 @@ class Lumberjack : public BoneAnimated
 public:
 	Lumberjack(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation);
 	void Accept(Visitor &v);
+	void SetLumberjackHut(LumberjackHut * aLumberjackHut);
 
 private:
-
+	LumberjackHut * lumberjackHut;
 };

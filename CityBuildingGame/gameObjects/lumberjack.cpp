@@ -9,3 +9,7 @@ void Lumberjack::Accept(Visitor &v)
 {
 	v.Visit(this);
 };
+
+void Lumberjack::SetLumberjackHut(LumberjackHut * aLumberjackHut) {
+	lumberjackHut = aLumberjackHut;
+}

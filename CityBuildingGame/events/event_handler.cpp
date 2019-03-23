@@ -60,6 +60,7 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 {
 	std::tuple<int, int> closestToClick = std::make_tuple(round(aCreateBuildingEvent->posX), round(aCreateBuildingEvent->posY));
 	std::tuple<int, int> buildingSize;
+
 	glm::vec3 modelCenter = glm::vec3(-1.0f, -1.0f, -1.0f);
 
 	bool isXRoundedUp = std::get<0>(closestToClick) >= aCreateBuildingEvent->posX;
@@ -68,12 +69,12 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 	switch (aCreateBuildingEvent->buildingType) {
 		case DwellingID:
 		{
-			buildingSize = std::make_tuple(2, 5);
+			buildingSize = std::make_tuple(2, 2);
 			break;
 		}
 		case LumberjackHutID:
 		{
-			buildingSize = std::make_tuple(2, 5);
+			buildingSize = std::make_tuple(2, 2);
 			break;
 		}
 	}
@@ -169,7 +170,9 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			dwelling->toY = toY;
 			dwelling->sizeX = std::get<0>(buildingSize);
 			dwelling->sizeY = std::get<1>(buildingSize);
-		
+			dwelling->entranceX = fromX;
+			dwelling->entranceY = fromY;
+
 			dwelling->CreateBuildingOutline();
 			/* create settler and link them.. TODO:*/
 
@@ -180,7 +183,7 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 		case LumberjackHutID:
 		{
 			/* save building in the coordinate where the 3d object center is located in -> good for rendering */
-			LumberjackHut * lumberjackHut = new LumberjackHut(modelCenter, // translate
+			LumberjackHut * lumberjackHut = new LumberjackHut(modelCenter,
 				glm::vec3(0.14f, 0.14f, 0.14f), // rescale
 				glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f));
 			
@@ -190,12 +193,17 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			lumberjackHut->toY = toY;
 			lumberjackHut->sizeX = std::get<0>(buildingSize);
 			lumberjackHut->sizeY = std::get<1>(buildingSize);
+			lumberjackHut->entranceX = fromX;
+			lumberjackHut->entranceY = fromY;
+
 			lumberjackHut->CreateBuildingOutline();
 
 			/* create lumberjack */
 			Lumberjack* lumby = new Lumberjack(glm::vec3(0 + 0.5f, 0 + 0.5f, grid->gridUnits[2][2]->averageHeight),
 				glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
-			grid->gridUnits[2][2]->movingObjects.push_back(lumby);
+
+			lumby->SetLumberjackHut(lumberjackHut);
+
 
 			Pathfinding path = Pathfinding(grid, Coordinate(2, 2), Coordinate((int)modelCenter.x, (int)modelCenter.y));
 			path.CalculatePath();
@@ -208,7 +216,9 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			}
 			lumby->SetNewPath(glmPath);
 
-			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(lumberjackHut); // store reference in grid
+			// store reference to grid
+			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(lumberjackHut);
+			grid->gridUnits[0][0]->movingObjects.push_back(lumby);
 			break;
 		}
 	}
