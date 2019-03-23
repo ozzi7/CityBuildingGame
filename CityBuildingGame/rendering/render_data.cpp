@@ -22,6 +22,11 @@ void RenderBuffer::Visit(Lumberjack* obj) {
 		lumberjackModels.push_back(obj->model);
 	}
 }
+void RenderBuffer::Visit(Settler* obj) {
+	if (obj->visible) {
+		settlerModels.push_back(obj->model);
+	}
+}
 void RenderBuffer::Visit(LumberjackHut* obj) {
 	switch (obj->evolutionStage) {
 	case 0:
@@ -61,4 +66,5 @@ void RenderBuffer::ClearData()
 	lumberjackHutModels.clear();
 	dwellingModels_growth1.clear();
 	buildingOutlineModels.clear();
+	settlerModels.clear();
 }

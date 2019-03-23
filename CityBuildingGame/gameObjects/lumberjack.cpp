@@ -13,3 +13,6 @@ void Lumberjack::Accept(Visitor &v)
 void Lumberjack::SetLumberjackHut(LumberjackHut * aLumberjackHut) {
 	lumberjackHut = aLumberjackHut;
 }
+void Lumberjack::GameStep() {
+
+}

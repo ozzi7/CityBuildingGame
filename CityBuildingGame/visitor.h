@@ -10,17 +10,22 @@ class Lumberjack;
 class Building;
 class LumberjackHut;
 class Dwelling;
+class Settler;
 
 class Visitor
 {
 public:
+	virtual void Visit(Terrain* terrain) = 0;
+
 	virtual void Visit(Tree* tree) = 0;
 	virtual void Visit(Oak * oak) = 0;
 	virtual void Visit(Spruce* spruce) = 0;
 	virtual void Visit(Pine* pine) = 0;
 	virtual void Visit(Juniper* juniper) = 0;
-	virtual void Visit(Terrain* terrain) = 0;
+
 	virtual void Visit(Lumberjack* lumberjack) = 0;
+	virtual void Visit(Settler* settler) = 0;
+
 	virtual void Visit(Building* building) = 0;
 	virtual void Visit(LumberjackHut* lumberjackHut) = 0;
 	virtual void Visit(Dwelling* dwelling) = 0;

@@ -53,6 +53,7 @@ public:
 	glm::vec2 GridBottomLeftVisible();
 	glm::vec2 GridBottomRightVisible();
 	glm::vec3 CursorPositionOnGrid();
+
 	void Scroll(Camera_Movement, float);
 	void Zoom(float);
 	void UpdateLightDirection();		// Call this after LightSource Position update

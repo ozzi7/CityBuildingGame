@@ -10,3 +10,12 @@ void Dwelling::Accept(Visitor &v)
 {
 	v.Visit(this);
 };
+void Dwelling::Evolve()
+{
+	evolutionStage++;
+
+	scale = glm::vec3(0.14f, 0.14f, 0.14f);
+	rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	recalculateModelMatix();
+}

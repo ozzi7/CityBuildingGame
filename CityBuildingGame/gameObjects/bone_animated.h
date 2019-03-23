@@ -10,19 +10,22 @@ class BoneAnimated : public GameObject
 {
 public:
 	BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation);
-	BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, int aGridX, int aGridY);
 
 	void UpdatePosition(Grid * grid);
 	void SetNewPath(std::vector<glm::vec2> aWayPoints);
 	void UpdatePath(std::vector<glm::vec2> aWayPoints);
-
+	virtual void GameStep() = 0;
 	bool visible = true;
-private:
+
+protected:
 	bool hasArrived = true;
+	int posX = 0;
+	int posY = 0;
+
+private:
+
 	bool proxyHasArrived = true;
 
-	int gridX = 0;
-	int gridY = 0;
 	glm::vec2 proxyObjectPos = glm::vec2(0.0f,0.0f);
 	std::vector<glm::vec2> wayPoints;
 	int proxyWPIdx = 0;

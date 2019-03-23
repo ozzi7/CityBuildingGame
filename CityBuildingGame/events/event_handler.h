@@ -3,6 +3,7 @@
 #include <event.h>
 #include <move_event.h>
 #include <create_building_event.h>
+#include <delete_event.h>
 #include <tuple>
 
 
@@ -17,6 +18,7 @@ public:
 
 	void Visit(MoveEvent * aMoveEvent);
 	void Visit(CreateBuildingEvent * aCreateBuildingEvent);
+	void Visit(DeleteEvent * aDeleteEvent);
 	Grid * grid;
 
 private:

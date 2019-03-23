@@ -9,6 +9,7 @@
 #include <pine.h>
 #include <lumberjack_hut.h>
 #include <dwelling.h>
+#include <settler.h>
 
 class RenderBuffer : public Buffer, public Visitor {
 public:
@@ -24,7 +25,7 @@ public:
 	void Visit(Building* obj);
 	void Visit(LumberjackHut* obj);
 	void Visit(Dwelling* obj);
-
+	void Visit(Settler* obj);
 	void ClearData();
 
 	std::vector<glm::mat4> pineModels;
@@ -35,6 +36,7 @@ public:
 	std::vector<glm::mat4> lumberjackHutModels;
 	std::vector<glm::mat4> dwellingModels_growth1;
 	std::vector<glm::mat4> buildingOutlineModels;
+	std::vector<glm::mat4> settlerModels;
 
 	Terrain* terrain; // TODO:
 };

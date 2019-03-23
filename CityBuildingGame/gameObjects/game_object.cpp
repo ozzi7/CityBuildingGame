@@ -13,8 +13,8 @@ GameObject::GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotatio
 	rotation = aRotation;
 	recalculateModelMatix();
 
-	gridX = (int)position.x,
-	gridY = (int)position.y;
+	posX = (int)position.x,
+	posY = (int)position.y;
 }
 
 GameObject::GameObject() {};

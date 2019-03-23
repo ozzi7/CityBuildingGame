@@ -182,5 +182,9 @@ private:
 			shader->setMat4("model", renderBuffer->lumberjackModels[i]);
 			mesh_lumberjack->Render(*shader);
 		}
+		for (int i = 0; i < renderBuffer->settlerModels.size(); ++i) {
+			shader->setMat4("model", renderBuffer->settlerModels[i]);
+			mesh_lumberjack->Render(*shader);
+		}
 	}
 };

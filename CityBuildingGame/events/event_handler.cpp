@@ -5,6 +5,7 @@
 #include <bone_animated.h>
 #include <dwelling.h>
 #include <lumberjack.h>
+#include <settler.h>
 #include <lumberjack_hut.h>
 #include "pathfinding.h"
 
@@ -175,9 +176,26 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 
 			dwelling->CreateBuildingOutline();
 			/* create settler and link them.. TODO:*/
+			Settler* settler = new Settler(glm::vec3(0 + 0.5f, 0 + 0.5f, grid->gridUnits[0][0]->averageHeight),
+				glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
+
+			settler->SetDwelling(dwelling);
+
+
+			Pathfinding path = Pathfinding(grid, Coordinate(0, 0), Coordinate((int)modelCenter.x, (int)modelCenter.y));
+			path.CalculatePath();
+			std::list<Coordinate>pathShorts = path.GetPath();
+			std::vector<glm::vec2> glmPath;
+			glmPath.push_back(glm::vec2(0.5f, 0.5f));
+			for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
+			{
+				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
+			}
+			settler->SetNewPath(glmPath);
 
 			/* save building in the coordinate where the 3d object center is located in->good for rendering */
 			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(dwelling);
+			grid->gridUnits[0][0]->movingObjects.push_back(settler);
 			break;
 		}
 		case LumberjackHutID:
@@ -199,13 +217,13 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			lumberjackHut->CreateBuildingOutline();
 
 			/* create lumberjack */
-			Lumberjack* lumby = new Lumberjack(glm::vec3(0 + 0.5f, 0 + 0.5f, grid->gridUnits[2][2]->averageHeight),
+			Lumberjack* lumby = new Lumberjack(glm::vec3(0 + 0.5f, 0 + 0.5f, grid->gridUnits[0][0]->averageHeight),
 				glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
 
 			lumby->SetLumberjackHut(lumberjackHut);
 
 
-			Pathfinding path = Pathfinding(grid, Coordinate(2, 2), Coordinate((int)modelCenter.x, (int)modelCenter.y));
+			Pathfinding path = Pathfinding(grid, Coordinate(0, 0), Coordinate((int)modelCenter.x, (int)modelCenter.y));
 			path.CalculatePath();
 			std::list<Coordinate>pathShorts = path.GetPath();
 			std::vector<glm::vec2> glmPath;
@@ -219,6 +237,24 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			// store reference to grid
 			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(lumberjackHut);
 			grid->gridUnits[0][0]->movingObjects.push_back(lumby);
+			break;
+		}
+	}
+}
+void EventHandler::Visit(DeleteEvent * aDeleteEvent)
+{
+	/* deletes reference to element */
+	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->movingObjects.begin(); it !=
+		grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->movingObjects.end(); ++it) {
+		if ((*it) == aDeleteEvent->gameObject) {
+			it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->movingObjects.erase(it);
+			break;
+		}
+	}
+	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.begin(); it !=
+		grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.end(); ++it) {
+		if ((*it) == aDeleteEvent->gameObject) {
+			it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.erase(it);
 			break;
 		}
 	}

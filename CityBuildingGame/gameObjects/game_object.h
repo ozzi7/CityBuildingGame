@@ -18,8 +18,8 @@ public:
 	glm::vec3 rotation;
 	glm::mat4 model = glm::mat4(1.0f);
 
-	int gridX = -1; // this must be set, otherwise crash pls
-	int gridY = -1;
+	int posX = -1; // this must be set, otherwise crash pls
+	int posY = -1;
 
 
 	virtual void Accept(class Visitor &v) = 0;

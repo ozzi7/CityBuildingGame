@@ -44,7 +44,7 @@ void MapGenerator::GenerateMap()
 	//grid->gridUnits[yStart][xStart]->movingObjects.push_back(lumbydumby);
 
 
-	int xStart = 30;
+	/*int xStart = 30;
 	int yStart = 40;
 
 	Lumberjack* lumbydumby = new Lumberjack(glm::vec3(xStart + 0.5f, yStart + 0.5f, grid->gridUnits[yStart][xStart]->averageHeight),
@@ -72,7 +72,7 @@ void MapGenerator::GenerateMap()
 	std::cout << '\n';
 
 	lumbydumby->SetNewPath(pathVector);
-	grid->gridUnits[yStart][xStart]->movingObjects.push_back(lumbydumby);
+	grid->gridUnits[yStart][xStart]->movingObjects.push_back(lumbydumby);*/
 }
 
 void MapGenerator::generateTerrain()

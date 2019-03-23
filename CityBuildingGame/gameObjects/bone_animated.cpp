@@ -16,20 +16,22 @@ void BoneAnimated::UpdatePosition(Grid * grid)
 	if (!hasArrived) {
 		distanceToProxy = glm::distance(proxyObjectPos, glm::vec2(position.x, position.y));
 
+		if (previousDistanceToProxy < distanceToProxy) {
+			walkingSpeed += walkingSpeedMaxChange;
+		}
+		else
+		{
+			walkingSpeed -= walkingSpeedMaxChange;
+		}
+		previousDistanceToProxy = distanceToProxy;
+
 		if (distanceToProxy > walkingSpeed) {
-			// will not reach goal yet
-			if (previousDistanceToProxy < distanceToProxy) {
-				walkingSpeed += walkingSpeedMaxChange;
-			}
-			else
-			{
-				walkingSpeed -= walkingSpeedMaxChange;
-			}
-			previousDistanceToProxy = distanceToProxy;
+			// will not reach proxy yet
 		}
 		else {
 			hasArrived = true;
 		}
+
 		float translationX = walkingSpeed* glm::normalize(proxyObjectPos - glm::vec2(position.x, position.y)).x;
 		float translationY = walkingSpeed* glm::normalize(proxyObjectPos - glm::vec2(position.x, position.y)).y;
 
@@ -106,15 +108,16 @@ void BoneAnimated::SetNewPath(std::vector<glm::vec2> aWayPoints)
 		hasArrived = false;
 	}
 }
+
 void BoneAnimated::UpdatePath(std::vector<glm::vec2> aWayPoints)
 {
 	// TODO (if the path changes without having arrived yet..maybe we can merge it with setnewpath..)
 }
 void BoneAnimated::updateGridUnit()
 {
-	if ((int)position.x != gridX || (int)position.y != gridY) {
-		unitEventHandler->AddEvent(new MoveEvent(gridX, gridY, (int)position.x, (int)position.y, this));
-		gridX = (int)position.x;
-		gridY = (int)position.y;
+	if ((int)position.x != posX || (int)position.y != posY) {
+		unitEventHandler->AddEvent(new MoveEvent(posX, posY, (int)position.x, (int)position.y, this));
+		posX = (int)position.x;
+		posY = (int)position.y;
 	}
 }

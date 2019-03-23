@@ -22,6 +22,7 @@
     <ClInclude Include="events\blockingconcurrentqueue.h" />
     <ClInclude Include="events\concurrentqueue.h" />
     <ClInclude Include="events\create_building_event.h" />
+    <ClInclude Include="events\delete_event.h" />
     <ClInclude Include="events\event_handler.h" />
     <ClInclude Include="events\event.h" />
     <ClInclude Include="events\event_visitor.h" />
@@ -33,6 +34,7 @@
     <ClInclude Include="gameObjects\lumberjack_hut.h" />
     <ClInclude Include="gameObjects\oak.h" />
     <ClInclude Include="gameObjects\pine.h" />
+    <ClInclude Include="gameObjects\settler.h" />
     <ClInclude Include="gameObjects\spruce.h" />
     <ClInclude Include="pathfinding\pathfinding.h" />
     <ClInclude Include="pathfinding\pathfinding_object.h" />
@@ -66,6 +68,7 @@
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="events\create_building_event.cpp" />
+    <ClCompile Include="events\delete_event.cpp" />
     <ClCompile Include="events\event_handler.cpp" />
     <ClCompile Include="events\move_event.cpp" />
     <ClCompile Include="game.cpp" />
@@ -75,6 +78,7 @@
     <ClCompile Include="gameObjects\game_object.cpp" />
     <ClCompile Include="gameObjects\lumberjack.cpp" />
     <ClCompile Include="gameObjects\lumberjack_hut.cpp" />
+    <ClCompile Include="gameObjects\settler.cpp" />
     <ClCompile Include="pathfinding\pathfinding.cpp" />
     <ClCompile Include="pathfinding\pathfinding_object.cpp" />
     <ClCompile Include="rendering\render_data.cpp" />

@@ -101,6 +101,7 @@ void Game::gameLoop()
 				for (std::list<BoneAnimated*>::iterator it = grid->gridUnits[i][j]->movingObjects.begin();
 					it != grid->gridUnits[i][j]->movingObjects.end(); ++it) {
 					(*it)->UpdatePosition(grid);
+					(*it)->GameStep();
 				}
 			}
 		}

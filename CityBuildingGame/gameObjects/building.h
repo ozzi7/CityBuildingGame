@@ -26,6 +26,7 @@ public:
 	std::vector<glm::mat4> buildingOutlines;
 
 	void CreateBuildingOutline();
+	virtual void Evolve() = 0;
 
 protected:
 };

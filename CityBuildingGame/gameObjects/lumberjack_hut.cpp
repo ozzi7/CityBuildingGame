@@ -10,3 +10,10 @@ void LumberjackHut::Accept(Visitor &v)
 {
 	v.Visit(this);
 };
+
+void LumberjackHut::Evolve()
+{
+	evolutionStage++;
+
+	/* Exchange 3d model scale, rotation */
+}
