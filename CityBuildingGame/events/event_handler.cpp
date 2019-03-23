@@ -2,9 +2,10 @@
 #pragma once
 #include <event_handler.h>
 #include <grid.h>
-#include <lumberjack.h>
 #include <bone_animated.h>
 #include <dwelling.h>
+#include <lumberjack.h>
+#include <lumberjack_hut.h>
 #include "pathfinding.h"
 
 EventHandler::EventHandler(Grid * aGrid)
@@ -39,7 +40,7 @@ bool EventHandler::ProcessEvent()
 }
 void EventHandler::Visit(MoveEvent * aMoveEvent)
 {
-	/* removes element by index, could use pointers instead but... */
+	/* removes element found by reference */
 	BoneAnimated * toMove = NULL;
 	for (auto it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.begin(); it !=
 		grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.end(); ++it) {
@@ -57,128 +58,158 @@ void EventHandler::Visit(MoveEvent * aMoveEvent)
 }
 void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 {
-	int buildingCenterX = round(aCreateBuildingEvent->posX);
-	int buildingCenterY = round(aCreateBuildingEvent->posY);
+	std::tuple<int, int> closestToClick = std::make_tuple(round(aCreateBuildingEvent->posX), round(aCreateBuildingEvent->posY));
+	std::tuple<int, int> buildingSize;
+	glm::vec3 modelCenter = glm::vec3(-1.0f, -1.0f, -1.0f);
+
+	bool isXRoundedUp = std::get<0>(closestToClick) >= aCreateBuildingEvent->posX;
+	bool isYRoundedUp = std::get<1>(closestToClick) >= aCreateBuildingEvent->posY;
 
 	switch (aCreateBuildingEvent->buildingType) {
-		case LumberjackHutID:
-		{
-			bool success = false;
-
-			// Dwelling 2x2
-			if (buildingCenterX < grid->gridWidth && buildingCenterY < grid->gridHeight &&
-				buildingCenterX - 1 >= 0 && buildingCenterY - 1 >= 0) {
-				if (!grid->gridUnits[buildingCenterY - 1][buildingCenterX - 1]->occupied && // TODO: use size_x, size_y to check
-					!grid->gridUnits[buildingCenterY - 1][buildingCenterX]->occupied &&
-					!grid->gridUnits[buildingCenterY][buildingCenterX]->occupied &&
-					!grid->gridUnits[buildingCenterY][buildingCenterX - 1]->occupied) {
-					if (grid->IsAreaFlat(buildingCenterX - 1, buildingCenterX, buildingCenterY - 1, buildingCenterY))
-					{
-						/* save building in the "middle" unit -> best for rendering */
-						grid->gridUnits[buildingCenterY][buildingCenterX]->objects.push_back(
-							new Dwelling(glm::vec3(buildingCenterX, buildingCenterY,
-								grid->GetHeight(buildingCenterX, buildingCenterY)),
-								glm::vec3(0.012f, 0.006f, 0.012f),
-								glm::vec3(glm::half_pi<float>(),0.0f,0.0f),
-								buildingCenterX, buildingCenterY));
-						grid->gridUnits[buildingCenterY - 1][buildingCenterX - 1]->occupied = true;
-						grid->gridUnits[buildingCenterY - 1][buildingCenterX]->occupied = true;
-						grid->gridUnits[buildingCenterY][buildingCenterX]->occupied = true;
-						grid->gridUnits[buildingCenterY][buildingCenterX - 1]->occupied = true;
-						success = true;
-					}
-					else {
-						// the area is not completely flat
-					}
-				}
-				else
-				{
-					// occupied grid units
-				}
-			}
-			else {
-				// building outside the grid
-			}
-			if (success)
-			{
-				// then also create a lumberjack
-				Lumberjack* lumby = new Lumberjack(glm::vec3(2 + 0.5f, 2 + 0.5f, grid->gridUnits[2][2]->averageHeight),
-					glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
-				grid->gridUnits[2][2]->movingObjects.push_back(lumby);
-
-				Pathfinding path = Pathfinding(grid, Coordinate(2, 2), Coordinate(buildingCenterX, buildingCenterY - 1));
-				path.CalculatePath();
-				std::list<Coordinate>pathShorts = path.GetPath();
-				std::vector<glm::vec2> glmPath;
-				glmPath.push_back(glm::vec2(2.5f, 2.5f));
-				for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
-				{
-					glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
-				}
-				lumby->SetNewPath(glmPath);
-
-			}
-		}
-		break;
-
 		case DwellingID:
 		{
-			bool success = false;
-
-			// Dwelling 2x2
-			if (buildingCenterX < grid->gridWidth && buildingCenterY < grid->gridHeight &&
-				buildingCenterX - 1 >= 0 && buildingCenterY - 1 >= 0) {
-				if (!grid->gridUnits[buildingCenterY - 1][buildingCenterX - 1]->occupied &&
-					!grid->gridUnits[buildingCenterY - 1][buildingCenterX]->occupied &&
-					!grid->gridUnits[buildingCenterY][buildingCenterX]->occupied &&
-					!grid->gridUnits[buildingCenterY][buildingCenterX - 1]->occupied) {
-					if (grid->IsAreaFlat(buildingCenterX - 1, buildingCenterX, buildingCenterY - 1, buildingCenterY))
-					{
-						/* save building in the "middle" unit -> best for rendering */
-						grid->gridUnits[buildingCenterY][buildingCenterX]->objects.push_back(
-							new Dwelling(glm::vec3(buildingCenterX, buildingCenterY,
-								grid->GetHeight(buildingCenterX, buildingCenterY)),
-								glm::vec3(0.14f, 0.14f, 0.14f),
-								glm::vec3(0.0f, 0.0f, 0.0f),
-							buildingCenterX, buildingCenterY));
-						grid->gridUnits[buildingCenterY - 1][buildingCenterX - 1]->occupied = true;
-						grid->gridUnits[buildingCenterY - 1][buildingCenterX]->occupied = true;
-						grid->gridUnits[buildingCenterY][buildingCenterX]->occupied = true;
-						grid->gridUnits[buildingCenterY][buildingCenterX - 1]->occupied = true;
-						success = true;
-					}
-					else {
-						// the area is not completely flat
-					}
-				}
-				else
-				{
-					// occupied grid units
-				}
-			}
-			else {
-				// building outside the grid
-			}
-			if (success)
-			{
-				// then also create a lumberjack
-				Lumberjack* lumby = new Lumberjack(glm::vec3(2 + 0.5f, 2 + 0.5f, grid->gridUnits[2][2]->averageHeight),
-					glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
-				grid->gridUnits[2][2]->movingObjects.push_back(lumby);
-
-				Pathfinding path = Pathfinding(grid, Coordinate(2, 2), Coordinate(buildingCenterX, buildingCenterY));
-				path.CalculatePath();
-				std::list<Coordinate>pathShorts = path.GetPath();
-				std::vector<glm::vec2> glmPath;
-				glmPath.push_back(glm::vec2(2.5f, 2.5f));
-				for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
-				{
-					glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
-				}
-				lumby->SetNewPath(glmPath);
-
-			}
+			buildingSize = std::make_tuple(2, 2);
 			break;
 		}
-	}	
+		case LumberjackHutID:
+		{
+			buildingSize = std::make_tuple(2, 2);
+			break;
+		}
+	}
+
+	/* Calculate correct occupied units and save in fromX, toX, fromY, toY */
+	/* Set correct 3d model center point */
+	int fromX, toX, fromY, toY = 0;
+
+	if (std::get<0>(buildingSize) % 2 == 0) {
+		fromX = std::get<0>(closestToClick) - std::get<0>(buildingSize) / 2;
+		toX = std::get<0>(closestToClick) + std::get<0>(buildingSize) / 2;
+
+		modelCenter.x = std::get<0>(closestToClick);
+	}
+	else {
+		if (isXRoundedUp) {
+			fromX = std::get<0>(closestToClick) - std::get<0>(buildingSize) / 2 - 1;
+			toX = std::get<0>(closestToClick) + std::get<0>(buildingSize) / 2 - 1;
+
+			modelCenter.x = std::get<0>(closestToClick) - 0.5f;
+		}
+		else {
+			fromX = std::get<0>(closestToClick) - std::get<0>(buildingSize) / 2;
+			toX = std::get<0>(closestToClick) + std::get<0>(buildingSize) / 2;
+
+			modelCenter.x = std::get<0>(closestToClick) + 0.5f;
+		}
+	}
+
+	if (std::get<1>(buildingSize) % 2 == 0) {
+		fromY = std::get<1>(closestToClick) - std::get<1>(buildingSize) / 2;
+		toY = std::get<1>(closestToClick) + std::get<1>(buildingSize) / 2;
+
+		modelCenter.y = std::get<1>(closestToClick);
+	}
+	else {
+		if (isYRoundedUp) {
+			fromY = std::get<1>(closestToClick) - std::get<1>(buildingSize) / 2 - 1;
+			toY = std::get<1>(closestToClick) + std::get<1>(buildingSize) / 2 - 1;
+
+			modelCenter.x = std::get<1>(closestToClick) - 0.5f;
+		}
+		else {
+			fromY = std::get<1>(closestToClick) - std::get<1>(buildingSize) / 2;
+			toY = std::get<1>(closestToClick) + std::get<1>(buildingSize) / 2;
+
+			modelCenter.x = std::get<1>(closestToClick) + 0.5f;
+		}
+	}
+
+	/* Check if the building is outside of the grid */
+	if (fromX < 0 || toX >= grid->gridWidth || fromY < 0 || toY >= grid->gridHeight) {
+		return;
+	}
+
+	/* Check if the grid is not occupied */
+	for (int i = fromX; i < toX; ++i) {
+		for (int j = fromY; j < toY; ++j) {
+			if (grid->gridUnits[j][i]->occupied) {
+				return;
+			}
+		}
+	}
+
+	/* Check if the floor is flat */
+	if (!grid->IsAreaFlat(fromX, toX, fromY, toY)) {
+		return;
+	}
+
+	/* set grid to occupied*/
+	for (int i = fromX; i < toX; ++i) {
+		for (int j = fromY; j < toY; ++j) {
+			grid->gridUnits[j][i]->occupied = true;
+		}
+	}
+
+	/* calculate 3d model position height*/
+	modelCenter.z = grid->GetHeight((int)modelCenter.x, (int)modelCenter.y);
+
+	/* Create the building object etc.. */
+	switch (aCreateBuildingEvent->buildingType) {
+		case DwellingID:
+		{
+			/* create building  */
+			Dwelling * dwelling = new Dwelling(modelCenter, // translate
+				glm::vec3(0.012f, 0.006f, 0.012f), // rescale
+				glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
+
+			/* save some stuff needed later.. TODO: dedicated building exit,check road etc (for other buildings)*/
+			dwelling->fromX = fromX;
+			dwelling->fromY = fromY;
+			dwelling->toX = toX;
+			dwelling->toY = toY;
+			dwelling->sizeX = std::get<0>(buildingSize);
+			dwelling->sizeY = std::get<1>(buildingSize);
+		
+			dwelling->CreateBuildingOutline();
+			/* create settler and link them.. TODO:*/
+
+			/* save building in the coordinate where the 3d object center is located in->good for rendering */
+			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(dwelling);
+			break;
+		}
+		case LumberjackHutID:
+		{
+			/* save building in the coordinate where the 3d object center is located in -> good for rendering */
+			LumberjackHut * lumberjackHut = new LumberjackHut(modelCenter, // translate
+				glm::vec3(0.14f, 0.14f, 0.14f), // rescale
+				glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f));
+			
+			lumberjackHut->fromX = fromX;
+			lumberjackHut->fromY = fromY;
+			lumberjackHut->toX = toX;
+			lumberjackHut->toY = toY;
+			lumberjackHut->sizeX = std::get<0>(buildingSize);
+			lumberjackHut->sizeY = std::get<1>(buildingSize);
+			lumberjackHut->CreateBuildingOutline();
+
+			/* create lumberjack */
+			Lumberjack* lumby = new Lumberjack(glm::vec3(0 + 0.5f, 0 + 0.5f, grid->gridUnits[2][2]->averageHeight),
+				glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
+			grid->gridUnits[2][2]->movingObjects.push_back(lumby);
+
+			Pathfinding path = Pathfinding(grid, Coordinate(2, 2), Coordinate((int)modelCenter.x, (int)modelCenter.y));
+			path.CalculatePath();
+			std::list<Coordinate>pathShorts = path.GetPath();
+			std::vector<glm::vec2> glmPath;
+			glmPath.push_back(glm::vec2(0.5f, 0.5f));
+			for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
+			{
+				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
+			}
+			lumby->SetNewPath(glmPath);
+
+			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(lumberjackHut); // store reference in grid
+			break;
+		}
+	}
 }

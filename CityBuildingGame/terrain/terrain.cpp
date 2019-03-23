@@ -94,14 +94,14 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 
 	/* Load GPU data for visible area */
 	int index = 0;
-	int startX = std::min(std::min((int)upperLeft.x, int(lowerLeft.x)), std::min((int)upperRight.x, int(lowerRight.x)));
+	int fromX = std::min(std::min((int)upperLeft.x, int(lowerLeft.x)), std::min((int)upperRight.x, int(lowerRight.x)));
 	int endX = std::max(std::max((int)upperLeft.x, int(lowerLeft.x)), std::max((int)upperRight.x, int(lowerRight.x)));
-	int startY = std::min(std::min((int)upperLeft.y, int(lowerLeft.y)), std::min((int)upperRight.y, int(lowerRight.y)));
+	int fromY = std::min(std::min((int)upperLeft.y, int(lowerLeft.y)), std::min((int)upperRight.y, int(lowerRight.y)));
 	int endY = std::max(std::max((int)upperLeft.y, int(lowerLeft.y)), std::max((int)upperRight.y, int(lowerRight.y)));
 
-	for (int i = std::max(0, startY+1); i <= std::min(gridHeight-1, endY); ++i)
+	for (int i = std::max(0, fromY+1); i <= std::min(gridHeight-1, endY); ++i)
 	{
-		for (int j = std::max(0, startX+1); j <= std::min(gridWidth-1, endX); ++j)
+		for (int j = std::max(0, fromX+1); j <= std::min(gridWidth-1, endX); ++j)
 		{
 			if (index < maximumVisibleUnits*48)
 			{
