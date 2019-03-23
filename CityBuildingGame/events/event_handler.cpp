@@ -171,7 +171,7 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			dwelling->toY = toY;
 			dwelling->sizeX = std::get<0>(buildingSize);
 			dwelling->sizeY = std::get<1>(buildingSize);
-			dwelling->entranceX = fromX;
+			dwelling->entranceX = fromX + 1;
 			dwelling->entranceY = fromY;
 
 			dwelling->CreateBuildingOutline();
@@ -182,7 +182,7 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			settler->SetDwelling(dwelling);
 
 
-			Pathfinding path = Pathfinding(grid, Coordinate(0, 0), Coordinate((int)modelCenter.x, (int)modelCenter.y));
+			Pathfinding path = Pathfinding(grid, Coordinate(0, 0), Coordinate(dwelling->entranceX, dwelling->entranceY));
 			path.CalculatePath();
 			std::list<Coordinate>pathShorts = path.GetPath();
 			std::vector<glm::vec2> glmPath;
