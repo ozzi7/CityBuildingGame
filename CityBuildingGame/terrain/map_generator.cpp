@@ -51,11 +51,11 @@ void MapGenerator::GenerateMap()
 		glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
 
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
-	//PathfindingObject<Tree> pathfinding = PathfindingObject<Tree>(grid, Coordinate(xStart, yStart), &Tree(glm::vec3(0), glm::vec3(0), glm::vec3(0)));
-	//pathfinding.FindClosest();
-	//std::list<Coordinate> path = pathfinding.GetPath();
+	PathfindingObject pathfinding = PathfindingObject(grid, Coordinate(xStart, yStart));
+	pathfinding.FindClosestTree();
+	std::list<Coordinate> path = pathfinding.GetPath();
 
-	/*std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
+	std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
 	std::chrono::microseconds total = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 	std::cout << "Path calculated and returned in " << total.count() << " microseconds \n";
 
@@ -69,9 +69,9 @@ void MapGenerator::GenerateMap()
 			glm::vec3(0.003f, 0.003f, 0.003f), glm::vec3(0, 0, glm::pi<float>()));
 		grid->gridUnits[(*it).second][(*it).first]->movingObjects.push_back(pathLumby);
 	}
-	std::cout << '\n';*/
+	std::cout << '\n';
 
-	//lumbydumby->SetNewPath(pathVector);
+	lumbydumby->SetNewPath(pathVector);
 	grid->gridUnits[yStart][xStart]->movingObjects.push_back(lumbydumby);
 }
 
@@ -153,30 +153,27 @@ void MapGenerator::generateTrees()
 					new Pine(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 						glm::vec3(scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR),
 						glm::vec3(1.5707963f, 0, rotation(gen))));
-				grid->gridUnits[i][j]->occupied = true;
 			}
 			else if (chosenTree <= 1 && isJuniper) {
 				grid->gridUnits[i][j]->objects.push_back(
 					new Juniper(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 						glm::vec3(scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR),
 						glm::vec3(1.5707963f, 0, rotation(gen))));
-				grid->gridUnits[i][j]->occupied = true;
 			}
 			else if (chosenTree <= 2 && isSpruce) {
 				grid->gridUnits[i][j]->objects.push_back(
 					new Spruce(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 						glm::vec3(scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR),
 						glm::vec3(1.5707963f, 0, rotation(gen))));
-				grid->gridUnits[i][j]->occupied = true;
 			}
 			else if (chosenTree <= 3 && isOak) {
 				grid->gridUnits[i][j]->objects.push_back(
 					new Oak(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 						glm::vec3(scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR, scale*TREE_SCALE_FACTOR),
 						glm::vec3(1.5707963f, 0, rotation(gen))));
-				grid->gridUnits[i][j]->occupied = true;
 			}
 			grid->gridUnits[i][j]->occupied = true;
+			grid->gridUnits[i][j]->hasTree = true;
 		}
 	}
 }

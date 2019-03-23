@@ -17,6 +17,7 @@ class Unit
 {
 public:
 	bool occupied = false;
+	bool hasTree = false;
 	float averageHeight = 0;
 	std::list<GameObject*> objects;
 	std::list<BoneAnimated*> movingObjects; // TODO doesnt have to coincide with bone animated.. hmm

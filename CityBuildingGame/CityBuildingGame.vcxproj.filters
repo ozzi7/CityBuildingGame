@@ -30,8 +30,9 @@
     <ClCompile Include="gameObjects\dwelling.cpp" />
     <ClCompile Include="events\create_building_event.cpp" />
     <ClCompile Include="events\move_event.cpp" />
-    <ClCompile Include="pathfinding.cpp" />
     <ClCompile Include="gameObjects\building.cpp" />
+    <ClCompile Include="pathfinding\pathfinding.cpp" />
+    <ClCompile Include="pathfinding\pathfinding_object.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
@@ -75,8 +76,8 @@
     <ClInclude Include="events\move_event.h" />
     <ClInclude Include="events\event_visitor.h" />
     <ClInclude Include="visitor.h" />
-    <ClInclude Include="pathfinding.h" />
-    <ClInclude Include="pathfinding_object.h" />
+    <ClInclude Include="pathfinding\pathfinding.h" />
+    <ClInclude Include="pathfinding\pathfinding_object.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />
