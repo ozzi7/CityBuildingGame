@@ -68,12 +68,12 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 	switch (aCreateBuildingEvent->buildingType) {
 		case DwellingID:
 		{
-			buildingSize = std::make_tuple(2, 2);
+			buildingSize = std::make_tuple(2, 5);
 			break;
 		}
 		case LumberjackHutID:
 		{
-			buildingSize = std::make_tuple(2, 2);
+			buildingSize = std::make_tuple(2, 5);
 			break;
 		}
 	}
@@ -114,13 +114,13 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			fromY = std::get<1>(closestToClick) - std::get<1>(buildingSize) / 2 - 1;
 			toY = std::get<1>(closestToClick) + std::get<1>(buildingSize) / 2 - 1;
 
-			modelCenter.x = std::get<1>(closestToClick) - 0.5f;
+			modelCenter.y = std::get<1>(closestToClick) - 0.5f;
 		}
 		else {
 			fromY = std::get<1>(closestToClick) - std::get<1>(buildingSize) / 2;
 			toY = std::get<1>(closestToClick) + std::get<1>(buildingSize) / 2;
 
-			modelCenter.x = std::get<1>(closestToClick) + 0.5f;
+			modelCenter.y = std::get<1>(closestToClick) + 0.5f;
 		}
 	}
 
@@ -151,7 +151,7 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 	}
 
 	/* calculate 3d model position height*/
-	modelCenter.z = grid->GetHeight((int)modelCenter.x, (int)modelCenter.y);
+	modelCenter.z = grid->GetHeight(modelCenter.x, modelCenter.y);
 
 	/* Create the building object etc.. */
 	switch (aCreateBuildingEvent->buildingType) {
