@@ -35,7 +35,11 @@ void Pathfinding::CalculatePath()
 		
 		if (!setNextNode())
 			break;
+		if (current->coordinate == destination->coordinate)
+			pathFound = true;
 	}
+	if (current->coordinate == destination->coordinate)
+		pathFound = true;
 }
 
 std::list<Coordinate> Pathfinding::GetPath()
@@ -55,8 +59,12 @@ void Pathfinding::createNode(const Coordinate coordinate)
 {
 	if (!visited[coordinate.first][coordinate.second])
 	{
-		if (!grid->gridUnits[coordinate.second][coordinate.first]->occupied)
+		if (!grid->gridUnits[coordinate.second][coordinate.first]->occupied ||
+			coordinate == destination->coordinate)
 		{
+			if (coordinate == destination->coordinate) {
+				std::cout << "urmom";
+			}
 			Node* node = new Node();
 			node->coordinate = coordinate;
 			node->distanceToStart = current->distanceToStart + 1;
@@ -69,9 +77,6 @@ void Pathfinding::createNode(const Coordinate coordinate)
 			open.push(node);
 		}
 		visited[coordinate.first][coordinate.second] = true;
-
-		if (coordinate == destination->coordinate)
-			pathFound = true;
 	}
 }
 
