@@ -38,7 +38,7 @@ public:
 	PathfindingObject(Grid* aGrid, const Coordinate XYstart, const T* objectType)
 	{
 		grid = aGrid;
-		type = typeid(objectType).name();
+		const char * type = typeid(objectType).name();
 
 		start = new NodeObject();
 		start->coordinate = XYstart;
@@ -103,7 +103,7 @@ private:
 	Grid* grid;
 	NodeObject* start;
 	NodeObject* current;
-	auto type;
+	std::type_info type;
 
 	bool objectFound = false;
 	NodeObject* destination;
