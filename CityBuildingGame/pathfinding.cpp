@@ -32,7 +32,7 @@ void Pathfinding::CalculatePath()
 			createNode(Coordinate(current->coordinate.first - 1, current->coordinate.second));
 		if (current->coordinate.second > 0)
 			createNode(Coordinate(current->coordinate.first, current->coordinate.second - 1));
-
+		
 		if (!setNextNode())
 			break;
 	}

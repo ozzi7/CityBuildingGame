@@ -12,17 +12,47 @@ void MapGenerator::GenerateMap()
 	generateTerrain();
 	generateTrees();
 
+	//int xStart = 30;
+	//int yStart = 40;
+	//int xDestination = 10;
+	//int yDestination = 10;
+
+	//Lumberjack* lumbydumby = new Lumberjack(glm::vec3(xStart + 0.5f, yStart + 0.5f, grid->gridUnits[yStart][xStart]->averageHeight),
+	//	glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
+
+	//std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
+	//Pathfinding pathfinding = Pathfinding(grid, Coordinate(xStart, yStart), Coordinate(xDestination, yDestination));
+	//pathfinding.CalculatePath();
+	//std::list<Coordinate> path = pathfinding.GetPath();
+	//std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
+	//std::chrono::microseconds total = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+	//std::cout << "Path calculated and returned in " << total.count() << " microseconds \n";
+
+	//std::vector<glm::vec2> pathVector = std::vector<glm::vec2>();
+	//for (std::list<Coordinate>::iterator it = path.begin(); it != path.end(); ++it)
+	//{
+	//	pathVector.push_back(glm::vec2((*it).first, (*it).second));
+	//	std::cout << ' ' << (*it).first << '|' << (*it).second;
+
+	//	Lumberjack* pathLumby = new Lumberjack(glm::vec3((*it).first + 0.5f, (*it).second + 0.5f, grid->gridUnits[(*it).second][(*it).first]->averageHeight),
+	//		glm::vec3(0.003f, 0.003f, 0.003f), glm::vec3(0, 0, glm::pi<float>()));
+	//	grid->gridUnits[(*it).second][(*it).first]->movingObjects.push_back(pathLumby);
+	//}
+	//std::cout << '\n';
+
+	////lumbydumby->SetNewPath(pathVector);
+	//grid->gridUnits[yStart][xStart]->movingObjects.push_back(lumbydumby);
+
+
 	int xStart = 30;
 	int yStart = 40;
-	int xDestination = 10;
-	int yDestination = 10;
 
 	Lumberjack* lumbydumby = new Lumberjack(glm::vec3(xStart + 0.5f, yStart + 0.5f, grid->gridUnits[yStart][xStart]->averageHeight),
 		glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
 
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
-	Pathfinding pathfinding = Pathfinding(grid, Coordinate(xStart, yStart), Coordinate(xDestination, yDestination));
-	pathfinding.CalculatePath();
+	PathfindingObject pathfinding = PathfindingObject(grid, Coordinate(xStart, yStart), &Tree(glm::vec3(0), glm::vec3(0), glm::vec3(0)));
+	pathfinding.FindClosest();
 	std::list<Coordinate> path = pathfinding.GetPath();
 	std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
 	std::chrono::microseconds total = std::chrono::duration_cast<std::chrono::microseconds>(end - start);

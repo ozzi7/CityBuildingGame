@@ -10,6 +10,7 @@
 #include "pine.h"
 #include "lumberjack.h"
 #include "pathfinding.h"
+#include "pathfinding_object.h"
 #include <cmath>
 
 class MapGenerator {

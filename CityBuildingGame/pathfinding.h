@@ -11,7 +11,6 @@
 #define max(x,y) ((x) > (y) ? (x) : (y))
 
 
-
 typedef std::pair<unsigned short, unsigned short> Coordinate;
 
 struct Node

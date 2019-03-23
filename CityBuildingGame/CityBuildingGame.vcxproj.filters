@@ -76,6 +76,7 @@
     <ClInclude Include="events\event_visitor.h" />
     <ClInclude Include="visitor.h" />
     <ClInclude Include="pathfinding.h" />
+    <ClInclude Include="pathfinding_object.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

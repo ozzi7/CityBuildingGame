@@ -21,6 +21,7 @@ public:
 	int gridX = -1; // this must be set, otherwise crash pls
 	int gridY = -1;
 
+
 	virtual void Accept(class Visitor &v) = 0;
 
 protected:
