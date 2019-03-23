@@ -16,10 +16,10 @@ void BoneAnimated::UpdatePosition(Grid * grid)
 	if (!hasArrived) {
 		distanceToProxy = glm::distance(proxyObjectPos, glm::vec2(position.x, position.y));
 
-		if (previousDistanceToProxy < distanceToProxy) {
+		if (previousDistanceToProxy < distanceToProxy && walkingSpeed < 0.0055f) {
 			walkingSpeed += walkingSpeedMaxChange;
 		}
-		else
+		else if(walkingSpeed > 0.0025f)
 		{
 			walkingSpeed -= walkingSpeedMaxChange;
 		}
