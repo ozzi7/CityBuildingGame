@@ -10,9 +10,9 @@ Building::Building(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 };
 void Building::CreateBuildingOutline()
 {
-	// bottom right line where y = 0
 	for (int i = fromX; i < toX; ++i)
 	{
+		// bottom right line where y = 0
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(i + 0.25f, fromY + 0.25f, position.z));
 		model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -30,10 +30,8 @@ void Building::CreateBuildingOutline()
 		model = glm::scale(model, glm::vec3(0.012f, 0.006f, 0.012f));
 
 		buildingOutlines.push_back(model);
-	}
-	// top line where y = max
-	for (int i = fromX; i < toX; ++i)
-	{
+
+		// top line where y = max
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(i + 0.25f, toY - 0.25f, position.z));
 		model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -52,12 +50,22 @@ void Building::CreateBuildingOutline()
 
 		buildingOutlines.push_back(model);
 	}
+
 	// left line where x = 0
 	for (int i = fromY; i < toY; ++i)
 	{
 		if (i != fromY) {
 			model = glm::mat4(1.0f);
 			model = glm::translate(model, glm::vec3(fromX + 0.25f, i + 0.25f, position.z));
+			model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+			model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(0.012f, 0.006f, 0.012f));
+
+			buildingOutlines.push_back(model);
+
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, glm::vec3(toX - 0.25f, i + 0.25f, position.z));
 			model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 			model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 			model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -72,29 +80,16 @@ void Building::CreateBuildingOutline()
 			model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 			model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
 			model = glm::scale(model, glm::vec3(0.012f, 0.006f, 0.012f));
-			buildingOutlines.push_back(model);
-		}
-	}
-	// right line where x = max
-	for (int i = fromY; i < toY; ++i)
-	{
-		if (i != fromY) {
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(toX - 0.25f, i + 0.25f, position.z));
-			model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-			model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-			model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-			model = glm::scale(model, glm::vec3(0.012f, 0.006f, 0.012f));
 
 			buildingOutlines.push_back(model);
-		}
-		if (i != toY - 1) {
+
 			model = glm::mat4(1.0f);
 			model = glm::translate(model, glm::vec3(toX - 0.25f, i + 0.75, position.z));
 			model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 			model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 			model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
 			model = glm::scale(model, glm::vec3(0.012f, 0.006f, 0.012f));
+
 			buildingOutlines.push_back(model);
 		}
 	}

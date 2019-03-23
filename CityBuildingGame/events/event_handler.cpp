@@ -68,12 +68,12 @@ void EventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 	switch (aCreateBuildingEvent->buildingType) {
 		case DwellingID:
 		{
-			buildingSize = std::make_tuple(2, 5);
+			buildingSize = std::make_tuple(2, 2);
 			break;
 		}
 		case LumberjackHutID:
 		{
-			buildingSize = std::make_tuple(2, 5);
+			buildingSize = std::make_tuple(2, 2);
 			break;
 		}
 	}
