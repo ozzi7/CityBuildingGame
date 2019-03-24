@@ -22,7 +22,7 @@ Pathfinding::Pathfinding(Grid* aGrid, const Coordinate XYstart, const Coordinate
 
 void Pathfinding::CalculatePath()
 {
-	while (!pathFound)
+	while (!pathFound && !unreachable)
 	{
 		if (current->coordinate.first < maxX)
 			createNode(Coordinate(current->coordinate.first + 1, current->coordinate.second));
@@ -33,13 +33,8 @@ void Pathfinding::CalculatePath()
 		if (current->coordinate.second > 0)
 			createNode(Coordinate(current->coordinate.first, current->coordinate.second - 1));
 		
-		if (!setNextNode())
-			break;
-		if (current->coordinate == destination->coordinate)
-			pathFound = true;
+		setNextNode();
 	}
-	if (current->coordinate == destination->coordinate)
-		pathFound = true;
 }
 
 std::list<Coordinate> Pathfinding::GetPath()
@@ -62,9 +57,6 @@ void Pathfinding::createNode(const Coordinate coordinate)
 		if (!grid->gridUnits[coordinate.second][coordinate.first]->occupied ||
 			coordinate == destination->coordinate)
 		{
-			if (coordinate == destination->coordinate) {
-				std::cout << "urmom";
-			}
 			Node* node = new Node();
 			node->coordinate = coordinate;
 			node->distanceToStart = current->distanceToStart + 1;
@@ -75,6 +67,9 @@ void Pathfinding::createNode(const Coordinate coordinate)
 			//adjustParentNode(node); TODO
 			//std::cout << "Inserting " << coordinate.first << '|' << coordinate.second << '\n';
 			open.push(node);
+
+			if (coordinate == destination->coordinate)
+				pathFound = true;
 		}
 		visited[coordinate.first][coordinate.second] = true;
 	}
@@ -87,16 +82,15 @@ unsigned short Pathfinding::distanceToDestination(const Coordinate coordinate)
 	std::abs(coordinate.second - destination->coordinate.second);
 }
 
-bool Pathfinding::setNextNode()
+void Pathfinding::setNextNode()
 {
 	if (!open.empty())
 	{
 		current = open.top();
 		open.pop();
 		closed.push_front(current);
-		return true;
-	}
-	return false;
+	} else 
+		unreachable = true;
 }
 
 void Pathfinding::adjustParentNode(Node* node)
