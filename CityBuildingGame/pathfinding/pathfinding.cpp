@@ -89,7 +89,8 @@ void Pathfinding::setNextNode()
 		current = open.top();
 		open.pop();
 		closed.push_front(current);
-	} else 
+	} 
+	else 
 		unreachable = true;
 }
 

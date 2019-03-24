@@ -53,6 +53,7 @@ private:
 	ObjectType objectType;
 
 	bool objectFound = false;
+	bool unreachable = false;
 	NodeObject* destination;
 
 	const unsigned short maxX = (unsigned short)MAP_WIDTH - 1;
@@ -61,6 +62,6 @@ private:
 	void calculatePath();
 	void createNode(const Coordinate coordinate);
 	void checkObjectFound(Coordinate coordinate);
-	bool setNextNode();
+	void setNextNode();
 };
 
