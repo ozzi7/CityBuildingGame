@@ -21,4 +21,7 @@ void Settler::GameStep() {
 		updatedDwelling = true;
 		unitEventHandler->AddEvent(new DeleteEvent(posX, posY, this));
 	}
+
+	/*Update animation*/
+	animationSecond += walkingSpeed*1.80f; // 100fps?
 }

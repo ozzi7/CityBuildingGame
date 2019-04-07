@@ -58,5 +58,6 @@ extern std::string Path;
 extern unsigned int ScreenWidth;
 extern unsigned int ScreenHeight;
 extern float ScreenRatio;
+// TODO: gameloop fps
 
 extern EventHandler* unitEventHandler; // ?? save in every object?! same with grid?

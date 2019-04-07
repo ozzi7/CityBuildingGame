@@ -175,14 +175,16 @@ private:
 		else
 			shader = skinned_mesh_shader;
 		shader->use();
-		z = z + 0.0011f; // TODO: speed of animation doesnt belong here...
-		mesh_lumberjack->BindBoneTransform(z, shader);
 
 		for (int i = 0; i < renderBuffer->lumberjackModels.size(); ++i) {
+			mesh_lumberjack->BindBoneTransform(renderBuffer->lumberjackAnimationSeconds[i], shader);
+
 			shader->setMat4("model", renderBuffer->lumberjackModels[i]);
 			mesh_lumberjack->Render(*shader);
 		}
 		for (int i = 0; i < renderBuffer->settlerModels.size(); ++i) {
+			mesh_lumberjack->BindBoneTransform(renderBuffer->settlerAnimationSeconds[i], shader);
+
 			shader->setMat4("model", renderBuffer->settlerModels[i]);
 			mesh_lumberjack->Render(*shader);
 		}

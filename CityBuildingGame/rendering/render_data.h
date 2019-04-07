@@ -38,5 +38,7 @@ public:
 	std::vector<glm::mat4> buildingOutlineModels;
 	std::vector<glm::mat4> settlerModels;
 
+	std::vector<float> settlerAnimationSeconds;
+	std::vector<float> lumberjackAnimationSeconds;
 	Terrain* terrain; // TODO:
 };
