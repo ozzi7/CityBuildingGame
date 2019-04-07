@@ -85,14 +85,16 @@ private:
 	Node* start;
 	Node* destination;
 	Node* current;
+
 	bool pathFound = false;
+	bool unreachable = false;
 
 	const unsigned short maxX = (unsigned short)MAP_WIDTH - 1;
 	const unsigned short maxY = (unsigned short)MAP_HEIGHT - 1;
 	
 	void createNode(const Coordinate coordinate);
 	unsigned short distanceToDestination(const Coordinate coordinate);
-	bool setNextNode();
+	void setNextNode();
 	void adjustParentNode(Node* node);
 };
 

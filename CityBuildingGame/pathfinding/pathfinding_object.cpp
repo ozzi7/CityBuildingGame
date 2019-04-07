@@ -51,7 +51,7 @@ std::list<Coordinate> PathfindingObject::GetPath()
 
 void PathfindingObject::calculatePath()
 {
-	while (!objectFound)
+	while (!objectFound && !unreachable)
 	{
 		if (current->coordinate.first < maxX)
 			createNode(Coordinate(current->coordinate.first + 1, current->coordinate.second));
@@ -62,8 +62,7 @@ void PathfindingObject::calculatePath()
 		if (current->coordinate.second > 0)
 			createNode(Coordinate(current->coordinate.first, current->coordinate.second - 1));
 
-		if (!setNextNode())
-			break;
+		setNextNode();
 	}
 }
 
@@ -101,14 +100,14 @@ void PathfindingObject::checkObjectFound(Coordinate coordinate)
 	}
 }
 
-bool PathfindingObject::setNextNode()
+void PathfindingObject::setNextNode()
 {
 	if (!open.empty())
 	{
 		current = open.top();
 		open.pop();
 		closed.push_front(current);
-		return true;
 	}
-	return false;
+	else
+		unreachable = true;
 }
