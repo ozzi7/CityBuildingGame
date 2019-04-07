@@ -19,11 +19,9 @@ void Settler::GameStep() {
 	if (hasArrived != updatedDwelling) {
 		dwelling->Evolve();
 		updatedDwelling = true;
-		//unitEventHandler->AddEvent(new DeleteEvent(posX, posY, this));
-
-		// TODO: Move code to Lumberjack
+		unitEventHandler->AddEvent(new DeleteEvent(posX, posY, this));
 	}
 
 	/*Update animation*/
-	animationSecond += walkingSpeed*1.80f; // 100fps?
+	animationSecond += walkingSpeed * 1.80f; // 100fps?
 }
