@@ -19,8 +19,6 @@ public:
 
 protected:
 	bool hasArrived = true;
-	int posX = 0;
-	int posY = 0;
 
 private:
 
@@ -32,9 +30,9 @@ private:
 
 	float proxySpeed = 0.004f;
 	float walkingSpeed = 0.004f;
-	const float maxSpeed = 1.5f*walkingSpeed;
-	const float minSpeed = 0.5*walkingSpeed;
-	float walkingSpeedMaxChange = walkingSpeed/100.0f;
+	const float maxSpeed = 1.5f * walkingSpeed;
+	const float minSpeed = 0.5f * walkingSpeed;
+	float walkingSpeedMaxChange = walkingSpeed / 100.0f;
 	float previousDistanceToProxy = 1.0f;
 	float distanceToProxy = 1.0f;
 

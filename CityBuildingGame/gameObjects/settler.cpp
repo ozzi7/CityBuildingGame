@@ -19,6 +19,8 @@ void Settler::GameStep() {
 	if (hasArrived != updatedDwelling) {
 		dwelling->Evolve();
 		updatedDwelling = true;
-		unitEventHandler->AddEvent(new DeleteEvent(posX, posY, this));
+		//unitEventHandler->AddEvent(new DeleteEvent(posX, posY, this));
+
+		// TODO: Move code to Lumberjack
 	}
 }

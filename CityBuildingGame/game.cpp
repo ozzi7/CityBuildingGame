@@ -34,6 +34,7 @@ Game::~Game()
 void Game::StartGame()
 {
 	std::thread threadGameLoop(&Game::gameLoop, this);
+	SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 	
 	renderLoop();
 	threadGameLoop.join();
