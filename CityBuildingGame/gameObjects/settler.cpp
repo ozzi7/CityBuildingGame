@@ -23,4 +23,7 @@ void Settler::GameStep() {
 
 		// TODO: Move code to Lumberjack
 	}
+
+	/*Update animation*/
+	animationSecond += walkingSpeed*1.80f; // 100fps?
 }

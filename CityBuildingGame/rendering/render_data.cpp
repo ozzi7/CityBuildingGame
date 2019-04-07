@@ -20,11 +20,13 @@ void RenderBuffer::Visit(Juniper* obj) {
 void RenderBuffer::Visit(Lumberjack* obj) {
 	if (obj->visible) {
 		lumberjackModels.push_back(obj->model);
+		lumberjackAnimationSeconds.push_back(obj->animationSecond);
 	}
 }
 void RenderBuffer::Visit(Settler* obj) {
 	if (obj->visible) {
 		settlerModels.push_back(obj->model);
+		settlerAnimationSeconds.push_back(obj->animationSecond);
 	}
 }
 void RenderBuffer::Visit(LumberjackHut* obj) {
@@ -67,4 +69,7 @@ void RenderBuffer::ClearData()
 	dwellingModels_growth1.clear();
 	buildingOutlineModels.clear();
 	settlerModels.clear();
+
+	settlerAnimationSeconds.clear();
+	lumberjackAnimationSeconds.clear();
 }

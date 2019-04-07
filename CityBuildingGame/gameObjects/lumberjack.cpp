@@ -14,5 +14,5 @@ void Lumberjack::SetLumberjackHut(LumberjackHut * aLumberjackHut) {
 	lumberjackHut = aLumberjackHut;
 }
 void Lumberjack::GameStep() {
-
+	animationSecond += walkingSpeed; // 100fps?
 }

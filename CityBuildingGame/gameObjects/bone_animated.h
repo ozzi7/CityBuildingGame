@@ -17,8 +17,11 @@ public:
 	virtual void GameStep() = 0;
 	bool visible = true;
 
+	float animationSecond = 0.0f;
+
 protected:
 	bool hasArrived = true;
+	float walkingSpeed = 0.006f;
 
 private:
 
@@ -28,11 +31,11 @@ private:
 	std::vector<glm::vec2> wayPoints;
 	int proxyWPIdx = 0;
 
-	float proxySpeed = 0.004f;
-	float walkingSpeed = 0.004f;
-	const float maxSpeed = 1.5f * walkingSpeed;
-	const float minSpeed = 0.5f * walkingSpeed;
-	float walkingSpeedMaxChange = walkingSpeed / 2000.0f; // /100
+
+	float proxySpeed = 0.006f;
+	const float maxSpeed = 1.05f * walkingSpeed;
+	const float minSpeed = 0.7f * walkingSpeed;
+	float walkingSpeedMaxChange = walkingSpeed / 500.0f; // /100
 	float previousDistanceToProxy = 1.0f;
 	float distanceToProxy = 1.0f;
 
