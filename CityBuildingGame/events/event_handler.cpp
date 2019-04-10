@@ -284,6 +284,7 @@ void EventHandler::Visit(GatherResourceEvent * aGatherResourceEvent)
 		case Wood:
 			path.FindClosestTree();
 			pathShorts = path.GetPath();
+			glmPath.push_back(glm::vec2(aGatherResourceEvent->person->posX, aGatherResourceEvent->person->posY));
 			for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
 			{
 				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
