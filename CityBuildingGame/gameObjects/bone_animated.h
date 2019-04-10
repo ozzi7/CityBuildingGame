@@ -21,6 +21,8 @@ public:
 
 	float animationSecond = 0.0f;
 
+	GameObject* destination = nullptr;
+
 protected:
 	bool hasArrived = true;
 	State state = idle;

@@ -258,6 +258,15 @@ void EventHandler::Visit(DeleteEvent * aDeleteEvent)
 	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.begin(); it !=
 		grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.end(); ++it) {
 		if ((*it) == aDeleteEvent->gameObject) {
+			
+			// to be moved into separate class 
+			try {
+				Tree* tree = dynamic_cast<Tree*>(*it);
+				grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->hasTree = false;
+			}
+			catch (const std::exception& e) {}
+			// ********************** //
+
 			it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.erase(it);
 			break;
 		}
@@ -275,7 +284,6 @@ void EventHandler::Visit(GatherResourceEvent * aGatherResourceEvent)
 		case Wood:
 			path.FindClosestTree();
 			pathShorts = path.GetPath();
-			glmPath.push_back(glm::vec2(0.5f, 0.5f));
 			for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
 			{
 				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
@@ -284,6 +292,7 @@ void EventHandler::Visit(GatherResourceEvent * aGatherResourceEvent)
 				grid->gridUnits[(*it).second][(*it).first]->movingObjects.push_back(pathLumby);
 			}
 			aGatherResourceEvent->person->SetNewPath(glmPath);
+			aGatherResourceEvent->person->destination = path.GetDestinationObject();
 			break;
 
 		default:

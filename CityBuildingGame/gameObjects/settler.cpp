@@ -15,15 +15,19 @@ void Settler::SetDwelling(Dwelling * aDwelling) {
 	dwelling = aDwelling;
 }
 void Settler::GameStep() {
+
+	if (state == idle) {
+		if (destination)
+			unitEventHandler->AddEvent(new DeleteEvent(destination->posX, destination->posY, destination));
+		unitEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
+	}
+
 	/* check if arrived at dwelling*/
-	if (hasArrived != updatedDwelling) {
+	if (hasArrived && !updatedDwelling) {
 		dwelling->Evolve();
 		updatedDwelling = true;
 		//unitEventHandler->AddEvent(new DeleteEvent(posX, posY, this));
 	}
-
-	if (state == idle)
-		unitEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
 
 	/*Update animation*/
 	animationSecond += walkingSpeed * 1.80f; // 100fps?

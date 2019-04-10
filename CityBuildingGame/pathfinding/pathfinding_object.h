@@ -41,7 +41,7 @@ public:
 	void FindClosestTree();
 
 	std::list<Coordinate> GetPath();
-
+	GameObject* GetDestinationObject();
 private:
 	std::forward_list<NodeObject*> closed; // maybe not needed, only for storing pointers for deleting
 	std::priority_queue<NodeObject*, std::deque<NodeObject*>, NodeCompareObject> open;

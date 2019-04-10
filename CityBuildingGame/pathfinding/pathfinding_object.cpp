@@ -49,6 +49,21 @@ std::list<Coordinate> PathfindingObject::GetPath()
 	return path;
 }
 
+GameObject* PathfindingObject::GetDestinationObject()
+{
+	for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first]->objects)
+	{
+		if (objectType == tree)
+		{
+			try {
+				Tree* tree = dynamic_cast<Tree*>(object);
+				return object;
+			}
+			catch (const std::exception& e) {} // Not an exception, expected behavior...
+		}
+	}
+}
+
 void PathfindingObject::calculatePath()
 {
 	while (!objectFound && !unreachable)
