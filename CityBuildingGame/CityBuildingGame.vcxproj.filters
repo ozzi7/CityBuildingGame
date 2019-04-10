@@ -35,6 +35,7 @@
     <ClCompile Include="pathfinding\pathfinding_object.cpp" />
     <ClCompile Include="gameObjects\settler.cpp" />
     <ClCompile Include="events\delete_event.cpp" />
+    <ClCompile Include="events\gather_resource_event.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
@@ -82,6 +83,7 @@
     <ClInclude Include="pathfinding\pathfinding_object.h" />
     <ClInclude Include="gameObjects\settler.h" />
     <ClInclude Include="events\delete_event.h" />
+    <ClInclude Include="events\gather_resource_event.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

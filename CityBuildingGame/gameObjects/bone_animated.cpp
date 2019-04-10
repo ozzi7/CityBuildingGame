@@ -3,7 +3,6 @@
 #include <bone_animated.h>
 #include <grid.h>
 
-
 BoneAnimated::BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 	: GameObject(aPosition, aScale, aRotation) {
 }
@@ -37,6 +36,7 @@ void BoneAnimated::UpdatePosition(Grid * grid)
 		}
 		else {
 			hasArrived = true;
+			state = idle;
 		}
 
 		float translationX = walkingSpeed* glm::normalize(proxyObjectPos - glm::vec2(position.x, position.y)).x;
@@ -106,6 +106,7 @@ void BoneAnimated::SetNewPath(std::vector<glm::vec2> aWayPoints)
 		/* Can be used to set a position */
 		proxyHasArrived = true;
 		hasArrived = true;
+		state = idle;
 		proxyObjectPos = glm::vec2(wayPoints[0].x, wayPoints[0].y);
 	}
 	else if (wayPoints.size() >= 2) {
@@ -113,6 +114,7 @@ void BoneAnimated::SetNewPath(std::vector<glm::vec2> aWayPoints)
 		proxyHasArrived = false;
 		updateProxyPosition(1.0f); // set initial proxy position
 		hasArrived = false;
+		state = walking;
 	}
 }
 

@@ -19,8 +19,11 @@ void Settler::GameStep() {
 	if (hasArrived != updatedDwelling) {
 		dwelling->Evolve();
 		updatedDwelling = true;
-		unitEventHandler->AddEvent(new DeleteEvent(posX, posY, this));
+		//unitEventHandler->AddEvent(new DeleteEvent(posX, posY, this));
 	}
+
+	if (state == idle)
+		unitEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
 
 	/*Update animation*/
 	animationSecond += walkingSpeed * 1.80f; // 100fps?

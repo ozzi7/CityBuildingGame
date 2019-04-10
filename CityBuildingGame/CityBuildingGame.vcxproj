@@ -36,6 +36,7 @@
     <ClInclude Include="gameObjects\pine.h" />
     <ClInclude Include="gameObjects\settler.h" />
     <ClInclude Include="gameObjects\spruce.h" />
+    <ClInclude Include="events\gather_resource_event.h" />
     <ClInclude Include="pathfinding\pathfinding.h" />
     <ClInclude Include="pathfinding\pathfinding_object.h" />
     <ClInclude Include="rendering\render_data.h" />
@@ -79,6 +80,7 @@
     <ClCompile Include="gameObjects\lumberjack.cpp" />
     <ClCompile Include="gameObjects\lumberjack_hut.cpp" />
     <ClCompile Include="gameObjects\settler.cpp" />
+    <ClCompile Include="events\gather_resource_event.cpp" />
     <ClCompile Include="pathfinding\pathfinding.cpp" />
     <ClCompile Include="pathfinding\pathfinding_object.cpp" />
     <ClCompile Include="rendering\render_data.cpp" />

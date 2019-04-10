@@ -6,6 +6,8 @@
 
 class Grid;
 
+enum State {idle, walking, working};
+
 class BoneAnimated : public GameObject
 {
 public:
@@ -21,6 +23,8 @@ public:
 
 protected:
 	bool hasArrived = true;
+	State state = idle;
+
 	float walkingSpeed = 0.006f;
 
 private:
