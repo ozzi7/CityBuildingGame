@@ -11,8 +11,8 @@ const unsigned int MAP_WIDTH = 40;
 const unsigned int MAP_HEIGHT = 50;
 
 // rendering
-const unsigned int SHADOW_WIDTH = 1920;
-const unsigned int SHADOW_HEIGHT = 1080;
+const unsigned int SHADOW_WIDTH = 1920*1.5;
+const unsigned int SHADOW_HEIGHT = 1080*1.5;
 
 /* vegetation generation */
 // the higher the tree persistence the higher the frequency of trees => easier to find all types of resources nearby
@@ -34,7 +34,7 @@ const float TREE_SCALE_FACTOR = 0.011f; // to resize all trees
 const float SMALL_TREE_CUTOFF_PERCENTAGE = 30.0f; // [0,100), removes midget trees
 const float PINE_DENSITY = 0.3f;		//0.4 [0 - 100]
 const float JUNIPER_DENSITY = 0.05f;		//0.1 [0 - 100]
-const float OAK_DENSITY = 0.3f;		// 0.4[0 - 100]
+const float OAK_DENSITY = 0.15f;		// 0.4[0 - 100]
 const float SPRUCE_DENSITY= 0.3f;		//0.4 [0 - 100]
 
 /* terrain generation */
