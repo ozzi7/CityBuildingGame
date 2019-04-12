@@ -23,7 +23,7 @@ glm::mat4 Camera::GetViewMatrix()
 glm::mat4 Camera::GetLightViewMatrix()
 {
 	//return glm::lookAt(DirectionalLight.Position, DirectionalLight.Position + lookat, glm::vec3(0.0, 0.0, 1.0));
-	return glm::lookAt(Position + DirectionalLight.PositionOffset, Position + lookat, glm::vec3(0.0, 0.0, 1.0));
+	return glm::lookAt(Position + lookat + DirectionalLight.PositionOffset, Position + lookat, up);
 
 }
 
@@ -34,7 +34,7 @@ glm::mat4 Camera::GetProjectionMatrix()
 
 glm::mat4 Camera::GetLightProjectionMatrix()
 {
-	return glm::ortho(-ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, -1.0f * ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, 0.0f, 200.0f);
+	return glm::ortho(-ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, -1.0f * ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, -100.0f, 100.0f);
 
 }
 
@@ -125,8 +125,6 @@ void Camera::UpdateLightDirection()
 		pow((lookat.y - Position.y + DirectionalLight.PositionOffset.y), 2) +
 		pow((lookat.z - Position.z + DirectionalLight.PositionOffset.z), 2));*/
 
-	DirectionalLight.Direction.x = ((lookat.x - (Position.x + DirectionalLight.PositionOffset.x)));
-	DirectionalLight.Direction.y = ((lookat.y - (Position.y + DirectionalLight.PositionOffset.y)));
-	DirectionalLight.Direction.z = ((lookat.z - (Position.z + DirectionalLight.PositionOffset.z)));
+	DirectionalLight.Direction = -(DirectionalLight.PositionOffset);
 }
 
