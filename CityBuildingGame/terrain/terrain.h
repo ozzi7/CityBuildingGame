@@ -46,7 +46,7 @@ private:
 
 	GLuint VBO, VAO, EBO;
 	unsigned int texture_id_grass;
-	std::string texture_grass = "Grass.bmp";
+	std::string texture_grass = "grass.png";
 
 	int gridHeight;
 	int gridWidth;
