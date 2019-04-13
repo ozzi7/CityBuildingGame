@@ -206,8 +206,8 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 		{
 			/* save building in the coordinate where the 3d object center is located in -> good for rendering */
 			LumberjackHut * lumberjackHut = new LumberjackHut(modelCenter,
-				glm::vec3(0.14f, 0.14f, 0.14f), // rescale
-				glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f));
+				glm::vec3(0.012f, 0.006f, 0.012f), // rescale
+				glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate;
 			
 			lumberjackHut->fromX = fromX;
 			lumberjackHut->fromY = fromY;
@@ -227,7 +227,7 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			lumby->SetLumberjackHut(lumberjackHut);
 
 
-			Pathfinding path = Pathfinding(grid, Coordinate(0, 0), Coordinate((int)modelCenter.x, (int)modelCenter.y));
+			Pathfinding path = Pathfinding(grid, Coordinate(0, 0), Coordinate(lumberjackHut->entranceX, lumberjackHut->entranceY));
 			path.CalculatePath();
 			std::list<Coordinate>pathShorts = path.GetPath();
 			std::vector<glm::vec2> glmPath;
