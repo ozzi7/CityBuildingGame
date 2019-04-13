@@ -37,7 +37,9 @@ Game::~Game()
 void Game::StartGame()
 {
 	std::thread threadGameLoop(&Game::gameLoop, this);
-	SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
+	//std::thread soundThread(&Game::soundThread, this);
+	SetThreadPriority(&threadGameLoop, THREAD_PRIORITY_TIME_CRITICAL);
+	//SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 	
 	renderLoop();
 	threadGameLoop.join();
@@ -139,3 +141,10 @@ void Game::gameLoop()
 		loops++;
 	}
 }
+//void Game::soundLoop()
+//{
+//
+//	while (!glfwWindowShouldClose(window))
+//	{
+//	}
+//}
