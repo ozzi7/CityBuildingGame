@@ -288,9 +288,9 @@ void GameEventHandler::Visit(GatherResourceEvent * aGatherResourceEvent)
 			for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
 			{
 				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
-				Lumberjack* pathLumby = new Lumberjack(glm::vec3((*it).first + 0.5f, (*it).second + 0.5f, grid->gridUnits[(*it).second][(*it).first]->averageHeight),
-					glm::vec3(0.003f, 0.003f, 0.003f), glm::vec3(0, 0, glm::pi<float>()));
-				grid->gridUnits[(*it).second][(*it).first]->movingObjects.push_back(pathLumby);
+				//Lumberjack* pathLumby = new Lumberjack(glm::vec3((*it).first + 0.5f, (*it).second + 0.5f, grid->gridUnits[(*it).second][(*it).first]->averageHeight),
+					//glm::vec3(0.003f, 0.003f, 0.003f), glm::vec3(0, 0, glm::pi<float>()));
+				//grid->gridUnits[(*it).second][(*it).first]->movingObjects.push_back(pathLumby);
 			}
 			aGatherResourceEvent->person->SetNewPath(glmPath);
 			aGatherResourceEvent->person->destination = path.GetDestinationObject();
