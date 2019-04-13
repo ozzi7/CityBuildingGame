@@ -2,9 +2,9 @@
 #pragma once
 #include "play_sound_event.h"
 
-PlaySoundEvent::PlaySoundEvent()
+PlaySoundEvent::PlaySoundEvent(SoundType aSoundType)
 {
-
+	soundType = aSoundType;
 };
 
 void PlaySoundEvent::Accept(SoundEventVisitor* soundEventVisitor)

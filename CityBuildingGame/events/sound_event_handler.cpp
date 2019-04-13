@@ -13,7 +13,10 @@ void SoundEventHandler::LoadFiles()
 	{
 		// TODO: should be in another method to play..
 		music.setLoop(true);
-		//music.play();
+		music.play();
+	}
+	if (buffer.loadFromFile(Path + "/../music/sound_effects/lvlup.ogg"))
+	{
 	}
 }
 // TODO: make playMusicEvent to change music
@@ -45,5 +48,6 @@ bool SoundEventHandler::ProcessEvent()
 }
 void SoundEventHandler::Visit(PlaySoundEvent * aSoundEvent)
 {
-	bool bla = true;
+	sound.setBuffer(buffer);
+	sound.play();
 }

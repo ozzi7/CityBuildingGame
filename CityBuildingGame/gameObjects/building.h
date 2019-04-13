@@ -4,6 +4,7 @@
 #include "visitor.h"
 #include <math.h> 
 #include <vector>
+
 class Building : public GameObject
 {
 public:

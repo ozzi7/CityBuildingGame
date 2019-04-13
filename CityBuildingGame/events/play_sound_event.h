@@ -1,12 +1,14 @@
 #pragma once
 #include <sound_event.h>
 
-//enum BuildingType { LumberjackHutID, DwellingID };
+enum SoundType { SettlerArrivedID };
 
 class PlaySoundEvent : public SoundEvent
 {
 public:
-	PlaySoundEvent();
+	PlaySoundEvent(SoundType);
 
 	void PlaySoundEvent::Accept(SoundEventVisitor* sEventVisitor);
+
+	SoundType soundType;
 };

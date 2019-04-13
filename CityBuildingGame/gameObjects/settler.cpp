@@ -19,6 +19,7 @@ void Settler::GameStep() {
 	/* check if arrived at dwelling*/
 	if (hasArrived && dwelling->evolutionStage == 0) {
 		dwelling->Evolve();
+		soundEventHandler->AddEvent(new PlaySoundEvent(SettlerArrivedID));
 	}
 
 	/*Update animation*/

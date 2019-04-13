@@ -19,4 +19,6 @@ public:
 private:
 	moodycamel::ConcurrentQueue<SoundEvent*> cq;
 	sf::Music music;
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
 };
