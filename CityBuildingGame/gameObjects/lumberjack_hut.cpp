@@ -15,7 +15,7 @@ void LumberjackHut::Evolve()
 {
 	evolutionStage++;
 
-	scale = glm::vec3(0.014f, 0.014f, 0.014f);
+	scale = glm::vec3(0.018f, 0.018f, 0.018f);
 	rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	recalculateModelMatix();
