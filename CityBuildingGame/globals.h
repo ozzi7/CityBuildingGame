@@ -1,7 +1,9 @@
 #pragma once
 
 #include <string>
-#include <event_handler.h>
+#include <game_event_handler.h>
+#include <sound_event_handler.h>
+//#include <logging_event_handler.h>
 
 // user settings
 const unsigned int DEFAULT_SCREEN_WIDTH = 1920;
@@ -62,4 +64,6 @@ extern unsigned int ScreenHeight;
 extern float ScreenRatio;
 // TODO: gameloop fps
 
-extern EventHandler* unitEventHandler; // ?? save in every object?! same with grid?
+extern GameEventHandler* unitEventHandler; // ?? save in every object?! same with grid?
+extern SoundEventHandler* soundEventHandler; // ?? save in every object?! same with grid?
+//extern LoggingEventHandler* logginHandler;

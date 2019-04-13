@@ -8,7 +8,7 @@ GatherResourceEvent::GatherResourceEvent(Resource aResource, BoneAnimated* aPers
 	person = aPerson;
 }
 
-void GatherResourceEvent::Accept(EventVisitor* eventVisitor)
+void GatherResourceEvent::Accept(GameEventVisitor* eventVisitor)
 {
 	eventVisitor->Visit(this);
 }

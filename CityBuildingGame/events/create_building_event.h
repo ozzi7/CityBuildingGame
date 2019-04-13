@@ -1,14 +1,14 @@
 #pragma once
-#include <event.h>
+#include <game_event.h>
 
 enum BuildingType { LumberjackHutID, DwellingID};
 
-class CreateBuildingEvent : public Event
+class CreateBuildingEvent : public GameEvent
 {
 public:
 	CreateBuildingEvent(BuildingType buildingType, float posX, float posY);
 	
-	void CreateBuildingEvent::Accept(EventVisitor* eventVisitor);
+	void CreateBuildingEvent::Accept(GameEventVisitor* eventVisitor);
 	
 	BuildingType buildingType;
 

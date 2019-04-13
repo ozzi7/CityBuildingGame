@@ -9,7 +9,7 @@ CreateBuildingEvent::CreateBuildingEvent(BuildingType aBuildingType, float aPosX
 	buildingType = aBuildingType;
 };
 
-void CreateBuildingEvent::Accept(EventVisitor* eventVisitor)
+void CreateBuildingEvent::Accept(GameEventVisitor* eventVisitor)
 {
 	eventVisitor->Visit(this);
 };
