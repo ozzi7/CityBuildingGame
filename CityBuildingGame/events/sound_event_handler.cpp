@@ -5,12 +5,18 @@
 
 SoundEventHandler::SoundEventHandler()
 {
-	if (!music.openFromFile(Path + "/../music/TownTheme.ogg"))
-	{
-	}
-	music.setLoop(true);
-	music.play();
+
 }
+void SoundEventHandler::LoadFiles()
+{
+	if (music.openFromFile(Path + "/../music/TownTheme.ogg"))
+	{
+		// TODO: should be in another method to play..
+		music.setLoop(true);
+		//music.play();
+	}
+}
+// TODO: make playMusicEvent to change music
 void SoundEventHandler::AddEvent(SoundEvent * e)
 {
 	cq.enqueue(e);
@@ -29,12 +35,12 @@ SoundEvent * SoundEventHandler::GetEvent()
 }
 bool SoundEventHandler::ProcessEvent()
 {
-	//Event * game_event = GetEvent();
-	//if (game_event != NULL)
-	//{
-	//	game_event->Accept(this);
-	//	return true;
-	//}
+	SoundEvent * sound_event = GetEvent();
+	if (sound_event != NULL)
+	{
+		sound_event->Accept(this);
+		return true;
+	}
 	return false;
 }
 void SoundEventHandler::Visit(PlaySoundEvent * aSoundEvent)

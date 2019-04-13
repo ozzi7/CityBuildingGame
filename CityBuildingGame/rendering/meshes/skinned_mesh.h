@@ -34,6 +34,7 @@ private:
 #define NUM_BONES_PER_VERTEX 4
 
 	void BoneTransform(float timeInSeconds, std::vector<glm::mat4>& Transforms);
+	void PrecalculateStringLookupTable();
 
 	struct BoneInfo
 	{
@@ -128,6 +129,8 @@ private:
 	std::vector<std::vector<Texture>> m_Textures;
 
 	std::vector<std::vector<glm::mat4>> Transforms;
+	std::vector<std::string> boneNames;
+
 	const int TRANSFORMS_PER_SECOND = 120;
 
 	std::map<std::string, unsigned int> m_BoneMapping; // maps a bone name to its index

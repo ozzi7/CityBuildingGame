@@ -14,5 +14,4 @@ public:
 
 protected:
 	Dwelling * dwelling;
-	bool updatedDwelling = false;
 };

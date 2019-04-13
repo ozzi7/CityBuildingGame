@@ -512,13 +512,21 @@ void SkinnedMesh::PrecalculateBoneTransforms()
 			Transform[i] = glm::transpose(Transform[i]);
 		Transforms.push_back(Transform);
 	}
+	PrecalculateStringLookupTable();
+}
+void SkinnedMesh::PrecalculateStringLookupTable()
+{
+	for (unsigned int i = 0; i < Transforms[0].size(); ++i)
+	{
+		boneNames.push_back("gBones[" + std::to_string(i) + "]");
+	}
 }
 void SkinnedMesh::BindBoneTransform(float timeInSeconds, Shader* shader)
 {
 	int index = int(fmod(timeInSeconds * (float)TRANSFORMS_PER_SECOND, float(Transforms.size())));
 	for (unsigned int i = 0; i < Transforms[index].size(); ++i)
 	{
-		const std::string name = "gBones[" + std::to_string(i) + "]";
+		const std::string name = boneNames[i];
 		GLuint boneTransform = glGetUniformLocation((*shader).ID, name.c_str());
 
 		glUniformMatrix4fv(boneTransform, 1, GL_TRUE, glm::value_ptr(Transforms[index][i]));

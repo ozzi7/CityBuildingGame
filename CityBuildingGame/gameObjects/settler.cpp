@@ -16,17 +16,9 @@ void Settler::SetDwelling(Dwelling * aDwelling) {
 }
 void Settler::GameStep() {
 
-	if (state == idle) {
-		if (destination)
-			unitEventHandler->AddEvent(new DeleteEvent(destination->posX, destination->posY, destination));
-		unitEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
-	}
-
 	/* check if arrived at dwelling*/
-	if (hasArrived && !updatedDwelling) {
+	if (hasArrived && dwelling->evolutionStage == 0) {
 		dwelling->Evolve();
-		updatedDwelling = true;
-		//unitEventHandler->AddEvent(new DeleteEvent(posX, posY, this));
 	}
 
 	/*Update animation*/

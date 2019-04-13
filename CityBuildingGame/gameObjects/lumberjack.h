@@ -12,6 +12,6 @@ public:
 	void SetLumberjackHut(LumberjackHut * aLumberjackHut);
 	void GameStep();
 
-private:
+protected:
 	LumberjackHut * lumberjackHut;
 };
