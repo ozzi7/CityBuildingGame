@@ -9,6 +9,7 @@ class Grid;
 class SoundEventHandler : public SoundEventVisitor {
 public:
 	SoundEventHandler::SoundEventHandler();
+	void SoundEventHandler::LoadFiles();
 	void AddEvent(SoundEvent*);
 	SoundEvent * GetEvent();
 	bool ProcessEvent();

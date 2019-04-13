@@ -5,12 +5,18 @@
 
 SoundEventHandler::SoundEventHandler()
 {
+
+}
+void SoundEventHandler::LoadFiles()
+{
 	if (music.openFromFile(Path + "/../music/TownTheme.ogg"))
 	{
+		// TODO: should be in another method to play..
 		music.setLoop(true);
 		music.play();
 	}
 }
+// TODO: make playMusicEvent to change music
 void SoundEventHandler::AddEvent(SoundEvent * e)
 {
 	cq.enqueue(e);

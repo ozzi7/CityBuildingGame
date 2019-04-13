@@ -143,6 +143,8 @@ void Game::gameLoop()
 }
 void Game::soundLoop()
 {
+	soundEventHandler->LoadFiles();
+
 	while (!glfwWindowShouldClose(window))
 	{
 		while (soundEventHandler->ProcessEvent());
