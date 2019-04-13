@@ -5,11 +5,11 @@
 
 SoundEventHandler::SoundEventHandler()
 {
-	if (!music.openFromFile(Path + "/../music/TownTheme.ogg"))
+	if (music.openFromFile(Path + "/../music/TownTheme.ogg"))
 	{
+		music.setLoop(true);
+		music.play();
 	}
-	music.setLoop(true);
-	music.play();
 }
 void SoundEventHandler::AddEvent(SoundEvent * e)
 {
@@ -29,12 +29,12 @@ SoundEvent * SoundEventHandler::GetEvent()
 }
 bool SoundEventHandler::ProcessEvent()
 {
-	//Event * game_event = GetEvent();
-	//if (game_event != NULL)
-	//{
-	//	game_event->Accept(this);
-	//	return true;
-	//}
+	SoundEvent * sound_event = GetEvent();
+	if (sound_event != NULL)
+	{
+		sound_event->Accept(this);
+		return true;
+	}
 	return false;
 }
 void SoundEventHandler::Visit(PlaySoundEvent * aSoundEvent)
