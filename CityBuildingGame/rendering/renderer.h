@@ -58,6 +58,9 @@ public:
 		model_path = Path + "/../models/buildings/dwelling/dwelling.dae";
 		instanced_model_dwelling = new InstancedModel(model_path);
 
+		model_path = Path + "/../models/buildings/lumberjack_hut/lumberjack_hut.dae";
+		instanced_model_lumberjack_hut = new InstancedModel(model_path);
+
 		model_path = Path + "/../models/buildings/building_outline.dae";
 		instanced_model_building_outline = new InstancedModel(model_path);
 
@@ -163,7 +166,7 @@ private:
 		instanced_model_oak->Draw(*shader, renderBuffer->oakModels);
 		instanced_model_spruce->Draw(*shader, renderBuffer->spruceModels);
 		instanced_model_juniper->Draw(*shader, renderBuffer->juniperModels);
-		//instanced_model_juniper->Draw(*shader, renderBuffer->lumberjackHutModels);
+		instanced_model_lumberjack_hut->Draw(*shader, renderBuffer->lumberjackHutModels);
 		instanced_model_dwelling->Draw(*shader, renderBuffer->dwellingModels_growth1);
 		instanced_model_building_outline->Draw(*shader, renderBuffer->buildingOutlineModels);
 	}

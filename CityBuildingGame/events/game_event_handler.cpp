@@ -205,9 +205,9 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 		case LumberjackHutID:
 		{
 			/* save building in the coordinate where the 3d object center is located in -> good for rendering */
-			LumberjackHut * lumberjackHut = new LumberjackHut(modelCenter,
+			LumberjackHut * lumberjackHut = new LumberjackHut(modelCenter, // translate
 				glm::vec3(0.012f, 0.006f, 0.012f), // rescale
-				glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate;
+				glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
 			
 			lumberjackHut->fromX = fromX;
 			lumberjackHut->fromY = fromY;
@@ -219,28 +219,28 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			lumberjackHut->entranceY = fromY;
 
 			lumberjackHut->CreateBuildingOutline();
+			lumberjackHut->Evolve();
+			///* create lumberjack */
+			//Lumberjack* lumby = new Lumberjack(glm::vec3(0 + 0.5f, 0 + 0.5f, grid->gridUnits[0][0]->averageHeight),
+			//	glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
 
-			/* create lumberjack */
-			Lumberjack* lumby = new Lumberjack(glm::vec3(0 + 0.5f, 0 + 0.5f, grid->gridUnits[0][0]->averageHeight),
-				glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
-
-			lumby->SetLumberjackHut(lumberjackHut);
+			//lumby->SetLumberjackHut(lumberjackHut);
 
 
-			Pathfinding path = Pathfinding(grid, Coordinate(0, 0), Coordinate(lumberjackHut->entranceX, lumberjackHut->entranceY));
-			path.CalculatePath();
-			std::list<Coordinate>pathShorts = path.GetPath();
-			std::vector<glm::vec2> glmPath;
-			glmPath.push_back(glm::vec2(0.5f, 0.5f));
-			for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
-			{
-				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
-			}
-			lumby->SetNewPath(glmPath);
+			//Pathfinding path = Pathfinding(grid, Coordinate(0, 0), Coordinate(lumberjackHut->entranceX, lumberjackHut->entranceY));
+			//path.CalculatePath();
+			//std::list<Coordinate>pathShorts = path.GetPath();
+			//std::vector<glm::vec2> glmPath;
+			//glmPath.push_back(glm::vec2(0.5f, 0.5f));
+			//for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
+			//{
+			//	glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
+			//}
+			//lumby->SetNewPath(glmPath);
 
 			// store reference to grid
 			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(lumberjackHut);
-			grid->gridUnits[0][0]->movingObjects.push_back(lumby);
+			//grid->gridUnits[0][0]->movingObjects.push_back(lumby);
 			break;
 		}
 	}

@@ -13,7 +13,7 @@ void SoundEventHandler::LoadFiles()
 	{
 		// TODO: should be in another method to play..
 		music.setLoop(true);
-		music.play();
+		//music.play();
 	}
 }
 // TODO: make playMusicEvent to change music
