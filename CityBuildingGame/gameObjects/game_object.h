@@ -2,10 +2,13 @@
 #include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
 #include "visitor.h"
-#include <event_visitor.h>
-#include <event_handler.h>
+#include <game_event_visitor.h>
+#include <sound_event_visitor.h>
+#include <game_event_handler.h>
+#include <sound_event_handler.h>
 
-class EventHandler;
+class GameEventHandler;
+class SoundEventHandler;
 
 class GameObject
 {

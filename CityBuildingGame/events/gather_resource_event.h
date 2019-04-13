@@ -1,16 +1,16 @@
 #pragma once
-#include "event.h"
+#include "game_event.h"
 
 class BoneAnimated;
 
 enum Resource {Wood};
 
-class GatherResourceEvent : public Event
+class GatherResourceEvent : public GameEvent
 {
 public:
 	GatherResourceEvent(Resource aResource, BoneAnimated* aPerson);
 
-	void Accept(EventVisitor* eventVisitor);
+	void Accept(GameEventVisitor* eventVisitor);
 
 	Resource resource;
 	BoneAnimated* person;

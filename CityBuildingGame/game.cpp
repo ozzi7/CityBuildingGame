@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "game.h"
 
-EventHandler* unitEventHandler; // ?? save in every object?! same with grid?
+GameEventHandler* unitEventHandler;
+SoundEventHandler* soundEventHandler;
 
 Game::Game(){};
 
@@ -10,7 +11,9 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	inputHandler = aInputHandler;
 
 	grid = new Grid(MAP_HEIGHT, MAP_WIDTH);
-	unitEventHandler = new EventHandler(grid);
+	unitEventHandler = new GameEventHandler(grid);
+	soundEventHandler = new SoundEventHandler();
+
 	renderBuffers = new TripleBuffer<RenderBuffer>();
 
 	camera = new Camera(glm::vec3(50.0f + MAP_HEIGHT * 0.5f, -50.0f + MAP_WIDTH * 0.5f, 50.0f), window);
