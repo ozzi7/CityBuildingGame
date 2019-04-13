@@ -7,6 +7,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include "globals.h"
 #include "mesh.h"
 #include "shader.h"
 

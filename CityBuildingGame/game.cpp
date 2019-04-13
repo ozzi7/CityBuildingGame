@@ -49,7 +49,7 @@ void Game::renderLoop()
 	glm::mat4 lightSpaceMatrix;
 	
 	camera->DirectionalLight.Color = { 1.0f, 1.0f, 1.0f };
-	camera->DirectionalLight.PositionOffset = glm::vec3{ -0.05f, -0.1f, 0.1f };
+	camera->DirectionalLight.PositionOffset = glm::vec3{ -1.0f, -2.0f, 1.0f };
 	camera->UpdateLightDirection();
 
 	grid->terrain->InitOpenGL(renderer->terrain_shader);

@@ -11,8 +11,10 @@ const unsigned int MAP_WIDTH = 200;
 const unsigned int MAP_HEIGHT = 200;
 
 // rendering
-const unsigned int SHADOW_WIDTH = 1920*1.5;
-const unsigned int SHADOW_HEIGHT = 1080*1.5;
+const unsigned int SHADOW_WIDTH = 2048;
+const unsigned int SHADOW_HEIGHT = 2048;
+
+//#define manualMipmaps;
 
 /* vegetation generation */
 // the higher the tree persistence the higher the frequency of trees => easier to find all types of resources nearby
