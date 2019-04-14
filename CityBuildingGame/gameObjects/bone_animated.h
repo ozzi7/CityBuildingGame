@@ -42,7 +42,6 @@ private:
 	const float maxSpeed = 1.05f * walkingSpeed;
 	const float minSpeed = 0.7f * walkingSpeed;
 	float walkingSpeedMaxChange = walkingSpeed / 500.0f; // /100
-	float previousDistanceToProxy = 1.0f;
 	float distanceToProxy = 1.0f;
 
 	void updateProxyPosition(float speed = -1.0f);
