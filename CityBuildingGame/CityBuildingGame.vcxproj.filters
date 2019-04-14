@@ -38,6 +38,7 @@
     <ClCompile Include="events\play_sound_event.cpp" />
     <ClCompile Include="events\game_event_handler.cpp" />
     <ClCompile Include="events\sound_event_handler.cpp" />
+    <ClCompile Include="rendering\meshes\mipmap_generator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
@@ -91,6 +92,7 @@
     <ClInclude Include="events\game_event.h" />
     <ClInclude Include="events\sound_event_handler.h" />
     <ClInclude Include="events\logging_event_handler.h" />
+    <ClInclude Include="rendering\meshes\mipmap_generator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

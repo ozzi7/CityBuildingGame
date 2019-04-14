@@ -83,7 +83,7 @@ private:
 
 	Grid* grid;
 	Node* start;
-	Node* destination;
+	Node* destination = nullptr;
 	Node* current;
 
 	bool pathFound = false;

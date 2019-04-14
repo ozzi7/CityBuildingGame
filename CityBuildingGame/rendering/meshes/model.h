@@ -10,6 +10,7 @@
 #include "globals.h"
 #include "mesh.h"
 #include "shader.h"
+#include "mipmap_generator.h"
 
 #include <string>
 #include <fstream>
@@ -27,7 +28,7 @@ public:
 
 	// draws the model, and thus all its meshes
 	void Draw(Shader& shader);
-	unsigned int TextureFromFile(const std::string& path);
+	unsigned int TextureFromFile(std::string& path);
 
 protected:
 	void init(const std::string& path);

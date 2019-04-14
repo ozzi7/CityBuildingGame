@@ -54,7 +54,7 @@ private:
 
 	bool objectFound = false;
 	bool unreachable = false;
-	NodeObject* destination;
+	NodeObject* destination = nullptr;
 
 	const unsigned short maxX = (unsigned short)MAP_WIDTH - 1;
 	const unsigned short maxY = (unsigned short)MAP_HEIGHT - 1;

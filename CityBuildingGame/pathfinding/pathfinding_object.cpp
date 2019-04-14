@@ -26,7 +26,8 @@ PathfindingObject::~PathfindingObject()
 		open.pop();
 		delete current;
 	}
-	delete destination;
+	if (destination)
+		delete destination;
 }
 
 void PathfindingObject::FindClosestTree()
@@ -37,7 +38,7 @@ void PathfindingObject::FindClosestTree()
 
 std::list<Coordinate> PathfindingObject::GetPath()
 {
-	std::list<std::pair<unsigned short, unsigned short>> path;
+	std::list<Coordinate> path;
 	if (objectFound)
 	{
 		current = destination;
