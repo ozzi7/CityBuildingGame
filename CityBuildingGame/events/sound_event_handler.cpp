@@ -58,7 +58,7 @@ void SoundEventHandler::Visit(PlaySoundEvent * aSoundEvent)
 		int location = -1;
 		for (int i = 0; i < sounds.size(); i++)
 		{
-			if (!sounds.at(i).Playing)
+			if (!sounds.at(i).getStatus() != sf::Sound::Playing)
 			{
 				location = i;
 				break;

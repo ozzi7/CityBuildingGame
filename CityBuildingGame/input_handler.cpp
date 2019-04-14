@@ -26,7 +26,7 @@ void InputHandler::Mouseclick(int button, int action)
 	if (windowFocused)
 	{
 		if (!action == GLFW_PRESS) { return; }
-		for(int i = 0; i < 100; ++i) // lol 
+		for(int i = 0; i < 300; ++i) // lol 
 			soundEventHandler->AddEvent(new PlaySoundEvent(SettlerArrivedID)); // TODO: 
 		// Test Code
 		glm::vec3 cursor_position = Camera->CursorPositionOnGrid();
