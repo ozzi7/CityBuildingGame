@@ -3,9 +3,10 @@
 #include <sound_event_handler.h>
 #include <grid.h>
 
-SoundEventHandler::SoundEventHandler()
+SoundEventHandler::SoundEventHandler(int nofSounds)
 {
-
+	// note 1 channel must be free for music as well.. total <= 256
+	maxSounds = nofSounds;
 }
 void SoundEventHandler::LoadFiles()
 {
@@ -15,9 +16,7 @@ void SoundEventHandler::LoadFiles()
 		music.setLoop(true);
 		music.play();
 	}
-	if (buffer.loadFromFile(Path + "/../music/sound_effects/lvlup.ogg"))
-	{
-	}
+	soundBuffers[0].loadFromFile(Path + "/../music/sound_effects/lvlup.ogg");
 }
 // TODO: make playMusicEvent to change music
 void SoundEventHandler::AddEvent(SoundEvent * e)
@@ -48,6 +47,34 @@ bool SoundEventHandler::ProcessEvent()
 }
 void SoundEventHandler::Visit(PlaySoundEvent * aSoundEvent)
 {
-	sound.setBuffer(buffer);
-	sound.play();
+	if (sounds.size() == 0)
+	{
+		sounds.push_back(sf::Sound());
+		sounds.at(0).setBuffer(soundBuffers[aSoundEvent->soundType]);
+		sounds.at(0).play();
+	}
+	else
+	{
+		int location = -1;
+		for (int i = 0; i < sounds.size(); i++)
+		{
+			if (!sounds.at(i).Playing)
+			{
+				location = i;
+				break;
+			}
+		}
+
+		if (location != -1)
+		{
+			sounds.at(location).setBuffer(soundBuffers[aSoundEvent->soundType]);
+			sounds.at(location).play();
+		}
+		else if(location == -1 && sounds.size() < maxSounds)
+		{
+			sounds.push_back(sf::Sound());
+			sounds.at(sounds.size() - 1).setBuffer(soundBuffers[aSoundEvent->soundType]);
+			sounds.at(sounds.size() - 1).play();
+		}
+	}
 }

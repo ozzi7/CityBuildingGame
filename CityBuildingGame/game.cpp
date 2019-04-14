@@ -12,7 +12,7 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 
 	grid = new Grid(MAP_HEIGHT, MAP_WIDTH);
 	unitEventHandler = new GameEventHandler(grid);
-	soundEventHandler = new SoundEventHandler();
+	soundEventHandler = new SoundEventHandler(255);
 
 	renderBuffers = new TripleBuffer<RenderBuffer>();
 

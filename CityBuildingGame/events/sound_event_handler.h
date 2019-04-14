@@ -3,12 +3,13 @@
 #include <SFML/Audio.hpp>
 #include <sound_event.h>
 #include <play_sound_event.h>
+#include <map>
 
 class Grid;
 
 class SoundEventHandler : public SoundEventVisitor {
 public:
-	SoundEventHandler::SoundEventHandler();
+	SoundEventHandler::SoundEventHandler(int nofSounds);
 	void SoundEventHandler::LoadFiles();
 	void AddEvent(SoundEvent*);
 	SoundEvent * GetEvent();
@@ -17,8 +18,9 @@ public:
 
 
 private:
+	int maxSounds = 255;
 	moodycamel::ConcurrentQueue<SoundEvent*> cq;
 	sf::Music music;
-	sf::SoundBuffer buffer;
-	sf::Sound sound;
+	std::map<int, sf::SoundBuffer> soundBuffers;
+	std::vector<sf::Sound> sounds;
 };
