@@ -14,7 +14,6 @@
     <ClCompile Include="terrain\terrain.cpp" />
     <ClCompile Include="terrain\tree_generator.cpp" />
     <ClCompile Include="utility\buffer.cpp" />
-    <ClCompile Include="gameObjects\game_object.cpp" />
     <ClCompile Include="rendering\shadow.cpp" />
     <ClCompile Include="rendering\meshes\instanced_mesh.cpp" />
     <ClCompile Include="rendering\meshes\instanced_model.cpp" />
@@ -23,30 +22,29 @@
     <ClCompile Include="rendering\meshes\skinned_mesh.cpp" />
     <ClCompile Include="gameObjects\bone_animated.cpp" />
     <ClCompile Include="gameObjects\lumberjack.cpp" />
-    <ClCompile Include="gameObjects\bone_animated.cpp" />
-    <ClCompile Include="gameObjects\lumberjack.cpp" />
-    <ClCompile Include="gameObjects\lumberjack_hut.cpp" />
-    <ClCompile Include="gameObjects\dwelling.cpp" />
     <ClCompile Include="events\create_building_event.cpp" />
     <ClCompile Include="events\move_event.cpp" />
-    <ClCompile Include="gameObjects\building.cpp" />
     <ClCompile Include="pathfinding\pathfinding.cpp" />
     <ClCompile Include="pathfinding\pathfinding_object.cpp" />
-    <ClCompile Include="gameObjects\settler.cpp" />
     <ClCompile Include="events\delete_event.cpp" />
     <ClCompile Include="events\gather_resource_event.cpp" />
     <ClCompile Include="events\play_sound_event.cpp" />
     <ClCompile Include="events\game_event_handler.cpp" />
     <ClCompile Include="events\sound_event_handler.cpp" />
     <ClCompile Include="rendering\meshes\mipmap_generator.cpp" />
+    <ClCompile Include="gameObjects\bone_animated.cpp" />
+    <ClCompile Include="gameObjects\building.cpp" />
+    <ClCompile Include="gameObjects\dwelling.cpp" />
+    <ClCompile Include="gameObjects\game_object.cpp" />
+    <ClCompile Include="gameObjects\lumberjack.cpp" />
+    <ClCompile Include="gameObjects\lumberjack_hut.cpp" />
+    <ClCompile Include="gameObjects\settler.cpp" />
+    <ClCompile Include="events\logging_event_handler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="game.h" />
-    <ClInclude Include="gameObjects\bone_animated.h" />
-    <ClInclude Include="gameObjects\lumberjack.h" />
-    <ClInclude Include="gameObjects\tree.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="grid.h" />
     <ClInclude Include="input_handler.h" />
@@ -60,11 +58,6 @@
     <ClInclude Include="terrain\tree_generator.h" />
     <ClInclude Include="utility\triple_buffer.h" />
     <ClInclude Include="utility\buffer.h" />
-    <ClInclude Include="gameObjects\game_object.h" />
-    <ClInclude Include="gameObjects\juniper.h" />
-    <ClInclude Include="gameObjects\oak.h" />
-    <ClInclude Include="gameObjects\spruce.h" />
-    <ClInclude Include="gameObjects\pine.h" />
     <ClInclude Include="rendering\shadow.h" />
     <ClInclude Include="rendering\meshes\instanced_mesh.h" />
     <ClInclude Include="rendering\meshes\instanced_model.h" />
@@ -73,14 +66,10 @@
     <ClInclude Include="rendering\meshes\skinned_mesh.h" />
     <ClInclude Include="events\blockingconcurrentqueue.h" />
     <ClInclude Include="events\concurrentqueue.h" />
-    <ClInclude Include="gameObjects\building.h" />
-    <ClInclude Include="gameObjects\lumberjack_hut.h" />
-    <ClInclude Include="gameObjects\dwelling.h" />
     <ClInclude Include="events\create_building_event.h" />
     <ClInclude Include="events\move_event.h" />
     <ClInclude Include="visitor.h" />
     <ClInclude Include="pathfinding\pathfinding.h" />
-    <ClInclude Include="gameObjects\settler.h" />
     <ClInclude Include="events\delete_event.h" />
     <ClInclude Include="events\gather_resource_event.h" />
     <ClInclude Include="pathfinding\pathfinding_object.h" />
@@ -93,6 +82,20 @@
     <ClInclude Include="events\sound_event_handler.h" />
     <ClInclude Include="events\logging_event_handler.h" />
     <ClInclude Include="rendering\meshes\mipmap_generator.h" />
+    <ClInclude Include="gameObjects\bone_animated.h" />
+    <ClInclude Include="gameObjects\building.h" />
+    <ClInclude Include="gameObjects\dwelling.h" />
+    <ClInclude Include="gameObjects\game_object.h" />
+    <ClInclude Include="gameObjects\juniper.h" />
+    <ClInclude Include="gameObjects\lumberjack.h" />
+    <ClInclude Include="gameObjects\lumberjack_hut.h" />
+    <ClInclude Include="gameObjects\oak.h" />
+    <ClInclude Include="gameObjects\pine.h" />
+    <ClInclude Include="gameObjects\settler.h" />
+    <ClInclude Include="gameObjects\spruce.h" />
+    <ClInclude Include="gameObjects\tree.h" />
+    <ClInclude Include="events\logging_event.h" />
+    <ClInclude Include="events\logging_event_visitor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

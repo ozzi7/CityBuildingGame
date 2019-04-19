@@ -3,14 +3,14 @@
 #include <string>
 #include <game_event_handler.h>
 #include <sound_event_handler.h>
-//#include <logging_event_handler.h>
+#include <logging_event_handler.h>
 
 // user settings
 const unsigned int DEFAULT_SCREEN_WIDTH = 1920;
 const unsigned int DEFAULT_SCREEN_HEIGHT = 1080;
 
-const unsigned int MAP_WIDTH = 200;
-const unsigned int MAP_HEIGHT = 200;
+const unsigned int MAP_WIDTH = 20;
+const unsigned int MAP_HEIGHT = 20;
 
 // rendering
 const unsigned int SHADOW_WIDTH = 2048;
@@ -36,10 +36,10 @@ const float SPRUCE_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 
 const float TREE_SCALE_FACTOR = 0.011f; // to resize all trees
 const float SMALL_TREE_CUTOFF_PERCENTAGE = 30.0f; // [0,100), removes midget trees
-const float PINE_DENSITY = 0.0f;		//0.4 [0 - 1]
-const float JUNIPER_DENSITY = 0.0f;		//0.1 [0 - 1]
-const float OAK_DENSITY = 0.0f;		// 0.4[0 - 1]
-const float SPRUCE_DENSITY= 0.0f;		//0.4 [0 - 1]
+const float PINE_DENSITY = 0.4f;		//0.3 [0 - 1]
+const float JUNIPER_DENSITY = 0.1f;		//0.1 [0 - 1]
+const float OAK_DENSITY = 0.15f;		// 0.3[0 - 1]
+const float SPRUCE_DENSITY= 0.4f;		//0.3 [0 - 1]
 
 /* terrain generation */
 const float HILL_HEIGHT = 15.0f;	// ~ 0 - 15
@@ -66,4 +66,4 @@ extern float ScreenRatio;
 
 extern GameEventHandler* unitEventHandler; // ?? save in every object?! same with grid?
 extern SoundEventHandler* soundEventHandler; // ?? save in every object?! same with grid?
-//extern LoggingEventHandler* logginHandler;
+extern LoggingEventHandler* loggingHandler;

@@ -3,6 +3,7 @@
 
 GameEventHandler* unitEventHandler;
 SoundEventHandler* soundEventHandler;
+LoggingEventHandler* loggingEventHandler;
 
 Game::Game(){};
 
@@ -13,6 +14,7 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	grid = new Grid(MAP_HEIGHT, MAP_WIDTH);
 	unitEventHandler = new GameEventHandler(grid);
 	soundEventHandler = new SoundEventHandler(255);
+	loggingEventHandler = new LoggingEventHandler("log", WARNING, INFO);
 
 	renderBuffers = new TripleBuffer<RenderBuffer>();
 
@@ -25,8 +27,13 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 
 	camera->Grid = grid;
 
+	// TODO: this is a test, gettickcount is not cross platform.. 
+	loggingEventHandler->AddEvent(new LoggingEvent(INFO, std::this_thread::get_id(), (unsigned long)GetTickCount(), "Generating map..."));
+
 	MapGenerator* mapGenerator = new MapGenerator(grid);
 	mapGenerator->GenerateMap();
+	loggingEventHandler->AddEvent(new LoggingEvent(ERROR_L, "Done generating map"));
+
 	delete mapGenerator;
 }
 Game::~Game()
@@ -38,11 +45,13 @@ void Game::StartGame()
 {
 	std::thread threadGameLoop(&Game::gameLoop, this);
 	std::thread threadSoundLoop(&Game::soundLoop, this);
+	std::thread threadLoggingLoop(&Game::loggingLoop, this);
 	SetThreadPriority(&threadGameLoop, THREAD_PRIORITY_TIME_CRITICAL);
 	
 	renderLoop();
 	threadGameLoop.join();
 	threadSoundLoop.join();
+	threadLoggingLoop.join();
 }
 
 void Game::renderLoop()
@@ -149,5 +158,13 @@ void Game::soundLoop()
 	{
 		while (soundEventHandler->ProcessEvent());
 		std::this_thread::sleep_for(std::chrono::milliseconds(long((1.0/60.0)*1000))); // blocking queue cant be terminated..
+	}
+}
+void Game::loggingLoop()
+{
+	while (!glfwWindowShouldClose(window))
+	{
+		while (loggingEventHandler->ProcessEvent());
+		std::this_thread::sleep_for(std::chrono::milliseconds(long((1.0 / 60.0) * 1000))); // blocking queue cant be terminated..
 	}
 }

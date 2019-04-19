@@ -292,6 +292,7 @@ void GameEventHandler::Visit(GatherResourceEvent * aGatherResourceEvent)
 					//glm::vec3(0.003f, 0.003f, 0.003f), glm::vec3(0, 0, glm::pi<float>()));
 				//grid->gridUnits[(*it).second][(*it).first]->movingObjects.push_back(pathLumby);
 			}
+			std::cout << (glmPath.size()) << std::endl;
 			aGatherResourceEvent->person->SetNewPath(glmPath);
 			aGatherResourceEvent->person->destination = path.GetDestinationObject();
 			break;

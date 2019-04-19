@@ -22,26 +22,12 @@ void BoneAnimated::UpdatePosition(Grid * grid)
 		{	
 			walkingSpeed += walkingSpeedMaxChange;
 		}
-		//if (previousDistanceToProxy < distanceToProxy && walkingSpeed < maxSpeed) {
-		//	walkingSpeed += walkingSpeedMaxChange;
-		//}
-		/*else if(walkingSpeed > minSpeed)
-		{
-			walkingSpeed -= walkingSpeedMaxChange;
-		}*/
 
 		if (distanceToProxy > walkingSpeed) {
 			// will not reach proxy yet
-		}
-		else {
-			hasArrived = true;
-			state = idle;
-		}
+			float translationX = walkingSpeed* glm::normalize(proxyObjectPos - glm::vec2(position.x, position.y)).x;
+			float translationY = walkingSpeed* glm::normalize(proxyObjectPos - glm::vec2(position.x, position.y)).y;
 
-		float translationX = walkingSpeed* glm::normalize(proxyObjectPos - glm::vec2(position.x, position.y)).x;
-		float translationY = walkingSpeed* glm::normalize(proxyObjectPos - glm::vec2(position.x, position.y)).y;
-
-		if (!std::isnan(translationX) && !std::isnan(translationY)) {
 			position = glm::vec3(position.x + translationX, position.y + translationY, grid->GetHeight(position.x + translationX,
 				position.y + translationY));
 
@@ -49,9 +35,12 @@ void BoneAnimated::UpdatePosition(Grid * grid)
 			if (translationX < 0)
 				rotation.z += 2 * glm::pi<float>();
 			rotation.z = rotation.z - glm::half_pi<float>(); // somehow roation direction is not from +x to +y but +x to -y.. 
-															 //rotation = rotation + 3.1415;
+																 //rotation = rotation + 3.1415;
 		}
 		else {
+			hasArrived = true;
+			state = idle;
+
 			position = glm::vec3(proxyObjectPos.x, proxyObjectPos.y, grid->GetHeight(proxyObjectPos.x, proxyObjectPos.y));
 		}
 
