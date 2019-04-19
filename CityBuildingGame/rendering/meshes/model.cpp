@@ -197,10 +197,18 @@ unsigned int Model::TextureFromFile(std::string& path)
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
 #ifdef  MANUAL_MIPMAPS
-		if (path == "H:/Repositories/CityBuildingGame/x64/Debug/../models/juniper/juniper leaf.png") 
+		if (path == "H:/Repositories/CityBuildingGame/x64/Debug/../models/juniper/bark06.png") 
 		{
-			MipmapGenerator mipmapGenerator = MipmapGenerator(data, width, height);
-			unsigned char* dataNew = mipmapGenerator.ScaledImage(1);
+			unsigned int level = 1;
+			while (width / 2 >= 1)
+			{
+				MipmapGenerator mipmapGenerator = MipmapGenerator(data, width, height);
+				width = width / 2;
+				height = height / 2;
+				unsigned char* dataNew = mipmapGenerator.ScaledImage();
+				glTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, format, GL_UNSIGNED_BYTE, dataNew);
+				level++;
+			}
 
 			//for (int i = 0; i < 4; i++)
 			//	path.pop_back();

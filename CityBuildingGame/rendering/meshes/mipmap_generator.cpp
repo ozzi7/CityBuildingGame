@@ -9,12 +9,12 @@ MipmapGenerator::MipmapGenerator(unsigned char* aData, unsigned int aWidth, unsi
 	height = aHeight;
 }
 
-unsigned char* MipmapGenerator::ScaledImage(unsigned int level)
+unsigned char* MipmapGenerator::ScaledImage()
 {
-	const unsigned int divisor = pow(2, level);
-	const unsigned int resultCount = width * height * 4 / divisor;
+	const unsigned int divisor = 2; //(unsigned int)pow(2, level);
 	const unsigned int targetWidth = width / divisor;
 	const unsigned int targetHeight = height / divisor;
+	const unsigned int resultCount = targetWidth * targetHeight * 4;
 	unsigned char* result = new unsigned char[resultCount];
 
 	unsigned int i = 0;
@@ -22,19 +22,18 @@ unsigned char* MipmapGenerator::ScaledImage(unsigned int level)
 	unsigned int currentHeight = 1;
 	
 	while (i < resultCount) {
-		for (int type = 0; type <= 3; type++)
+		for (int channel = 0; channel <= 3; channel++)
 		{
-			std::cout << +(*result) << std::endl;
-			char color = bilinear(currentWidth, currentHeight, divisor);
+			unsigned char color = bilinear(currentWidth, currentHeight, channel, divisor);
 
-			if (type == 3)
+			if (channel == 3)
 				if (color < 128)
 					color = 0;
 				else
 					color = 255;
 
 			result[i] = color;
-
+			std::cout << "Position: " << i << " Value: " << +result[i] << std::endl;
 			i++;
 		}
 		if (currentWidth < targetWidth)
@@ -48,22 +47,27 @@ unsigned char* MipmapGenerator::ScaledImage(unsigned int level)
 	return result;
 }
 
-char MipmapGenerator::bilinear(unsigned int positionWidth, unsigned int positionHeight, unsigned int divisor)
+unsigned char MipmapGenerator::bilinear(unsigned int positionWidth, unsigned int positionHeight, int channel, unsigned int divisor)
 {
-	float accurateWidth = (positionWidth - 0.5f) * divisor + 0.5f;
-	float accurateHeight = (positionHeight - 0.5f) * divisor + 0.5f;
+	float accurateWidth = (positionWidth - 0.5f) * divisor + channel + 0.5f;
+	float accurateHeight = (positionHeight - 0.5f) * divisor + channel + 0.5f;
 
-	char lowerWidth = data[(int)accurateWidth];
-	char upperWidth = data[(int)accurateWidth + 1];
+	unsigned char upperLeft = data[(((int)accurateHeight - 1) * width + (int)accurateWidth - 1) * 4];
+	unsigned char upperRight = data[(((int)accurateHeight - 1) * width + (int)accurateWidth) * 4];
+	unsigned char lowerLeft = data[((int)accurateHeight * width + (int)accurateWidth - 1) * 4];
+	unsigned char lowerRight = data[((int)accurateHeight * width + (int)accurateWidth) * 4];
+
 	float lowerWidthWeight = accurateWidth - (int)accurateWidth;
 	float upperWidthWeight = 1.0f - lowerWidthWeight;
-
-	char lowerHeight = data[(int)accurateHeight];
-	char upperHeight = data[(int)accurateHeight + 1];
 	float lowerHeightWeight = accurateHeight - (int)accurateHeight;
 	float upperHeightWeight = 1.0f - lowerHeightWeight;
 
-	float color = (lowerWidth * lowerWidthWeight + upperWidth * upperWidthWeight + lowerHeight * lowerHeightWeight + upperHeight * upperHeightWeight) * 0.5f;
+	float upperLeftWeight = lowerWidthWeight * upperHeightWeight;
+	float upperRightWeight = upperWidthWeight * upperHeightWeight;
+	float lowerLeftWeight = lowerWidthWeight * lowerHeightWeight;
+	float lowerRightWeight = upperWidthWeight * lowerHeightWeight;
 
-	return (char)color;
+	float color = upperLeft * upperLeftWeight + upperRight * upperRightWeight + lowerLeft * lowerLeftWeight + lowerRight * lowerRightWeight;
+
+	return (unsigned char)color;
 }
