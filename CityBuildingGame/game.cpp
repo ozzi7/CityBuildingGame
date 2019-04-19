@@ -14,7 +14,7 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	grid = new Grid(MAP_HEIGHT, MAP_WIDTH);
 	unitEventHandler = new GameEventHandler(grid);
 	soundEventHandler = new SoundEventHandler(255);
-	loggingEventHandler = new LoggingEventHandler("log", WARNING, INFO);
+	loggingEventHandler = new LoggingEventHandler(WARNING, INFO);
 
 	renderBuffers = new TripleBuffer<RenderBuffer>();
 
@@ -28,7 +28,7 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	camera->Grid = grid;
 
 	// TODO: this is a test, gettickcount is not cross platform.. 
-	loggingEventHandler->AddEvent(new LoggingEvent(INFO, std::this_thread::get_id(), (unsigned long)GetTickCount(), "Generating map..."));
+	loggingEventHandler->AddEvent(new LoggingEvent(INFO, std::this_thread::get_id(), GetTickCount(), "Generating map..."));
 
 	MapGenerator* mapGenerator = new MapGenerator(grid);
 	mapGenerator->GenerateMap();

@@ -9,7 +9,7 @@ class Grid;
 
 class LoggingEventHandler : public LoggingEventVisitor {
 public:
-	LoggingEventHandler::LoggingEventHandler(std::string filename, LoggingLevel fileLoggingLevel, LoggingLevel consoleLoggingLevel);
+	LoggingEventHandler::LoggingEventHandler(LoggingLevel fileLoggingLevel, LoggingLevel consoleLoggingLevel);
 	void AddEvent(LoggingEvent*);
 	LoggingEvent * GetEvent();
 	bool ProcessEvent();
@@ -23,4 +23,5 @@ private:
 	LoggingLevel consoleLoggingLevel;
 
 	std::fstream file;
+	std::map<int, std::string> logging_levels;
 };

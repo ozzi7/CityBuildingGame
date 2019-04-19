@@ -8,7 +8,7 @@ enum LoggingLevel { CRITICAL=0, ERROR_L=1, WARNING=2, INFO=3, DEBUG=4, NOTSET=5 
 class LoggingEvent
 {
 public:
-	LoggingEvent(LoggingLevel aLoggingLevel, std::thread::id aThread_id, unsigned long aTimestamp, std::string aLog_text)
+	LoggingEvent(LoggingLevel aLoggingLevel, std::thread::id aThread_id, DWORD aTimestamp, std::string aLog_text)
 	{
 		loggingLevel = aLoggingLevel;
 		thread_id = aThread_id;
@@ -19,7 +19,7 @@ public:
 	{
 		loggingLevel = aLoggingLevel;
 		thread_id = std::this_thread::get_id();
-		timestamp = (unsigned long)GetTickCount();
+		timestamp = GetTickCount();
 		log_text = aLog_text;
 	}
 	void LoggingEvent::Accept(LoggingEventVisitor* eventVisitor)
@@ -29,6 +29,6 @@ public:
 	
 	LoggingLevel loggingLevel;
 	std::thread::id thread_id;
-	unsigned long timestamp;
+	DWORD timestamp;
 	std::string log_text;
 };
