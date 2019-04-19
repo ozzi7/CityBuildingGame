@@ -199,16 +199,19 @@ unsigned int Model::TextureFromFile(std::string& path)
 #ifdef  MANUAL_MIPMAPS
 		if (path == "H:/Repositories/CityBuildingGame/x64/Debug/../models/juniper/juniper leaf.png") 
 		{
-			for (int i = 0; i < 4; i++)
-				path.pop_back();
-			for (int i = 1; i < 8; i++)
-			{
-				std::string pathNew = path + std::to_string(i) + ".png";
-				data = stbi_load(pathNew.c_str(), &width, &height, &nrComponents, 0);
-				if (data) {
-					glTexImage2D(GL_TEXTURE_2D, i, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-				}
-			}
+			MipmapGenerator mipmapGenerator = MipmapGenerator(data, width, height);
+			unsigned char* dataNew = mipmapGenerator.ScaledImage(1);
+
+			//for (int i = 0; i < 4; i++)
+			//	path.pop_back();
+			//for (int i = 1; i < 8; i++)
+			//{
+			//	std::string pathNew = path + std::to_string(i) + ".png";
+			//	data = stbi_load(pathNew.c_str(), &width, &height, &nrComponents, 0);
+			//	if (data) {
+			//		glTexImage2D(GL_TEXTURE_2D, i, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+			//	}
+			//}
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 		}
 
@@ -218,13 +221,10 @@ unsigned int Model::TextureFromFile(std::string& path)
 #ifndef MANUAL_MIPMAPS
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 #endif
-
-
-		//glGenerateMipmap(GL_TEXTURE_2D);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		stbi_image_free(data);
 	}
