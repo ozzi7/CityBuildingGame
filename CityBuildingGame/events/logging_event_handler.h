@@ -4,6 +4,7 @@
 #include <map>
 #include <ctime>
 #include <fstream>
+#include <iomanip>
 
 class Grid;
 
