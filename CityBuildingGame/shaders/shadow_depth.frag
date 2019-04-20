@@ -11,6 +11,6 @@ in vec2 TexCoords;
 void main()
 {   
 	vec4 texColor = texture(material.diffuse, TexCoords);
-	if(texColor.a < 0.5)
+	if(texColor.a < 0.9)
 		discard;
 }  

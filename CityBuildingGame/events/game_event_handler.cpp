@@ -176,30 +176,27 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			dwelling->entranceY = fromY;
 
 			dwelling->CreateBuildingOutline();
-			/* create settler and link them.. TODO:*/
-			Settler* settler = new Settler(glm::vec3(0 + 0.5f, 0 + 0.5f, grid->gridUnits[0][0]->averageHeight),
-				glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
 
-			settler->SetDwelling(dwelling);
-
-
-			Pathfinding path = Pathfinding(grid, Coordinate(0, 0), Coordinate(dwelling->entranceX, dwelling->entranceY));
-			path.CalculatePath();
+			PathfindingObject path = PathfindingObject(grid, Coordinate(dwelling->entranceX, dwelling->entranceY));
+			path.FindClosestEdge();
 			std::list<Coordinate>pathShorts = path.GetPath();
-			std::vector<glm::vec2> glmPath;
-			glmPath.push_back(glm::vec2(0.5f, 0.5f));
-			for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
-			{
-				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
-				Lumberjack* pathLumby = new Lumberjack(glm::vec3((*it).first + 0.5f, (*it).second + 0.5f, grid->gridUnits[(*it).second][(*it).first]->averageHeight),
-					glm::vec3(0.45f,0.45f,0.45f), glm::vec3(0, 0, glm::pi<float>()));
-				grid->gridUnits[(*it).second][(*it).first]->movingObjects.push_back(pathLumby);
-			}
-			settler->SetNewPath(glmPath);
+			if (!pathShorts.empty()) {
+				std::vector<glm::vec2> glmPath;
+				for (std::list<Coordinate>::iterator it = --pathShorts.end(); it != pathShorts.begin(); it--)
+					glmPath.push_back(glm::vec2((*it).first + 0.5f, (*it).second) + 0.5f);
+				glmPath.push_back(glm::vec2(pathShorts.front().first + 0.5f, pathShorts.front().second + 0.5f));
 
-			/* save building in the coordinate where the 3d object center is located in->good for rendering */
-			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(dwelling);
-			grid->gridUnits[0][0]->movingObjects.push_back(settler);
+				Settler* settler = new Settler(glm::vec3(pathShorts.back().first + 0.5f, pathShorts.back().second + 0.5f,
+					grid->gridUnits[pathShorts.back().second][pathShorts.back().first]->averageHeight),
+					glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
+
+				settler->SetDwelling(dwelling);
+				settler->SetNewPath(glmPath);
+
+				/* save building in the coordinate where the 3d object center is located in->good for rendering */
+				grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(dwelling);
+				grid->gridUnits[pathShorts.back().second][pathShorts.back().first]->movingObjects.push_back(settler);
+			}
 			break;
 		}
 		case LumberjackHutID:
@@ -258,15 +255,6 @@ void GameEventHandler::Visit(DeleteEvent * aDeleteEvent)
 	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.begin(); it !=
 		grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.end(); ++it) {
 		if ((*it) == aDeleteEvent->gameObject) {
-			
-			// to be moved into separate class 
-			try {
-				Tree* tree = dynamic_cast<Tree*>(*it);
-				grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->hasTree = false;
-			}
-			catch (const std::exception& e) {}
-			// ********************** //
-
 			it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.erase(it);
 			break;
 		}
@@ -288,11 +276,9 @@ void GameEventHandler::Visit(GatherResourceEvent * aGatherResourceEvent)
 			for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
 			{
 				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
-				//Lumberjack* pathLumby = new Lumberjack(glm::vec3((*it).first + 0.5f, (*it).second + 0.5f, grid->gridUnits[(*it).second][(*it).first]->averageHeight),
-					//glm::vec3(0.003f, 0.003f, 0.003f), glm::vec3(0, 0, glm::pi<float>()));
-				//grid->gridUnits[(*it).second][(*it).first]->movingObjects.push_back(pathLumby);
 			}
 			std::cout << (glmPath.size()) << std::endl;
+			grid->gridUnits[path.GetDestinationObject()->posY][path.GetDestinationObject()->posX]->hasTree = false;
 			aGatherResourceEvent->person->SetNewPath(glmPath);
 			aGatherResourceEvent->person->destination = path.GetDestinationObject();
 			break;

@@ -8,7 +8,7 @@
 
 typedef std::pair<unsigned short, unsigned short> Coordinate;
 
-enum ObjectType { tree };
+enum ObjectType { edge, tree };
 
 struct NodeObject
 {
@@ -39,6 +39,7 @@ public:
 	~PathfindingObject();
 
 	void FindClosestTree();
+	void FindClosestEdge();
 
 	std::list<Coordinate> GetPath();
 	GameObject* GetDestinationObject();

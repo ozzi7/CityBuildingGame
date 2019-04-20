@@ -18,6 +18,7 @@ void Lumberjack::GameStep() {
 	if (state == idle) {
 		if (destination)
 			unitEventHandler->AddEvent(new DeleteEvent(destination->posX, destination->posY, destination));
+
 		unitEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
 	}
 

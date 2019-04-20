@@ -36,6 +36,12 @@ void PathfindingObject::FindClosestTree()
 	calculatePath();
 }
 
+void PathfindingObject::FindClosestEdge()
+{
+	objectType = edge;
+	calculatePath();
+}
+
 std::list<Coordinate> PathfindingObject::GetPath()
 {
 	std::list<Coordinate> path;
@@ -109,6 +115,19 @@ void PathfindingObject::checkObjectFound(Coordinate coordinate)
 	{
 	case tree:
 		if (grid->gridUnits[coordinate.second][coordinate.first]->hasTree)
+		{
+			objectFound = true;
+			destination = new NodeObject();
+			destination->coordinate = coordinate;
+			destination->parent = current;
+		}
+		break;
+
+	case edge:
+		if (coordinate.first == maxX || 
+			coordinate.first == 0 ||
+			coordinate.second == maxY ||
+			coordinate.second == 0)
 		{
 			objectFound = true;
 			destination = new NodeObject();
