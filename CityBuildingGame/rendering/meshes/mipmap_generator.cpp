@@ -16,6 +16,7 @@ unsigned char* MipmapGenerator::ScaledImage()
 	const unsigned int targetHeight = height / divisor;
 	const unsigned int resultCount = targetWidth * targetHeight * 4;
 	unsigned char* result = new unsigned char[resultCount];
+	resultUnrounded = new unsigned char[resultCount];
 
 	unsigned int i = 0;
 	unsigned int currentWidth = 1;
@@ -26,8 +27,10 @@ unsigned char* MipmapGenerator::ScaledImage()
 		{
 			unsigned char color = bilinear(currentWidth, currentHeight, channel, divisor);
 
+			resultUnrounded[i] = color;
+
 			if (channel == 3)
-				if (color <= 127)
+				if (color <= ALPHA_CUTOFF)
 					color = 0;
 				else
 					color = 255;

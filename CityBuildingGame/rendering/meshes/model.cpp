@@ -199,7 +199,8 @@ unsigned int Model::TextureFromFile(std::string& path)
 #ifdef  MANUAL_MIPMAPS
 		//if (path == "H:/Repositories/CityBuildingGame/x64/Debug/../models/juniper/bark06.png")
 		//{
-			if (format == GL_RGBA) {
+			if (format == GL_RGBA) 
+			{
 				unsigned int level = 1;
 				while (width / 2 >= 1)
 				{
@@ -208,13 +209,17 @@ unsigned int Model::TextureFromFile(std::string& path)
 					height = height / 2;
 					data = mipmapGenerator.ScaledImage();
 					glTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+					data = mipmapGenerator.resultUnrounded;
 					level++;	
 				}
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 			}
-			else
+			else 
+			{
 				glGenerateMipmap(GL_TEXTURE_2D);
-
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+			}
 
 		//}
 		//else

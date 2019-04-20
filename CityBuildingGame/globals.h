@@ -17,6 +17,7 @@ const unsigned int SHADOW_WIDTH = 2048;
 const unsigned int SHADOW_HEIGHT = 2048;
 
 #define MANUAL_MIPMAPS true;
+const unsigned int ALPHA_CUTOFF = 70; // [0-255]
 
 /* vegetation generation */
 // the higher the tree persistence the higher the frequency of trees => easier to find all types of resources nearby

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include "globals.h"
 
 class MipmapGenerator
 {
@@ -9,6 +10,7 @@ public:
 
 	unsigned char* ScaledImage();
 
+	unsigned char* resultUnrounded = nullptr;
 private:
 	unsigned char bilinear(unsigned int positionWidth, unsigned int positionHeight, int channel, unsigned int divisor);
 
