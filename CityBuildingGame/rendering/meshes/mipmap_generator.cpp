@@ -27,20 +27,20 @@ unsigned char* MipmapGenerator::ScaledImage()
 			unsigned char color = bilinear(currentWidth, currentHeight, channel, divisor);
 
 			if (channel == 3)
-				if (color < 128)
+				if (color <= 127)
 					color = 0;
 				else
 					color = 255;
 
 			result[i] = color;
-			std::cout << "Position: " << i << " Value: " << +result[i] << std::endl;
+			//std::cout << "Position: " << i << " Value: " << +result[i] << std::endl;
 			i++;
 		}
 		if (currentWidth < targetWidth)
 			currentWidth++;
 		else
 		{
-			currentWidth = 0;
+			currentWidth = 1;
 			currentHeight++;
 		}
 	}
@@ -49,13 +49,13 @@ unsigned char* MipmapGenerator::ScaledImage()
 
 unsigned char MipmapGenerator::bilinear(unsigned int positionWidth, unsigned int positionHeight, int channel, unsigned int divisor)
 {
-	float accurateWidth = (positionWidth - 0.5f) * divisor + channel + 0.5f;
-	float accurateHeight = (positionHeight - 0.5f) * divisor + channel + 0.5f;
+	float accurateWidth = (positionWidth - 0.5f) * divisor + 0.5f;
+	float accurateHeight = (positionHeight - 0.5f) * divisor + 0.5f;
 
-	unsigned char upperLeft = data[(((int)accurateHeight - 1) * width + (int)accurateWidth - 1) * 4];
-	unsigned char upperRight = data[(((int)accurateHeight - 1) * width + (int)accurateWidth) * 4];
-	unsigned char lowerLeft = data[((int)accurateHeight * width + (int)accurateWidth - 1) * 4];
-	unsigned char lowerRight = data[((int)accurateHeight * width + (int)accurateWidth) * 4];
+	unsigned char upperLeft = data[((int)accurateHeight - 1) * width * 4 + ((int)accurateWidth - 1) * 4 + channel];
+	unsigned char upperRight = data[((int)accurateHeight - 1) * width * 4 + (int)accurateWidth * 4  + channel];
+	unsigned char lowerLeft = data[(int)accurateHeight * width * 4 + ((int)accurateWidth - 1) * 4 + channel];
+	unsigned char lowerRight = data[(int)accurateHeight * width * 4 + (int)accurateWidth * 4 + channel];
 
 	float lowerWidthWeight = accurateWidth - (int)accurateWidth;
 	float upperWidthWeight = 1.0f - lowerWidthWeight;
@@ -69,5 +69,11 @@ unsigned char MipmapGenerator::bilinear(unsigned int positionWidth, unsigned int
 
 	float color = upperLeft * upperLeftWeight + upperRight * upperRightWeight + lowerLeft * lowerLeftWeight + lowerRight * lowerRightWeight;
 
-	return (unsigned char)color;
+	//if (color > 0) {
+	//	std::cout << "Upper Left: " << ((int)accurateHeight - 1) * width * 4 + ((int)accurateWidth - 1) * 4 + channel << " Value: " << (float)upperLeft << std::endl;
+	//	std::cout << "Upper Right: " << ((int)accurateHeight - 1) * width * 4 + (int)accurateWidth * 4 + channel << " Value: " << (float)upperRight << std::endl;
+	//	std::cout << "Lower Left: " << (int)accurateHeight * width * 4 + ((int)accurateWidth - 1) * 4 + channel << " Value: " << (float)lowerLeft << std::endl;
+	//	std::cout << "Lower Right: " << (int)accurateHeight * width * 4 + (int)accurateWidth * 4 + channel << " Value: " << (float)lowerRight << std::endl;
+	//}
+	return (unsigned char)round(color);
 }

@@ -197,34 +197,28 @@ unsigned int Model::TextureFromFile(std::string& path)
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
 #ifdef  MANUAL_MIPMAPS
-		if (path == "H:/Repositories/CityBuildingGame/x64/Debug/../models/juniper/bark06.png") 
-		{
-			unsigned int level = 1;
-			while (width / 2 >= 1)
-			{
-				MipmapGenerator mipmapGenerator = MipmapGenerator(data, width, height);
-				width = width / 2;
-				height = height / 2;
-				unsigned char* dataNew = mipmapGenerator.ScaledImage();
-				glTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, format, GL_UNSIGNED_BYTE, dataNew);
-				level++;
+		//if (path == "H:/Repositories/CityBuildingGame/x64/Debug/../models/juniper/bark06.png")
+		//{
+			if (format == GL_RGBA) {
+				unsigned int level = 1;
+				while (width / 2 >= 1)
+				{
+					MipmapGenerator mipmapGenerator = MipmapGenerator(data, width, height);
+					width = width / 2;
+					height = height / 2;
+					data = mipmapGenerator.ScaledImage();
+					glTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+					level++;	
+				}
 			}
+			else
+				glGenerateMipmap(GL_TEXTURE_2D);
 
-			//for (int i = 0; i < 4; i++)
-			//	path.pop_back();
-			//for (int i = 1; i < 8; i++)
-			//{
-			//	std::string pathNew = path + std::to_string(i) + ".png";
-			//	data = stbi_load(pathNew.c_str(), &width, &height, &nrComponents, 0);
-			//	if (data) {
-			//		glTexImage2D(GL_TEXTURE_2D, i, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-			//	}
-			//}
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-		}
 
-		else
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//}
+		//else
+		//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 #endif
 #ifndef MANUAL_MIPMAPS
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
