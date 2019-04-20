@@ -51,5 +51,6 @@ private:
 	// Continuously redraws all visible objects
 	void renderLoop();
 
+	void loggingLoop();
 	void soundLoop();
 };

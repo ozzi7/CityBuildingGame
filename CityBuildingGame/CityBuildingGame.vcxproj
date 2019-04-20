@@ -26,7 +26,9 @@
     <ClInclude Include="events\game_event_handler.h" />
     <ClInclude Include="events\game_event.h" />
     <ClInclude Include="events\game_event_visitor.h" />
+    <ClInclude Include="events\logging_event.h" />
     <ClInclude Include="events\logging_event_handler.h" />
+    <ClInclude Include="events\logging_event_visitor.h" />
     <ClInclude Include="events\move_event.h" />
     <ClInclude Include="events\play_sound_event.h" />
     <ClInclude Include="events\sound_event.h" />
@@ -77,6 +79,7 @@
     <ClCompile Include="events\create_building_event.cpp" />
     <ClCompile Include="events\delete_event.cpp" />
     <ClCompile Include="events\game_event_handler.cpp" />
+    <ClCompile Include="events\logging_event_handler.cpp" />
     <ClCompile Include="events\move_event.cpp" />
     <ClCompile Include="events\play_sound_event.cpp" />
     <ClCompile Include="events\sound_event_handler.cpp" />

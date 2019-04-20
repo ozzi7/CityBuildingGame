@@ -3,14 +3,14 @@
 #include <string>
 #include <game_event_handler.h>
 #include <sound_event_handler.h>
-//#include <logging_event_handler.h>
+#include <logging_event_handler.h>
 
 // user settings
 const unsigned int DEFAULT_SCREEN_WIDTH = 1920;
 const unsigned int DEFAULT_SCREEN_HEIGHT = 1080;
 
-const unsigned int MAP_WIDTH = 200;
-const unsigned int MAP_HEIGHT = 200;
+const unsigned int MAP_WIDTH = 40;
+const unsigned int MAP_HEIGHT = 40;
 
 // rendering
 const unsigned int SHADOW_WIDTH = 2048;
@@ -67,4 +67,4 @@ extern float ScreenRatio;
 
 extern GameEventHandler* unitEventHandler; // ?? save in every object?! same with grid?
 extern SoundEventHandler* soundEventHandler; // ?? save in every object?! same with grid?
-//extern LoggingEventHandler* logginHandler;
+extern LoggingEventHandler* loggingHandler;

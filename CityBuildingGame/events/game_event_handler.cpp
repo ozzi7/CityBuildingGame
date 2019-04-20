@@ -178,7 +178,7 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			dwelling->CreateBuildingOutline();
 			/* create settler and link them.. TODO:*/
 			Settler* settler = new Settler(glm::vec3(0 + 0.5f, 0 + 0.5f, grid->gridUnits[0][0]->averageHeight),
-				glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
+				glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
 
 			settler->SetDwelling(dwelling);
 
@@ -192,7 +192,7 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			{
 				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
 				Lumberjack* pathLumby = new Lumberjack(glm::vec3((*it).first + 0.5f, (*it).second + 0.5f, grid->gridUnits[(*it).second][(*it).first]->averageHeight),
-					glm::vec3(0.003f, 0.003f, 0.003f), glm::vec3(0, 0, glm::pi<float>()));
+					glm::vec3(0.45f,0.45f,0.45f), glm::vec3(0, 0, glm::pi<float>()));
 				grid->gridUnits[(*it).second][(*it).first]->movingObjects.push_back(pathLumby);
 			}
 			settler->SetNewPath(glmPath);
@@ -292,6 +292,7 @@ void GameEventHandler::Visit(GatherResourceEvent * aGatherResourceEvent)
 					//glm::vec3(0.003f, 0.003f, 0.003f), glm::vec3(0, 0, glm::pi<float>()));
 				//grid->gridUnits[(*it).second][(*it).first]->movingObjects.push_back(pathLumby);
 			}
+			std::cout << (glmPath.size()) << std::endl;
 			aGatherResourceEvent->person->SetNewPath(glmPath);
 			aGatherResourceEvent->person->destination = path.GetDestinationObject();
 			break;
