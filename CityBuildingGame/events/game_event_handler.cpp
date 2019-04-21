@@ -240,14 +240,14 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 				
 				if (pathShorts.size() != 0) {
 					std::vector<glm::vec2> glmPath;
-					for (std::list<Coordinate>::iterator it = --pathShorts.end(); it != pathShorts.begin(); it--)
-						glmPath.push_back(glm::vec2((*it).first + 0.5f, (*it).second) + 0.5f);
 					glmPath.push_back(glm::vec2(pathShorts.front().first + 0.5f, pathShorts.front().second + 0.5f));
+					for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
+						glmPath.push_back(glm::vec2((*it).first + 0.5f, (*it).second) + 0.5f);
 
 					lumby->SetNewPath(glmPath);
 					lumby->state = returningHome;
 					lumby->SetLumberjackHut(lumberjackHut);
-					lumby->destination = path.GetDestinationObject();
+					lumby->destination = lumberjackHut;
 				}
 				else
 				{
@@ -300,14 +300,22 @@ void GameEventHandler::Visit(GatherResourceEvent * aGatherResourceEvent)
 		case Wood:
 			path.FindClosestTree();
 			pathShorts = path.GetPath();
-			glmPath.push_back(glm::vec2(aGatherResourceEvent->person->posX, aGatherResourceEvent->person->posY));
-			for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
-			{
-				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
+
+			if (pathShorts.size() != 0) {
+				glmPath.push_back(glm::vec2(aGatherResourceEvent->person->posX, aGatherResourceEvent->person->posY));
+				for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
+				{
+					glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
+				}
+				grid->gridUnits[path.GetDestinationObject()->posY][path.GetDestinationObject()->posX]->hasTree = false;
+				aGatherResourceEvent->person->SetNewPath(glmPath);
+				aGatherResourceEvent->person->destination = path.GetDestinationObject();
+				aGatherResourceEvent->person->state = walkingToTarget;
 			}
-			grid->gridUnits[path.GetDestinationObject()->posY][path.GetDestinationObject()->posX]->hasTree = false;
-			aGatherResourceEvent->person->SetNewPath(glmPath);
-			aGatherResourceEvent->person->destination = path.GetDestinationObject();
+			else
+			{
+				aGatherResourceEvent->person->state = idle;
+			}
 			break;
 
 		default:
@@ -333,7 +341,7 @@ void GameEventHandler::Visit(ReturnHomeEvent * aReturnHomeEvent)
 				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
 			}
 			lumby->SetNewPath(glmPath);
-
+			lumby->state = returningHome;
 			break;
 	}
 }
