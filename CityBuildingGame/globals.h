@@ -65,6 +65,8 @@ extern unsigned int ScreenHeight;
 extern float ScreenRatio;
 // TODO: gameloop fps
 
+const bool SOUND_ENABLED = false;
+const bool MUSIC_ENABLED = false;
 extern GameEventHandler* unitEventHandler; // ?? save in every object?! same with grid?
 extern SoundEventHandler* soundEventHandler; // ?? save in every object?! same with grid?
 extern LoggingEventHandler* loggingHandler;
