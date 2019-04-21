@@ -24,13 +24,13 @@ const float PERSISTENCE_TREES = 0.8f;
 
 // defines on which height the species grows the most in percentage of the terrain height
 const float PINE_GAUSSIAN_MEAN_PERCENTAGE = 82.0f;		// [0 - 100]
-const float JUNIPER_GAUSSIAN_MEAN_PERCENTAGE = 57.0f;		// [0 - 100]
+const float JUNIPER_GAUSSIAN_MEAN_PERCENTAGE = 57.0f;	// [0 - 100]
 const float OAK_GAUSSIAN_MEAN_PERCENTAGE = 37.0f;		// [0 - 100]
-const float SPRUCE_GAUSSIAN_MEAN_PERCENTAGE = 72.0f;		// [0 - 100]
+const float SPRUCE_GAUSSIAN_MEAN_PERCENTAGE = 72.0f;	// [0 - 100]
 
 // high variance => tree can grow at a larger spectrum of height around its mean
 const float PINE_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
-const float JUNIPER_GAUSSIAN_VARIANCE_PERCENTAGE = 1.0f;		// [0 - 100]
+const float JUNIPER_GAUSSIAN_VARIANCE_PERCENTAGE = 1.0f;	// [0 - 100]
 const float OAK_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 const float SPRUCE_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 
