@@ -31,6 +31,7 @@
     <ClInclude Include="events\logging_event_visitor.h" />
     <ClInclude Include="events\move_event.h" />
     <ClInclude Include="events\play_sound_event.h" />
+    <ClInclude Include="events\return_home_event.h" />
     <ClInclude Include="events\sound_event.h" />
     <ClInclude Include="events\sound_event_handler.h" />
     <ClInclude Include="events\sound_event_visitor.h" />
@@ -49,6 +50,7 @@
     <ClInclude Include="pathfinding\pathfinding_object.h" />
     <ClInclude Include="rendering\render_data.h" />
     <ClInclude Include="rendering\shadow.h" />
+    <ClInclude Include="resources.h" />
     <ClInclude Include="utility\buffer.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="game.h" />
@@ -82,6 +84,7 @@
     <ClCompile Include="events\logging_event_handler.cpp" />
     <ClCompile Include="events\move_event.cpp" />
     <ClCompile Include="events\play_sound_event.cpp" />
+    <ClCompile Include="events\return_home_event.cpp" />
     <ClCompile Include="events\sound_event_handler.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameObjects\bone_animated.cpp" />
@@ -106,6 +109,7 @@
     <ClCompile Include="rendering\shader.cpp" />
     <ClCompile Include="rendering\meshes\skinned_mesh.cpp" />
     <ClCompile Include="rendering\shadow.cpp" />
+    <ClCompile Include="resources.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

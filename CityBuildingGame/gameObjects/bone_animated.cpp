@@ -39,7 +39,6 @@ void BoneAnimated::UpdatePosition(Grid * grid)
 		}
 		else {
 			hasArrived = true;
-			state = idle;
 
 			position = glm::vec3(proxyObjectPos.x, proxyObjectPos.y, grid->GetHeight(proxyObjectPos.x, proxyObjectPos.y));
 		}
@@ -92,22 +91,13 @@ void BoneAnimated::updateProxyPosition(float speed)
 void BoneAnimated::SetNewPath(std::vector<glm::vec2> aWayPoints)
 {
 	wayPoints = aWayPoints;
-
 	proxyWPIdx = 0;
 
-	if (wayPoints.size() == 1) {
-		/* Can be used to set a position */
-		proxyHasArrived = true;
-		hasArrived = true;
-		state = idle;
-		proxyObjectPos = glm::vec2(wayPoints[0].x, wayPoints[0].y);
-	}
-	else if (wayPoints.size() >= 2) {
+	if (wayPoints.size() >= 2) {
 		proxyObjectPos = glm::vec2(wayPoints[0].x, wayPoints[0].y);
 		proxyHasArrived = false;
 		updateProxyPosition(1.0f); // set initial proxy position
 		hasArrived = false;
-		state = walking;
 	}
 }
 
@@ -115,6 +105,7 @@ void BoneAnimated::UpdatePath(std::vector<glm::vec2> aWayPoints)
 {
 	// TODO (if the path changes without having arrived yet..maybe we can merge it with setnewpath..)
 }
+
 void BoneAnimated::updateGridUnit()
 {
 	if ((int)position.x != posX || (int)position.y != posY) {

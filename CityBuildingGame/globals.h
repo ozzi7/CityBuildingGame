@@ -4,6 +4,7 @@
 #include <game_event_handler.h>
 #include <sound_event_handler.h>
 #include <logging_event_handler.h>
+#include <resources.h>
 
 // user settings
 const unsigned int DEFAULT_SCREEN_WIDTH = 1920;
@@ -68,4 +69,6 @@ const bool SOUND_ENABLED = false;
 const bool MUSIC_ENABLED = false;
 extern GameEventHandler* unitEventHandler; // ?? save in every object?! same with grid?
 extern SoundEventHandler* soundEventHandler; // ?? save in every object?! same with grid?
-extern LoggingEventHandler* loggingHandler;
+extern LoggingEventHandler* loggingEventHandler;
+
+extern Resources* resources;

@@ -4,6 +4,7 @@
 GameEventHandler* unitEventHandler;
 SoundEventHandler* soundEventHandler;
 LoggingEventHandler* loggingEventHandler;
+Resources * resources;
 
 Game::Game(){};
 
@@ -12,9 +13,10 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	inputHandler = aInputHandler;
 
 	grid = new Grid(MAP_HEIGHT, MAP_WIDTH);
+	loggingEventHandler = new LoggingEventHandler(WARNING, INFO);
 	unitEventHandler = new GameEventHandler(grid);
 	soundEventHandler = new SoundEventHandler(255);
-	loggingEventHandler = new LoggingEventHandler(WARNING, INFO);
+	resources = new Resources();
 
 	renderBuffers = new TripleBuffer<RenderBuffer>();
 
@@ -32,7 +34,7 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 
 	MapGenerator* mapGenerator = new MapGenerator(grid);
 	mapGenerator->GenerateMap();
-	loggingEventHandler->AddEvent(new LoggingEvent(ERROR_L, "Done generating map"));
+	loggingEventHandler->AddEvent(new LoggingEvent(INFO, "Done generating map"));
 
 	delete mapGenerator;
 }

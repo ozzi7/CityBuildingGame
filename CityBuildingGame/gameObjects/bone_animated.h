@@ -6,7 +6,7 @@
 
 class Grid;
 
-enum State {idle, walking, working};
+enum State {idle, walkingToTarget, returningHome, working};
 
 class BoneAnimated : public GameObject
 {
@@ -16,16 +16,17 @@ public:
 	void UpdatePosition(Grid * grid);
 	void SetNewPath(std::vector<glm::vec2> aWayPoints);
 	void UpdatePath(std::vector<glm::vec2> aWayPoints);
+
 	virtual void GameStep() = 0;
 	bool visible = true;
 
 	float animationSecond = 0.0f;
 
 	GameObject* destination = nullptr;
+	State state = idle;
 
 protected:
 	bool hasArrived = true;
-	State state = idle;
 
 	float walkingSpeed = 0.006f;
 

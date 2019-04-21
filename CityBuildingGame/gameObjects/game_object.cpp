@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #pragma once
-#include "game_object.h"
-#include "game_event_handler.h"
-#include "sound_event_handler.h"
+#include <game_object.h>
+#include <game_event_handler.h>
+#include <sound_event_handler.h>
+#include <resources.h>
 
 
 /*TODO: problem with using pos.x for grid coordinate is that for buildings and larger objects it will be wrong

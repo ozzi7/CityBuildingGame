@@ -21,6 +21,8 @@ void Settler::GameStep() {
 		dwelling->Evolve();
 		soundEventHandler->AddEvent(new PlaySoundEvent(SettlerArrivedID));
 		visible = false;
+		state = idle;
+		resources->AddIdleSettler(this);
 	}
 	else {
 		/*Update animation*/

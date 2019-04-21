@@ -7,8 +7,8 @@
 #include <lumberjack.h>
 #include <settler.h>
 #include <lumberjack_hut.h>
-#include "pathfinding.h"
-#include "pathfinding_object.h"
+#include <pathfinding.h>
+#include <pathfinding_object.h>
 
 GameEventHandler::GameEventHandler(Grid * aGrid)
 {
@@ -221,28 +221,49 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			lumberjackHut->entranceY = fromY;
 
 			lumberjackHut->CreateBuildingOutline();
-			lumberjackHut->Evolve();
-			///* create lumberjack */
-			//Lumberjack* lumby = new Lumberjack(glm::vec3(0 + 0.5f, 0 + 0.5f, grid->gridUnits[0][0]->averageHeight),
-			//	glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
+			
+			/*get settlers if there are enough, here we get 2 settlers, kill them and create 1 lumby */
+			std::vector<Settler*> settlers = resources->GetIdleSettlers(2);
+			if (settlers.size() != 0) {
+				// copy first settlers position to new lumby
+				Lumberjack* lumby = new Lumberjack(glm::vec3(settlers[0]->position.x, settlers[0]->position.y, 
+					grid->gridUnits[settlers[0]->position.x][settlers[0]->position.y]->averageHeight),
+					glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
 
-			//lumby->SetLumberjackHut(lumberjackHut);
+				lumby->SetLumberjackHut(lumberjackHut);
 
+				/* there should always be a path here because of roads */
+				Pathfinding pathfinding = Pathfinding(grid, Coordinate(settlers[0]->posX, settlers[0]->posY), Coordinate(lumberjackHut->entranceX, lumberjackHut->entranceY));
+				pathfinding.CalculatePath();
 
-			//Pathfinding path = Pathfinding(grid, Coordinate(0, 0), Coordinate(lumberjackHut->entranceX, lumberjackHut->entranceY));
-			//path.CalculatePath();
-			//std::list<Coordinate>pathShorts = path.GetPath();
-			//std::vector<glm::vec2> glmPath;
-			//glmPath.push_back(glm::vec2(0.5f, 0.5f));
-			//for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
-			//{
-			//	glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
-			//}
-			//lumby->SetNewPath(glmPath);
+				std::list<Coordinate>pathShorts = pathfinding.GetPath();
+				
+				if (pathShorts.size() != 0) {
+					std::vector<glm::vec2> glmPath;
+					for (std::list<Coordinate>::iterator it = --pathShorts.end(); it != pathShorts.begin(); it--)
+						glmPath.push_back(glm::vec2((*it).first + 0.5f, (*it).second) + 0.5f);
+					glmPath.push_back(glm::vec2(pathShorts.front().first + 0.5f, pathShorts.front().second + 0.5f));
+
+					lumby->SetNewPath(glmPath);
+				}
+				else
+				{
+					loggingEventHandler->AddEvent(new LoggingEvent(ERROR_L, "The lumberjack can't walk from dwelling to lumberjackhut (no path)"));
+				}
+
+				// store reference to lumby
+				grid->gridUnits[lumby->posY][lumby->posX]->movingObjects.push_back(lumby);
+
+				/* delete the settlers */
+				for (int i = 0; i < settlers.size(); ++i) {
+					this->AddEvent(new DeleteEvent(settlers[i]->posX, settlers[i]->posY, settlers[i])); // kill the settlers
+				}
+			}
+
 
 			// store reference to grid
 			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(lumberjackHut);
-			//grid->gridUnits[0][0]->movingObjects.push_back(lumby);
+
 			break;
 		}
 	}
@@ -282,13 +303,35 @@ void GameEventHandler::Visit(GatherResourceEvent * aGatherResourceEvent)
 			{
 				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
 			}
-			std::cout << (glmPath.size()) << std::endl;
 			grid->gridUnits[path.GetDestinationObject()->posY][path.GetDestinationObject()->posX]->hasTree = false;
 			aGatherResourceEvent->person->SetNewPath(glmPath);
 			aGatherResourceEvent->person->destination = path.GetDestinationObject();
 			break;
 
 		default:
+			break;
+	}
+}
+
+void GameEventHandler::Visit(ReturnHomeEvent * aReturnHomeEvent)
+{
+	switch (aReturnHomeEvent->personType)
+	{
+		case LumberjackID:
+			Lumberjack* lumby = (Lumberjack*)(aReturnHomeEvent->person); // or extract coordinates??
+			Pathfinding path = Pathfinding(grid, Coordinate(aReturnHomeEvent->person->position.x, aReturnHomeEvent->person->position.y),
+				Coordinate(lumby->lumberjackHut->entranceX, lumby->lumberjackHut->entranceY));
+			path.CalculatePath();
+			std::list<Coordinate> pathShorts = path.GetPath();
+			std::vector<glm::vec2> glmPath;
+
+			glmPath.push_back(glm::vec2(lumby->position.x, lumby->position.y));
+			for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
+			{
+				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
+			}
+			lumby->SetNewPath(glmPath);
+
 			break;
 	}
 }

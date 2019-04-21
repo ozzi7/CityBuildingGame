@@ -40,6 +40,8 @@
     <ClCompile Include="gameObjects\lumberjack_hut.cpp" />
     <ClCompile Include="gameObjects\settler.cpp" />
     <ClCompile Include="events\logging_event_handler.cpp" />
+    <ClCompile Include="resources.cpp" />
+    <ClCompile Include="events\return_home_event.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
@@ -96,6 +98,8 @@
     <ClInclude Include="gameObjects\tree.h" />
     <ClInclude Include="events\logging_event.h" />
     <ClInclude Include="events\logging_event_visitor.h" />
+    <ClInclude Include="resources.h" />
+    <ClInclude Include="events\return_home_event.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

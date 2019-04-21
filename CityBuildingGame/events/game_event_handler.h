@@ -5,6 +5,7 @@
 #include <create_building_event.h>
 #include <delete_event.h>
 #include <gather_resource_event.h>
+#include <return_home_event.h>
 #include <tuple>
 
 
@@ -21,6 +22,7 @@ public:
 	void Visit(CreateBuildingEvent * aCreateBuildingEvent);
 	void Visit(DeleteEvent * aDeleteEvent);
 	void Visit(GatherResourceEvent * aGatherResourceEvent);
+	void Visit(ReturnHomeEvent * aReturnHomeEvent);
 	Grid * grid;
 
 private:
