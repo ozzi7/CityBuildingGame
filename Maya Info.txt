@@ -9,3 +9,13 @@ click file -> export selection, select dae/fbx and change settings to bake anima
 done.. 
 
 change the .dae file in text editor, on top change the texture paths to relative ones (relative to dae file) (copy paste them from another .dae..)
+
+// new
+create maya scene
+drag and drop from asset/lumberjack lumberjack.dae
+rigging-> quickrig, step by step, in first step after create move the positions to fit arm length..
+create rest but dont create quickrig character only skeleton
+drag and drop walk cycle the fixed one .mb..
+apply it.. bake it to lumberjack and then remove it again
+now the animated lumby can be changed with keyframes or in graph editor..
+to add an axe simply choose the last node in skeleton and shift click the object then make a parent constraint 

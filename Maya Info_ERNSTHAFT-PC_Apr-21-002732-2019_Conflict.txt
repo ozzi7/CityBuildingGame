@@ -1,0 +1,21 @@
+create new maya scene
+drag and drop mariolow.obj into maya
+Note: Your character mesh needs to be in a Y-up worldspace, facing the Z-axis:
+select mesh -> modify -> center pivot (to rotate around center); rotation must be perfect for quickrig, quickrig  does not even try to figure out where legs and arms are.. 
+
+alternative: also quickrig but choose step by step, do first create/update and fix the guides..
+select the complete mesh (via windows-> outliner & shift select)
+select rigging in drop down, then skeleton -> quickrig -> auto rig button
+drag and drop the animation fbx into maya
+in drop down of rigging stuff (which is still open) select source: humanoid1 (animation now works, check with slider..)
+// maybe click blue icon and bake, bake skeleton.. probably not
+in outliner select quickrigcharacter_reference & all the meshes
+click file -> export selection, select FBX, import again, then export again as dae/fbx, always set bake animation with keyframes so that the complete animation is contained..
+done.. 
+
+change the .dae file in editor, on top change the texture paths to absolute ones (relative to dae file) (copy paste them from another .dae..)
+
+
+// creating new model
+create box, in panels -> ortho we can set it to floor height
+use extrude tool to create new vertices.. select face first 

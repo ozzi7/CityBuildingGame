@@ -10,7 +10,7 @@ SoundEventHandler::SoundEventHandler(int nofSounds)
 }
 void SoundEventHandler::LoadFiles()
 {
-	if (music.openFromFile(Path + "/../music/TownTheme.ogg"))
+	if (music.openFromFile(Path + "/../music/TownTheme.ogg") && MUSIC_ENABLED)
 	{
 		// TODO: should be in another method to play..
 		music.setLoop(true);
@@ -47,6 +47,9 @@ bool SoundEventHandler::ProcessEvent()
 }
 void SoundEventHandler::Visit(PlaySoundEvent * aSoundEvent)
 {
+	if (!SOUND_ENABLED)
+		return;
+
 	if (sounds.size() == 0)
 	{
 		sounds.push_back(sf::Sound());

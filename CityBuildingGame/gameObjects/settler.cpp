@@ -20,8 +20,10 @@ void Settler::GameStep() {
 	if (hasArrived && dwelling->evolutionStage == 0) {
 		dwelling->Evolve();
 		soundEventHandler->AddEvent(new PlaySoundEvent(SettlerArrivedID));
+		visible = false;
 	}
-
-	/*Update animation*/
-	animationSecond += walkingSpeed * 1.80f; // 100fps?
+	else {
+		/*Update animation*/
+		animationSecond += walkingSpeed * 1.80f; // 100fps?
+	}
 }

@@ -34,10 +34,6 @@ void InputHandler::Mouseclick(int button, int action)
 		{
 			if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 			{
-				/*Grid->gridUnits[(int)cursor_position.y][(int)cursor_position.x]->objects.push_back(
-					new Pine(glm::vec3(cursor_position),
-						glm::vec3(0.01f, 0.01f, 0.01f),
-						glm::vec3(1.5707963f, 0.0f, 0.0f)));*/
 				unitEventHandler->AddEvent(new CreateBuildingEvent(LumberjackHutID, cursor_position.x, cursor_position.y));
 			}
 			else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
