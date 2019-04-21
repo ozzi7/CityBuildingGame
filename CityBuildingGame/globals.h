@@ -9,15 +9,15 @@
 const unsigned int DEFAULT_SCREEN_WIDTH = 1920;
 const unsigned int DEFAULT_SCREEN_HEIGHT = 1080;
 
-const unsigned int MAP_WIDTH = 40;
-const unsigned int MAP_HEIGHT = 40;
+const unsigned int MAP_WIDTH = 200;
+const unsigned int MAP_HEIGHT = 200;
 
 // rendering
 const unsigned int SHADOW_WIDTH = 2048;
 const unsigned int SHADOW_HEIGHT = 2048;
 
 #define MANUAL_MIPMAPS true;
-const unsigned int ALPHA_CUTOFF = 80; // [0-255]
+const unsigned int ALPHA_CUTOFF = 80; // [0 - 255]
 
 /* vegetation generation */
 // the higher the tree persistence the higher the frequency of trees => easier to find all types of resources nearby

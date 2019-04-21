@@ -11,8 +11,10 @@ public:
 	unsigned char* ScaledImage();
 
 	unsigned char* resultUnrounded = nullptr;
+	unsigned char* result = nullptr;
 private:
 	unsigned char bilinear(unsigned int positionWidth, unsigned int positionHeight, int channel, unsigned int divisor);
+	void roundAlpha();
 
 	unsigned char* data;
 	unsigned int width, height;
