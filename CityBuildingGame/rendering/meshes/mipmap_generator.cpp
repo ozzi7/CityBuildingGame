@@ -7,36 +7,35 @@ MipmapGenerator::MipmapGenerator(unsigned char* aData, unsigned int aWidth, unsi
 	data = aData;
 	width = aWidth;
 	height = aHeight;
+
+	targetWidth = width / divisor;
+	targetHeight = height / divisor;
+	resultCount = targetWidth * targetHeight * 4;
+	result = new unsigned char[resultCount];
+	resultUnrounded = new unsigned char[resultCount];
+	alphaValues.resize(targetWidth * targetHeight);
 }
 
-unsigned char* MipmapGenerator::ScaledImage()
+void MipmapGenerator::ScaleImage()
 {
-	const unsigned int divisor = 2; //(unsigned int)pow(2, level);
-	const unsigned int targetWidth = width / divisor;
-	const unsigned int targetHeight = height / divisor;
-	const unsigned int resultCount = targetWidth * targetHeight * 4;
-	unsigned char* result = new unsigned char[resultCount];
-	resultUnrounded = new unsigned char[resultCount];
-
 	unsigned int i = 0;
+	unsigned int alphaCounter = 0;
 	unsigned int currentWidth = 1;
 	unsigned int currentHeight = 1;
 	
 	while (i < resultCount) {
 		for (int channel = 0; channel <= 3; channel++)
 		{
-			unsigned char color = bilinear(currentWidth, currentHeight, channel, divisor);
-
-			resultUnrounded[i] = color;
+			unsigned char color = bilinear(currentWidth, currentHeight, channel);
 
 			if (channel == 3)
-				if (color <= ALPHA_CUTOFF)
-					color = 0;
-				else
-					color = 255;
-
+			{
+				alphaValues[alphaCounter] = alphaPair(color, i);
+				alphaCounter++;
+			}
+				
+			resultUnrounded[i] = color;
 			result[i] = color;
-			//std::cout << "Position: " << i << " Value: " << +result[i] << std::endl;
 			i++;
 		}
 		if (currentWidth < targetWidth)
@@ -47,10 +46,10 @@ unsigned char* MipmapGenerator::ScaledImage()
 			currentHeight++;
 		}
 	}
-	return result;
+	roundAlpha();
 }
 
-unsigned char MipmapGenerator::bilinear(unsigned int positionWidth, unsigned int positionHeight, int channel, unsigned int divisor)
+unsigned char MipmapGenerator::bilinear(unsigned int positionWidth, unsigned int positionHeight, int channel)
 {
 	float accurateWidth = (positionWidth - 0.5f) * divisor + 0.5f;
 	float accurateHeight = (positionHeight - 0.5f) * divisor + 0.5f;
@@ -72,11 +71,42 @@ unsigned char MipmapGenerator::bilinear(unsigned int positionWidth, unsigned int
 
 	float color = upperLeft * upperLeftWeight + upperRight * upperRightWeight + lowerLeft * lowerLeftWeight + lowerRight * lowerRightWeight;
 
-	//if (color > 0) {
-	//	std::cout << "Upper Left: " << ((int)accurateHeight - 1) * width * 4 + ((int)accurateWidth - 1) * 4 + channel << " Value: " << (float)upperLeft << std::endl;
-	//	std::cout << "Upper Right: " << ((int)accurateHeight - 1) * width * 4 + (int)accurateWidth * 4 + channel << " Value: " << (float)upperRight << std::endl;
-	//	std::cout << "Lower Left: " << (int)accurateHeight * width * 4 + ((int)accurateWidth - 1) * 4 + channel << " Value: " << (float)lowerLeft << std::endl;
-	//	std::cout << "Lower Right: " << (int)accurateHeight * width * 4 + (int)accurateWidth * 4 + channel << " Value: " << (float)lowerRight << std::endl;
-	//}
 	return (unsigned char)round(color);
+}
+
+void MipmapGenerator::roundAlpha()
+{
+	std::sort(alphaValues.begin(), alphaValues.end());
+
+	unsigned int removedAlpha = 0;
+	unsigned int addedAlpha = 0;
+
+	unsigned int frontCounter = 0;
+	unsigned int backCounter = alphaValues.size() - 1;
+
+	unsigned int position;
+
+	while (frontCounter < backCounter)
+	{
+		if (addedAlpha > removedAlpha)
+		{
+			// Read from front with lowest Alpha
+			position = alphaValues[frontCounter].second;
+
+			result[position] = 0;
+			removedAlpha += alphaValues[frontCounter].first;
+
+			frontCounter++;
+		}
+		else
+		{
+			// Read from back with highest Alpha
+			position = alphaValues[backCounter].second;
+
+			result[position] = 255;
+			addedAlpha += 255 - alphaValues[backCounter].first;
+
+			backCounter--;
+		}
+	}
 }

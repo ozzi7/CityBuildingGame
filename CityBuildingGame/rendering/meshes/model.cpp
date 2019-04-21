@@ -207,8 +207,8 @@ unsigned int Model::TextureFromFile(std::string& path)
 					MipmapGenerator mipmapGenerator = MipmapGenerator(data, width, height);
 					width = width / 2;
 					height = height / 2;
-					data = mipmapGenerator.ScaledImage();
-					glTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+					mipmapGenerator.ScaleImage();
+					glTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, format, GL_UNSIGNED_BYTE, mipmapGenerator.result);
 					data = mipmapGenerator.resultUnrounded;
 					level++;	
 				}
