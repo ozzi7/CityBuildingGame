@@ -197,33 +197,28 @@ unsigned int Model::TextureFromFile(std::string& path)
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
 #ifdef  MANUAL_MIPMAPS
-		//if (path == "H:/Repositories/CityBuildingGame/x64/Debug/../models/juniper/bark06.png")
-		//{
-			if (format == GL_RGBA) 
-			{
-				unsigned int level = 1;
-				while (width / 2 >= 1)
-				{
-					MipmapGenerator mipmapGenerator = MipmapGenerator(data, width, height);
-					width = width / 2;
-					height = height / 2;
-					mipmapGenerator.ScaleImage();
-					glTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, format, GL_UNSIGNED_BYTE, mipmapGenerator.result);
-					data = mipmapGenerator.resultUnrounded;
-					level++;	
-				}
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-			}
-			else 
-			{
-				glGenerateMipmap(GL_TEXTURE_2D);
-				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-			}
 
-		//}
-		//else
-		//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		if (format == GL_RGBA) 
+		{
+			unsigned int level = 1;
+			while (width / 2 >= 1)
+			{
+				MipmapGenerator mipmapGenerator = MipmapGenerator(data, width, height);
+				width = width / 2;
+				height = height / 2;
+				mipmapGenerator.ScaleImage();
+				glTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, format, GL_UNSIGNED_BYTE, mipmapGenerator.result);
+				data = mipmapGenerator.resultUnrounded;
+				level++;
+			}
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+		}
+		else 
+		{
+			glGenerateMipmap(GL_TEXTURE_2D);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+		}
 #endif
 #ifndef MANUAL_MIPMAPS
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
