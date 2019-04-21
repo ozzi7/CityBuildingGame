@@ -36,6 +36,10 @@ void Lumberjack::GameStep() {
 		unitEventHandler->AddEvent(new ReturnHomeEvent(this, LumberjackID));
 		state = returningHome;
 	}
+	else if (state == working)
+	{
+		workTimeLeft--;
+	}
 
 	/*Update animation*/
 	animationSecond += walkingSpeed * 1.80f; // 100fps?

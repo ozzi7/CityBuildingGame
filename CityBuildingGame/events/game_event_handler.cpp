@@ -193,7 +193,7 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 
 			/* create settler.. */
 			Settler* settler = new Settler(glm::vec3(pathShorts.back().first + 0.5f, pathShorts.back().second + 0.5f,
-				grid->gridUnits[pathShorts.back().second][pathShorts.back().first]->averageHeight),
+				grid->GetHeight(pathShorts.back().first, pathShorts.back().second)),
 				glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
 
 			settler->SetDwelling(dwelling);
@@ -217,7 +217,7 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			lumberjackHut->toY = toY;
 			lumberjackHut->sizeX = std::get<0>(buildingSize);
 			lumberjackHut->sizeY = std::get<1>(buildingSize);
-			lumberjackHut->entranceX = fromX;
+			lumberjackHut->entranceX = fromX + 1;
 			lumberjackHut->entranceY = fromY;
 
 			lumberjackHut->CreateBuildingOutline();
@@ -226,9 +226,9 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 			std::vector<Settler*> settlers = resources->GetIdleSettlers(2);
 			if (settlers.size() != 0) {
 				// copy first settlers position to new lumby
-				Lumberjack* lumby = new Lumberjack(glm::vec3(settlers[0]->position.x, settlers[0]->position.y, 
-					grid->gridUnits[settlers[0]->position.x][settlers[0]->position.y]->averageHeight),
-					glm::vec3(0.0045f, 0.0045f, 0.0045f), glm::vec3(0, 0, glm::pi<float>()));
+				Lumberjack* lumby = new Lumberjack(glm::vec3(settlers[0]->posX, settlers[0]->posY, 
+					grid->GetHeight(settlers[0]->posX, settlers[0]->posY)),
+					glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
 
 				lumby->SetLumberjackHut(lumberjackHut);
 
@@ -245,6 +245,9 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 					glmPath.push_back(glm::vec2(pathShorts.front().first + 0.5f, pathShorts.front().second + 0.5f));
 
 					lumby->SetNewPath(glmPath);
+					lumby->state = returningHome;
+					lumby->SetLumberjackHut(lumberjackHut);
+					lumby->destination = path.GetDestinationObject();
 				}
 				else
 				{
@@ -259,7 +262,6 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 					this->AddEvent(new DeleteEvent(settlers[i]->posX, settlers[i]->posY, settlers[i])); // kill the settlers
 				}
 			}
-
 
 			// store reference to grid
 			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(lumberjackHut);
