@@ -146,15 +146,24 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 		return;
 	}
 
+	/* calculate 3d model position height*/
+	modelCenter.z = grid->GetHeight(modelCenter.x, modelCenter.y);
+
+	/* find path*/
+	PathfindingObject path = PathfindingObject(grid, Coordinate(fromX + 1, fromY));
+	path.FindClosestEdge();
+	std::list<Coordinate>pathShorts = path.GetPath();
+
+	/* if no path found do nothing..*/
+	if (pathShorts.empty())
+		return;
+
 	/* set grid to occupied*/
 	for (int i = fromX; i < toX; ++i) {
 		for (int j = fromY; j < toY; ++j) {
 			grid->gridUnits[j][i]->occupied = true;
 		}
 	}
-
-	/* calculate 3d model position height*/
-	modelCenter.z = grid->GetHeight(modelCenter.x, modelCenter.y);
 
 	/* Create the building object etc.. */
 	switch (aCreateBuildingEvent->buildingType) {
@@ -177,31 +186,27 @@ void GameEventHandler::Visit(CreateBuildingEvent * aCreateBuildingEvent)
 
 			dwelling->CreateBuildingOutline();
 
-			PathfindingObject path = PathfindingObject(grid, Coordinate(dwelling->entranceX, dwelling->entranceY));
-			path.FindClosestEdge();
-			std::list<Coordinate>pathShorts = path.GetPath();
-			if (!pathShorts.empty()) {
-				std::vector<glm::vec2> glmPath;
-				for (std::list<Coordinate>::iterator it = --pathShorts.end(); it != pathShorts.begin(); it--)
-					glmPath.push_back(glm::vec2((*it).first + 0.5f, (*it).second) + 0.5f);
-				glmPath.push_back(glm::vec2(pathShorts.front().first + 0.5f, pathShorts.front().second + 0.5f));
+			std::vector<glm::vec2> glmPath;
+			for (std::list<Coordinate>::iterator it = --pathShorts.end(); it != pathShorts.begin(); it--)
+				glmPath.push_back(glm::vec2((*it).first + 0.5f, (*it).second) + 0.5f);
+			glmPath.push_back(glm::vec2(pathShorts.front().first + 0.5f, pathShorts.front().second + 0.5f));
 
-				Settler* settler = new Settler(glm::vec3(pathShorts.back().first + 0.5f, pathShorts.back().second + 0.5f,
-					grid->gridUnits[pathShorts.back().second][pathShorts.back().first]->averageHeight),
-					glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
+			/* create settler.. */
+			Settler* settler = new Settler(glm::vec3(pathShorts.back().first + 0.5f, pathShorts.back().second + 0.5f,
+				grid->gridUnits[pathShorts.back().second][pathShorts.back().first]->averageHeight),
+				glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
 
-				settler->SetDwelling(dwelling);
-				settler->SetNewPath(glmPath);
+			settler->SetDwelling(dwelling);
+			settler->SetNewPath(glmPath);
 
-				/* save building in the coordinate where the 3d object center is located in->good for rendering */
-				grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(dwelling);
-				grid->gridUnits[pathShorts.back().second][pathShorts.back().first]->movingObjects.push_back(settler);
-			}
+			/* save building in the coordinate where the 3d object center is located in->good for rendering */
+			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(dwelling);
+			grid->gridUnits[pathShorts.back().second][pathShorts.back().first]->movingObjects.push_back(settler);
+
 			break;
 		}
 		case LumberjackHutID:
 		{
-			/* save building in the coordinate where the 3d object center is located in -> good for rendering */
 			LumberjackHut * lumberjackHut = new LumberjackHut(modelCenter, // translate
 				glm::vec3(0.012f, 0.006f, 0.012f), // rescale
 				glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
