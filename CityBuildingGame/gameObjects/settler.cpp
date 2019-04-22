@@ -4,7 +4,7 @@
 #include <dwelling.h>
 
 Settler::Settler(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
-	: BoneAnimated(aPosition, aScale, aRotation) {
+	: BoneAnimated(aPosition, aScale*0.35f, aRotation) {
 };
 void Settler::Accept(Visitor &v)
 {

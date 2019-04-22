@@ -19,3 +19,4 @@ drag and drop walk cycle the fixed one .mb..
 apply it.. bake it to lumberjack and then remove it again
 now the animated lumby can be changed with keyframes or in graph editor..
 to add an axe simply choose the last node in skeleton and shift click the object then make a parent constraint 
+to resize skeleton select the master node in windows generaral hypergraph hierarchy.. 

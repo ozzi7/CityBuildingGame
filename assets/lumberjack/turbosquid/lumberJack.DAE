@@ -155,10 +155,10 @@
   </library_lights>
   <library_images>
     <image id="lumberJack_diffuse_png">
-      <init_from>file:///G:/3DArt/3DAssetForge/Assets/_Characters/LowPolyLumberJack/Textures/lumberJack_diffuse.png</init_from>
+      <init_from>lumberJack_diffuse.png</init_from>
     </image>
     <image id="lumberJack_normal_png">
-      <init_from>file:///G:/3DArt/3DAssetForge/Assets/_Characters/LowPolyLumberJack/Textures/lumberJack_normal.png</init_from>
+      <init_from>lumberJack_normal.png</init_from>
     </image>
   </library_images>
   <library_visual_scenes>
