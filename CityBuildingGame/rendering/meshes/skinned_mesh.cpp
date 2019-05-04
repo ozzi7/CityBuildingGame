@@ -10,18 +10,18 @@
 #define BONE_ID_LOCATION     3
 #define BONE_WEIGHT_LOCATION 4
 
-glm::mat3 aiMatrix3x3ToGlm(const aiMatrix3x3 &from)
+glm::mat3 aiMatrix3x3ToGlm(const aiMatrix3x3 & from)
 {
 	glm::mat3 to;
 	//the a,b,c,d in assimp is the row ; the 1,2,3,4 is the column
-	to[0][0] = from.a1; to[1][0] = from.a2;	to[2][0] = from.a3; 
-	to[0][1] = from.b1; to[1][1] = from.b2;	to[2][1] = from.b3; 
-	to[0][2] = from.c1; to[1][2] = from.c2;	to[2][2] = from.c3; 
-	
+	to[0][0] = from.a1; to[1][0] = from.a2;	to[2][0] = from.a3;
+	to[0][1] = from.b1; to[1][1] = from.b2;	to[2][1] = from.b3;
+	to[0][2] = from.c1; to[1][2] = from.c2;	to[2][2] = from.c3;
+
 	return to;
 }
 
-glm::mat4 aiMatrix4x4ToGlm(const aiMatrix4x4 &from)
+glm::mat4 aiMatrix4x4ToGlm(const aiMatrix4x4& from)
 {
 	glm::mat4 to;
 	//the a,b,c,d in assimp is the row ; the 1,2,3,4 is the column
@@ -100,8 +100,8 @@ bool SkinnedMesh::LoadMesh(const std::string& fileName)
 		/* Get transformation matrix for nodes(vertices relative to bones) */
 		aiMatrix4x4 tp1 = m_pScene->mRootNode->mTransformation;
 		m_GlobalInverseTransform = aiMatrix4x4ToGlm(tp1);
-		m_GlobalInverseTransform =  glm::inverse(m_GlobalInverseTransform);
-		
+		m_GlobalInverseTransform = glm::inverse(m_GlobalInverseTransform);
+
 		ret = InitFromScene(m_pScene, fileName);
 	}
 	else
@@ -120,7 +120,7 @@ bool SkinnedMesh::InitFromScene(const aiScene* pScene, const std::string& fileNa
 	/* Resize the mesh & texture vectors */
 	m_Entries.resize(pScene->mNumMeshes);
 	m_Textures.resize(pScene->mNumMeshes);
-	
+
 	std::vector<glm::vec3> Positions;
 	std::vector<glm::vec3> Normals;
 	std::vector<glm::vec2> TexCoords;
@@ -161,7 +161,7 @@ bool SkinnedMesh::InitFromScene(const aiScene* pScene, const std::string& fileNa
 		if (!InitMaterials(i, paiMesh, pScene))
 			return false;
 	}
-	
+
 	/* Generate and populate the buffers with vertex attributes and indices */
 	glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[POS_VB]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Positions[0]) * Positions.size(), &Positions[0], GL_STATIC_DRAW);
@@ -209,14 +209,14 @@ void SkinnedMesh::InitMesh(unsigned int MeshIndex,
 	for (unsigned int i = 0; i < paiMesh->mNumVertices; ++i)
 	{
 		/* Get pos normal texCoord */
-		
+
 		const aiVector3D* pPos = &(paiMesh->mVertices[i]);
-		
+
 		const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &(paiMesh->mTextureCoords[0][i]) : &Zero3D;
 
 		/* store pos normal texCoord */
 		Positions.push_back(glm::vec3(pPos->x, pPos->y, pPos->z));
-	
+
 		if (paiMesh->HasNormals())
 		{
 			const aiVector3D* pNormal = &(paiMesh->mNormals[i]);
@@ -243,7 +243,7 @@ void SkinnedMesh::InitMesh(unsigned int MeshIndex,
 void SkinnedMesh::LoadBones(unsigned int MeshIndex, const aiMesh* pMesh, std::vector<VertexBoneData>& Bones)
 {
 	/* Load bones one by one */
-	
+
 	for (unsigned int i = 0; i < pMesh->mNumBones; ++i)
 	{
 		unsigned int BoneIndex = 0;
@@ -277,12 +277,12 @@ void SkinnedMesh::LoadBones(unsigned int MeshIndex, const aiMesh* pMesh, std::ve
 }
 
 // loads all texture of given mesh
-bool SkinnedMesh::InitMaterials(const unsigned int meshIndex, const aiMesh *mesh, const aiScene *scene)
+bool SkinnedMesh::InitMaterials(const unsigned int meshIndex, const aiMesh* mesh, const aiScene* scene)
 {
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
 	// we assume a convention for sampler names in the shaders. Each diffuse texture should be named
-	// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
+	// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER.
 	// Same applies to other texture as the following list summarizes:
 	// diffuse: texture_diffuseN
 	// specular: texture_specularN
@@ -310,7 +310,6 @@ void SkinnedMesh::Render(Shader shader)
 	glBindVertexArray(m_VAO);
 
 	for (unsigned int i = 0; i < m_Entries.size(); i++) {
-		
 		int currTexture = 0;
 
 		// bind appropriate textures
@@ -356,14 +355,13 @@ void SkinnedMesh::Render(Shader shader)
 
 unsigned int SkinnedMesh::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
-	for (unsigned int i = 0; i < pNodeAnim->mNumPositionKeys - 1; i++) 
+	for (unsigned int i = 0; i < pNodeAnim->mNumPositionKeys - 1; i++)
 	{
-		
 		if (AnimationTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime) {
 			return i;
 		}
 	}
-	
+
 	assert(0);
 	return 0;
 }
@@ -404,15 +402,15 @@ void SkinnedMesh::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime,
 	}
 
 	unsigned int PositionIndex = FindPosition(AnimationTime, pNodeAnim);
-		unsigned int NextPositionIndex = (PositionIndex + 1);
-		assert(NextPositionIndex < pNodeAnim->mNumPositionKeys);
-		float DeltaTime = (float)(pNodeAnim->mPositionKeys[NextPositionIndex].mTime - pNodeAnim->mPositionKeys[PositionIndex].mTime);
-		float Factor = (AnimationTime - (float)pNodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
-		assert(Factor >= 0.0f && Factor <= 1.0f);
-		const aiVector3D& Start = pNodeAnim->mPositionKeys[PositionIndex].mValue;
-		const aiVector3D& End = pNodeAnim->mPositionKeys[NextPositionIndex].mValue;
-		aiVector3D Delta = End - Start;
-		Out = Start + Factor * Delta;
+	unsigned int NextPositionIndex = (PositionIndex + 1);
+	assert(NextPositionIndex < pNodeAnim->mNumPositionKeys);
+	float DeltaTime = (float)(pNodeAnim->mPositionKeys[NextPositionIndex].mTime - pNodeAnim->mPositionKeys[PositionIndex].mTime);
+	float Factor = (AnimationTime - (float)pNodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
+	assert(Factor >= 0.0f && Factor <= 1.0f);
+	const aiVector3D& Start = pNodeAnim->mPositionKeys[PositionIndex].mValue;
+	const aiVector3D& End = pNodeAnim->mPositionKeys[NextPositionIndex].mValue;
+	aiVector3D Delta = End - Start;
+	Out = Start + Factor * Delta;
 }
 
 void SkinnedMesh::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
@@ -424,15 +422,15 @@ void SkinnedMesh::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTim
 	}
 
 	unsigned int RotationIndex = FindRotation(AnimationTime, pNodeAnim);
-		unsigned int NextRotationIndex = (RotationIndex + 1);
-		assert(NextRotationIndex < pNodeAnim->mNumRotationKeys);
-		float DeltaTime = (float)(pNodeAnim->mRotationKeys[NextRotationIndex].mTime - pNodeAnim->mRotationKeys[RotationIndex].mTime);
-		float Factor = (AnimationTime - (float)pNodeAnim->mRotationKeys[RotationIndex].mTime) / DeltaTime;
-		assert(Factor >= 0.0f && Factor <= 1.0f);
-		const aiQuaternion& StartRotationQ = pNodeAnim->mRotationKeys[RotationIndex].mValue;
-		const aiQuaternion& EndRotationQ = pNodeAnim->mRotationKeys[NextRotationIndex].mValue;
-		aiQuaternion::Interpolate(Out, StartRotationQ, EndRotationQ, Factor);
-		Out = Out.Normalize();
+	unsigned int NextRotationIndex = (RotationIndex + 1);
+	assert(NextRotationIndex < pNodeAnim->mNumRotationKeys);
+	float DeltaTime = (float)(pNodeAnim->mRotationKeys[NextRotationIndex].mTime - pNodeAnim->mRotationKeys[RotationIndex].mTime);
+	float Factor = (AnimationTime - (float)pNodeAnim->mRotationKeys[RotationIndex].mTime) / DeltaTime;
+	assert(Factor >= 0.0f && Factor <= 1.0f);
+	const aiQuaternion& StartRotationQ = pNodeAnim->mRotationKeys[RotationIndex].mValue;
+	const aiQuaternion& EndRotationQ = pNodeAnim->mRotationKeys[NextRotationIndex].mValue;
+	aiQuaternion::Interpolate(Out, StartRotationQ, EndRotationQ, Factor);
+	Out = Out.Normalize();
 }
 
 void SkinnedMesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
@@ -443,15 +441,15 @@ void SkinnedMesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, 
 	}
 
 	unsigned int ScalingIndex = FindScaling(AnimationTime, pNodeAnim);
-		unsigned int NextScalingIndex = (ScalingIndex + 1);
-		assert(NextScalingIndex < pNodeAnim->mNumScalingKeys);
-		float DeltaTime = (float)(pNodeAnim->mScalingKeys[NextScalingIndex].mTime - pNodeAnim->mScalingKeys[ScalingIndex].mTime);
-		float Factor = (AnimationTime - (float)pNodeAnim->mScalingKeys[ScalingIndex].mTime) / DeltaTime;
-		assert(Factor >= 0.0f && Factor <= 1.0f);
-		const aiVector3D& Start = pNodeAnim->mScalingKeys[ScalingIndex].mValue;
-		const aiVector3D& End = pNodeAnim->mScalingKeys[NextScalingIndex].mValue;
-		aiVector3D Delta = End - Start;
-		Out = Start + Factor * Delta;
+	unsigned int NextScalingIndex = (ScalingIndex + 1);
+	assert(NextScalingIndex < pNodeAnim->mNumScalingKeys);
+	float DeltaTime = (float)(pNodeAnim->mScalingKeys[NextScalingIndex].mTime - pNodeAnim->mScalingKeys[ScalingIndex].mTime);
+	float Factor = (AnimationTime - (float)pNodeAnim->mScalingKeys[ScalingIndex].mTime) / DeltaTime;
+	assert(Factor >= 0.0f && Factor <= 1.0f);
+	const aiVector3D& Start = pNodeAnim->mScalingKeys[ScalingIndex].mValue;
+	const aiVector3D& End = pNodeAnim->mScalingKeys[NextScalingIndex].mValue;
+	aiVector3D Delta = End - Start;
+	Out = Start + Factor * Delta;
 }
 
 void SkinnedMesh::ReadNodeHierarchy(float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform)
@@ -469,7 +467,7 @@ void SkinnedMesh::ReadNodeHierarchy(float AnimationTime, const aiNode* pNode, co
 		aiVector3D Scaling;
 		CalcInterpolatedScaling(Scaling, AnimationTime, pNodeAnim);
 		glm::mat4 ScalingM;
-		
+
 		ScalingM = glm::scale(ScalingM, glm::vec3(Scaling.x, Scaling.y, Scaling.z));
 
 		// Interpolate rotation and generate rotation transformation matrix
@@ -480,13 +478,13 @@ void SkinnedMesh::ReadNodeHierarchy(float AnimationTime, const aiNode* pNode, co
 
 		// Interpolate translation and generate translation transformation matrix
 		aiVector3D Translation;
-		
+
 		CalcInterpolatedPosition(Translation, AnimationTime, pNodeAnim);
 		glm::mat4 TranslationM;
 		TranslationM = glm::translate(TranslationM, glm::vec3(Translation.x, Translation.y, Translation.z));
 
 		// Combine the above transformations
-		NodeTransformation = TranslationM * RotationM *ScalingM;
+		NodeTransformation = TranslationM * RotationM * ScalingM;
 	}
 
 	glm::mat4 GlobalTransformation = ParentTransform * NodeTransformation;
@@ -508,7 +506,7 @@ void SkinnedMesh::PrecalculateBoneTransforms()
 	{
 		std::vector<glm::mat4> Transform;
 		BoneTransform(tick, Transform);
-		for(int i = 0; i < Transform.size(); ++i)
+		for (int i = 0; i < Transform.size(); ++i)
 			Transform[i] = glm::transpose(Transform[i]);
 		Transforms.push_back(Transform);
 	}
@@ -535,8 +533,8 @@ void SkinnedMesh::BindBoneTransform(float timeInSeconds, Shader* shader)
 void SkinnedMesh::BoneTransform(float timeInSeconds, std::vector<glm::mat4>& Transforms)
 {
 	glm::mat4 Identity = glm::mat4();
-	
-    /* The original code with the buggy animation duration */
+
+	/* The original code with the buggy animation duration */
 	//animDuration = (float)m_pScene->mAnimations[0]->mDuration;
 
 	/* Calc animation duration from last frame */
@@ -547,12 +545,12 @@ void SkinnedMesh::BoneTransform(float timeInSeconds, std::vector<glm::mat4>& Tra
 
 	float TimeInTicks = timeInSeconds * TicksPerSecond;
 	float AnimationTime = (float)fmod(TimeInTicks, animDuration);
-	
+
 	ReadNodeHierarchy(AnimationTime, m_pScene->mRootNode, Identity);
 
 	Transforms.resize(m_NumBones);
-	
-	for (unsigned int  i = 0; i < m_NumBones; i++) {
+
+	for (unsigned int i = 0; i < m_NumBones; i++) {
 		Transforms[i] = m_BoneInfo[i].FinalTransformation;
 	}
 }
@@ -571,7 +569,7 @@ const aiNodeAnim* SkinnedMesh::FindNodeAnim(const aiAnimation* pAnimation, const
 }
 
 // loads all textures of the whole model of a single type (i.e., diffuse, specular..)
-std::vector<Texture> SkinnedMesh::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+std::vector<Texture> SkinnedMesh::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
 	std::vector<Texture> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
@@ -589,7 +587,7 @@ std::vector<Texture> SkinnedMesh::LoadMaterialTextures(aiMaterial *mat, aiTextur
 }
 
 // utility function for loading a 2D texture from file
-unsigned int SkinnedMesh::TextureFromFile(const char *path, const std::string &directory, bool gamma)
+unsigned int SkinnedMesh::TextureFromFile(const char* path, const std::string& directory, bool gamma)
 {
 	std::string filename = std::string(path);
 
@@ -599,7 +597,7 @@ unsigned int SkinnedMesh::TextureFromFile(const char *path, const std::string &d
 	glGenTextures(1, &textureID);
 
 	int width, height, nrComponents;
-	unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
 	if (data)
 	{
 		GLenum format;

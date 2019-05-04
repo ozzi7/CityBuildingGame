@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#define STB_IMAGE_IMPLEMENTATION    
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "model.h"
 
@@ -38,12 +38,12 @@ void Model::Draw(Shader& shader)
 	}
 }
 // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
-void Model::processNode(aiNode *node, const aiScene *scene)
+void Model::processNode(aiNode* node, const aiScene* scene)
 {
 	// process each mesh located at the current node
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
-		// the node object only contains indices to index the actual objects in the scene. 
+		// the node object only contains indices to index the actual objects in the scene.
 		// the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
@@ -68,7 +68,6 @@ void Model::addMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indi
 
 void Model::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>* vertices, std::vector<unsigned int>* indices, std::vector<Texture>* textures)
 {
-
 	// Walk through each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -88,7 +87,7 @@ void Model::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>*
 		if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
 		{
 			glm::vec2 vec;
-			// a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
+			// a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't
 			// use models where a vertex can have multiple texture coordinates so we always take the first set (0).
 			vec.x = mesh->mTextureCoords[0][i].x;
 			vec.y = mesh->mTextureCoords[0][i].y;
@@ -119,7 +118,7 @@ void Model::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>*
 	// process materials
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 	// we assume a convention for sampler names in the shaders. Each diffuse texture should be named
-	// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
+	// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER.
 	// Same applies to other texture as the following list summarizes:
 	// diffuse: texture_diffuseN
 	// specular: texture_specularN
@@ -137,7 +136,6 @@ void Model::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>*
 	// 4. height maps
 	std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
 	textures->insert(textures->end(), heightMaps.begin(), heightMaps.end());
-
 }
 
 // checks all material textures of a given type and loads the textures if they're not loaded yet.
@@ -198,7 +196,7 @@ unsigned int Model::TextureFromFile(std::string& path)
 
 #ifdef  MANUAL_MIPMAPS
 
-		if (format == GL_RGBA) 
+		if (format == GL_RGBA)
 		{
 			unsigned int level = 1;
 			while (width / 2 >= 1)
@@ -213,7 +211,7 @@ unsigned int Model::TextureFromFile(std::string& path)
 			}
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 		}
-		else 
+		else
 		{
 			glGenerateMipmap(GL_TEXTURE_2D);
 			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
@@ -238,5 +236,3 @@ unsigned int Model::TextureFromFile(std::string& path)
 
 	return textureID;
 }
-
-

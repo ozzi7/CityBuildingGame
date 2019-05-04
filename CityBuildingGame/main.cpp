@@ -19,7 +19,6 @@
 #include "game.h"
 #include "input_handler.h"
 
-
 Game game;
 GLFWwindow* window;
 InputHandler inputHandler;
@@ -27,7 +26,7 @@ InputHandler inputHandler;
 void init_glfw();
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void window_focus_callback(GLFWwindow *window, int focused);
+void window_focus_callback(GLFWwindow* window, int focused);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 

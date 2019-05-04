@@ -2,7 +2,7 @@
 #pragma once
 #include "move_event.h"
 
-MoveEvent::MoveEvent(int aFromX, int aFromY, int aToX, int aToY, GameObject * aGameObject)
+MoveEvent::MoveEvent(int aFromX, int aFromY, int aToX, int aToY, GameObject* aGameObject)
 {
 	fromX = aFromX;
 	fromY = aFromY;

@@ -10,15 +10,14 @@
 
 #define max(x,y) ((x) > (y) ? (x) : (y))
 
-
 typedef std::pair<unsigned short, unsigned short> Coordinate;
 
 struct Node
 {
 	Coordinate coordinate;
-	unsigned short distanceToStart;
-	unsigned short distanceToDestination;
-	unsigned short distanceTotal;
+	unsigned short distanceToStart = 0;
+	unsigned short distanceToDestination = 0;
+	unsigned short distanceTotal = 0;
 	Node* parent;
 	Coordinate destination;
 };
@@ -51,7 +50,6 @@ struct NodeCompare {
 		short yDistance1 = std::abs(node1->coordinate.second - node1->destination.second);
 		short xDistance2 = std::abs(node2->coordinate.first - node1->destination.first);
 		short yDistance2 = std::abs(node2->coordinate.second - node1->destination.second);
-		
 
 		if (xDistance1 > yDistance1 &&
 			xDistance1 > xDistance2 &&
@@ -79,7 +77,7 @@ public:
 private:
 	std::forward_list<Node*> closed; // maybe not needed, only for storing pointers for deleting
 	std::priority_queue<Node*, std::deque<Node*>, NodeCompare> open;
-	bool visited[MAP_WIDTH][MAP_HEIGHT] { false };
+	bool visited[MAP_WIDTH][MAP_HEIGHT]{ false };
 
 	Grid* grid;
 	Node* start;
@@ -91,10 +89,9 @@ private:
 
 	const unsigned short maxX = (unsigned short)MAP_WIDTH - 1;
 	const unsigned short maxY = (unsigned short)MAP_HEIGHT - 1;
-	
+
 	void createNode(const Coordinate coordinate);
 	unsigned short distanceToDestination(const Coordinate coordinate);
 	void setNextNode();
 	void adjustParentNode(Node* node);
 };
-

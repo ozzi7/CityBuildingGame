@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GL/glew.h> 
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <assimp/Importer.hpp>
@@ -18,7 +18,7 @@
 #include <map>
 #include <vector>
 
-class InstancedModel: public Model
+class InstancedModel : public Model
 {
 public:
 	InstancedModel();

@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <time.h>
-#include <mutex> 
+#include <mutex>
 #include <atomic>
 
 #include <GL/glew.h>
@@ -29,10 +29,10 @@ public:
 	void SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	void CreateGeometry();
 	void Draw();
-	void LoadTextures(Shader *shaderTerrain);
+	void LoadTextures(Shader* shaderTerrain);
 	void GenerateBuffers();
-	void InitOpenGL(Shader *shaderTerrain);
-	void Accept(Visitor &v);
+	void InitOpenGL(Shader* shaderTerrain);
+	void Accept(Visitor& v);
 	std::vector<std::vector<float>> heightmap;
 
 	/* Defines the size of renderData0, renderData1 (main memory buffers) in terms of tiles
@@ -65,7 +65,7 @@ private:
 	bool reloadGPUData = false;
 	int currRenderData = 1;
 	int renderDataVertexCount = 0;
-	std::vector<GLfloat> *renderData0 = new std::vector<GLfloat>(maximumVisibleUnits * 48); /* Gets sent to GPU */
-	std::vector<GLfloat> *renderData1 = new std::vector<GLfloat>(maximumVisibleUnits * 48); /* .. */
+	std::vector<GLfloat>* renderData0 = new std::vector<GLfloat>(maximumVisibleUnits * 48); /* Gets sent to GPU */
+	std::vector<GLfloat>* renderData1 = new std::vector<GLfloat>(maximumVisibleUnits * 48); /* .. */
 	std::vector<unsigned int> indices;
 };

@@ -4,7 +4,7 @@
 
 InstancedModel::InstancedModel() {}
 
-InstancedModel::InstancedModel(const std::string& path) 
+InstancedModel::InstancedModel(const std::string& path)
 {
 	init(path);
 }
@@ -15,8 +15,7 @@ void InstancedModel::addMesh(std::vector<Vertex> vertices, std::vector<unsigned 
 	meshes.push_back(mesh);
 }
 
-
-void InstancedModel::Draw(Shader &shader, std::vector<glm::mat4> &models)
+void InstancedModel::Draw(Shader& shader, std::vector<glm::mat4>& models)
 {
 	for (unsigned int i = 0; i < meshes.size(); i++)
 	{

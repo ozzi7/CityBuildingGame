@@ -4,9 +4,9 @@
 GameEventHandler* unitEventHandler;
 SoundEventHandler* soundEventHandler;
 LoggingEventHandler* loggingEventHandler;
-Resources * resources;
+Resources* resources;
 
-Game::Game(){};
+Game::Game() {};
 
 Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	window = aWindow;
@@ -29,7 +29,7 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 
 	camera->Grid = grid;
 
-	// TODO: this is a test, gettickcount is not cross platform.. 
+	// TODO: this is a test, gettickcount is not cross platform..
 	loggingEventHandler->AddEvent(new LoggingEvent(INFO, std::this_thread::get_id(), GetTickCount(), "Generating map..."));
 
 	MapGenerator* mapGenerator = new MapGenerator(grid);
@@ -49,7 +49,7 @@ void Game::StartGame()
 	std::thread threadSoundLoop(&Game::soundLoop, this);
 	std::thread threadLoggingLoop(&Game::loggingLoop, this);
 	SetThreadPriority(&threadGameLoop, THREAD_PRIORITY_TIME_CRITICAL);
-	
+
 	renderLoop();
 	threadGameLoop.join();
 	threadSoundLoop.join();
@@ -63,7 +63,7 @@ void Game::renderLoop()
 	glm::mat4 projection;
 	glm::mat4 view;
 	glm::mat4 lightSpaceMatrix;
-	
+
 	camera->DirectionalLight.Color = { 1.0f, 1.0f, 1.0f };
 	camera->DirectionalLight.PositionOffset = glm::vec3{ -1.0f, -2.0f, 1.0f };
 	camera->UpdateLightDirection();
@@ -102,7 +102,6 @@ void Game::gameLoop()
 	const int TICKS_PER_SECOND = 100;
 	const int SKIP_TICKS = 1000000 / TICKS_PER_SECOND; // microseconds
 
-
 	int loops = 0;
 
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
@@ -123,7 +122,7 @@ void Game::gameLoop()
 			}
 		}
 
-		grid->terrain->SetRenderWindow(camera->GridTopLeftVisible(),camera->GridTopRightVisible(), camera->GridBottomLeftVisible(),
+		grid->terrain->SetRenderWindow(camera->GridTopLeftVisible(), camera->GridTopRightVisible(), camera->GridBottomLeftVisible(),
 			camera->GridBottomRightVisible());
 		grid->UpdateVisibleList(camera->GridTopLeftVisible(), camera->GridTopRightVisible(), camera->GridBottomLeftVisible(),
 			camera->GridBottomRightVisible());
@@ -143,10 +142,9 @@ void Game::gameLoop()
 		grid->terrain->Accept(*producerBuffer); // TODO
 		renderBuffers->ExchangeProducerBuffer();
 
-
 		/*Handle all object moving, deleting, creating, no locks needed because no other thread is currently doing anything..*/
 		while (unitEventHandler->ProcessEvent());
-		
+
 		std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::microseconds>(next_game_tick - std::chrono::high_resolution_clock::now()));
 		next_game_tick = (next_game_tick + std::chrono::microseconds(SKIP_TICKS));
 		loops++;
@@ -155,11 +153,11 @@ void Game::gameLoop()
 void Game::soundLoop()
 {
 	soundEventHandler->LoadFiles();
-	
+
 	while (!glfwWindowShouldClose(window))
 	{
 		while (soundEventHandler->ProcessEvent());
-		std::this_thread::sleep_for(std::chrono::milliseconds(long((1.0/60.0)*1000))); // blocking queue cant be terminated..
+		std::this_thread::sleep_for(std::chrono::milliseconds(long((1.0 / 60.0) * 1000))); // blocking queue cant be terminated..
 	}
 }
 void Game::loggingLoop()

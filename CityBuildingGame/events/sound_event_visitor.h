@@ -5,5 +5,5 @@ class PlaySoundEvent;
 class SoundEventVisitor
 {
 public:
-	virtual void Visit(PlaySoundEvent * aPlaySoundEvent) = 0;
+	virtual void Visit(PlaySoundEvent* aPlaySoundEvent) = 0;
 };

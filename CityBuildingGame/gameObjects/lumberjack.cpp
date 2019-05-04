@@ -4,23 +4,23 @@
 #include <lumberjack_hut.h>
 
 Lumberjack::Lumberjack(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
-	: BoneAnimated(aPosition, aScale*0.35f, aRotation) {
+	: BoneAnimated(aPosition, aScale * 0.35f, aRotation) {
 };
-void Lumberjack::Accept(Visitor &v)
+void Lumberjack::Accept(Visitor& v)
 {
 	v.Visit(this);
 };
 
-void Lumberjack::SetLumberjackHut(LumberjackHut * aLumberjackHut) {
+void Lumberjack::SetLumberjackHut(LumberjackHut* aLumberjackHut) {
 	lumberjackHut = aLumberjackHut;
 }
 void Lumberjack::GameStep() {
 	if (hasArrived)
-	{  
+	{
 		if (state == returningHome) {
 			// arrived back home..
 			// TODO: add resources
-			// find new tree.. 
+			// find new tree..
 			if (lumberjackHut->evolutionStage == 0) {
 				lumberjackHut->Evolve();
 			}
@@ -28,7 +28,7 @@ void Lumberjack::GameStep() {
 		}
 		else if (state == walkingToTarget)
 		{
-			// arrived at tree, start working.. 
+			// arrived at tree, start working..
 			state = working;
 			workTimeLeft = 1000;
 		}

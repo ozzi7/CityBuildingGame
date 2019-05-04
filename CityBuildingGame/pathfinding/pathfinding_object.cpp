@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "pathfinding_object.h"
 
-PathfindingObject::PathfindingObject(Grid * aGrid, const Coordinate XYstart)
+PathfindingObject::PathfindingObject(Grid* aGrid, const Coordinate XYstart)
 {
 	grid = aGrid;
 
@@ -17,15 +17,15 @@ PathfindingObject::PathfindingObject(Grid * aGrid, const Coordinate XYstart)
 PathfindingObject::~PathfindingObject()
 {
 	for (NodeObject* node : closed)
-	{
 		delete node;
-	}
+
 	while (!open.empty())
 	{
 		current = open.top();
 		open.pop();
 		delete current;
 	}
+
 	if (destination)
 		delete destination;
 }
@@ -57,7 +57,7 @@ std::list<Coordinate> PathfindingObject::GetPath()
 }
 
 GameObject* PathfindingObject::GetDestinationObject()
-{	
+{
 	if (objectFound) {
 		for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first]->objects)
 		{
@@ -124,7 +124,7 @@ void PathfindingObject::checkObjectFound(Coordinate coordinate)
 		break;
 
 	case edge:
-		if (coordinate.first == maxX || 
+		if (coordinate.first == maxX ||
 			coordinate.first == 0 ||
 			coordinate.second == maxY ||
 			coordinate.second == 0)

@@ -9,4 +9,3 @@ public:
 	TreeGenerator();
 	std::vector<Tree> TreeGenerator::GenerateTrees();
 };
-

@@ -4,18 +4,17 @@
 #include <dwelling.h>
 
 Settler::Settler(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
-	: BoneAnimated(aPosition, aScale*0.35f, aRotation) {
+	: BoneAnimated(aPosition, aScale * 0.35f, aRotation) {
 };
-void Settler::Accept(Visitor &v)
+void Settler::Accept(Visitor& v)
 {
 	v.Visit(this);
 };
 
-void Settler::SetDwelling(Dwelling * aDwelling) {
+void Settler::SetDwelling(Dwelling* aDwelling) {
 	dwelling = aDwelling;
 }
 void Settler::GameStep() {
-
 	/* check if arrived at dwelling*/
 	if (hasArrived && dwelling->evolutionStage == 0) {
 		dwelling->Evolve();

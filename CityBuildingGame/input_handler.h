@@ -11,7 +11,7 @@ public:
 	void Mousewheel(float yOffset);
 	void WindowFocus(int focused);
 	void MouseScroll();
-	
+
 	GLFWwindow* Window;
 	Camera* Camera;
 	Grid* Grid;

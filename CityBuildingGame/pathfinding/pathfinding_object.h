@@ -17,7 +17,7 @@ struct NodeObject
 	NodeObject* parent;
 };
 
-struct NodeCompareObject 
+struct NodeCompareObject
 {
 	bool operator() (const NodeObject* node1, const NodeObject* node2)
 	{
@@ -65,4 +65,3 @@ private:
 	void checkObjectFound(Coordinate coordinate);
 	void setNextNode();
 };
-

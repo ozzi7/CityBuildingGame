@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "pathfinding.h"
 
-
 Pathfinding::Pathfinding(Grid* aGrid, const Coordinate XYstart, const Coordinate XYdestination)
 {
 	grid = aGrid;
@@ -32,7 +31,7 @@ void Pathfinding::CalculatePath()
 			createNode(Coordinate(current->coordinate.first - 1, current->coordinate.second));
 		if (current->coordinate.second > 0)
 			createNode(Coordinate(current->coordinate.first, current->coordinate.second - 1));
-		
+
 		setNextNode();
 	}
 }
@@ -78,8 +77,8 @@ void Pathfinding::createNode(const Coordinate coordinate)
 unsigned short Pathfinding::distanceToDestination(const Coordinate coordinate)
 {
 	return
-	std::abs(coordinate.first - destination->coordinate.first) +
-	std::abs(coordinate.second - destination->coordinate.second);
+		std::abs(coordinate.first - destination->coordinate.first) +
+		std::abs(coordinate.second - destination->coordinate.second);
 }
 
 void Pathfinding::setNextNode()
@@ -89,8 +88,8 @@ void Pathfinding::setNextNode()
 		current = open.top();
 		open.pop();
 		closed.push_front(current);
-	} 
-	else 
+	}
+	else
 		unreachable = true;
 }
 
@@ -113,14 +112,14 @@ void Pathfinding::adjustParentNode(Node* node)
 Pathfinding::~Pathfinding()
 {
 	for (Node* node : closed)
-	{
 		delete node;
-	}
+
 	while (!open.empty())
 	{
 		current = open.top();
 		open.pop();
 		delete current;
 	}
+
 	delete destination;
 }

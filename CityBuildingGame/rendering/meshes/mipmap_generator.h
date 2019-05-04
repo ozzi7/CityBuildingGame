@@ -25,4 +25,3 @@ private:
 	std::vector<alphaPair> alphaValues;
 	unsigned int width, height;
 };
-

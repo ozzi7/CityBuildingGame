@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GL/glew.h> 
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <assimp/Importer.hpp>
@@ -22,7 +22,7 @@
 class Model
 {
 public:
-	// constructor, expects a filepath to a 3D model.	
+	// constructor, expects a filepath to a 3D model.
 	Model();
 	Model(const std::string& path); // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
 

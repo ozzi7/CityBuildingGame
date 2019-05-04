@@ -7,7 +7,7 @@
 #include <map>
 #include <vector>
 
-#include <GL/glew.h> 
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -26,14 +26,14 @@ public:
 
 	bool LoadMesh(const std::string& fileName);
 	void Render(Shader shader);
-	
+
 	void PrecalculateBoneTransforms();
 	void BindBoneTransform(float timeInSeconds, Shader* shader);
 
 private:
 #define NUM_BONES_PER_VERTEX 4
 
-	void BoneTransform(float timeInSeconds, std::vector<glm::mat4>& Transforms);
+	void BoneTransform(float timeInSeconds, std::vector<glm::mat4> & Transforms);
 	void PrecalculateStringLookupTable();
 
 	struct BoneInfo
@@ -87,9 +87,9 @@ private:
 		std::vector<VertexBoneData>& Bones,
 		std::vector<unsigned int>& Indices);
 	void LoadBones(unsigned int MeshIndex, const aiMesh* paiMesh, std::vector<VertexBoneData>& Bones);
-	bool InitMaterials(const unsigned int meshIndex, const aiMesh* mesh, const aiScene *scene);
-	std::vector<Texture> SkinnedMesh::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
-	unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
+	bool InitMaterials(const unsigned int meshIndex, const aiMesh* mesh, const aiScene* scene);
+	std::vector<Texture> SkinnedMesh::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+	unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
 	void Clear();
 
 #define INVALID_MATERIAL 0xFFFFFFFF

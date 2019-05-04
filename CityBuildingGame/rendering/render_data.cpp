@@ -3,7 +3,6 @@
 
 RenderBuffer::RenderBuffer() {};
 void RenderBuffer::Visit(GameObject* obj) {
-
 }
 void RenderBuffer::Visit(Pine* obj) {
 	pineModels.push_back(obj->model);
@@ -50,10 +49,8 @@ void RenderBuffer::Visit(Dwelling* obj) {
 	}
 }
 void RenderBuffer::Visit(Building* obj) {
-	
 }
 void RenderBuffer::Visit(Terrain* obj) {
-
 	terrain = obj;
 }
 void RenderBuffer::Visit(Tree* obj) {

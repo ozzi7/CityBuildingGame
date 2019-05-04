@@ -5,5 +5,5 @@ class LoggingEvent;
 class LoggingEventVisitor
 {
 public:
-	virtual void Visit(LoggingEvent * aLoggingEvent) = 0;
+	virtual void Visit(LoggingEvent* aLoggingEvent) = 0;
 };

@@ -22,7 +22,6 @@ void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::ve
 }
 void Terrain::AddTexturesToGrid()
 {
-
 }
 
 void Terrain::Draw()
@@ -41,7 +40,7 @@ void Terrain::Draw()
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-	
+
 	glBindVertexArray(0);
 
 	// always good practice to set everything back to defaults once configured.
@@ -58,9 +57,9 @@ int Terrain::ReloadGPUData()
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 		if (currRenderData)
-			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount *8, &(*renderData1)[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 8, &(*renderData1)[0], GL_STATIC_DRAW);
 		else
-			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount *8, &(*renderData0)[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 8, &(*renderData0)[0], GL_STATIC_DRAW);
 
 		vertexCount = renderDataVertexCount;
 
@@ -80,11 +79,11 @@ int Terrain::ReloadGPUData()
 	return vertexCount;
 }
 void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
-{	
+{
 	/* parameters: corners of visible grid on (x/y/z=0) plane */
 	/* Create geometry data for visible area */
 
-	std::vector<GLfloat> *renderDataTemp;
+	std::vector<GLfloat>* renderDataTemp;
 	renderDataMutex.lock();
 	if (currRenderData)
 		renderDataTemp = renderData0;
@@ -99,11 +98,11 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	int fromY = std::min(std::min((int)upperLeft.y, int(lowerLeft.y)), std::min((int)upperRight.y, int(lowerRight.y)));
 	int endY = std::max(std::max((int)upperLeft.y, int(lowerLeft.y)), std::max((int)upperRight.y, int(lowerRight.y)));
 
-	for (int i = std::max(0, fromY+1); i <= std::min(gridHeight-1, endY); ++i)
+	for (int i = std::max(0, fromY + 1); i <= std::min(gridHeight - 1, endY); ++i)
 	{
-		for (int j = std::max(0, fromX+1); j <= std::min(gridWidth-1, endX); ++j)
+		for (int j = std::max(0, fromX + 1); j <= std::min(gridWidth - 1, endX); ++j)
 		{
-			if (index < maximumVisibleUnits*48)
+			if (index < maximumVisibleUnits * 48)
 			{
 				/* Check if the point is inside the rectangle*/
 				glm::vec2 AM = glm::vec2(j - upperLeft.x, i - upperLeft.y);
@@ -122,9 +121,9 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = heightmap[i][j];
 
 					// x/y/z of normal vector
-					(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j].x;
-					(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j].y;
-					(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j].z;
+					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j].x;
+					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j].y;
+					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j].z;
 
 					// texture coord X, Y of first vertex
 					(*renderDataTemp)[index++] = 0.0f;
@@ -135,9 +134,9 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = heightmap[i][j + 1];
 
 					// x/y/z of normal vector
-					(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].x;
-					(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].y;
-					(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].z;
+					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j + 1].x;
+					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j + 1].y;
+					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j + 1].z;
 
 					(*renderDataTemp)[index++] = 1.0f;
 					(*renderDataTemp)[index++] = 0.0f;
@@ -146,9 +145,9 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = float_i + 1;
 					(*renderDataTemp)[index++] = heightmap[i + 1][j];
 
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].x;
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].y;
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].z;
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].x;
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].y;
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].z;
 
 					(*renderDataTemp)[index++] = 0.0f;
 					(*renderDataTemp)[index++] = 1.0f;
@@ -157,9 +156,9 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = float_i + 1;
 					(*renderDataTemp)[index++] = heightmap[i + 1][j];
 
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].x;
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].y;
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j].z;
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].x;
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].y;
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].z;
 
 					(*renderDataTemp)[index++] = 0.0f;
 					(*renderDataTemp)[index++] = 1.0f;
@@ -168,9 +167,9 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = float_i;
 					(*renderDataTemp)[index++] = heightmap[i][j + 1];
 
-					(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].x;
-					(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].y;
-					(*renderDataTemp)[index++] = vertexNormals[i*(gridWidth + 1) + j + 1].z;
+					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j + 1].x;
+					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j + 1].y;
+					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j + 1].z;
 
 					(*renderDataTemp)[index++] = 1.0f;
 					(*renderDataTemp)[index++] = 0.0f;
@@ -179,9 +178,9 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = float_i + 1;
 					(*renderDataTemp)[index++] = heightmap[i + 1][j + 1];
 
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j + 1].x;
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j + 1].y;
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1)*(gridWidth + 1) + j + 1].z;
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j + 1].x;
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j + 1].y;
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j + 1].z;
 
 					(*renderDataTemp)[index++] = 1.0f;
 					(*renderDataTemp)[index++] = 1.0f;
@@ -191,7 +190,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 				goto loopExit;
 		}
 	}
-	loopExit:
+loopExit:
 	renderDataMutex.lock();
 	if (currRenderData == 1)
 	{
@@ -208,8 +207,8 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 void Terrain::CreateGeometry()
 {
 	/* Create normals, areas for triangles using explicit cross product formula*/
-	triangleNormals = std::vector<glm::vec3>(gridWidth*gridHeight * 2);
-	triangleArea = std::vector<float>(gridWidth*gridHeight * 2);
+	triangleNormals = std::vector<glm::vec3>(gridWidth * gridHeight * 2);
+	triangleArea = std::vector<float>(gridWidth * gridHeight * 2);
 	for (int i = 0; i < gridHeight; ++i)
 	{
 		for (int j = 0; j < gridWidth; ++j)
@@ -219,8 +218,8 @@ void Terrain::CreateGeometry()
 				heightmap[i + 1][j] - heightmap[i][j],
 				1);
 
-			triangleArea[(i*gridWidth + j) * 2] = glm::length(crossProduct) / 2.0f;
-			triangleNormals[(i*gridWidth + j) * 2] = glm::normalize(crossProduct);
+			triangleArea[(i * gridWidth + j) * 2] = glm::length(crossProduct) / 2.0f;
+			triangleNormals[(i * gridWidth + j) * 2] = glm::normalize(crossProduct);
 
 			/* Right triangle*/
 			crossProduct = glm::vec3(-(heightmap[i + 1][j + 1] - heightmap[i][j + 1]) -
@@ -228,13 +227,13 @@ void Terrain::CreateGeometry()
 				-(heightmap[i + 1][j + 1] - heightmap[i][j + 1]),
 				1);
 
-			triangleArea[(i*gridWidth + j) * 2 + 1] = glm::length(crossProduct) / 2.0f;
-			triangleNormals[(i*gridWidth + j) * 2 + 1] = glm::normalize(crossProduct);
+			triangleArea[(i * gridWidth + j) * 2 + 1] = glm::length(crossProduct) / 2.0f;
+			triangleNormals[(i * gridWidth + j) * 2 + 1] = glm::normalize(crossProduct);
 		}
 	}
 
 	/* Create vertex normals, currently weighted by area of neighbor triangle not angle (should be similar in this case)*/
-	vertexNormals = std::vector<glm::vec3>((gridWidth+1)*(gridHeight+1));
+	vertexNormals = std::vector<glm::vec3>((gridWidth + 1) * (gridHeight + 1));
 	for (int i = 0; i < gridHeight + 1; ++i)
 	{
 		for (int j = 0; j < gridWidth + 1; ++j)
@@ -244,62 +243,63 @@ void Terrain::CreateGeometry()
 				// bottom row
 				if (j == 0) {
 					// bottom left vertex
-					vertexNormals[i*(gridWidth+1)+j] = triangleNormals[0];
-				} else if (j == gridHeight) {
+					vertexNormals[i * (gridWidth + 1) + j] = triangleNormals[0];
+				}
+				else if (j == gridHeight) {
 					// bottom right
-					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(j - 1) * 2] * triangleNormals[(j - 1) * 2] +
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(j - 1) * 2] * triangleNormals[(j - 1) * 2] +
 						triangleArea[(j - 1) * 2 + 1] * triangleNormals[(j - 1) * 2 + 1]);
 				}
 				else {
 					// bottom middle
-					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(j - 1) * 2]*triangleNormals[(j-1)*2] +
-						triangleArea[(j - 1) * 2 + 1] * triangleNormals[(j - 1) * 2 + 1])+
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(j - 1) * 2] * triangleNormals[(j - 1) * 2] +
+						triangleArea[(j - 1) * 2 + 1] * triangleNormals[(j - 1) * 2 + 1]) +
 						triangleArea[(j - 1) * 2 + 2] * triangleNormals[(j - 1) * 2 + 2];
 				}
 			}
 			else {
 				if (j == 0 && i < gridHeight) {
 					// left column, except bottomn left and top left
-					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(i-1)*gridWidth*2] * triangleNormals[(i - 1)*gridWidth * 2] +
-						triangleArea[(i - 1)*gridWidth * 2+1] * triangleNormals[(i - 1)*gridWidth * 2+1] +
-						triangleArea[i*gridWidth * 2] * triangleNormals[i * gridWidth*2]);
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(i - 1) * gridWidth * 2] * triangleNormals[(i - 1) * gridWidth * 2] +
+						triangleArea[(i - 1) * gridWidth * 2 + 1] * triangleNormals[(i - 1) * gridWidth * 2 + 1] +
+						triangleArea[i * gridWidth * 2] * triangleNormals[i * gridWidth * 2]);
 				}
-				else if(j == 0) {
+				else if (j == 0) {
 					// top left
-					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(i - 1)*gridWidth * 2] * triangleNormals[(i - 1)*gridWidth * 2] +
-						triangleArea[(i - 1)*gridWidth * 2 + 1] * triangleNormals[(i - 1)*gridWidth * 2 + 1]);
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(i - 1) * gridWidth * 2] * triangleNormals[(i - 1) * gridWidth * 2] +
+						triangleArea[(i - 1) * gridWidth * 2 + 1] * triangleNormals[(i - 1) * gridWidth * 2 + 1]);
 				}
 				else if (j == gridWidth && i != gridHeight) {
-					// right side, middle 
-					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(i - 1)*gridWidth * 2 +j*2 - 1] * triangleNormals[(i - 1)*gridWidth * 2 + j * 2 - 1] +
-						triangleArea[i *gridWidth * 2 + j * 2 - 2] * triangleNormals[i *gridWidth * 2 + j * 2 - 2] +
-						triangleArea[i *gridWidth * 2 + j * 2 - 1] * triangleNormals[i *gridWidth * 2 + j * 2 - 1]);
+					// right side, middle
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(i - 1) * gridWidth * 2 + j * 2 - 1] * triangleNormals[(i - 1) * gridWidth * 2 + j * 2 - 1] +
+						triangleArea[i * gridWidth * 2 + j * 2 - 2] * triangleNormals[i * gridWidth * 2 + j * 2 - 2] +
+						triangleArea[i * gridWidth * 2 + j * 2 - 1] * triangleNormals[i * gridWidth * 2 + j * 2 - 1]);
 				}
 				else if (j == gridWidth && i == gridHeight) {
-					// right top 
-					vertexNormals[i*(gridWidth + 1) + j] = triangleNormals[gridWidth*gridHeight-1];
+					// right top
+					vertexNormals[i * (gridWidth + 1) + j] = triangleNormals[gridWidth * gridHeight - 1];
 				}
 				else if (i == gridHeight) {
-					// top row, except left and right 
-					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(i - 1)*gridWidth * 2 + (j*2)-1] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2) - 1] +
-						triangleArea[(i - 1)*gridWidth * 2 + (j * 2)] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2)] +
-						triangleArea[(i - 1)*gridWidth * 2 + (j * 2)+1] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2) + 1]);
+					// top row, except left and right
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(i - 1) * gridWidth * 2 + (j * 2) - 1] * triangleNormals[(i - 1) * gridWidth * 2 + (j * 2) - 1] +
+						triangleArea[(i - 1) * gridWidth * 2 + (j * 2)] * triangleNormals[(i - 1) * gridWidth * 2 + (j * 2)] +
+						triangleArea[(i - 1) * gridWidth * 2 + (j * 2) + 1] * triangleNormals[(i - 1) * gridWidth * 2 + (j * 2) + 1]);
 				}
 				else
 				{
 					// rest, all in the middle with 6 surrounding triangles
-					vertexNormals[i*(gridWidth + 1) + j] = normalize(triangleArea[(i - 1)*gridWidth * 2 + (j * 2) - 1] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2) - 1] +
-						triangleArea[(i - 1)*gridWidth * 2 + (j * 2)] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2)] +
-						triangleArea[(i - 1)*gridWidth * 2 + (j * 2) + 1] * triangleNormals[(i - 1)*gridWidth * 2 + (j * 2) + 1]+
-						triangleArea[i*gridWidth * 2 + (j * 2) - 2] * triangleNormals[i*gridWidth * 2 + (j * 2) - 2] +
-						triangleArea[i*gridWidth * 2 + (j * 2) - 1] * triangleNormals[i*gridWidth * 2 + (j * 2) - 1] +
-						triangleArea[i*gridWidth * 2 + (j * 2)]  * triangleNormals[i*gridWidth * 2 + (j * 2) + 1]);
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(i - 1) * gridWidth * 2 + (j * 2) - 1] * triangleNormals[(i - 1) * gridWidth * 2 + (j * 2) - 1] +
+						triangleArea[(i - 1) * gridWidth * 2 + (j * 2)] * triangleNormals[(i - 1) * gridWidth * 2 + (j * 2)] +
+						triangleArea[(i - 1) * gridWidth * 2 + (j * 2) + 1] * triangleNormals[(i - 1) * gridWidth * 2 + (j * 2) + 1] +
+						triangleArea[i * gridWidth * 2 + (j * 2) - 2] * triangleNormals[i * gridWidth * 2 + (j * 2) - 2] +
+						triangleArea[i * gridWidth * 2 + (j * 2) - 1] * triangleNormals[i * gridWidth * 2 + (j * 2) - 1] +
+						triangleArea[i * gridWidth * 2 + (j * 2)] * triangleNormals[i * gridWidth * 2 + (j * 2) + 1]);
 				}
 			}
 		}
 	}
 }
-void Terrain::Accept(Visitor &v)
+void Terrain::Accept(Visitor& v)
 {
 	v.Visit(this);
 }

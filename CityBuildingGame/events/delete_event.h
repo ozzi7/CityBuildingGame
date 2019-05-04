@@ -6,11 +6,11 @@ class GameObject;
 class DeleteEvent : public GameEvent
 {
 public:
-	DeleteEvent(int posX, int posY, GameObject * aGameObject);
+	DeleteEvent(int posX, int posY, GameObject* aGameObject);
 	void DeleteEvent::Accept(GameEventVisitor* eventVisitor);
 
 	int posX;
 	int posY;
 
-	GameObject * gameObject;
+	GameObject* gameObject;
 };

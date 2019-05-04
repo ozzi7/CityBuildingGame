@@ -10,7 +10,6 @@
 #include <iostream>
 #include <vector>
 
-
 struct Vertex {
 	glm::vec3 Position;
 	glm::vec3 Normal;
@@ -33,7 +32,7 @@ public:
 
 	// render the mesh
 	void Draw();
-	
+
 protected:
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;

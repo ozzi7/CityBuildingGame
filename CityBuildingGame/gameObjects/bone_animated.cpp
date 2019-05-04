@@ -6,8 +6,8 @@
 BoneAnimated::BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 	: GameObject(aPosition, aScale, aRotation) {
 }
-void BoneAnimated::UpdatePosition(Grid * grid) 
-{	
+void BoneAnimated::UpdatePosition(Grid* grid)
+{
 	if (!proxyHasArrived) {
 		updateProxyPosition();
 	}
@@ -19,14 +19,14 @@ void BoneAnimated::UpdatePosition(Grid * grid)
 			walkingSpeed -= walkingSpeedMaxChange;
 		}
 		else if (distanceToProxy > 1.0f && walkingSpeed < maxSpeed)
-		{	
+		{
 			walkingSpeed += walkingSpeedMaxChange;
 		}
 
 		if (distanceToProxy > walkingSpeed) {
 			// will not reach proxy yet
-			float translationX = walkingSpeed* glm::normalize(proxyObjectPos - glm::vec2(position.x, position.y)).x;
-			float translationY = walkingSpeed* glm::normalize(proxyObjectPos - glm::vec2(position.x, position.y)).y;
+			float translationX = walkingSpeed * glm::normalize(proxyObjectPos - glm::vec2(position.x, position.y)).x;
+			float translationY = walkingSpeed * glm::normalize(proxyObjectPos - glm::vec2(position.x, position.y)).y;
 
 			position = glm::vec3(position.x + translationX, position.y + translationY, grid->GetHeight(position.x + translationX,
 				position.y + translationY));
@@ -34,7 +34,7 @@ void BoneAnimated::UpdatePosition(Grid * grid)
 			rotation.z = std::atan2f(translationY, translationX);
 			if (translationX < 0)
 				rotation.z += 2 * glm::pi<float>();
-			rotation.z = rotation.z - glm::half_pi<float>(); // somehow roation direction is not from +x to +y but +x to -y.. 
+			rotation.z = rotation.z - glm::half_pi<float>(); // somehow roation direction is not from +x to +y but +x to -y..
 																 //rotation = rotation + 3.1415;
 		}
 		else {
@@ -59,17 +59,17 @@ void BoneAnimated::updateProxyPosition(float speed)
 	{
 		// not at final WP yet..
 		float distanceToNextWP = glm::distance(proxyObjectPos, wayPoints[proxyWPIdx + 1]);
-		
+
 		if (distanceToNextWP > speed) {
 			// ..and will not arrive at a new WP this update
-			translation = speed*glm::normalize(wayPoints[proxyWPIdx + 1] - proxyObjectPos);
+			translation = speed * glm::normalize(wayPoints[proxyWPIdx + 1] - proxyObjectPos);
 		}
 		else {
 			// .. and will reach a new WP this update
 			if (proxyWPIdx + 2 < wayPoints.size())
 			{
 				// continue to next WP after the one we just arrived at..
-				translation = (wayPoints[proxyWPIdx + 1] - proxyObjectPos) + (speed - distanceToNextWP)*
+				translation = (wayPoints[proxyWPIdx + 1] - proxyObjectPos) + (speed - distanceToNextWP) *
 					glm::normalize(wayPoints[proxyWPIdx + 2] - wayPoints[proxyWPIdx + 1]);
 			}
 			else {

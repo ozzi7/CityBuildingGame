@@ -7,7 +7,6 @@
 #include <game_event_handler.h>
 #include <sound_event_handler.h>
 
-
 class GameEventHandler;
 class SoundEventHandler;
 
@@ -25,8 +24,7 @@ public:
 	int posX = -1; // this must be set, otherwise crash pls
 	int posY = -1;
 
-
-	virtual void Accept(class Visitor &v) = 0;
+	virtual void Accept(class Visitor& v) = 0;
 
 protected:
 	void recalculateModelMatix();

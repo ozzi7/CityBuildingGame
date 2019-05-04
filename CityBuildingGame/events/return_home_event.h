@@ -14,4 +14,3 @@ public:
 	BoneAnimated* person;
 	PersonType personType;
 };
-

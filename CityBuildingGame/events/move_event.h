@@ -6,7 +6,7 @@ class GameObject;
 class MoveEvent : public GameEvent
 {
 public:
-	MoveEvent(int aFromX, int aFromY, int aToX, int aToY, GameObject * aGameObject);
+	MoveEvent(int aFromX, int aFromY, int aToX, int aToY, GameObject* aGameObject);
 	void MoveEvent::Accept(GameEventVisitor* eventVisitor);
 
 	int fromX;
@@ -15,5 +15,5 @@ public:
 	int toX;
 	int toY;
 
-	GameObject * gameObject;
+	GameObject* gameObject;
 };

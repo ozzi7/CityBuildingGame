@@ -18,7 +18,7 @@ public:
 	virtual void Visit(Terrain* terrain) = 0;
 
 	virtual void Visit(Tree* tree) = 0;
-	virtual void Visit(Oak * oak) = 0;
+	virtual void Visit(Oak* oak) = 0;
 	virtual void Visit(Spruce* spruce) = 0;
 	virtual void Visit(Pine* pine) = 0;
 	virtual void Visit(Juniper* juniper) = 0;

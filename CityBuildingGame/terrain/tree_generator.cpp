@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "tree_generator.h"
 
-
-
 TreeGenerator::TreeGenerator()
 {
 }

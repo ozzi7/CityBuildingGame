@@ -1,19 +1,19 @@
 #pragma once
 #include <game_object.h>
 #include "visitor.h"
-#include <math.h> 
+#include <math.h>
 #include <vector>
 
 class Grid;
 
-enum State {idle, walkingToTarget, returningHome, working};
+enum State { idle, walkingToTarget, returningHome, working };
 
 class BoneAnimated : public GameObject
 {
 public:
 	BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation);
 
-	void UpdatePosition(Grid * grid);
+	void UpdatePosition(Grid* grid);
 	void SetNewPath(std::vector<glm::vec2> aWayPoints);
 	void UpdatePath(std::vector<glm::vec2> aWayPoints);
 
@@ -34,10 +34,9 @@ private:
 
 	bool proxyHasArrived = true;
 
-	glm::vec2 proxyObjectPos = glm::vec2(0.0f,0.0f);
+	glm::vec2 proxyObjectPos = glm::vec2(0.0f, 0.0f);
 	std::vector<glm::vec2> wayPoints;
 	int proxyWPIdx = 0;
-
 
 	float proxySpeed = 0.006f;
 	const float maxSpeed = 1.05f * walkingSpeed;

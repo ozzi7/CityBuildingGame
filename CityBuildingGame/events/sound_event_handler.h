@@ -12,10 +12,9 @@ public:
 	SoundEventHandler::SoundEventHandler(int nofSounds);
 	void SoundEventHandler::LoadFiles();
 	void AddEvent(SoundEvent*);
-	SoundEvent * GetEvent();
+	SoundEvent* GetEvent();
 	bool ProcessEvent();
-	void Visit(PlaySoundEvent * aPlaySoundEvent);
-
+	void Visit(PlaySoundEvent* aPlaySoundEvent);
 
 private:
 	int maxSounds = 255;

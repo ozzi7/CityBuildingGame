@@ -12,9 +12,9 @@ class LoggingEventHandler : public LoggingEventVisitor {
 public:
 	LoggingEventHandler::LoggingEventHandler(LoggingLevel fileLoggingLevel, LoggingLevel consoleLoggingLevel);
 	void AddEvent(LoggingEvent*);
-	LoggingEvent * GetEvent();
+	LoggingEvent* GetEvent();
 	bool ProcessEvent();
-	void Visit(LoggingEvent * aLoggingEvent);
+	void Visit(LoggingEvent* aLoggingEvent);
 
 private:
 	moodycamel::ConcurrentQueue<LoggingEvent*> cq;

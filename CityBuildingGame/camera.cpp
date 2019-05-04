@@ -24,7 +24,6 @@ glm::mat4 Camera::GetLightViewMatrix()
 {
 	//return glm::lookAt(DirectionalLight.Position, DirectionalLight.Position + lookat, glm::vec3(0.0, 0.0, 1.0));
 	return glm::lookAt(Position + lookat + DirectionalLight.PositionOffset, Position + lookat, up);
-
 }
 
 glm::mat4 Camera::GetProjectionMatrix()
@@ -35,7 +34,6 @@ glm::mat4 Camera::GetProjectionMatrix()
 glm::mat4 Camera::GetLightProjectionMatrix()
 {
 	return glm::ortho(-ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, -1.0f * ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, -100.0f, 100.0f);
-
 }
 
 // Top left position on Grid that is visible by camera
@@ -84,12 +82,12 @@ glm::vec3 Camera::CursorPositionOnGrid()
 	x = (float)window_x;
 	y = ScreenHeight - (float)window_y;
 	glReadPixels((int)x, (int)y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
-	
+
 	glm::vec3 window = glm::vec3(x, y, z);
 	glm::mat4 model = GetViewMatrix();
 	glm::mat4 projection = GetProjectionMatrix();
 	glm::vec4 viewport = glm::vec4(0.0f, 0.0f, (float)ScreenWidth, (float)ScreenHeight);
-	
+
 	glm::vec3 result = glm::unProject(window, model, projection, viewport);
 
 	return result;
@@ -119,7 +117,7 @@ void Camera::Zoom(float yOffset)
 
 void Camera::UpdateLightDirection()
 {
-	/*float distance = 
+	/*float distance =
 		sqrt(
 		pow((lookat.x - Position.x + DirectionalLight.PositionOffset.x), 2) +
 		pow((lookat.y - Position.y + DirectionalLight.PositionOffset.y), 2) +
@@ -127,4 +125,3 @@ void Camera::UpdateLightDirection()
 
 	DirectionalLight.Direction = -(DirectionalLight.PositionOffset);
 }
-

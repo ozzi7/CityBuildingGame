@@ -28,7 +28,6 @@ struct LightSource
 	glm::vec3 Color;
 };
 
-
 const float ZOOM_MAX = 50.0f;
 const float ZOOM_MIN = 0.2f;
 const float ROOT3 = (float)sqrt(3); // ROOT3 if viewing angle is 45°
@@ -66,4 +65,3 @@ private:
 	glm::vec3 lookat;
 	GLFWwindow* window;
 };
-

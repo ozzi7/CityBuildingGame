@@ -40,7 +40,7 @@ const float SMALL_TREE_CUTOFF_PERCENTAGE = 30.0f; // [0,100), removes midget tre
 const float PINE_DENSITY = 0.3f;		//0.4 [0 - 1]
 const float JUNIPER_DENSITY = 0.3f;		//0.1 [0 - 1]
 const float OAK_DENSITY = 0.15f;		// 0.4[0 - 1]
-const float SPRUCE_DENSITY= 0.3f;		//0.4 [0 - 1]
+const float SPRUCE_DENSITY = 0.3f;		//0.4 [0 - 1]
 
 /* terrain generation */
 const float HILL_HEIGHT = 15.0f;	// ~ 0 - 15
@@ -52,7 +52,7 @@ const float PLATEAU_PERCENTAGE = 10.0f; // [0 - 100] flattens x percent tallest 
 const float VALLEY_PERCENTAGE = 30.0f; //[0 - 100] flattens x percent of lowest terrain
 
 // if 0 => the tree noise map defines tree distribution, 1=> the terrain height defines tree distribution
-const float TERRAIN_WEIGHT_FACTOR = 0.7f; // [0,1] 
+const float TERRAIN_WEIGHT_FACTOR = 0.7f; // [0,1]
 
 const float SCROLL_SPEED = 5.0f;
 const float VISIBLE_RANGE = 1.6f;	// ~1.6 is entire screen

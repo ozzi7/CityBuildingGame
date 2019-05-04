@@ -19,13 +19,13 @@ void SoundEventHandler::LoadFiles()
 	soundBuffers[0].loadFromFile(Path + "/../music/sound_effects/lvlup.ogg");
 }
 // TODO: make playMusicEvent to change music
-void SoundEventHandler::AddEvent(SoundEvent * e)
+void SoundEventHandler::AddEvent(SoundEvent* e)
 {
 	cq.enqueue(e);
 }
-SoundEvent * SoundEventHandler::GetEvent()
+SoundEvent* SoundEventHandler::GetEvent()
 {
-	SoundEvent * e;
+	SoundEvent* e;
 	if (cq.try_dequeue(e))
 	{
 		return e;
@@ -37,7 +37,7 @@ SoundEvent * SoundEventHandler::GetEvent()
 }
 bool SoundEventHandler::ProcessEvent()
 {
-	SoundEvent * sound_event = GetEvent();
+	SoundEvent* sound_event = GetEvent();
 	if (sound_event != NULL)
 	{
 		sound_event->Accept(this);
@@ -45,7 +45,7 @@ bool SoundEventHandler::ProcessEvent()
 	}
 	return false;
 }
-void SoundEventHandler::Visit(PlaySoundEvent * aSoundEvent)
+void SoundEventHandler::Visit(PlaySoundEvent* aSoundEvent)
 {
 	if (!SOUND_ENABLED)
 		return;
@@ -73,7 +73,7 @@ void SoundEventHandler::Visit(PlaySoundEvent * aSoundEvent)
 			sounds.at(location).setBuffer(soundBuffers[aSoundEvent->soundType]);
 			sounds.at(location).play();
 		}
-		else if(location == -1 && sounds.size() < maxSounds)
+		else if (location == -1 && sounds.size() < maxSounds)
 		{
 			sounds.push_back(sf::Sound());
 			sounds.at(sounds.size() - 1).setBuffer(soundBuffers[aSoundEvent->soundType]);

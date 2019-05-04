@@ -3,7 +3,7 @@
 
 class BoneAnimated;
 
-enum Resource {Wood};
+enum Resource { Wood };
 
 class GatherResourceEvent : public GameEvent
 {
@@ -15,4 +15,3 @@ public:
 	Resource resource;
 	BoneAnimated* person;
 };
-

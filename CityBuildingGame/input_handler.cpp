@@ -21,13 +21,13 @@ void InputHandler::Keypress(int button, int action)
 			Camera->Scroll(RIGHT, 0.05f);
 	}
 }
-void InputHandler::Mouseclick(int button, int action) 
+void InputHandler::Mouseclick(int button, int action)
 {
 	if (windowFocused)
 	{
 		if (!action == GLFW_PRESS) { return; }
-		for(int i = 0; i < 300; ++i) // lol 
-			soundEventHandler->AddEvent(new PlaySoundEvent(SettlerArrivedID)); // TODO: 
+		for (int i = 0; i < 300; ++i) // lol
+			soundEventHandler->AddEvent(new PlaySoundEvent(SettlerArrivedID)); // TODO:
 		// Test Code
 		glm::vec3 cursor_position = Camera->CursorPositionOnGrid();
 		if (cursor_position.x >= 0 && cursor_position.y >= 0 && Grid->gridHeight > (int)cursor_position.y && Grid->gridWidth > (int)cursor_position.x)
@@ -50,11 +50,10 @@ void InputHandler::Mousewheel(float yOffset)
 		Camera->Zoom(yOffset);
 }
 
-void InputHandler::WindowFocus(int focused) 
+void InputHandler::WindowFocus(int focused)
 {
 	windowFocused = focused;
 	if (windowFocused) {
-
 		int width;
 		int height;
 		int left;

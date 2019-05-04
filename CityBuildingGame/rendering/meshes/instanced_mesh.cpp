@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "instanced_mesh.h"
 
-
 InstancedMesh::InstancedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
 {
 	this->vertices = vertices;
@@ -14,7 +13,7 @@ InstancedMesh::InstancedMesh(std::vector<Vertex> vertices, std::vector<unsigned 
 
 void InstancedMesh::setupInstancedMesh()
 {
-	glBindVertexArray(VAO);	
+	glBindVertexArray(VAO);
 	glGenBuffers(1, &instanceVBO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);

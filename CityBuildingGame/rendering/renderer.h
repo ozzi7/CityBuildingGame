@@ -43,7 +43,6 @@ public:
 
 	Renderer(Camera& aCamera) : camera(aCamera)
 	{
-
 		std::string model_path;
 
 		terrain_shader = new Shader("shaders/mesh.vert", "shaders/mesh.frag");

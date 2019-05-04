@@ -34,7 +34,7 @@ void Grid::Init()
 	visibleUnits = std::vector<Unit*>(maximumVisibleUnits);
 }
 
-void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::vec2 &lowerLeft, glm::vec2 &lowerRight)
+void Grid::UpdateVisibleList(glm::vec2& upperLeft, glm::vec2& upperRight, glm::vec2& lowerLeft, glm::vec2& lowerRight)
 {
 	/* Check if we need to recalculate visible grid */
 	if (currUpperLeftX != (int)upperLeft.x || currUpperLeftY != (int)upperLeft.y ||
@@ -74,7 +74,7 @@ void Grid::UpdateVisibleList(glm::vec2 &upperLeft, glm::vec2 &upperRight, glm::v
 		}
 	}
 }
-/* Return height of any point on the grid 
+/* Return height of any point on the grid
 Note: No out of bounds checking*/
 float Grid::GetHeight(float posX, float posY)
 {
@@ -89,12 +89,12 @@ float Grid::GetHeight(float posX, float posY)
 		// left triangle
 		float m = terrain->heightmap[i][j + 1] - terrain->heightmap[i][j];
 		float n = terrain->heightmap[i + 1][j] - terrain->heightmap[i][j];
-		return (offsetX*m + offsetY*n) + terrain->heightmap[i][j];
+		return (offsetX * m + offsetY * n) + terrain->heightmap[i][j];
 	}
 	else {
 		float m = terrain->heightmap[i + 1][j] - terrain->heightmap[i + 1][j + 1];
 		float n = terrain->heightmap[i][j + 1] - terrain->heightmap[i + 1][j + 1];
-		return ((1-offsetX)*m + (1-offsetY) * n) + terrain->heightmap[i + 1][j + 1];;
+		return ((1 - offsetX) * m + (1 - offsetY) * n) + terrain->heightmap[i + 1][j + 1];;
 	}
 }
 /* Check if area is flat within a rectangle of the grid
@@ -109,7 +109,7 @@ bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY)
 			if (terrain->heightmap[i][j] != height)
 			{
 				isFlat = false;
-				i = toY+1; // alternative to goto: 
+				i = toY + 1; // alternative to goto:
 				break;
 			}
 		}

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "mipmap_generator.h"
 
-
 MipmapGenerator::MipmapGenerator(unsigned char* aData, unsigned int aWidth, unsigned int aHeight)
 {
 	data = aData;
@@ -22,7 +21,7 @@ void MipmapGenerator::ScaleImage()
 	unsigned int alphaCounter = 0;
 	unsigned int currentWidth = 1;
 	unsigned int currentHeight = 1;
-	
+
 	while (i < resultCount) {
 		for (int channel = 0; channel <= 3; channel++)
 		{
@@ -33,7 +32,7 @@ void MipmapGenerator::ScaleImage()
 				alphaValues[alphaCounter] = alphaPair(color, i);
 				alphaCounter++;
 			}
-				
+
 			resultUnrounded[i] = color;
 			result[i] = color;
 			i++;
@@ -55,7 +54,7 @@ unsigned char MipmapGenerator::bilinear(unsigned int positionWidth, unsigned int
 	float accurateHeight = (positionHeight - 0.5f) * divisor + 0.5f;
 
 	unsigned char upperLeft = data[((int)accurateHeight - 1) * width * 4 + ((int)accurateWidth - 1) * 4 + channel];
-	unsigned char upperRight = data[((int)accurateHeight - 1) * width * 4 + (int)accurateWidth * 4  + channel];
+	unsigned char upperRight = data[((int)accurateHeight - 1) * width * 4 + (int)accurateWidth * 4 + channel];
 	unsigned char lowerLeft = data[(int)accurateHeight * width * 4 + ((int)accurateWidth - 1) * 4 + channel];
 	unsigned char lowerRight = data[(int)accurateHeight * width * 4 + (int)accurateWidth * 4 + channel];
 
