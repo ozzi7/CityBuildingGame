@@ -9,7 +9,8 @@ InstancedModel::InstancedModel(const std::string& path)
 	init(path);
 }
 
-void InstancedModel::addMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
+void InstancedModel::addMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
+                             std::vector<Texture> textures)
 {
 	InstancedMesh mesh = InstancedMesh(vertices, indices, textures);
 	meshes.push_back(mesh);

@@ -8,9 +8,9 @@ class Settler : public BoneAnimated
 {
 public:
 	Settler(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation);
-	void Accept(Visitor& v);
+	void Accept(Visitor& v) override;
 	void SetDwelling(Dwelling* aDwelling);
-	void GameStep();
+	void GameStep() override;
 
 protected:
 	Dwelling* dwelling;

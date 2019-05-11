@@ -22,7 +22,8 @@ void MipmapGenerator::ScaleImage()
 	unsigned int currentWidth = 1;
 	unsigned int currentHeight = 1;
 
-	while (i < resultCount) {
+	while (i < resultCount)
+	{
 		for (int channel = 0; channel <= 3; channel++)
 		{
 			unsigned char color = bilinear(currentWidth, currentHeight, channel);
@@ -68,7 +69,8 @@ unsigned char MipmapGenerator::bilinear(unsigned int positionWidth, unsigned int
 	float lowerLeftWeight = lowerWidthWeight * lowerHeightWeight;
 	float lowerRightWeight = upperWidthWeight * lowerHeightWeight;
 
-	float color = upperLeft * upperLeftWeight + upperRight * upperRightWeight + lowerLeft * lowerLeftWeight + lowerRight * lowerRightWeight;
+	float color = upperLeft * upperLeftWeight + upperRight * upperRightWeight + lowerLeft * lowerLeftWeight + lowerRight
+		* lowerRightWeight;
 
 	return (unsigned char)round(color);
 }

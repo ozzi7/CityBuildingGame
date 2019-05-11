@@ -85,8 +85,9 @@ public:
 		mesh_lumberjack->LoadMesh(model_path);
 		mesh_lumberjack->PrecalculateBoneTransforms();
 
-		ambientLight = { 0.3f, 0.3f, 0.3f };
+		ambientLight = {0.3f, 0.3f, 0.3f};
 	}
+
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix, unsigned int shadowMapID)
 	{
 		terrain_shader->use();
@@ -129,6 +130,7 @@ public:
 		shadow_skinned_shader->use();
 		shadow_skinned_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
 	}
+
 	void CalculateShadow(RenderBuffer* renderBuffer)
 	{
 		// don't calculate terrain shadows
@@ -153,6 +155,7 @@ private:
 		terrain_shader->use();
 		renderBuffer->terrain->Draw();
 	}
+
 	void renderInstancedObjects(RenderBuffer* renderBuffer)
 	{
 		Shader* shader;
@@ -169,6 +172,7 @@ private:
 		instanced_model_dwelling->Draw(*shader, renderBuffer->dwellingModels_growth1);
 		instanced_model_building_outline->Draw(*shader, renderBuffer->buildingOutlineModels);
 	}
+
 	void renderBoneAnimated(RenderBuffer* renderBuffer)
 	{
 		Shader* shader;
@@ -178,13 +182,15 @@ private:
 			shader = skinned_mesh_shader;
 		shader->use();
 
-		for (int i = 0; i < renderBuffer->lumberjackModels.size(); ++i) {
+		for (int i = 0; i < renderBuffer->lumberjackModels.size(); ++i)
+		{
 			mesh_lumberjack->BindBoneTransform(renderBuffer->lumberjackAnimationSeconds[i], shader);
 
 			shader->setMat4("model", renderBuffer->lumberjackModels[i]);
 			mesh_lumberjack->Render(*shader);
 		}
-		for (int i = 0; i < renderBuffer->settlerModels.size(); ++i) {
+		for (int i = 0; i < renderBuffer->settlerModels.size(); ++i)
+		{
 			mesh_lumberjack->BindBoneTransform(renderBuffer->settlerAnimationSeconds[i], shader);
 
 			shader->setMat4("model", renderBuffer->settlerModels[i]);

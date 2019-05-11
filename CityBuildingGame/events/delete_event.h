@@ -7,7 +7,7 @@ class DeleteEvent : public GameEvent
 {
 public:
 	DeleteEvent(int posX, int posY, GameObject* aGameObject);
-	void DeleteEvent::Accept(GameEventVisitor* eventVisitor);
+	void DeleteEvent::Accept(GameEventVisitor* eventVisitor) override;
 
 	int posX;
 	int posY;

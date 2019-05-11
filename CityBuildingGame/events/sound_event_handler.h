@@ -7,14 +7,15 @@
 
 class Grid;
 
-class SoundEventHandler : public SoundEventVisitor {
+class SoundEventHandler : public SoundEventVisitor
+{
 public:
 	SoundEventHandler::SoundEventHandler(int nofSounds);
 	void SoundEventHandler::LoadFiles();
 	void AddEvent(SoundEvent*);
 	SoundEvent* GetEvent();
 	bool ProcessEvent();
-	void Visit(PlaySoundEvent* aPlaySoundEvent);
+	void Visit(PlaySoundEvent* aPlaySoundEvent) override;
 
 private:
 	int maxSounds = 255;

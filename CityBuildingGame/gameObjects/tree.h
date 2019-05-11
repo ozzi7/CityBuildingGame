@@ -8,7 +8,8 @@ class Tree : public GameObject
 public:
 	Tree(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 		: GameObject(aPosition, aScale, aRotation) {};
-	void Accept(Visitor& v)
+
+	void Accept(Visitor& v) override
 	{
 		v.Visit(this);
 	};

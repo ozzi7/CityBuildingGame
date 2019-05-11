@@ -35,9 +35,11 @@ protected:
 
 	// processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
 	void processNode(aiNode* node, const aiScene* scene);
-	void virtual addMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+	void virtual addMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
+	                     std::vector<Texture> textures);
 	//  vertices, indicies, textures are return values
-	void processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>* vertices, std::vector<unsigned int>* indices, std::vector<Texture>* textures);
+	void processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>* vertices,
+	                 std::vector<unsigned int>* indices, std::vector<Texture>* textures);
 
 	std::string directory;
 

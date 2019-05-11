@@ -5,7 +5,7 @@
 NoiseGen::NoiseGen() {};
 
 void NoiseGen::GeneratePerlinNoise(std::vector<std::vector<float>>& pHeightmap, int pHeight, int pWidth,
-	float minimumHeight, float maximumHeight, int octaveCount, float persistence)
+                                   float minimumHeight, float maximumHeight, int octaveCount, float persistence)
 {
 	width = pWidth;
 	height = pHeight;
@@ -15,7 +15,8 @@ void NoiseGen::GeneratePerlinNoise(std::vector<std::vector<float>>& pHeightmap, 
 	//generate smooth noise
 	for (int i = 0; i < octaveCount; i++)
 	{
-		std::vector<std::vector<float>> smoothNoise = std::vector<std::vector<float>>(pHeight, std::vector<float>(pWidth, 0));
+		std::vector<std::vector<float>> smoothNoise = std::vector<std::vector<float>>(
+			pHeight, std::vector<float>(pWidth, 0));
 		for (auto& j : smoothNoise)
 			fill(j.begin(), j.end(), 0);
 		GenerateSmoothNoise(pHeightmap, smoothNoise, i);
@@ -26,6 +27,7 @@ void NoiseGen::GeneratePerlinNoise(std::vector<std::vector<float>>& pHeightmap, 
 
 	Rescale(pHeightmap, minimumHeight, maximumHeight);
 }
+
 void NoiseGen::CombineNoiseMaps(std::vector<std::vector<float>>& pHeightmap, int octaveCount, float aPersistence)
 {
 	float persistence = aPersistence;
@@ -35,13 +37,13 @@ void NoiseGen::CombineNoiseMaps(std::vector<std::vector<float>>& pHeightmap, int
 	for (auto& i : pHeightmap)
 		fill(i.begin(), i.end(), 0);
 
-	NoiseGen::totalAmplitude = 0.0f;
+	totalAmplitude = 0.0f;
 
 	float maxValue = 0;
 	for (int octave = octaveCount - 1; octave >= 0; octave--)
 	{
 		amplitude *= persistence;
-		NoiseGen::totalAmplitude += amplitude;
+		totalAmplitude += amplitude;
 
 		for (int i = 0; i < height; i++)
 		{
@@ -55,7 +57,7 @@ void NoiseGen::CombineNoiseMaps(std::vector<std::vector<float>>& pHeightmap, int
 
 void NoiseGen::GenerateWhiteNoise(std::vector<std::vector<float>>& pHeightmap)
 {
-	srand((unsigned)time(0)); // seed random numbers
+	srand((unsigned)time(nullptr)); // seed random numbers
 
 	for (int i = 0; i < height; i++)
 	{
@@ -65,8 +67,9 @@ void NoiseGen::GenerateWhiteNoise(std::vector<std::vector<float>>& pHeightmap)
 		}
 	}
 }
+
 void NoiseGen::GenerateSmoothNoise(std::vector<std::vector<float>>& baseNoise,
-	std::vector<std::vector<float>>& smoothNoise, int octave)
+                                   std::vector<std::vector<float>>& smoothNoise, int octave)
 {
 	int samplePeriod = 1 << octave; // calculates 2 ^ k
 	float sampleFrequency = 1.0f / samplePeriod;
@@ -87,11 +90,11 @@ void NoiseGen::GenerateSmoothNoise(std::vector<std::vector<float>>& baseNoise,
 
 			//blend the top two corners
 			float top = Interpolate(baseNoise[sample_i0][sample_j0],
-				baseNoise[sample_i1][sample_j0], vertical_blend);
+			                        baseNoise[sample_i1][sample_j0], vertical_blend);
 
 			//blend the bottom two corners
 			float bottom = Interpolate(baseNoise[sample_i0][sample_j1],
-				baseNoise[sample_i1][sample_j1], vertical_blend);
+			                           baseNoise[sample_i1][sample_j1], vertical_blend);
 
 			//final blend
 			smoothNoise[i][j] = Interpolate(top, bottom, horizontal_blend);
@@ -103,6 +106,7 @@ float NoiseGen::Interpolate(float x0, float x1, float alpha)
 {
 	return x0 * (1 - alpha) + alpha * x1;
 }
+
 void NoiseGen::Rescale(std::vector<std::vector<float>>& pHeightmap, float minHeight, float maxHeight)
 {
 	//normalisation
@@ -114,4 +118,5 @@ void NoiseGen::Rescale(std::vector<std::vector<float>>& pHeightmap, float minHei
 		}
 	}
 }
+
 NoiseGen::~NoiseGen() {};

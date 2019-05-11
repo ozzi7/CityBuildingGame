@@ -63,8 +63,8 @@ void init_glfw()
 	//glfwWindowHint(GLFW_SAMPLES, 4); /* MSAA */
 
 	// glfw window creation
-	window = glfwCreateWindow(ScreenWidth, ScreenHeight, "CityBuildingGame", NULL, NULL);
-	if (window == NULL)
+	window = glfwCreateWindow(ScreenWidth, ScreenHeight, "CityBuildingGame", nullptr, nullptr);
+	if (window == nullptr)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();

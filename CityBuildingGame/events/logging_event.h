@@ -15,6 +15,7 @@ public:
 		timestamp = aTimestamp;
 		log_text = aLog_text;
 	}
+
 	LoggingEvent(LoggingLevel aLoggingLevel, std::string aLog_text)
 	{
 		loggingLevel = aLoggingLevel;
@@ -22,6 +23,7 @@ public:
 		timestamp = GetTickCount();
 		log_text = aLog_text;
 	}
+
 	void LoggingEvent::Accept(LoggingEventVisitor* eventVisitor)
 	{
 		eventVisitor->Visit(this);

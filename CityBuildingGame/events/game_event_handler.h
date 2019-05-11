@@ -10,18 +10,19 @@
 
 class Grid;
 
-class GameEventHandler : public GameEventVisitor {
+class GameEventHandler : public GameEventVisitor
+{
 public:
 	GameEventHandler::GameEventHandler(Grid* aGrid);
 	void AddEvent(GameEvent*);
 	GameEvent* GetEvent();
 	bool ProcessEvent();
 
-	void Visit(MoveEvent* aMoveEvent);
-	void Visit(CreateBuildingEvent* aCreateBuildingEvent);
-	void Visit(DeleteEvent* aDeleteEvent);
-	void Visit(GatherResourceEvent* aGatherResourceEvent);
-	void Visit(ReturnHomeEvent* aReturnHomeEvent);
+	void Visit(MoveEvent* aMoveEvent) override;
+	void Visit(CreateBuildingEvent* aCreateBuildingEvent) override;
+	void Visit(DeleteEvent* aDeleteEvent) override;
+	void Visit(GatherResourceEvent* aGatherResourceEvent) override;
+	void Visit(ReturnHomeEvent* aReturnHomeEvent) override;
 	Grid* grid;
 
 private:

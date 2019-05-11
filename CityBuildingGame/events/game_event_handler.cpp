@@ -14,10 +14,12 @@ GameEventHandler::GameEventHandler(Grid* aGrid)
 {
 	grid = aGrid;
 }
+
 void GameEventHandler::AddEvent(GameEvent* e)
 {
 	cq.enqueue(e);
 }
+
 GameEvent* GameEventHandler::GetEvent()
 {
 	GameEvent* e;
@@ -25,42 +27,45 @@ GameEvent* GameEventHandler::GetEvent()
 	{
 		return e;
 	}
-	else
-	{
-		return NULL;
-	}
+	return nullptr;
 }
+
 bool GameEventHandler::ProcessEvent()
 {
 	GameEvent* game_event = GetEvent();
-	if (game_event != NULL)
+	if (game_event != nullptr)
 	{
 		game_event->Accept(this);
 		return true;
 	}
 	return false;
 }
+
 void GameEventHandler::Visit(MoveEvent* aMoveEvent)
 {
 	/* removes element found by reference */
-	BoneAnimated* toMove = NULL;
+	BoneAnimated* toMove = nullptr;
 	for (auto it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.begin(); it !=
-		grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.end(); ++it) {
-		if ((*it) == aMoveEvent->gameObject) {
+	     grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.end(); ++it)
+	{
+		if ((*it) == aMoveEvent->gameObject)
+		{
 			toMove = *it;
 			it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.erase(it);
 			break;
 		}
 	}
-	if (toMove == NULL)
+	if (toMove == nullptr)
 		// should not happen
 		bool problem = true;
 	else
 		grid->gridUnits[aMoveEvent->toY][aMoveEvent->toX]->movingObjects.push_back(toMove);
 }
+
 void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 {
-	std::tuple<int, int> closestToClick = std::make_tuple(round(aCreateBuildingEvent->posX), round(aCreateBuildingEvent->posY));
+	std::tuple<int, int> closestToClick = std::make_tuple(round(aCreateBuildingEvent->posX),
+	                                                      round(aCreateBuildingEvent->posY));
 	std::tuple<int, int> buildingSize;
 
 	glm::vec3 modelCenter = glm::vec3(-1.0f, -1.0f, -1.0f);
@@ -68,7 +73,8 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	bool isXRoundedUp = std::get<0>(closestToClick) >= aCreateBuildingEvent->posX;
 	bool isYRoundedUp = std::get<1>(closestToClick) >= aCreateBuildingEvent->posY;
 
-	switch (aCreateBuildingEvent->buildingType) {
+	switch (aCreateBuildingEvent->buildingType)
+	{
 	case DwellingID:
 	{
 		buildingSize = std::make_tuple(2, 2);
@@ -85,20 +91,24 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	/* Set correct 3d model center point */
 	int fromX, toX, fromY, toY = 0;
 
-	if (std::get<0>(buildingSize) % 2 == 0) {
+	if (std::get<0>(buildingSize) % 2 == 0)
+	{
 		fromX = std::get<0>(closestToClick) - std::get<0>(buildingSize) / 2;
 		toX = std::get<0>(closestToClick) + std::get<0>(buildingSize) / 2;
 
 		modelCenter.x = std::get<0>(closestToClick);
 	}
-	else {
-		if (isXRoundedUp) {
+	else
+	{
+		if (isXRoundedUp)
+		{
 			fromX = std::get<0>(closestToClick) - std::get<0>(buildingSize) / 2 - 1;
 			toX = std::get<0>(closestToClick) + std::get<0>(buildingSize) / 2 - 1;
 
 			modelCenter.x = std::get<0>(closestToClick) - 0.5f;
 		}
-		else {
+		else
+		{
 			fromX = std::get<0>(closestToClick) - std::get<0>(buildingSize) / 2;
 			toX = std::get<0>(closestToClick) + std::get<0>(buildingSize) / 2;
 
@@ -106,20 +116,24 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		}
 	}
 
-	if (std::get<1>(buildingSize) % 2 == 0) {
+	if (std::get<1>(buildingSize) % 2 == 0)
+	{
 		fromY = std::get<1>(closestToClick) - std::get<1>(buildingSize) / 2;
 		toY = std::get<1>(closestToClick) + std::get<1>(buildingSize) / 2;
 
 		modelCenter.y = std::get<1>(closestToClick);
 	}
-	else {
-		if (isYRoundedUp) {
+	else
+	{
+		if (isYRoundedUp)
+		{
 			fromY = std::get<1>(closestToClick) - std::get<1>(buildingSize) / 2 - 1;
 			toY = std::get<1>(closestToClick) + std::get<1>(buildingSize) / 2 - 1;
 
 			modelCenter.y = std::get<1>(closestToClick) - 0.5f;
 		}
-		else {
+		else
+		{
 			fromY = std::get<1>(closestToClick) - std::get<1>(buildingSize) / 2;
 			toY = std::get<1>(closestToClick) + std::get<1>(buildingSize) / 2;
 
@@ -128,21 +142,26 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	}
 
 	/* Check if the building is outside of the grid */
-	if (fromX < 0 || toX >= grid->gridWidth || fromY < 0 || toY >= grid->gridHeight) {
+	if (fromX < 0 || toX >= grid->gridWidth || fromY < 0 || toY >= grid->gridHeight)
+	{
 		return;
 	}
 
 	/* Check if the grid is not occupied */
-	for (int i = fromX; i < toX; ++i) {
-		for (int j = fromY; j < toY; ++j) {
-			if (grid->gridUnits[j][i]->occupied) {
+	for (int i = fromX; i < toX; ++i)
+	{
+		for (int j = fromY; j < toY; ++j)
+		{
+			if (grid->gridUnits[j][i]->occupied)
+			{
 				return;
 			}
 		}
 	}
 
 	/* Check if the floor is flat */
-	if (!grid->IsAreaFlat(fromX, toX, fromY, toY)) {
+	if (!grid->IsAreaFlat(fromX, toX, fromY, toY))
+	{
 		return;
 	}
 
@@ -152,27 +171,30 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	/* find path*/
 	PathfindingObject path = PathfindingObject(grid, Coordinate(fromX + 1, fromY));
 	path.FindClosestEdge();
-	std::list<Coordinate>pathShorts = path.GetPath();
+	std::list<Coordinate> pathShorts = path.GetPath();
 
 	/* if no path found do nothing..*/
 	if (pathShorts.empty())
 		return;
 
 	/* set grid to occupied*/
-	for (int i = fromX; i < toX; ++i) {
-		for (int j = fromY; j < toY; ++j) {
+	for (int i = fromX; i < toX; ++i)
+	{
+		for (int j = fromY; j < toY; ++j)
+		{
 			grid->gridUnits[j][i]->occupied = true;
 		}
 	}
 
 	/* Create the building object etc.. */
-	switch (aCreateBuildingEvent->buildingType) {
+	switch (aCreateBuildingEvent->buildingType)
+	{
 	case DwellingID:
 	{
 		/* create building  */
 		Dwelling* dwelling = new Dwelling(modelCenter, // translate
-			glm::vec3(0.012f, 0.006f, 0.012f), // rescale
-			glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
+		                                  glm::vec3(0.012f, 0.006f, 0.012f), // rescale
+		                                  glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
 
 		/* save some stuff needed later.. TODO: dedicated building exit,check road etc (for other buildings)*/
 		dwelling->fromX = fromX;
@@ -187,14 +209,14 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		dwelling->CreateBuildingOutline();
 
 		std::vector<glm::vec2> glmPath;
-		for (std::list<Coordinate>::iterator it = --pathShorts.end(); it != pathShorts.begin(); it--)
+		for (std::list<Coordinate>::iterator it = --pathShorts.end(); it != pathShorts.begin(); --it)
 			glmPath.push_back(glm::vec2((*it).first + 0.5f, (*it).second) + 0.5f);
 		glmPath.push_back(glm::vec2(pathShorts.front().first + 0.5f, pathShorts.front().second + 0.5f));
 
 		/* create settler.. */
 		Settler* settler = new Settler(glm::vec3(pathShorts.back().first + 0.5f, pathShorts.back().second + 0.5f,
-			grid->GetHeight(pathShorts.back().first, pathShorts.back().second)),
-			glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
+		                                         grid->GetHeight(pathShorts.back().first, pathShorts.back().second)),
+		                               glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
 
 		settler->SetDwelling(dwelling);
 		settler->SetNewPath(glmPath);
@@ -208,8 +230,8 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	case LumberjackHutID:
 	{
 		LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
-			glm::vec3(0.012f, 0.006f, 0.012f), // rescale
-			glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
+		                                                 glm::vec3(0.012f, 0.006f, 0.012f), // rescale
+		                                                 glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
 
 		lumberjackHut->fromX = fromX;
 		lumberjackHut->fromY = fromY;
@@ -224,21 +246,24 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 		/*get settlers if there are enough, here we get 2 settlers, kill them and create 1 lumby */
 		std::vector<Settler*> settlers = resources->GetIdleSettlers(2);
-		if (settlers.size() != 0) {
+		if (settlers.size() != 0)
+		{
 			// copy first settlers position to new lumby
 			Lumberjack* lumby = new Lumberjack(glm::vec3(settlers[0]->posX, settlers[0]->posY,
-				grid->GetHeight(settlers[0]->posX, settlers[0]->posY)),
-				glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
+			                                             grid->GetHeight(settlers[0]->posX, settlers[0]->posY)),
+			                                   glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
 
 			lumby->SetLumberjackHut(lumberjackHut);
 
 			/* there should always be a path here because of roads */
-			Pathfinding pathfinding = Pathfinding(grid, Coordinate(settlers[0]->posX, settlers[0]->posY), Coordinate(lumberjackHut->entranceX, lumberjackHut->entranceY));
+			Pathfinding pathfinding = Pathfinding(grid, Coordinate(settlers[0]->posX, settlers[0]->posY),
+			                                      Coordinate(lumberjackHut->entranceX, lumberjackHut->entranceY));
 			pathfinding.CalculatePath();
 
-			std::list<Coordinate>pathShorts = pathfinding.GetPath();
+			std::list<Coordinate> pathShorts = pathfinding.GetPath();
 
-			if (pathShorts.size() != 0) {
+			if (pathShorts.size() != 0)
+			{
 				std::vector<glm::vec2> glmPath;
 				glmPath.push_back(glm::vec2(pathShorts.front().first + 0.5f, pathShorts.front().second + 0.5f));
 				for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
@@ -251,14 +276,16 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			}
 			else
 			{
-				loggingEventHandler->AddEvent(new LoggingEvent(ERROR_L, "The lumberjack can't walk from dwelling to lumberjackhut (no path)"));
+				loggingEventHandler->AddEvent(
+					new LoggingEvent(ERROR_L, "The lumberjack can't walk from dwelling to lumberjackhut (no path)"));
 			}
 
 			// store reference to lumby
 			grid->gridUnits[lumby->posY][lumby->posX]->movingObjects.push_back(lumby);
 
 			/* delete the settlers */
-			for (int i = 0; i < settlers.size(); ++i) {
+			for (int i = 0; i < settlers.size(); ++i)
+			{
 				this->AddEvent(new DeleteEvent(settlers[i]->posX, settlers[i]->posY, settlers[i])); // kill the settlers
 			}
 		}
@@ -270,19 +297,24 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	}
 	}
 }
+
 void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 {
 	/* deletes reference to element */
 	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->movingObjects.begin(); it !=
-		grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->movingObjects.end(); ++it) {
-		if ((*it) == aDeleteEvent->gameObject) {
+	     grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->movingObjects.end(); ++it)
+	{
+		if ((*it) == aDeleteEvent->gameObject)
+		{
 			it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->movingObjects.erase(it);
 			break;
 		}
 	}
 	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.begin(); it !=
-		grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.end(); ++it) {
-		if ((*it) == aDeleteEvent->gameObject) {
+	     grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.end(); ++it)
+	{
+		if ((*it) == aDeleteEvent->gameObject)
+		{
 			it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.erase(it);
 			break;
 		}
@@ -291,7 +323,8 @@ void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 
 void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 {
-	PathfindingObject path = PathfindingObject(grid, Coordinate(aGatherResourceEvent->person->position.x, aGatherResourceEvent->person->position.y));
+	PathfindingObject path = PathfindingObject(
+		grid, Coordinate(aGatherResourceEvent->person->position.x, aGatherResourceEvent->person->position.y));
 	std::list<Coordinate> pathShorts;
 	std::vector<glm::vec2> glmPath;
 
@@ -301,7 +334,8 @@ void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 		path.FindClosestTree();
 		pathShorts = path.GetPath();
 
-		if (pathShorts.size() != 0) {
+		if (pathShorts.size() != 0)
+		{
 			glmPath.push_back(glm::vec2(aGatherResourceEvent->person->posX, aGatherResourceEvent->person->posY));
 			for (std::list<Coordinate>::iterator it = pathShorts.begin(); it != pathShorts.end(); ++it)
 			{
@@ -329,7 +363,8 @@ void GameEventHandler::Visit(ReturnHomeEvent* aReturnHomeEvent)
 	{
 	case LumberjackID:
 		Lumberjack* lumby = (Lumberjack*)(aReturnHomeEvent->person); // or extract coordinates??
-		Pathfinding path = Pathfinding(grid, Coordinate(aReturnHomeEvent->person->position.x, aReturnHomeEvent->person->position.y),
+		Pathfinding path = Pathfinding(
+			grid, Coordinate(aReturnHomeEvent->person->position.x, aReturnHomeEvent->person->position.y),
 			Coordinate(lumby->lumberjackHut->entranceX, lumby->lumberjackHut->entranceY));
 		path.CalculatePath();
 		std::list<Coordinate> pathShorts = path.GetPath();

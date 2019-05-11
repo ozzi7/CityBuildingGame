@@ -12,7 +12,8 @@
 #include <pathfinding.h>
 #include <pathfinding_object.h>
 
-class MapGenerator {
+class MapGenerator
+{
 public:
 	MapGenerator(Grid* aGrid);
 

@@ -10,7 +10,7 @@ class GatherResourceEvent : public GameEvent
 public:
 	GatherResourceEvent(Resource aResource, BoneAnimated* aPerson);
 
-	void Accept(GameEventVisitor* eventVisitor);
+	void Accept(GameEventVisitor* eventVisitor) override;
 
 	Resource resource;
 	BoneAnimated* person;

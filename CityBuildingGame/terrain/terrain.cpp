@@ -20,9 +20,8 @@ void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::ve
 		LoadVisibleGeometry(upperLeft, upperRight, lowerLeft, lowerRight);
 	}
 }
-void Terrain::AddTexturesToGrid()
-{
-}
+
+void Terrain::AddTexturesToGrid() {}
 
 void Terrain::Draw()
 {
@@ -46,6 +45,7 @@ void Terrain::Draw()
 	// always good practice to set everything back to defaults once configured.
 	glActiveTexture(GL_TEXTURE0);
 }
+
 int Terrain::ReloadGPUData()
 {
 	renderDataMutex.lock();
@@ -57,14 +57,16 @@ int Terrain::ReloadGPUData()
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 		if (currRenderData)
-			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 8, &(*renderData1)[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 8, &(*renderData1)[0],
+			             GL_STATIC_DRAW);
 		else
-			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 8, &(*renderData0)[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 8, &(*renderData0)[0],
+			             GL_STATIC_DRAW);
 
 		vertexCount = renderDataVertexCount;
 
 		// position attribute, 5th attribute can be 0 for tightly packed, its equal to 3*sizeof(float)
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)nullptr);
 		glEnableVertexAttribArray(0);
 
 		// position attribute, 5th attribute can be 0 for tightly packed, its equal to 3*sizeof(float)
@@ -78,6 +80,7 @@ int Terrain::ReloadGPUData()
 	renderDataMutex.unlock();
 	return vertexCount;
 }
+
 void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
 {
 	/* parameters: corners of visible grid on (x/y/z=0) plane */
@@ -109,8 +112,8 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 				glm::vec2 AB = glm::vec2(upperRight - upperLeft);
 				glm::vec2 AD = glm::vec2(lowerLeft - upperLeft);
 
-				if ((0 <= glm::dot(AM, AB)) && (glm::dot(AM, AB) < glm::dot(AB, AB)) &&
-					(glm::dot(AM, AD) < glm::dot(AD, AD)) && 0 <= glm::dot(AM, AD))
+				if ((0 <= dot(AM, AB)) && (dot(AM, AB) < dot(AB, AB)) &&
+					(dot(AM, AD) < dot(AD, AD)) && 0 <= dot(AM, AD))
 				{
 					float float_i = float(i);
 					float float_j = float(j);
@@ -204,6 +207,7 @@ loopExit:
 	reloadGPUData = true;
 	renderDataMutex.unlock();
 }
+
 void Terrain::CreateGeometry()
 {
 	/* Create normals, areas for triangles using explicit cross product formula*/
@@ -215,20 +219,20 @@ void Terrain::CreateGeometry()
 		{
 			/* Left triangle */
 			glm::vec3 crossProduct = glm::vec3(-(heightmap[i][j + 1] - heightmap[i][j]),
-				heightmap[i + 1][j] - heightmap[i][j],
-				1);
+			                                   heightmap[i + 1][j] - heightmap[i][j],
+			                                   1);
 
-			triangleArea[(i * gridWidth + j) * 2] = glm::length(crossProduct) / 2.0f;
-			triangleNormals[(i * gridWidth + j) * 2] = glm::normalize(crossProduct);
+			triangleArea[(i * gridWidth + j) * 2] = length(crossProduct) / 2.0f;
+			triangleNormals[(i * gridWidth + j) * 2] = normalize(crossProduct);
 
 			/* Right triangle*/
 			crossProduct = glm::vec3(-(heightmap[i + 1][j + 1] - heightmap[i][j + 1]) -
-				(heightmap[i][j + 1] - heightmap[i + 1][j]),
-				-(heightmap[i + 1][j + 1] - heightmap[i][j + 1]),
-				1);
+			                         (heightmap[i][j + 1] - heightmap[i + 1][j]),
+			                         -(heightmap[i + 1][j + 1] - heightmap[i][j + 1]),
+			                         1);
 
-			triangleArea[(i * gridWidth + j) * 2 + 1] = glm::length(crossProduct) / 2.0f;
-			triangleNormals[(i * gridWidth + j) * 2 + 1] = glm::normalize(crossProduct);
+			triangleArea[(i * gridWidth + j) * 2 + 1] = length(crossProduct) / 2.0f;
+			triangleNormals[(i * gridWidth + j) * 2 + 1] = normalize(crossProduct);
 		}
 	}
 
@@ -239,76 +243,105 @@ void Terrain::CreateGeometry()
 		for (int j = 0; j < gridWidth + 1; ++j)
 		{
 			// cycle all vertices
-			if (i == 0) {
+			if (i == 0)
+			{
 				// bottom row
-				if (j == 0) {
+				if (j == 0)
+				{
 					// bottom left vertex
 					vertexNormals[i * (gridWidth + 1) + j] = triangleNormals[0];
 				}
-				else if (j == gridHeight) {
+				else if (j == gridHeight)
+				{
 					// bottom right
-					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(j - 1) * 2] * triangleNormals[(j - 1) * 2] +
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(
+						triangleArea[(j - 1) * 2] * triangleNormals[(j - 1) * 2] +
 						triangleArea[(j - 1) * 2 + 1] * triangleNormals[(j - 1) * 2 + 1]);
 				}
-				else {
+				else
+				{
 					// bottom middle
-					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(j - 1) * 2] * triangleNormals[(j - 1) * 2] +
-						triangleArea[(j - 1) * 2 + 1] * triangleNormals[(j - 1) * 2 + 1]) +
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(
+							triangleArea[(j - 1) * 2] * triangleNormals[(j - 1) * 2] +
+							triangleArea[(j - 1) * 2 + 1] * triangleNormals[(j - 1) * 2 + 1]) +
 						triangleArea[(j - 1) * 2 + 2] * triangleNormals[(j - 1) * 2 + 2];
 				}
 			}
-			else {
-				if (j == 0 && i < gridHeight) {
+			else
+			{
+				if (j == 0 && i < gridHeight)
+				{
 					// left column, except bottomn left and top left
-					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(i - 1) * gridWidth * 2] * triangleNormals[(i - 1) * gridWidth * 2] +
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(
+						triangleArea[(i - 1) * gridWidth * 2] * triangleNormals[(i - 1) * gridWidth * 2] +
 						triangleArea[(i - 1) * gridWidth * 2 + 1] * triangleNormals[(i - 1) * gridWidth * 2 + 1] +
 						triangleArea[i * gridWidth * 2] * triangleNormals[i * gridWidth * 2]);
 				}
-				else if (j == 0) {
+				else if (j == 0)
+				{
 					// top left
-					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(i - 1) * gridWidth * 2] * triangleNormals[(i - 1) * gridWidth * 2] +
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(
+						triangleArea[(i - 1) * gridWidth * 2] * triangleNormals[(i - 1) * gridWidth * 2] +
 						triangleArea[(i - 1) * gridWidth * 2 + 1] * triangleNormals[(i - 1) * gridWidth * 2 + 1]);
 				}
-				else if (j == gridWidth && i != gridHeight) {
+				else if (j == gridWidth && i != gridHeight)
+				{
 					// right side, middle
-					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(i - 1) * gridWidth * 2 + j * 2 - 1] * triangleNormals[(i - 1) * gridWidth * 2 + j * 2 - 1] +
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(
+						triangleArea[(i - 1) * gridWidth * 2 + j * 2 - 1] * triangleNormals[(i - 1) * gridWidth * 2 + j
+							* 2 - 1] +
 						triangleArea[i * gridWidth * 2 + j * 2 - 2] * triangleNormals[i * gridWidth * 2 + j * 2 - 2] +
 						triangleArea[i * gridWidth * 2 + j * 2 - 1] * triangleNormals[i * gridWidth * 2 + j * 2 - 1]);
 				}
-				else if (j == gridWidth && i == gridHeight) {
+				else if (j == gridWidth && i == gridHeight)
+				{
 					// right top
 					vertexNormals[i * (gridWidth + 1) + j] = triangleNormals[gridWidth * gridHeight - 1];
 				}
-				else if (i == gridHeight) {
+				else if (i == gridHeight)
+				{
 					// top row, except left and right
-					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(i - 1) * gridWidth * 2 + (j * 2) - 1] * triangleNormals[(i - 1) * gridWidth * 2 + (j * 2) - 1] +
-						triangleArea[(i - 1) * gridWidth * 2 + (j * 2)] * triangleNormals[(i - 1) * gridWidth * 2 + (j * 2)] +
-						triangleArea[(i - 1) * gridWidth * 2 + (j * 2) + 1] * triangleNormals[(i - 1) * gridWidth * 2 + (j * 2) + 1]);
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(
+						triangleArea[(i - 1) * gridWidth * 2 + (j * 2) - 1] * triangleNormals[(i - 1) * gridWidth * 2 +
+							(j * 2) - 1] +
+						triangleArea[(i - 1) * gridWidth * 2 + (j * 2)] * triangleNormals[(i - 1) * gridWidth * 2 + (j *
+							2)] +
+						triangleArea[(i - 1) * gridWidth * 2 + (j * 2) + 1] * triangleNormals[(i - 1) * gridWidth * 2 +
+							(j * 2) + 1]);
 				}
 				else
 				{
 					// rest, all in the middle with 6 surrounding triangles
-					vertexNormals[i * (gridWidth + 1) + j] = normalize(triangleArea[(i - 1) * gridWidth * 2 + (j * 2) - 1] * triangleNormals[(i - 1) * gridWidth * 2 + (j * 2) - 1] +
-						triangleArea[(i - 1) * gridWidth * 2 + (j * 2)] * triangleNormals[(i - 1) * gridWidth * 2 + (j * 2)] +
-						triangleArea[(i - 1) * gridWidth * 2 + (j * 2) + 1] * triangleNormals[(i - 1) * gridWidth * 2 + (j * 2) + 1] +
-						triangleArea[i * gridWidth * 2 + (j * 2) - 2] * triangleNormals[i * gridWidth * 2 + (j * 2) - 2] +
-						triangleArea[i * gridWidth * 2 + (j * 2) - 1] * triangleNormals[i * gridWidth * 2 + (j * 2) - 1] +
+					vertexNormals[i * (gridWidth + 1) + j] = normalize(
+						triangleArea[(i - 1) * gridWidth * 2 + (j * 2) - 1] * triangleNormals[(i - 1) * gridWidth * 2 +
+							(j * 2) - 1] +
+						triangleArea[(i - 1) * gridWidth * 2 + (j * 2)] * triangleNormals[(i - 1) * gridWidth * 2 + (j *
+							2)] +
+						triangleArea[(i - 1) * gridWidth * 2 + (j * 2) + 1] * triangleNormals[(i - 1) * gridWidth * 2 +
+							(j * 2) + 1] +
+						triangleArea[i * gridWidth * 2 + (j * 2) - 2] * triangleNormals[i * gridWidth * 2 + (j * 2) - 2]
+						+
+						triangleArea[i * gridWidth * 2 + (j * 2) - 1] * triangleNormals[i * gridWidth * 2 + (j * 2) - 1]
+						+
 						triangleArea[i * gridWidth * 2 + (j * 2)] * triangleNormals[i * gridWidth * 2 + (j * 2) + 1]);
 				}
 			}
 		}
 	}
 }
+
 void Terrain::Accept(Visitor& v)
 {
 	v.Visit(this);
 }
+
 void Terrain::InitOpenGL(Shader* terrain_shader)
 {
 	terrain_shader->use();
 	LoadTextures(terrain_shader);
 	GenerateBuffers();
 }
+
 void Terrain::LoadTextures(Shader* terrain_shader)
 {
 	Model grass = Model();
@@ -316,11 +349,13 @@ void Terrain::LoadTextures(Shader* terrain_shader)
 
 	terrain_shader->setInt("texture1", 0);
 }
+
 void Terrain::GenerateBuffers()
 {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 }
+
 Terrain::~Terrain()
 {
 	// Properly de-allocate all resources once they've outlived their purpose

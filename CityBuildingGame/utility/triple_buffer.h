@@ -29,7 +29,8 @@ protected:
 	void TripleBuffer<T>::exchangeConsumerBuffer()  // call this before consumption cycle
 	{
 		bufferMutex.lock();
-		if (newDataReady) {
+		if (newDataReady)
+		{
 			std::swap(idleBuffer, consumerBufferID);
 			newDataReady = false;
 		}
@@ -37,16 +38,21 @@ protected:
 	}
 
 public:
-	TripleBuffer<T>::TripleBuffer() {
-		for (int i = 0; i < 3; ++i) {
+	TripleBuffer<T>::TripleBuffer()
+	{
+		for (int i = 0; i < 3; ++i)
+		{
 			buffers.push_back(new T);
 		}
 	}
-	TripleBuffer<T>::~TripleBuffer() {
+
+	TripleBuffer<T>::~TripleBuffer()
+	{
 		delete buffers[0];
 		delete buffers[1];
 		delete buffers[2];
 	}
+
 	void TripleBuffer<T>::ExchangeProducerBuffer()  // call this after production cycle
 	{
 		bufferMutex.lock();
@@ -54,16 +60,19 @@ public:
 		newDataReady = true;
 		bufferMutex.unlock();
 	}
+
 	T* TripleBuffer<T>::GetConsumerBuffer()
 	{
 		exchangeConsumerBuffer();
 		return buffers[consumerBufferID];
 	}
+
 	T* TripleBuffer<T>::GetProducerBuffer()
 	{
 		buffers[producerBufferID]->ClearData();
 		return buffers[producerBufferID];
 	}
+
 	std::mutex bufferMutex;
 	std::vector<T*> buffers;
 

@@ -21,20 +21,26 @@ void InputHandler::Keypress(int button, int action)
 			Camera->Scroll(RIGHT, 0.05f);
 	}
 }
+
 void InputHandler::Mouseclick(int button, int action)
 {
 	if (windowFocused)
 	{
-		if (!action == GLFW_PRESS) { return; }
+		if (!action == GLFW_PRESS)
+		{
+			return;
+		}
 		for (int i = 0; i < 300; ++i) // lol
 			soundEventHandler->AddEvent(new PlaySoundEvent(SettlerArrivedID)); // TODO:
 		// Test Code
 		glm::vec3 cursor_position = Camera->CursorPositionOnGrid();
-		if (cursor_position.x >= 0 && cursor_position.y >= 0 && Grid->gridHeight > (int)cursor_position.y && Grid->gridWidth > (int)cursor_position.x)
+		if (cursor_position.x >= 0 && cursor_position.y >= 0 && Grid->gridHeight > (int)cursor_position.y && Grid->
+			gridWidth > (int)cursor_position.x)
 		{
 			if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 			{
-				unitEventHandler->AddEvent(new CreateBuildingEvent(LumberjackHutID, cursor_position.x, cursor_position.y));
+				unitEventHandler->AddEvent(
+					new CreateBuildingEvent(LumberjackHutID, cursor_position.x, cursor_position.y));
 			}
 			else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 			{
@@ -53,7 +59,8 @@ void InputHandler::Mousewheel(float yOffset)
 void InputHandler::WindowFocus(int focused)
 {
 	windowFocused = focused;
-	if (windowFocused) {
+	if (windowFocused)
+	{
 		int width;
 		int height;
 		int left;
@@ -78,7 +85,8 @@ void InputHandler::WindowFocus(int focused)
 
 void InputHandler::MouseScroll()
 {
-	if (windowFocused) {
+	if (windowFocused)
+	{
 		double xpos;
 		double ypos;
 		int width;

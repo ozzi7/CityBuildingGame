@@ -33,7 +33,7 @@ public:
 private:
 #define NUM_BONES_PER_VERTEX 4
 
-	void BoneTransform(float timeInSeconds, std::vector<glm::mat4> & Transforms);
+	void BoneTransform(float timeInSeconds, std::vector<glm::mat4>& Transforms);
 	void PrecalculateStringLookupTable();
 
 	struct BoneInfo
@@ -76,25 +76,26 @@ private:
 	unsigned int FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
 	unsigned int FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
 	unsigned int FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
-	const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName);
+	const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, std::string NodeName);
 	void ReadNodeHierarchy(float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform);
 	bool InitFromScene(const aiScene* pScene, const std::string& Filename);
 	void InitMesh(unsigned int MeshIndex,
-		const aiMesh* paiMesh,
-		std::vector<glm::vec3>& Positions,
-		std::vector<glm::vec3>& Normals,
-		std::vector<glm::vec2>& TexCoords,
-		std::vector<VertexBoneData>& Bones,
-		std::vector<unsigned int>& Indices);
+	              const aiMesh* paiMesh,
+	              std::vector<glm::vec3>& Positions,
+	              std::vector<glm::vec3>& Normals,
+	              std::vector<glm::vec2>& TexCoords,
+	              std::vector<VertexBoneData>& Bones,
+	              std::vector<unsigned int>& Indices);
 	void LoadBones(unsigned int MeshIndex, const aiMesh* paiMesh, std::vector<VertexBoneData>& Bones);
-	bool InitMaterials(const unsigned int meshIndex, const aiMesh* mesh, const aiScene* scene);
+	bool InitMaterials(unsigned int meshIndex, const aiMesh* mesh, const aiScene* scene);
 	std::vector<Texture> SkinnedMesh::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 	unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
 	void Clear();
 
 #define INVALID_MATERIAL 0xFFFFFFFF
 
-	enum VB_TYPES {
+	enum VB_TYPES
+	{
 		INDEX_BUFFER,
 		POS_VB,
 		NORMAL_VB,
@@ -108,7 +109,8 @@ private:
 	GLuint m_ColorBuffer;
 	std::vector<glm::vec3> Colors;
 
-	struct MeshEntry {
+	struct MeshEntry
+	{
 		MeshEntry()
 		{
 			NumIndices = 0;

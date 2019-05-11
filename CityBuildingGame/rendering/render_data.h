@@ -11,21 +11,22 @@
 #include <dwelling.h>
 #include <settler.h>
 
-class RenderBuffer : public Buffer, public Visitor {
+class RenderBuffer : public Buffer, public Visitor
+{
 public:
 	RenderBuffer();
 	void Visit(GameObject*);
-	void Visit(Spruce*);
-	void Visit(Oak*);
-	void Visit(Pine*);
-	void Visit(Juniper*);
-	void Visit(Lumberjack*);
-	void Visit(Terrain* obj);
-	void Visit(Tree* obj);
-	void Visit(Building* obj);
-	void Visit(LumberjackHut* obj);
-	void Visit(Dwelling* obj);
-	void Visit(Settler* obj);
+	void Visit(Spruce*) override;
+	void Visit(Oak*) override;
+	void Visit(Pine*) override;
+	void Visit(Juniper*) override;
+	void Visit(Lumberjack*) override;
+	void Visit(Terrain* obj) override;
+	void Visit(Tree* obj) override;
+	void Visit(Building* obj) override;
+	void Visit(LumberjackHut* obj) override;
+	void Visit(Dwelling* obj) override;
+	void Visit(Settler* obj) override;
 	void ClearData();
 
 	std::vector<glm::mat4> pineModels;

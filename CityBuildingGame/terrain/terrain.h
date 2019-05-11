@@ -32,7 +32,7 @@ public:
 	void LoadTextures(Shader* shaderTerrain);
 	void GenerateBuffers();
 	void InitOpenGL(Shader* shaderTerrain);
-	void Accept(Visitor& v);
+	void Accept(Visitor& v) override;
 	std::vector<std::vector<float>> heightmap;
 
 	/* Defines the size of renderData0, renderData1 (main memory buffers) in terms of tiles

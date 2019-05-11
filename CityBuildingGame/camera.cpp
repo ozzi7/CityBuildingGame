@@ -17,13 +17,13 @@ Camera::Camera(glm::vec3 position, GLFWwindow* aWindow)
 // Returns the view matrix calculated using LookAt Matrix
 glm::mat4 Camera::GetViewMatrix()
 {
-	return glm::lookAt(Position, Position + lookat, up);
+	return lookAt(Position, Position + lookat, up);
 }
 
 glm::mat4 Camera::GetLightViewMatrix()
 {
 	//return glm::lookAt(DirectionalLight.Position, DirectionalLight.Position + lookat, glm::vec3(0.0, 0.0, 1.0));
-	return glm::lookAt(Position + lookat + DirectionalLight.PositionOffset, Position + lookat, up);
+	return lookAt(Position + lookat + DirectionalLight.PositionOffset, Position + lookat, up);
 }
 
 glm::mat4 Camera::GetProjectionMatrix()
@@ -33,14 +33,17 @@ glm::mat4 Camera::GetProjectionMatrix()
 
 glm::mat4 Camera::GetLightProjectionMatrix()
 {
-	return glm::ortho(-ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, -1.0f * ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, -100.0f, 100.0f);
+	return glm::ortho(-ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease,
+	                  -1.0f * ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, -100.0f, 100.0f);
 }
 
 // Top left position on Grid that is visible by camera
 glm::vec2 Camera::GridTopLeftVisible()
 {
-	float x = Position.x + lookat.x - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
-	float y = Position.y + lookat.y - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
+	float x = Position.x + lookat.x - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
+		VISIBLE_RANGE;
+	float y = Position.y + lookat.y - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
+		VISIBLE_RANGE;
 
 	return glm::vec2(x, y);
 }
@@ -48,8 +51,10 @@ glm::vec2 Camera::GridTopLeftVisible()
 // Top right position on Grid that is visible by camera
 glm::vec2 Camera::GridTopRightVisible()
 {
-	float x = Position.x + lookat.x + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
-	float y = Position.y + lookat.y + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
+	float x = Position.x + lookat.x + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
+		VISIBLE_RANGE;
+	float y = Position.y + lookat.y + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
+		VISIBLE_RANGE;
 
 	return glm::vec2(x, y);
 }
@@ -57,8 +62,10 @@ glm::vec2 Camera::GridTopRightVisible()
 // Bottom left position on Grid that is visible by camera
 glm::vec2 Camera::GridBottomLeftVisible()
 {
-	float x = Position.x + lookat.x - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
-	float y = Position.y + lookat.y - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
+	float x = Position.x + lookat.x - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
+		VISIBLE_RANGE;
+	float y = Position.y + lookat.y - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
+		VISIBLE_RANGE;
 
 	return glm::vec2(x, y);
 }
@@ -66,8 +73,10 @@ glm::vec2 Camera::GridBottomLeftVisible()
 // Bottom right position on Grid that is visible by camera
 glm::vec2 Camera::GridBottomRightVisible()
 {
-	float x = Position.x + lookat.x + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
-	float y = Position.y + lookat.y + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 * VISIBLE_RANGE;
+	float x = Position.x + lookat.x + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
+		VISIBLE_RANGE;
+	float y = Position.y + lookat.y + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
+		VISIBLE_RANGE;
 
 	return glm::vec2(x, y);
 }
@@ -88,7 +97,7 @@ glm::vec3 Camera::CursorPositionOnGrid()
 	glm::mat4 projection = GetProjectionMatrix();
 	glm::vec4 viewport = glm::vec4(0.0f, 0.0f, (float)ScreenWidth, (float)ScreenHeight);
 
-	glm::vec3 result = glm::unProject(window, model, projection, viewport);
+	glm::vec3 result = unProject(window, model, projection, viewport);
 
 	return result;
 }

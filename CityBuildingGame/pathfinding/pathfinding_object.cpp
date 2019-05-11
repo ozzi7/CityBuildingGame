@@ -48,22 +48,26 @@ std::list<Coordinate> PathfindingObject::GetPath()
 	if (objectFound)
 	{
 		current = destination;
-		while (current->parent != nullptr) {
+		while (current->parent != nullptr)
+		{
 			path.push_front(current->coordinate);
 			current = current->parent;
-		};
+		}
 	}
 	return path;
 }
 
 GameObject* PathfindingObject::GetDestinationObject()
 {
-	if (objectFound) {
-		for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first]->objects)
+	if (objectFound)
+	{
+		for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first]->
+		     objects)
 		{
 			if (objectType == tree)
 			{
-				try {
+				try
+				{
 					Tree* tree = dynamic_cast<Tree*>(object);
 					return object;
 				}

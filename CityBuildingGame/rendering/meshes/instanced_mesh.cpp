@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "instanced_mesh.h"
 
-InstancedMesh::InstancedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
+InstancedMesh::InstancedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
+                             std::vector<Texture> textures)
 {
 	this->vertices = vertices;
 	this->indices = indices;
@@ -20,7 +21,7 @@ void InstancedMesh::setupInstancedMesh()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * textures.size(), textures.data(), GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(glm::vec4), (void*)0);
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(glm::vec4), (void*)nullptr);
 	glEnableVertexAttribArray(4);
 	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(glm::vec4), (void*)sizeof(glm::vec4));
 	glEnableVertexAttribArray(5);
@@ -38,7 +39,7 @@ void InstancedMesh::setupInstancedMesh()
 
 void InstancedMesh::Draw(int instances)
 {
-	glDrawElementsInstanced(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, 0, instances);
+	glDrawElementsInstanced(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, nullptr, instances);
 
 	// unbind
 	glBindVertexArray(0);

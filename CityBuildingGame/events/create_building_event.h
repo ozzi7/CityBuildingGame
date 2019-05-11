@@ -8,7 +8,7 @@ class CreateBuildingEvent : public GameEvent
 public:
 	CreateBuildingEvent(BuildingType buildingType, float posX, float posY);
 
-	void CreateBuildingEvent::Accept(GameEventVisitor* eventVisitor);
+	void CreateBuildingEvent::Accept(GameEventVisitor* eventVisitor) override;
 
 	BuildingType buildingType;
 

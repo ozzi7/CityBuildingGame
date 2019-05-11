@@ -3,7 +3,8 @@
 
 #include "grid.h"
 
-Grid::Grid(int aGridHeight, int aGridWidth) {
+Grid::Grid(int aGridHeight, int aGridWidth)
+{
 	gridHeight = aGridHeight;
 	gridWidth = aGridWidth;
 
@@ -24,8 +25,10 @@ void Grid::Init()
 	}
 
 	/* calculate height of each grid unit */
-	for (int i = 0; i < terrain->heightmap.size() - 1; ++i) {
-		for (int j = 0; j < terrain->heightmap[i].size() - 1; ++j) {
+	for (int i = 0; i < terrain->heightmap.size() - 1; ++i)
+	{
+		for (int j = 0; j < terrain->heightmap[i].size() - 1; ++j)
+		{
 			gridUnits[i][j]->averageHeight = (terrain->heightmap[i + 1][j] + terrain->heightmap[i][j + 1]) / 2.0f;
 		}
 	}
@@ -45,10 +48,14 @@ void Grid::UpdateVisibleList(glm::vec2& upperLeft, glm::vec2& upperRight, glm::v
 		currLowerRightX = (int)lowerRight.x;
 		currLowerRightY = (int)lowerRight.y;
 
-		int fromX = std::min(std::min((int)upperLeft.x, int(lowerLeft.x)), std::min((int)upperRight.x, int(lowerRight.x)));
-		int endX = std::max(std::max((int)upperLeft.x, int(lowerLeft.x)), std::max((int)upperRight.x, int(lowerRight.x)));
-		int fromY = std::min(std::min((int)upperLeft.y, int(lowerLeft.y)), std::min((int)upperRight.y, int(lowerRight.y)));
-		int endY = std::max(std::max((int)upperLeft.y, int(lowerLeft.y)), std::max((int)upperRight.y, int(lowerRight.y)));
+		int fromX = std::min(std::min((int)upperLeft.x, int(lowerLeft.x)),
+		                     std::min((int)upperRight.x, int(lowerRight.x)));
+		int endX = std::max(std::max((int)upperLeft.x, int(lowerLeft.x)),
+		                    std::max((int)upperRight.x, int(lowerRight.x)));
+		int fromY = std::min(std::min((int)upperLeft.y, int(lowerLeft.y)),
+		                     std::min((int)upperRight.y, int(lowerRight.y)));
+		int endY = std::max(std::max((int)upperLeft.y, int(lowerLeft.y)),
+		                    std::max((int)upperRight.y, int(lowerRight.y)));
 
 		nofVisibleUnits = 0;
 		for (int i = std::max(0, fromY + 1); i <= std::min(gridHeight - 1, endY); ++i)
@@ -62,8 +69,8 @@ void Grid::UpdateVisibleList(glm::vec2& upperLeft, glm::vec2& upperRight, glm::v
 					glm::vec2 AB = glm::vec2(upperRight - upperLeft);
 					glm::vec2 AD = glm::vec2(lowerLeft - upperLeft);
 
-					if ((0 <= glm::dot(AM, AB)) && (glm::dot(AM, AB) < glm::dot(AB, AB)) &&
-						(glm::dot(AM, AD) < glm::dot(AD, AD)) && 0 <= glm::dot(AM, AD))
+					if ((0 <= dot(AM, AB)) && (dot(AM, AB) < dot(AB, AB)) &&
+						(dot(AM, AD) < dot(AD, AD)) && 0 <= dot(AM, AD))
 					{
 						visibleUnits[nofVisibleUnits++] = gridUnits[i][j];
 					}
@@ -85,17 +92,16 @@ float Grid::GetHeight(float posX, float posY)
 	float offsetX = fmod(posX, 1.0f);
 	float offsetY = fmod(posY, 1.0f);
 
-	if (offsetX + offsetY <= 1.0f) {
+	if (offsetX + offsetY <= 1.0f)
+	{
 		// left triangle
 		float m = terrain->heightmap[i][j + 1] - terrain->heightmap[i][j];
 		float n = terrain->heightmap[i + 1][j] - terrain->heightmap[i][j];
 		return (offsetX * m + offsetY * n) + terrain->heightmap[i][j];
 	}
-	else {
-		float m = terrain->heightmap[i + 1][j] - terrain->heightmap[i + 1][j + 1];
-		float n = terrain->heightmap[i][j + 1] - terrain->heightmap[i + 1][j + 1];
-		return ((1 - offsetX) * m + (1 - offsetY) * n) + terrain->heightmap[i + 1][j + 1];;
-	}
+	float m = terrain->heightmap[i + 1][j] - terrain->heightmap[i + 1][j + 1];
+	float n = terrain->heightmap[i][j + 1] - terrain->heightmap[i + 1][j + 1];
+	return ((1 - offsetX) * m + (1 - offsetY) * n) + terrain->heightmap[i + 1][j + 1];
 }
 /* Check if area is flat within a rectangle of the grid
 Input for a 2x2 building is (0,1, 0,1) but accesses heightmap (0,2, 0,2)
@@ -104,8 +110,10 @@ bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY)
 {
 	bool isFlat = true;
 	float height = terrain->heightmap[fromY][fromX];
-	for (int i = fromY; i <= toY + 1; ++i) {
-		for (int j = fromX; j <= toX + 1; ++j) {
+	for (int i = fromY; i <= toY + 1; ++i)
+	{
+		for (int j = fromX; j <= toX + 1; ++j)
+		{
 			if (terrain->heightmap[i][j] != height)
 			{
 				isFlat = false;
@@ -116,15 +124,20 @@ bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY)
 	}
 	return isFlat;
 }
-Grid::~Grid() {
+
+Grid::~Grid()
+{
 	delete terrain;
 }
 
-Unit::Unit() {
+Unit::Unit()
+{
 	objects = std::list<GameObject*>();
 	movingObjects = std::list<BoneAnimated*>();
 }
-Unit::~Unit() {
+
+Unit::~Unit()
+{
 	for (auto it = objects.begin(); it != objects.end(); ++it)
 		delete (*it);
 	for (auto it = movingObjects.begin(); it != movingObjects.end(); ++it)

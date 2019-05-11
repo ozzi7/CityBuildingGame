@@ -28,5 +28,6 @@ public:
 
 private:
 	std::vector<InstancedMesh> meshes;
-	void addMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+	void addMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
+	             std::vector<Texture> textures) override;
 };

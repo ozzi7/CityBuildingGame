@@ -19,7 +19,7 @@ struct NodeObject
 
 struct NodeCompareObject
 {
-	bool operator() (const NodeObject* node1, const NodeObject* node2)
+	bool operator()(const NodeObject* node1, const NodeObject* node2)
 	{
 		if (node1->distanceToStart > node2->distanceToStart)
 			return true;
@@ -34,7 +34,7 @@ class PathfindingObject
 {
 public:
 	PathfindingObject() {};
-	PathfindingObject(Grid* aGrid, const Coordinate XYstart);
+	PathfindingObject(Grid* aGrid, Coordinate XYstart);
 
 	~PathfindingObject();
 
@@ -46,7 +46,7 @@ public:
 private:
 	std::forward_list<NodeObject*> closed; // maybe not needed, only for storing pointers for deleting
 	std::priority_queue<NodeObject*, std::deque<NodeObject*>, NodeCompareObject> open;
-	bool visited[MAP_WIDTH][MAP_HEIGHT]{ false };
+	bool visited[MAP_WIDTH][MAP_HEIGHT]{false};
 
 	Grid* grid;
 	NodeObject* start;
@@ -61,7 +61,7 @@ private:
 	const unsigned short maxY = (unsigned short)MAP_HEIGHT - 1;
 
 	void calculatePath();
-	void createNode(const Coordinate coordinate);
+	void createNode(Coordinate coordinate);
 	void checkObjectFound(Coordinate coordinate);
 	void setNextNode();
 };

@@ -8,7 +8,8 @@ Resources* resources;
 
 Game::Game() {};
 
-Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
+Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler)
+{
 	window = aWindow;
 	inputHandler = aInputHandler;
 
@@ -30,7 +31,8 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 	camera->Grid = grid;
 
 	// TODO: this is a test, gettickcount is not cross platform..
-	loggingEventHandler->AddEvent(new LoggingEvent(INFO, std::this_thread::get_id(), GetTickCount(), "Generating map..."));
+	loggingEventHandler->AddEvent(new LoggingEvent(INFO, std::this_thread::get_id(), GetTickCount(),
+	                                               "Generating map..."));
 
 	MapGenerator* mapGenerator = new MapGenerator(grid);
 	mapGenerator->GenerateMap();
@@ -38,6 +40,7 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler) {
 
 	delete mapGenerator;
 }
+
 Game::~Game()
 {
 	// delete grid;
@@ -64,8 +67,8 @@ void Game::renderLoop()
 	glm::mat4 view;
 	glm::mat4 lightSpaceMatrix;
 
-	camera->DirectionalLight.Color = { 1.0f, 1.0f, 1.0f };
-	camera->DirectionalLight.PositionOffset = glm::vec3{ -1.0f, -2.0f, 1.0f };
+	camera->DirectionalLight.Color = {1.0f, 1.0f, 1.0f};
+	camera->DirectionalLight.PositionOffset = glm::vec3{-1.0f, -2.0f, 1.0f};
 	camera->UpdateLightDirection();
 
 	grid->terrain->InitOpenGL(renderer->terrain_shader);
@@ -112,30 +115,38 @@ void Game::gameLoop()
 		//glfwPollEvents();
 		inputHandler->MouseScroll();
 
-		for (int i = 0; i < grid->gridUnits.size(); i++) {
-			for (int j = 0; j < grid->gridUnits[i].size(); j++) {
+		for (int i = 0; i < grid->gridUnits.size(); i++)
+		{
+			for (int j = 0; j < grid->gridUnits[i].size(); j++)
+			{
 				for (std::list<BoneAnimated*>::iterator it = grid->gridUnits[i][j]->movingObjects.begin();
-					it != grid->gridUnits[i][j]->movingObjects.end(); ++it) {
+				     it != grid->gridUnits[i][j]->movingObjects.end(); ++it)
+				{
 					(*it)->UpdatePosition(grid);
 					(*it)->GameStep();
 				}
 			}
 		}
 
-		grid->terrain->SetRenderWindow(camera->GridTopLeftVisible(), camera->GridTopRightVisible(), camera->GridBottomLeftVisible(),
-			camera->GridBottomRightVisible());
-		grid->UpdateVisibleList(camera->GridTopLeftVisible(), camera->GridTopRightVisible(), camera->GridBottomLeftVisible(),
-			camera->GridBottomRightVisible());
+		grid->terrain->SetRenderWindow(camera->GridTopLeftVisible(), camera->GridTopRightVisible(),
+		                               camera->GridBottomLeftVisible(),
+		                               camera->GridBottomRightVisible());
+		grid->UpdateVisibleList(camera->GridTopLeftVisible(), camera->GridTopRightVisible(),
+		                        camera->GridBottomLeftVisible(),
+		                        camera->GridBottomRightVisible());
 
 		/* Extract data for the renderer*/
 		RenderBuffer* producerBuffer = renderBuffers->GetProducerBuffer();
-		for (int i = 0; i < grid->nofVisibleUnits; i++) {
+		for (int i = 0; i < grid->nofVisibleUnits; i++)
+		{
 			for (std::list<GameObject*>::iterator it = grid->visibleUnits[i]->objects.begin();
-				it != grid->visibleUnits[i]->objects.end(); ++it) {
+			     it != grid->visibleUnits[i]->objects.end(); ++it)
+			{
 				(*it)->Accept(*producerBuffer);
 			}
 			for (std::list<BoneAnimated*>::iterator it = grid->visibleUnits[i]->movingObjects.begin();
-				it != grid->visibleUnits[i]->movingObjects.end(); ++it) {
+			     it != grid->visibleUnits[i]->movingObjects.end(); ++it)
+			{
 				(*it)->Accept(*producerBuffer);
 			}
 		}
@@ -145,11 +156,14 @@ void Game::gameLoop()
 		/*Handle all object moving, deleting, creating, no locks needed because no other thread is currently doing anything..*/
 		while (unitEventHandler->ProcessEvent());
 
-		std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::microseconds>(next_game_tick - std::chrono::high_resolution_clock::now()));
+		std::this_thread::sleep_for(
+			std::chrono::duration_cast<std::chrono::microseconds>(
+				next_game_tick - std::chrono::high_resolution_clock::now()));
 		next_game_tick = (next_game_tick + std::chrono::microseconds(SKIP_TICKS));
 		loops++;
 	}
 }
+
 void Game::soundLoop()
 {
 	soundEventHandler->LoadFiles();
@@ -157,14 +171,17 @@ void Game::soundLoop()
 	while (!glfwWindowShouldClose(window))
 	{
 		while (soundEventHandler->ProcessEvent());
-		std::this_thread::sleep_for(std::chrono::milliseconds(long((1.0 / 60.0) * 1000))); // blocking queue cant be terminated..
+		std::this_thread::
+			sleep_for(std::chrono::milliseconds(long((1.0 / 60.0) * 1000))); // blocking queue cant be terminated..
 	}
 }
+
 void Game::loggingLoop()
 {
 	while (!glfwWindowShouldClose(window))
 	{
 		while (loggingEventHandler->ProcessEvent());
-		std::this_thread::sleep_for(std::chrono::milliseconds(long((1.0 / 60.0) * 1000))); // blocking queue cant be terminated..
+		std::this_thread::
+			sleep_for(std::chrono::milliseconds(long((1.0 / 60.0) * 1000))); // blocking queue cant be terminated..
 	}
 }

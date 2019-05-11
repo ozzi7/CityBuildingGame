@@ -12,6 +12,7 @@ MoveEvent::MoveEvent(int aFromX, int aFromY, int aToX, int aToY, GameObject* aGa
 
 	gameObject = aGameObject;
 };
+
 void MoveEvent::Accept(GameEventVisitor* eventVisitor)
 {
 	eventVisitor->Visit(this);

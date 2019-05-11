@@ -22,8 +22,9 @@ struct Node
 	Coordinate destination;
 };
 
-struct NodeCompare {
-	bool operator() (const Node* node1, const Node* node2)
+struct NodeCompare
+{
+	bool operator()(const Node* node1, const Node* node2)
 	{
 		if (node1->distanceTotal > node2->distanceTotal)
 			return true;
@@ -68,7 +69,7 @@ struct NodeCompare {
 class Pathfinding
 {
 public:
-	Pathfinding(Grid* aGrid, const Coordinate XYstart, const Coordinate XYdestination);
+	Pathfinding(Grid* aGrid, Coordinate XYstart, Coordinate XYdestination);
 	~Pathfinding();
 
 	void CalculatePath();
@@ -77,7 +78,7 @@ public:
 private:
 	std::forward_list<Node*> closed; // maybe not needed, only for storing pointers for deleting
 	std::priority_queue<Node*, std::deque<Node*>, NodeCompare> open;
-	bool visited[MAP_WIDTH][MAP_HEIGHT]{ false };
+	bool visited[MAP_WIDTH][MAP_HEIGHT]{false};
 
 	Grid* grid;
 	Node* start;
@@ -90,8 +91,8 @@ private:
 	const unsigned short maxX = (unsigned short)MAP_WIDTH - 1;
 	const unsigned short maxY = (unsigned short)MAP_HEIGHT - 1;
 
-	void createNode(const Coordinate coordinate);
-	unsigned short distanceToDestination(const Coordinate coordinate);
+	void createNode(Coordinate coordinate);
+	unsigned short distanceToDestination(Coordinate coordinate);
 	void setNextNode();
 	void adjustParentNode(Node* node);
 };

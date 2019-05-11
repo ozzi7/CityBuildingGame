@@ -9,6 +9,7 @@ DeleteEvent::DeleteEvent(int aPosX, int aPosY, GameObject* aGameObject)
 
 	gameObject = aGameObject;
 };
+
 void DeleteEvent::Accept(GameEventVisitor* eventVisitor)
 {
 	eventVisitor->Visit(this);

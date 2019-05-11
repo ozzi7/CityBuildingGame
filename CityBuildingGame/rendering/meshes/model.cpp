@@ -4,6 +4,7 @@
 #include "model.h"
 
 Model::Model() {}
+
 Model::Model(const std::string& path)
 {
 	init(path);
@@ -13,7 +14,8 @@ void Model::init(const std::string& path)
 {
 	// read file via ASSIMP
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	const aiScene* scene = importer.ReadFile(
+		path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
 	// check for errors
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
@@ -66,14 +68,16 @@ void Model::addMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indi
 	meshes.push_back(mesh);
 }
 
-void Model::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>* vertices, std::vector<unsigned int>* indices, std::vector<Texture>* textures)
+void Model::processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Vertex>* vertices,
+                        std::vector<unsigned int>* indices, std::vector<Texture>* textures)
 {
 	// Walk through each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		Vertex vertex;
-		glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
-							// positions
+		glm::vec3
+			vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
+		// positions
 		vector.x = mesh->mVertices[i].x;
 		vector.y = mesh->mVertices[i].y;
 		vector.z = mesh->mVertices[i].z;
@@ -154,7 +158,8 @@ std::vector<Texture> Model::loadMaterialTextures(const aiMaterial* mat, aiTextur
 			if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
 			{
 				textures.push_back(textures_loaded[j]);
-				skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
+				skip =
+					true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
 				break;
 			}
 		}
@@ -165,7 +170,8 @@ std::vector<Texture> Model::loadMaterialTextures(const aiMaterial* mat, aiTextur
 			texture.type = typeName;
 			texture.path = str.C_Str();
 			textures.push_back(texture);
-			textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
+			textures_loaded.
+				push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
 		}
 	}
 	return textures;
@@ -205,7 +211,8 @@ unsigned int Model::TextureFromFile(std::string& path)
 				width = width / 2;
 				height = height / 2;
 				mipmapGenerator.ScaleImage();
-				glTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, format, GL_UNSIGNED_BYTE, mipmapGenerator.result);
+				glTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, format, GL_UNSIGNED_BYTE,
+				             mipmapGenerator.result);
 				data = mipmapGenerator.resultUnrounded;
 				level++;
 			}

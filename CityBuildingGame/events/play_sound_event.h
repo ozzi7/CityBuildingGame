@@ -8,7 +8,7 @@ class PlaySoundEvent : public SoundEvent
 public:
 	PlaySoundEvent(SoundType);
 
-	void PlaySoundEvent::Accept(SoundEventVisitor* sEventVisitor);
+	void PlaySoundEvent::Accept(SoundEventVisitor* sEventVisitor) override;
 
 	SoundType soundType;
 };

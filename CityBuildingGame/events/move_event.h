@@ -7,7 +7,7 @@ class MoveEvent : public GameEvent
 {
 public:
 	MoveEvent(int aFromX, int aFromY, int aToX, int aToY, GameObject* aGameObject);
-	void MoveEvent::Accept(GameEventVisitor* eventVisitor);
+	void MoveEvent::Accept(GameEventVisitor* eventVisitor) override;
 
 	int fromX;
 	int fromY;

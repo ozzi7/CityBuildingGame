@@ -6,12 +6,14 @@
 LoggingEventHandler::LoggingEventHandler(LoggingLevel aFileLoggingLevel, LoggingLevel aConsoleLoggingLevel)
 {
 	time_t* rawtime = new time_t; // we'll get the time here by time() function.
-	struct tm* timeinfo; /* we'll get the time info. (sec, min, hour, etc...) here from rawtime by the localtime() function */
+	struct tm*
+		timeinfo; /* we'll get the time info. (sec, min, hour, etc...) here from rawtime by the localtime() function */
 	time(rawtime); // Get time into rawtime
 	timeinfo = localtime(rawtime); // Get time info into timeinfo
 
 	logFileName = "log_" + std::to_string(timeinfo->tm_year + 1900) + "-" + std::to_string(timeinfo->tm_mon + 1) + "-" +
-		std::to_string(timeinfo->tm_mday) + "_" + std::to_string(timeinfo->tm_hour) + "h" + std::to_string(timeinfo->tm_min) + "m" +
+		std::to_string(timeinfo->tm_mday) + "_" + std::to_string(timeinfo->tm_hour) + "h" + std::to_string(
+			timeinfo->tm_min) + "m" +
 		std::to_string(timeinfo->tm_sec) + "s" + ".log";
 
 	file.open(Path + "/../log/" + logFileName, std::ios::out);
@@ -33,10 +35,12 @@ LoggingEventHandler::LoggingEventHandler(LoggingLevel aFileLoggingLevel, Logging
 	logging_levels[4] = "DEBUG";
 	logging_levels[5] = "NOTSET";
 }
+
 void LoggingEventHandler::AddEvent(LoggingEvent* e)
 {
 	cq.enqueue(e);
 }
+
 LoggingEvent* LoggingEventHandler::GetEvent()
 {
 	LoggingEvent* e;
@@ -44,21 +48,20 @@ LoggingEvent* LoggingEventHandler::GetEvent()
 	{
 		return e;
 	}
-	else
-	{
-		return NULL;
-	}
+	return nullptr;
 }
+
 bool LoggingEventHandler::ProcessEvent()
 {
 	LoggingEvent* logging_event = GetEvent();
-	if (logging_event != NULL)
+	if (logging_event != nullptr)
 	{
 		logging_event->Accept(this);
 		return true;
 	}
 	return false;
 }
+
 void LoggingEventHandler::Visit(LoggingEvent* aLoggingEvent)
 {
 	std::stringstream ss;
@@ -79,10 +82,12 @@ void LoggingEventHandler::Visit(LoggingEvent* aLoggingEvent)
 	output << "[" << std::to_string(aLoggingEvent->timestamp) << "] " << "Thread " << std::to_string(id) << " " <<
 		logging_levels[aLoggingEvent->loggingLevel] << std::setw(10) << ": " + aLoggingEvent->log_text << std::endl;
 	std::string output_s = output.str();
-	if (aLoggingEvent->loggingLevel <= fileLoggingLevel) {
+	if (aLoggingEvent->loggingLevel <= fileLoggingLevel)
+	{
 		file << output_s;
 	}
-	if (aLoggingEvent->loggingLevel <= consoleLoggingLevel) {
+	if (aLoggingEvent->loggingLevel <= consoleLoggingLevel)
+	{
 		std::cout << output_s;
 	}
 }

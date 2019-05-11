@@ -8,6 +8,7 @@ SoundEventHandler::SoundEventHandler(int nofSounds)
 	// note 1 channel must be free for music as well.. total <= 256
 	maxSounds = nofSounds;
 }
+
 void SoundEventHandler::LoadFiles()
 {
 	if (music.openFromFile(Path + "/../music/TownTheme.ogg") && MUSIC_ENABLED)
@@ -23,6 +24,7 @@ void SoundEventHandler::AddEvent(SoundEvent* e)
 {
 	cq.enqueue(e);
 }
+
 SoundEvent* SoundEventHandler::GetEvent()
 {
 	SoundEvent* e;
@@ -30,21 +32,20 @@ SoundEvent* SoundEventHandler::GetEvent()
 	{
 		return e;
 	}
-	else
-	{
-		return NULL;
-	}
+	return nullptr;
 }
+
 bool SoundEventHandler::ProcessEvent()
 {
 	SoundEvent* sound_event = GetEvent();
-	if (sound_event != NULL)
+	if (sound_event != nullptr)
 	{
 		sound_event->Accept(this);
 		return true;
 	}
 	return false;
 }
+
 void SoundEventHandler::Visit(PlaySoundEvent* aSoundEvent)
 {
 	if (!SOUND_ENABLED)
