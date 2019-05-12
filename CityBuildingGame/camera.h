@@ -58,11 +58,11 @@ public:
 	void Zoom(float);
 	void UpdateLightDirection();		// Call this after LightSource Position update
 
-	float projectionIncrease = 2.0f;
+	float ProjectionIncrease = 2.0f;
 
 private:
-	glm::vec3 up;
-	glm::vec3 right;
-	glm::vec3 lookat;
-	GLFWwindow* window{};
+	glm::vec3 Up;
+	glm::vec3 Right;
+	glm::vec3 LookAt;
+	GLFWwindow* Window{};
 };

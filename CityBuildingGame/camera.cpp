@@ -2,26 +2,26 @@
 #pragma once
 #include "camera.h"
 
-Camera::Camera(glm::vec3 position, GLFWwindow* aWindow)
+Camera::Camera(const glm::vec3 position, GLFWwindow* window)
 {
 	Position = position;
-	window = aWindow;
+	Window = window;
 
-	up = glm::vec3(-1.0f, 1.0f, 0.0f);
-	right = glm::vec3(1.0f, 1.0f, 0.0f);
-	lookat = glm::vec3(-50.0f, 50.0f, -50.0f);
+	Up = glm::vec3(-1.0f, 1.0f, 0.0f);
+	Right = glm::vec3(1.0f, 1.0f, 0.0f);
+	LookAt = glm::vec3(-50.0f, 50.0f, -50.0f);
 }
 
 // Returns the view matrix calculated using LookAt Matrix
 glm::mat4 Camera::GetViewMatrix() const
 {
-	return lookAt(Position, Position + lookat, up);
+	return LookAt(Position, Position + LookAt, Up);
 }
 
 glm::mat4 Camera::GetLightViewMatrix() const
 {
-	//return glm::lookAt(DirectionalLight.Position, DirectionalLight.Position + lookat, glm::vec3(0.0, 0.0, 1.0));
-	return lookAt(Position + lookat + DirectionalLight.PositionOffset, Position + lookat, up);
+	//return glm::lookAt(DirectionalLight.Position, DirectionalLight.Position + lookAt, glm::vec3(0.0, 0.0, 1.0));
+	return LookAt(Position + LookAt + DirectionalLight.PositionOffset, Position + LookAt, Up);
 }
 
 glm::mat4 Camera::GetProjectionMatrix() const
@@ -31,16 +31,16 @@ glm::mat4 Camera::GetProjectionMatrix() const
 
 glm::mat4 Camera::GetLightProjectionMatrix() const
 {
-	return glm::ortho(-ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease,
-	                  -1.0f * ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, -100.0f, 100.0f);
+	return glm::ortho(-ZoomLevel * ProjectionIncrease, ZoomLevel * ProjectionIncrease,
+	                  -1.0f * ZoomLevel * ProjectionIncrease, ZoomLevel * ProjectionIncrease, -100.0f, 100.0f);
 }
 
 // Top left position on Grid that is visible by camera
 glm::vec2 Camera::GridTopLeftVisible() const
 {
-	float x = Position.x + lookat.x - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
+	const float x = Position.x + LookAt.x - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
 		VISIBLE_RANGE;
-	float y = Position.y + lookat.y - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
+	const float y = Position.y + LookAt.y - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
 		VISIBLE_RANGE;
 
 	return glm::vec2(x, y);
@@ -49,9 +49,9 @@ glm::vec2 Camera::GridTopLeftVisible() const
 // Top right position on Grid that is visible by camera
 glm::vec2 Camera::GridTopRightVisible() const
 {
-	float x = Position.x + lookat.x + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
+	const float x = Position.x + LookAt.x + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
 		VISIBLE_RANGE;
-	float y = Position.y + lookat.y + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
+	const float y = Position.y + LookAt.y + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
 		VISIBLE_RANGE;
 
 	return glm::vec2(x, y);
@@ -60,9 +60,9 @@ glm::vec2 Camera::GridTopRightVisible() const
 // Bottom left position on Grid that is visible by camera
 glm::vec2 Camera::GridBottomLeftVisible() const
 {
-	float x = Position.x + lookat.x - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
+	const float x = Position.x + LookAt.x - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
 		VISIBLE_RANGE;
-	float y = Position.y + lookat.y - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
+	const float y = Position.y + LookAt.y - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
 		VISIBLE_RANGE;
 
 	return glm::vec2(x, y);
@@ -71,9 +71,9 @@ glm::vec2 Camera::GridBottomLeftVisible() const
 // Bottom right position on Grid that is visible by camera
 glm::vec2 Camera::GridBottomRightVisible() const
 {
-	float x = Position.x + lookat.x + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
+	const float x = Position.x + LookAt.x + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
 		VISIBLE_RANGE;
-	float y = Position.y + lookat.y + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
+	const float y = Position.y + LookAt.y + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
 		VISIBLE_RANGE;
 
 	return glm::vec2(x, y);
@@ -83,17 +83,17 @@ glm::vec2 Camera::GridBottomRightVisible() const
 glm::vec3 Camera::CursorPositionOnGrid() const
 {
 	float z;
-	double window_x, window_y;
+	double windowX, windowY;
 
-	glfwGetCursorPos(window, &window_x, &window_y);
-	float x = (float)window_x;
-	float y = ScreenHeight - (float)window_y;
+	glfwGetCursorPos(Window, &windowX, &windowY);
+	const float x = (float)windowX;
+	const float y = ScreenHeight - (float)windowY;
 	glReadPixels((int)x, (int)y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
 
-	glm::vec3 window = glm::vec3(x, y, z);
-	glm::mat4 model = GetViewMatrix();
-	glm::mat4 projection = GetProjectionMatrix();
-	glm::vec4 viewport = glm::vec4(0.0f, 0.0f, (float)ScreenWidth, (float)ScreenHeight);
+	const glm::vec3 window = glm::vec3(x, y, z);
+	const glm::mat4 model = GetViewMatrix();
+	const glm::mat4 projection = GetProjectionMatrix();
+	const glm::vec4 viewport = glm::vec4(0.0f, 0.0f, (float)ScreenWidth, (float)ScreenHeight);
 
 	glm::vec3 result = unProject(window, model, projection, viewport);
 
@@ -103,13 +103,13 @@ glm::vec3 Camera::CursorPositionOnGrid() const
 void Camera::Scroll(Camera_Movement direction, float yOffset)
 {
 	if (direction == UP)
-		Position += up * yOffset * ZoomLevel * ROOT3;
+		Position += Up * yOffset * ZoomLevel * ROOT3;
 	if (direction == DOWN)
-		Position -= up * yOffset * ZoomLevel * ROOT3;
+		Position -= Up * yOffset * ZoomLevel * ROOT3;
 	if (direction == LEFT)
-		Position -= right * yOffset * ZoomLevel;
+		Position -= Right * yOffset * ZoomLevel;
 	if (direction == RIGHT)
-		Position += right * yOffset * ZoomLevel;
+		Position += Right * yOffset * ZoomLevel;
 }
 
 void Camera::Zoom(float yOffset)
@@ -126,9 +126,9 @@ void Camera::UpdateLightDirection()
 {
 	/*float distance =
 		sqrt(
-		pow((lookat.x - Position.x + DirectionalLight.PositionOffset.x), 2) +
-		pow((lookat.y - Position.y + DirectionalLight.PositionOffset.y), 2) +
-		pow((lookat.z - Position.z + DirectionalLight.PositionOffset.z), 2));*/
+		pow((lookAt.x - Position.x + DirectionalLight.PositionOffset.x), 2) +
+		pow((lookAt.y - Position.y + DirectionalLight.PositionOffset.y), 2) +
+		pow((lookAt.z - Position.z + DirectionalLight.PositionOffset.z), 2));*/
 
 	DirectionalLight.Direction = -(DirectionalLight.PositionOffset);
 }
