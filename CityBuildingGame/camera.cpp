@@ -15,13 +15,13 @@ Camera::Camera(const glm::vec3 position, GLFWwindow* window)
 // Returns the view matrix calculated using LookAt Matrix
 glm::mat4 Camera::GetViewMatrix() const
 {
-	return LookAt(Position, Position + LookAt, Up);
+	return glm::lookAt(Position, Position + LookAt, Up);
 }
 
 glm::mat4 Camera::GetLightViewMatrix() const
 {
 	//return glm::lookAt(DirectionalLight.Position, DirectionalLight.Position + lookAt, glm::vec3(0.0, 0.0, 1.0));
-	return LookAt(Position + LookAt + DirectionalLight.PositionOffset, Position + LookAt, Up);
+	return glm::lookAt(Position + LookAt + DirectionalLight.PositionOffset, Position + LookAt, Up);
 }
 
 glm::mat4 Camera::GetProjectionMatrix() const
