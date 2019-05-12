@@ -75,7 +75,7 @@ void Pathfinding::createNode(const Coordinate coordinate)
 	}
 }
 
-unsigned short Pathfinding::distanceToDestination(const Coordinate coordinate)
+unsigned short Pathfinding::distanceToDestination(const Coordinate coordinate) const
 {
 	return
 		std::abs(coordinate.first - destination->coordinate.first) +

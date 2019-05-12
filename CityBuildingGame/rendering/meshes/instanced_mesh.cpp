@@ -37,7 +37,7 @@ void InstancedMesh::setupInstancedMesh()
 	glBindVertexArray(0);
 }
 
-void InstancedMesh::Draw(int instances)
+void InstancedMesh::Draw(int instances) const
 {
 	glDrawElementsInstanced(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, nullptr, instances);
 

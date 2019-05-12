@@ -6,11 +6,11 @@
 class InputHandler
 {
 public:
-	void Mouseclick(int button, int action);
-	void Keypress(int button, int action);
-	void Mousewheel(float yOffset);
+	void Mouseclick(int button, int action) const;
+	void Keypress(int button, int action) const;
+	void Mousewheel(float yOffset) const;
 	void WindowFocus(int focused);
-	void MouseScroll();
+	void MouseScroll() const;
 
 	GLFWwindow* Window;
 	Camera* Camera;

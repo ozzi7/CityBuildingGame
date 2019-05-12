@@ -1,5 +1,5 @@
-#pragma once
 #include "stdafx.h"
+
 #include "buffer.h"
 
 Buffer::Buffer() {};

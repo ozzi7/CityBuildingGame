@@ -26,9 +26,9 @@ private:
 	std::random_device rd;
 	std::vector<std::vector<float>> treeMap;
 
-	void generateTerrain();
+	void generateTerrain() const;
 	void generateTrees();
-	void flattenMap(std::vector<std::vector<float>>& pHeightmap);
-	float getHeightAtPercentage(std::vector<std::vector<float>>& pHeightmap, float percentage);
+	void flattenMap(std::vector<std::vector<float>>& pHeightmap) const;
+	float getHeightAtPercentage(std::vector<std::vector<float>>& pHeightmap, float percentage) const;
 	float getGaussianPDFValue(float mean, float stddev, float x);
 };

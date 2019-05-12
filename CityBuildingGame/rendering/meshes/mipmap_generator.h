@@ -14,7 +14,7 @@ public:
 	unsigned char* resultUnrounded = nullptr;
 	unsigned char* result = nullptr;
 private:
-	unsigned char bilinear(unsigned int positionWidth, unsigned int positionHeight, int channel);
+	unsigned char bilinear(unsigned int positionWidth, unsigned int positionHeight, int channel) const;
 	void roundAlpha();
 
 	const unsigned int divisor = 2;

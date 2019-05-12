@@ -55,7 +55,7 @@ void NoiseGen::CombineNoiseMaps(std::vector<std::vector<float>>& pHeightmap, int
 	}
 }
 
-void NoiseGen::GenerateWhiteNoise(std::vector<std::vector<float>>& pHeightmap)
+void NoiseGen::GenerateWhiteNoise(std::vector<std::vector<float>>& pHeightmap) const
 {
 	srand((unsigned)time(nullptr)); // seed random numbers
 
@@ -107,7 +107,7 @@ float NoiseGen::Interpolate(float x0, float x1, float alpha)
 	return x0 * (1 - alpha) + alpha * x1;
 }
 
-void NoiseGen::Rescale(std::vector<std::vector<float>>& pHeightmap, float minHeight, float maxHeight)
+void NoiseGen::Rescale(std::vector<std::vector<float>>& pHeightmap, float minHeight, float maxHeight) const
 {
 	//normalisation
 	for (int i = 0; i < height; i++)

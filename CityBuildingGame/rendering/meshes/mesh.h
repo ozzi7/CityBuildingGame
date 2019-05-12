@@ -34,7 +34,7 @@ public:
 	void Bind(Shader& shader);
 
 	// render the mesh
-	void Draw();
+	void Draw() const;
 
 protected:
 	std::vector<Vertex> vertices;

@@ -7,7 +7,7 @@ public:
 	Shadow();
 
 	void InitShadowMap();
-	void BindShadowMap();
+	void BindShadowMap() const;
 	void UnbindShadowMap();
 	unsigned int DepthMap;
 

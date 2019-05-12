@@ -49,7 +49,7 @@ void MipmapGenerator::ScaleImage()
 	roundAlpha();
 }
 
-unsigned char MipmapGenerator::bilinear(unsigned int positionWidth, unsigned int positionHeight, int channel)
+unsigned char MipmapGenerator::bilinear(unsigned int positionWidth, unsigned int positionHeight, int channel) const
 {
 	float accurateWidth = (positionWidth - 0.5f) * divisor + 0.5f;
 	float accurateHeight = (positionHeight - 0.5f) * divisor + 0.5f;

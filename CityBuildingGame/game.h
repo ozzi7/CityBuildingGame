@@ -44,11 +44,11 @@ private:
 	float lastFrame = 0.0f;
 
 	// Called by the application class to update the game logic
-	void gameLoop();
+	void gameLoop() const;
 
 	// Continuously redraws all visible objects
 	void renderLoop();
 
-	void loggingLoop();
-	void soundLoop();
+	void loggingLoop() const;
+	void soundLoop() const;
 };

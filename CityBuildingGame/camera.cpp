@@ -15,30 +15,30 @@ Camera::Camera(glm::vec3 position, GLFWwindow* aWindow)
 }
 
 // Returns the view matrix calculated using LookAt Matrix
-glm::mat4 Camera::GetViewMatrix()
+glm::mat4 Camera::GetViewMatrix() const
 {
 	return lookAt(Position, Position + lookat, up);
 }
 
-glm::mat4 Camera::GetLightViewMatrix()
+glm::mat4 Camera::GetLightViewMatrix() const
 {
 	//return glm::lookAt(DirectionalLight.Position, DirectionalLight.Position + lookat, glm::vec3(0.0, 0.0, 1.0));
 	return lookAt(Position + lookat + DirectionalLight.PositionOffset, Position + lookat, up);
 }
 
-glm::mat4 Camera::GetProjectionMatrix()
+glm::mat4 Camera::GetProjectionMatrix() const
 {
 	return glm::ortho(-ScreenRatio * ZoomLevel, ScreenRatio * ZoomLevel, -1.0f * ZoomLevel, ZoomLevel, 0.0f, 200.0f);
 }
 
-glm::mat4 Camera::GetLightProjectionMatrix()
+glm::mat4 Camera::GetLightProjectionMatrix() const
 {
 	return glm::ortho(-ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease,
 	                  -1.0f * ZoomLevel * projectionIncrease, ZoomLevel * projectionIncrease, -100.0f, 100.0f);
 }
 
 // Top left position on Grid that is visible by camera
-glm::vec2 Camera::GridTopLeftVisible()
+glm::vec2 Camera::GridTopLeftVisible() const
 {
 	float x = Position.x + lookat.x - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
 		VISIBLE_RANGE;
@@ -49,7 +49,7 @@ glm::vec2 Camera::GridTopLeftVisible()
 }
 
 // Top right position on Grid that is visible by camera
-glm::vec2 Camera::GridTopRightVisible()
+glm::vec2 Camera::GridTopRightVisible() const
 {
 	float x = Position.x + lookat.x + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE - ZoomLevel * 0.5f * ROOT3 *
 		VISIBLE_RANGE;
@@ -60,7 +60,7 @@ glm::vec2 Camera::GridTopRightVisible()
 }
 
 // Bottom left position on Grid that is visible by camera
-glm::vec2 Camera::GridBottomLeftVisible()
+glm::vec2 Camera::GridBottomLeftVisible() const
 {
 	float x = Position.x + lookat.x - ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
 		VISIBLE_RANGE;
@@ -71,7 +71,7 @@ glm::vec2 Camera::GridBottomLeftVisible()
 }
 
 // Bottom right position on Grid that is visible by camera
-glm::vec2 Camera::GridBottomRightVisible()
+glm::vec2 Camera::GridBottomRightVisible() const
 {
 	float x = Position.x + lookat.x + ZoomLevel * 0.5f * ScreenRatio * VISIBLE_RANGE + ZoomLevel * 0.5f * ROOT3 *
 		VISIBLE_RANGE;
@@ -82,7 +82,7 @@ glm::vec2 Camera::GridBottomRightVisible()
 }
 
 // Current cursor position on Grid
-glm::vec3 Camera::CursorPositionOnGrid()
+glm::vec3 Camera::CursorPositionOnGrid() const
 {
 	float x, y, z;
 	double window_x, window_y;

@@ -44,15 +44,15 @@ public:
 	Grid* Grid;
 	LightSource DirectionalLight;
 
-	glm::mat4 GetViewMatrix();			// Returns the view matrix calculated using LookAt Matrix
-	glm::mat4 GetLightViewMatrix();
-	glm::mat4 GetProjectionMatrix();	// Returns the projection orthographic projection matrix
-	glm::mat4 GetLightProjectionMatrix();
-	glm::vec2 GridTopLeftVisible();
-	glm::vec2 GridTopRightVisible();
-	glm::vec2 GridBottomLeftVisible();
-	glm::vec2 GridBottomRightVisible();
-	glm::vec3 CursorPositionOnGrid();
+	glm::mat4 GetViewMatrix() const;			// Returns the view matrix calculated using LookAt Matrix
+	glm::mat4 GetLightViewMatrix() const;
+	glm::mat4 GetProjectionMatrix() const;	// Returns the projection orthographic projection matrix
+	glm::mat4 GetLightProjectionMatrix() const;
+	glm::vec2 GridTopLeftVisible() const;
+	glm::vec2 GridTopRightVisible() const;
+	glm::vec2 GridBottomLeftVisible() const;
+	glm::vec2 GridBottomRightVisible() const;
+	glm::vec3 CursorPositionOnGrid() const;
 
 	void Scroll(Camera_Movement, float);
 	void Zoom(float);

@@ -24,7 +24,7 @@ struct Node
 
 struct NodeCompare
 {
-	bool operator()(const Node* node1, const Node* node2)
+	bool operator()(const Node* node1, const Node* node2) const
 	{
 		if (node1->distanceTotal > node2->distanceTotal)
 			return true;
@@ -92,7 +92,7 @@ private:
 	const unsigned short maxY = (unsigned short)MAP_HEIGHT - 1;
 
 	void createNode(Coordinate coordinate);
-	unsigned short distanceToDestination(Coordinate coordinate);
+	unsigned short distanceToDestination(Coordinate coordinate) const;
 	void setNextNode();
 	void adjustParentNode(Node* node);
 };

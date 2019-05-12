@@ -3,7 +3,7 @@
 #include "game_event_handler.h"
 #include "sound_event_handler.h"
 
-void InputHandler::Keypress(int button, int action)
+void InputHandler::Keypress(int button, int action) const
 {
 	if (windowFocused)
 	{
@@ -22,7 +22,7 @@ void InputHandler::Keypress(int button, int action)
 	}
 }
 
-void InputHandler::Mouseclick(int button, int action)
+void InputHandler::Mouseclick(int button, int action) const
 {
 	if (windowFocused)
 	{
@@ -50,7 +50,7 @@ void InputHandler::Mouseclick(int button, int action)
 	}
 }
 
-void InputHandler::Mousewheel(float yOffset)
+void InputHandler::Mousewheel(float yOffset) const
 {
 	if (windowFocused)
 		Camera->Zoom(yOffset);
@@ -83,7 +83,7 @@ void InputHandler::WindowFocus(int focused)
 	}
 }
 
-void InputHandler::MouseScroll()
+void InputHandler::MouseScroll() const
 {
 	if (windowFocused)
 	{

@@ -88,7 +88,7 @@ public:
 		ambientLight = {0.3f, 0.3f, 0.3f};
 	}
 
-	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix, unsigned int shadowMapID)
+	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix, unsigned int shadowMapID) const
 	{
 		terrain_shader->use();
 		terrain_shader->setMat4("projection", aProjection);
@@ -119,7 +119,7 @@ public:
 		instanced_mesh_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
 	}
 
-	void SetShadowMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix)
+	void SetShadowMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix) const
 	{
 		shadow_shader->use();
 		shadow_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
@@ -150,13 +150,13 @@ public:
 private:
 	bool shadowPass = false;
 
-	void renderTerrain(RenderBuffer* renderBuffer)
+	void renderTerrain(RenderBuffer* renderBuffer) const
 	{
 		terrain_shader->use();
 		renderBuffer->terrain->Draw();
 	}
 
-	void renderInstancedObjects(RenderBuffer* renderBuffer)
+	void renderInstancedObjects(RenderBuffer* renderBuffer) const
 	{
 		Shader* shader;
 		if (shadowPass)
@@ -173,7 +173,7 @@ private:
 		instanced_model_building_outline->Draw(*shader, renderBuffer->buildingOutlineModels);
 	}
 
-	void renderBoneAnimated(RenderBuffer* renderBuffer)
+	void renderBoneAnimated(RenderBuffer* renderBuffer) const
 	{
 		Shader* shader;
 		if (shadowPass)

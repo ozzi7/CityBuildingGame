@@ -100,7 +100,7 @@ void Game::renderLoop()
 	delete renderer;
 }
 
-void Game::gameLoop()
+void Game::gameLoop() const
 {
 	const int TICKS_PER_SECOND = 100;
 	const int SKIP_TICKS = 1000000 / TICKS_PER_SECOND; // microseconds
@@ -164,7 +164,7 @@ void Game::gameLoop()
 	}
 }
 
-void Game::soundLoop()
+void Game::soundLoop() const
 {
 	soundEventHandler->LoadFiles();
 
@@ -176,7 +176,7 @@ void Game::soundLoop()
 	}
 }
 
-void Game::loggingLoop()
+void Game::loggingLoop() const
 {
 	while (!glfwWindowShouldClose(window))
 	{

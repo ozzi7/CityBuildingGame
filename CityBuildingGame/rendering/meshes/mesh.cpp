@@ -39,7 +39,7 @@ void Mesh::Bind(Shader& shader)
 	}
 }
 
-void Mesh::Draw()
+void Mesh::Draw() const
 {
 	glDrawElements(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, nullptr);
 

@@ -10,7 +10,7 @@ public:
 	void Bind(Shader& shader, std::vector<glm::mat4>& models);
 
 	// Render instanced
-	void Draw(int instances);
+	void Draw(int instances) const;
 
 private:
 	unsigned int instanceVBO;

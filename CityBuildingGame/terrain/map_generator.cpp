@@ -73,7 +73,7 @@ void MapGenerator::GenerateMap()
 	grid->gridUnits[yStart][xStart]->movingObjects.push_back(lumbydumby);*/
 }
 
-void MapGenerator::generateTerrain()
+void MapGenerator::generateTerrain() const
 {
 	NoiseGen noise_gen;
 	std::vector<std::vector<float>> heightmap = std::vector<std::vector<float>>(
@@ -195,7 +195,7 @@ void MapGenerator::generateTrees()
 	}
 }
 
-void MapGenerator::flattenMap(std::vector<std::vector<float>>& pHeightmap)
+void MapGenerator::flattenMap(std::vector<std::vector<float>>& pHeightmap) const
 {
 	float thresholdValley = getHeightAtPercentage(pHeightmap, VALLEY_PERCENTAGE);
 	float thresholdPlateau = getHeightAtPercentage(pHeightmap, 100 - PLATEAU_PERCENTAGE);
@@ -217,7 +217,7 @@ void MapGenerator::flattenMap(std::vector<std::vector<float>>& pHeightmap)
 	}
 }
 /* Returns the height threshold where <percentage> of the map is lower */
-float MapGenerator::getHeightAtPercentage(std::vector<std::vector<float>>& pHeightmap, float percentage)
+float MapGenerator::getHeightAtPercentage(std::vector<std::vector<float>>& pHeightmap, float percentage) const
 {
 	std::vector<float> zValues;
 	for (int i = 0; i < pHeightmap.size(); i++)

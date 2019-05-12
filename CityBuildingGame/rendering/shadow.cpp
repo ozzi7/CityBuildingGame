@@ -23,7 +23,7 @@ void Shadow::InitShadowMap()
 	glReadBuffer(GL_NONE);
 }
 
-void Shadow::BindShadowMap()
+void Shadow::BindShadowMap() const
 {
 	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, depthMapFBO);

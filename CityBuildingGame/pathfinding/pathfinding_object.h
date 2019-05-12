@@ -19,7 +19,7 @@ struct NodeObject
 
 struct NodeCompareObject
 {
-	bool operator()(const NodeObject* node1, const NodeObject* node2)
+	bool operator()(const NodeObject* node1, const NodeObject* node2) const
 	{
 		if (node1->distanceToStart > node2->distanceToStart)
 			return true;
@@ -42,7 +42,7 @@ public:
 	void FindClosestEdge();
 
 	std::list<Coordinate> GetPath();
-	GameObject* GetDestinationObject();
+	GameObject* GetDestinationObject() const;
 private:
 	std::forward_list<NodeObject*> closed; // maybe not needed, only for storing pointers for deleting
 	std::priority_queue<NodeObject*, std::deque<NodeObject*>, NodeCompareObject> open;

@@ -57,7 +57,7 @@ std::list<Coordinate> PathfindingObject::GetPath()
 	return path;
 }
 
-GameObject* PathfindingObject::GetDestinationObject()
+GameObject* PathfindingObject::GetDestinationObject() const
 {
 	if (objectFound)
 	{
