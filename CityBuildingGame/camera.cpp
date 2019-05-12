@@ -15,13 +15,13 @@ Camera::Camera(const glm::vec3 position, GLFWwindow* window)
 // Returns the view matrix calculated using LookAt Matrix
 glm::mat4 Camera::GetViewMatrix() const
 {
-	return glm::lookAt(Position, Position + LookAt, Up);
+	return lookAt(Position, Position + LookAt, Up);
 }
 
 glm::mat4 Camera::GetLightViewMatrix() const
 {
 	//return glm::lookAt(DirectionalLight.Position, DirectionalLight.Position + lookAt, glm::vec3(0.0, 0.0, 1.0));
-	return glm::lookAt(Position + LookAt + DirectionalLight.PositionOffset, Position + LookAt, Up);
+	return lookAt(Position + LookAt + DirectionalLight.PositionOffset, Position + LookAt, Up);
 }
 
 glm::mat4 Camera::GetProjectionMatrix() const
@@ -87,7 +87,7 @@ glm::vec3 Camera::CursorPositionOnGrid() const
 
 	glfwGetCursorPos(Window, &windowX, &windowY);
 	const float x = (float)windowX;
-	const float y = ScreenHeight - (float)windowY;
+	const float y = (float)ScreenHeight - (float)windowY;
 	glReadPixels((int)x, (int)y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
 
 	const glm::vec3 window = glm::vec3(x, y, z);
@@ -130,5 +130,5 @@ void Camera::UpdateLightDirection()
 		pow((lookAt.y - Position.y + DirectionalLight.PositionOffset.y), 2) +
 		pow((lookAt.z - Position.z + DirectionalLight.PositionOffset.z), 2));*/
 
-	DirectionalLight.Direction = -(DirectionalLight.PositionOffset);
+	DirectionalLight.Direction = -DirectionalLight.PositionOffset;
 }

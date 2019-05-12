@@ -48,7 +48,7 @@ void GameEventHandler::Visit(MoveEvent* aMoveEvent)
 	for (auto it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.begin(); it !=
 	     grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.end(); ++it)
 	{
-		if ((*it) == aMoveEvent->gameObject)
+		if (*it == aMoveEvent->gameObject)
 		{
 			toMove = *it;
 			it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.erase(it);
@@ -304,7 +304,7 @@ void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->movingObjects.begin(); it !=
 	     grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->movingObjects.end(); ++it)
 	{
-		if ((*it) == aDeleteEvent->gameObject)
+		if (*it == aDeleteEvent->gameObject)
 		{
 			it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->movingObjects.erase(it);
 			break;
@@ -313,7 +313,7 @@ void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.begin(); it !=
 	     grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.end(); ++it)
 	{
-		if ((*it) == aDeleteEvent->gameObject)
+		if (*it == aDeleteEvent->gameObject)
 		{
 			it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.erase(it);
 			break;
@@ -362,7 +362,7 @@ void GameEventHandler::Visit(ReturnHomeEvent* aReturnHomeEvent)
 	switch (aReturnHomeEvent->personType)
 	{
 	case LumberjackID:
-		Lumberjack* lumby = (Lumberjack*)(aReturnHomeEvent->person); // or extract coordinates??
+		Lumberjack* lumby = (Lumberjack*)aReturnHomeEvent->person; // or extract coordinates??
 		Pathfinding path = Pathfinding(
 			grid, Coordinate(aReturnHomeEvent->person->position.x, aReturnHomeEvent->person->position.y),
 			Coordinate(lumby->lumberjackHut->entranceX, lumby->lumberjackHut->entranceY));

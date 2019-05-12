@@ -77,14 +77,14 @@ void NoiseGen::GenerateSmoothNoise(std::vector<std::vector<float>>& baseNoise,
 	for (int i = 0; i < height; i++)
 	{
 		//calculate the horizontal sampling indices
-		int sample_i0 = (i / samplePeriod) * samplePeriod;
+		int sample_i0 = i / samplePeriod * samplePeriod;
 		int sample_i1 = (sample_i0 + samplePeriod) % height; //wrap around
 		float vertical_blend = (i - sample_i0) * sampleFrequency;
 
 		for (int j = 0; j < width; j++)
 		{
 			//calculate the vertical sampling indices
-			int sample_j0 = (j / samplePeriod) * samplePeriod;
+			int sample_j0 = j / samplePeriod * samplePeriod;
 			int sample_j1 = (sample_j0 + samplePeriod) % width; //wrap around
 			float horizontal_blend = (j - sample_j0) * sampleFrequency;
 

@@ -182,29 +182,29 @@ bool SkinnedMesh::InitFromScene(const aiScene* pScene, const std::string& fileNa
 
 	/* Generate and populate the buffers with vertex attributes and indices */
 	glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[POS_VB]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Positions[0]) * Positions.size(), &Positions[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof Positions[0] * Positions.size(), &Positions[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(POSITION_LOCATION);
 	glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[TEXCOORD_VB]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(TexCoords[0]) * TexCoords.size(), &TexCoords[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof TexCoords[0] * TexCoords.size(), &TexCoords[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(TEX_COORD_LOCATION);
 	glVertexAttribPointer(TEX_COORD_LOCATION, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[NORMAL_VB]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Normals[0]) * Normals.size(), &Normals[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof Normals[0] * Normals.size(), &Normals[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(NORMAL_LOCATION);
 	glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[BONE_VB]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Bones[0]) * Bones.size(), &Bones[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof Bones[0] * Bones.size(), &Bones[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(BONE_ID_LOCATION);
 	glVertexAttribIPointer(BONE_ID_LOCATION, 4, GL_INT, sizeof(VertexBoneData), (const GLvoid*)nullptr);
 	glEnableVertexAttribArray(BONE_WEIGHT_LOCATION);
 	glVertexAttribPointer(BONE_WEIGHT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData), (const GLvoid*)16);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Buffers[INDEX_BUFFER]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices[0]) * Indices.size(), &Indices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof Indices[0] * Indices.size(), &Indices[0], GL_STATIC_DRAW);
 
 	if (glGetError() == GL_NO_ERROR)
 		return true;
@@ -227,16 +227,16 @@ void SkinnedMesh::InitMesh(unsigned int MeshIndex,
 	{
 		/* Get pos normal texCoord */
 
-		const aiVector3D* pPos = &(paiMesh->mVertices[i]);
+		const aiVector3D* pPos = &paiMesh->mVertices[i];
 
-		const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &(paiMesh->mTextureCoords[0][i]) : &Zero3D;
+		const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &paiMesh->mTextureCoords[0][i] : &Zero3D;
 
 		/* store pos normal texCoord */
 		Positions.push_back(glm::vec3(pPos->x, pPos->y, pPos->z));
 
 		if (paiMesh->HasNormals())
 		{
-			const aiVector3D* pNormal = &(paiMesh->mNormals[i]);
+			const aiVector3D* pNormal = &paiMesh->mNormals[i];
 			Normals.push_back(glm::vec3(pNormal->x, pNormal->y, pNormal->z));
 		}
 		TexCoords.push_back(glm::vec2(pTexCoord->x, pTexCoord->y));
@@ -426,7 +426,7 @@ void SkinnedMesh::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime,
 	}
 
 	unsigned int PositionIndex = FindPosition(AnimationTime, pNodeAnim);
-	unsigned int NextPositionIndex = (PositionIndex + 1);
+	unsigned int NextPositionIndex = PositionIndex + 1;
 	assert(NextPositionIndex < pNodeAnim->mNumPositionKeys);
 	float DeltaTime = (float)(pNodeAnim->mPositionKeys[NextPositionIndex].mTime - pNodeAnim->mPositionKeys[PositionIndex
 	].mTime);
@@ -448,7 +448,7 @@ void SkinnedMesh::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTim
 	}
 
 	unsigned int RotationIndex = FindRotation(AnimationTime, pNodeAnim);
-	unsigned int NextRotationIndex = (RotationIndex + 1);
+	unsigned int NextRotationIndex = RotationIndex + 1;
 	assert(NextRotationIndex < pNodeAnim->mNumRotationKeys);
 	float DeltaTime = (float)(pNodeAnim->mRotationKeys[NextRotationIndex].mTime - pNodeAnim->mRotationKeys[RotationIndex
 	].mTime);
@@ -469,7 +469,7 @@ void SkinnedMesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, 
 	}
 
 	unsigned int ScalingIndex = FindScaling(AnimationTime, pNodeAnim);
-	unsigned int NextScalingIndex = (ScalingIndex + 1);
+	unsigned int NextScalingIndex = ScalingIndex + 1;
 	assert(NextScalingIndex < pNodeAnim->mNumScalingKeys);
 	float DeltaTime = (float)(pNodeAnim->mScalingKeys[NextScalingIndex].mTime - pNodeAnim->mScalingKeys[ScalingIndex].
 		mTime);
@@ -536,7 +536,7 @@ void SkinnedMesh::PrecalculateBoneTransforms()
 {
 	unsigned int numPosKeys = m_pScene->mAnimations[0]->mChannels[0]->mNumPositionKeys;
 	animDuration = m_pScene->mAnimations[0]->mChannels[0]->mPositionKeys[numPosKeys - 1].mTime;
-	for (float tick = 0.0f; tick < animDuration; tick += (1.0f / TRANSFORMS_PER_SECOND))
+	for (float tick = 0.0f; tick < animDuration; tick += 1.0f / TRANSFORMS_PER_SECOND)
 	{
 		std::vector<glm::mat4> Transform;
 		BoneTransform(tick, Transform);

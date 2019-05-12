@@ -80,13 +80,13 @@ void BoneAnimated::updateProxyPosition(float speed)
 			if (proxyWPIdx + 2 < wayPoints.size())
 			{
 				// continue to next WP after the one we just arrived at..
-				translation = (wayPoints[proxyWPIdx + 1] - proxyObjectPos) + (speed - distanceToNextWP) *
+				translation = wayPoints[proxyWPIdx + 1] - proxyObjectPos + (speed - distanceToNextWP) *
 					normalize(wayPoints[proxyWPIdx + 2] - wayPoints[proxyWPIdx + 1]);
 			}
 			else
 			{
 				// ..unless we arrived at final WP
-				translation = (wayPoints[proxyWPIdx + 1] - proxyObjectPos);
+				translation = wayPoints[proxyWPIdx + 1] - proxyObjectPos;
 				proxyHasArrived = true;
 			}
 			proxyWPIdx = proxyWPIdx + 1;

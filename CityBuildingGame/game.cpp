@@ -156,7 +156,7 @@ void Game::gameLoop() const
 		std::this_thread::sleep_for(
 			std::chrono::duration_cast<std::chrono::microseconds>(
 				next_game_tick - std::chrono::high_resolution_clock::now()));
-		next_game_tick = (next_game_tick + std::chrono::microseconds(SKIP_TICKS));
+		next_game_tick = next_game_tick + std::chrono::microseconds(SKIP_TICKS);
 		loops++;
 	}
 }
@@ -169,7 +169,7 @@ void Game::soundLoop() const
 	{
 		while (soundEventHandler->ProcessEvent());
 		std::this_thread::
-			sleep_for(std::chrono::milliseconds(long((1.0 / 60.0) * 1000))); // blocking queue cant be terminated..
+			sleep_for(std::chrono::milliseconds(long(1.0 / 60.0 * 1000))); // blocking queue cant be terminated..
 	}
 }
 
@@ -179,6 +179,6 @@ void Game::loggingLoop() const
 	{
 		while (loggingEventHandler->ProcessEvent());
 		std::this_thread::
-			sleep_for(std::chrono::milliseconds(long((1.0 / 60.0) * 1000))); // blocking queue cant be terminated..
+			sleep_for(std::chrono::milliseconds(long(1.0 / 60.0 * 1000))); // blocking queue cant be terminated..
 	}
 }

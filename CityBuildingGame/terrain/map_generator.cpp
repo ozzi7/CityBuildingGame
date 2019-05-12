@@ -234,5 +234,5 @@ float MapGenerator::getHeightAtPercentage(std::vector<std::vector<float>>& pHeig
 
 float MapGenerator::getGaussianPDFValue(float mean, float var, float x)
 {
-	return (1 / std::sqrtf(2 * std::_Pi * var) * std::expf(-((x - mean) * (x - mean)) / (2 * var)));
+	return 1 / std::sqrtf(2 * std::_Pi * var) * std::expf(-((x - mean) * (x - mean)) / (2 * var));
 }

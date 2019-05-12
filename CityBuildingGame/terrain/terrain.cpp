@@ -112,8 +112,8 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 				glm::vec2 AB = glm::vec2(upperRight - upperLeft);
 				glm::vec2 AD = glm::vec2(lowerLeft - upperLeft);
 
-				if ((0 <= dot(AM, AB)) && (dot(AM, AB) < dot(AB, AB)) &&
-					(dot(AM, AD) < dot(AD, AD)) && 0 <= dot(AM, AD))
+				if (0 <= dot(AM, AB) && dot(AM, AB) < dot(AB, AB) &&
+					dot(AM, AD) < dot(AD, AD) && 0 <= dot(AM, AD))
 				{
 					float float_i = float(i);
 					float float_j = float(j);
@@ -203,7 +203,7 @@ loopExit:
 	{
 		currRenderData = 1;
 	}
-	renderDataVertexCount = (index / 48) * 6;
+	renderDataVertexCount = index / 48 * 6;
 	reloadGPUData = true;
 	renderDataMutex.unlock();
 }
@@ -302,28 +302,28 @@ void Terrain::CreateGeometry()
 				{
 					// top row, except left and right
 					vertexNormals[i * (gridWidth + 1) + j] = normalize(
-						triangleArea[(i - 1) * gridWidth * 2 + (j * 2) - 1] * triangleNormals[(i - 1) * gridWidth * 2 +
-							(j * 2) - 1] +
-						triangleArea[(i - 1) * gridWidth * 2 + (j * 2)] * triangleNormals[(i - 1) * gridWidth * 2 + (j *
-							2)] +
-						triangleArea[(i - 1) * gridWidth * 2 + (j * 2) + 1] * triangleNormals[(i - 1) * gridWidth * 2 +
-							(j * 2) + 1]);
+						triangleArea[(i - 1) * gridWidth * 2 + j * 2 - 1] * triangleNormals[(i - 1) * gridWidth * 2 +
+							j * 2 - 1] +
+						triangleArea[(i - 1) * gridWidth * 2 + j * 2] * triangleNormals[(i - 1) * gridWidth * 2 + j *
+							2] +
+						triangleArea[(i - 1) * gridWidth * 2 + j * 2 + 1] * triangleNormals[(i - 1) * gridWidth * 2 +
+							j * 2 + 1]);
 				}
 				else
 				{
 					// rest, all in the middle with 6 surrounding triangles
 					vertexNormals[i * (gridWidth + 1) + j] = normalize(
-						triangleArea[(i - 1) * gridWidth * 2 + (j * 2) - 1] * triangleNormals[(i - 1) * gridWidth * 2 +
-							(j * 2) - 1] +
-						triangleArea[(i - 1) * gridWidth * 2 + (j * 2)] * triangleNormals[(i - 1) * gridWidth * 2 + (j *
-							2)] +
-						triangleArea[(i - 1) * gridWidth * 2 + (j * 2) + 1] * triangleNormals[(i - 1) * gridWidth * 2 +
-							(j * 2) + 1] +
-						triangleArea[i * gridWidth * 2 + (j * 2) - 2] * triangleNormals[i * gridWidth * 2 + (j * 2) - 2]
+						triangleArea[(i - 1) * gridWidth * 2 + j * 2 - 1] * triangleNormals[(i - 1) * gridWidth * 2 +
+							j * 2 - 1] +
+						triangleArea[(i - 1) * gridWidth * 2 + j * 2] * triangleNormals[(i - 1) * gridWidth * 2 + j *
+							2] +
+						triangleArea[(i - 1) * gridWidth * 2 + j * 2 + 1] * triangleNormals[(i - 1) * gridWidth * 2 +
+							j * 2 + 1] +
+						triangleArea[i * gridWidth * 2 + j * 2 - 2] * triangleNormals[i * gridWidth * 2 + j * 2 - 2]
 						+
-						triangleArea[i * gridWidth * 2 + (j * 2) - 1] * triangleNormals[i * gridWidth * 2 + (j * 2) - 1]
+						triangleArea[i * gridWidth * 2 + j * 2 - 1] * triangleNormals[i * gridWidth * 2 + j * 2 - 1]
 						+
-						triangleArea[i * gridWidth * 2 + (j * 2)] * triangleNormals[i * gridWidth * 2 + (j * 2) + 1]);
+						triangleArea[i * gridWidth * 2 + j * 2] * triangleNormals[i * gridWidth * 2 + j * 2 + 1]);
 				}
 			}
 		}

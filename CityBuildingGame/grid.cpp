@@ -69,8 +69,8 @@ void Grid::UpdateVisibleList(glm::vec2& upperLeft, glm::vec2& upperRight, glm::v
 					glm::vec2 AB = glm::vec2(upperRight - upperLeft);
 					glm::vec2 AD = glm::vec2(lowerLeft - upperLeft);
 
-					if ((0 <= dot(AM, AB)) && (dot(AM, AB) < dot(AB, AB)) &&
-						(dot(AM, AD) < dot(AD, AD)) && 0 <= dot(AM, AD))
+					if (0 <= dot(AM, AB) && dot(AM, AB) < dot(AB, AB) &&
+						dot(AM, AD) < dot(AD, AD) && 0 <= dot(AM, AD))
 					{
 						visibleUnits[nofVisibleUnits++] = gridUnits[i][j];
 					}
@@ -97,11 +97,11 @@ float Grid::GetHeight(float posX, float posY) const
 		// left triangle
 		float m = terrain->heightmap[i][j + 1] - terrain->heightmap[i][j];
 		float n = terrain->heightmap[i + 1][j] - terrain->heightmap[i][j];
-		return (offsetX * m + offsetY * n) + terrain->heightmap[i][j];
+		return offsetX * m + offsetY * n + terrain->heightmap[i][j];
 	}
 	float m = terrain->heightmap[i + 1][j] - terrain->heightmap[i + 1][j + 1];
 	float n = terrain->heightmap[i][j + 1] - terrain->heightmap[i + 1][j + 1];
-	return ((1 - offsetX) * m + (1 - offsetY) * n) + terrain->heightmap[i + 1][j + 1];
+	return (1 - offsetX) * m + (1 - offsetY) * n + terrain->heightmap[i + 1][j + 1];
 }
 /* Check if area is flat within a rectangle of the grid
 Input for a 2x2 building is (0,1, 0,1) but accesses heightmap (0,2, 0,2)
@@ -139,7 +139,7 @@ Unit::Unit()
 Unit::~Unit()
 {
 	for (auto it = objects.begin(); it != objects.end(); ++it)
-		delete (*it);
+		delete *it;
 	for (auto it = movingObjects.begin(); it != movingObjects.end(); ++it)
-		delete (*it);
+		delete *it;
 }
