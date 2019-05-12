@@ -84,12 +84,12 @@ glm::vec2 Camera::GridBottomRightVisible() const
 // Current cursor position on Grid
 glm::vec3 Camera::CursorPositionOnGrid() const
 {
-	float x, y, z;
+	float z;
 	double window_x, window_y;
 
 	glfwGetCursorPos(window, &window_x, &window_y);
-	x = (float)window_x;
-	y = ScreenHeight - (float)window_y;
+	float x = (float)window_x;
+	float y = ScreenHeight - (float)window_y;
 	glReadPixels((int)x, (int)y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
 
 	glm::vec3 window = glm::vec3(x, y, z);

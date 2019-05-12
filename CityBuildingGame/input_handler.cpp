@@ -65,14 +65,12 @@ void InputHandler::WindowFocus(int focused)
 		int height;
 		int left;
 		int top;
-		int right;
-		int bottom;
 		RECT windowEdges;
 
 		glfwGetWindowPos(Window, &left, &top);
 		glfwGetWindowSize(Window, &width, &height);
-		right = left + width;
-		bottom = top + height;
+		int right = left + width;
+		int bottom = top + height;
 
 		windowEdges.left = left;
 		windowEdges.top = top;

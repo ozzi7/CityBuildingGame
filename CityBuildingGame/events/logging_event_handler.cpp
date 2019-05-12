@@ -6,10 +6,9 @@
 LoggingEventHandler::LoggingEventHandler(LoggingLevel aFileLoggingLevel, LoggingLevel aConsoleLoggingLevel)
 {
 	time_t* rawtime = new time_t; // we'll get the time here by time() function.
-	struct tm*
-		timeinfo; /* we'll get the time info. (sec, min, hour, etc...) here from rawtime by the localtime() function */
 	time(rawtime); // Get time into rawtime
-	timeinfo = localtime(rawtime); // Get time info into timeinfo
+	struct tm*
+		timeinfo = localtime(rawtime); // Get time info into timeinfo
 
 	logFileName = "log_" + std::to_string(timeinfo->tm_year + 1900) + "-" + std::to_string(timeinfo->tm_mon + 1) + "-" +
 		std::to_string(timeinfo->tm_mday) + "_" + std::to_string(timeinfo->tm_hour) + "h" + std::to_string(

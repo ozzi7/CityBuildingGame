@@ -63,9 +63,6 @@ void Game::renderLoop()
 {
 	renderer = new Renderer(*camera);
 	shadow = new Shadow();
-	glm::mat4 projection;
-	glm::mat4 view;
-	glm::mat4 lightSpaceMatrix;
 
 	camera->DirectionalLight.Color = {1.0f, 1.0f, 1.0f};
 	camera->DirectionalLight.PositionOffset = glm::vec3{-1.0f, -2.0f, 1.0f};
@@ -78,9 +75,9 @@ void Game::renderLoop()
 	{
 		// Shadow pass
 		shadow->BindShadowMap();
-		projection = camera->GetLightProjectionMatrix();
-		view = camera->GetLightViewMatrix();
-		lightSpaceMatrix = projection * view;
+		glm::mat4 projection = camera->GetLightProjectionMatrix();
+		glm::mat4 view = camera->GetLightViewMatrix();
+		glm::mat4 lightSpaceMatrix = projection * view;
 
 		renderer->SetShadowMatrices(projection, view, lightSpaceMatrix);
 		renderer->CalculateShadow(renderBuffers->GetConsumerBuffer());
