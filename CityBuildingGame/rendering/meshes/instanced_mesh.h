@@ -13,6 +13,6 @@ public:
 	void Draw(int instances) const;
 
 private:
-	unsigned int instanceVBO;
+	unsigned int instanceVBO{};
 	void setupInstancedMesh();
 };

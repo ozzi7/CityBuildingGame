@@ -9,8 +9,8 @@ public:
 	void InitShadowMap();
 	void BindShadowMap() const;
 	void UnbindShadowMap();
-	unsigned int DepthMap;
+	unsigned int DepthMap{};
 
 private:
-	unsigned int depthMapFBO;
+	unsigned int depthMapFBO{};
 };

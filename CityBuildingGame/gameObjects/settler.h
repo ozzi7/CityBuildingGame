@@ -13,5 +13,5 @@ public:
 	void GameStep() override;
 
 protected:
-	Dwelling* dwelling;
+	Dwelling* dwelling{};
 };

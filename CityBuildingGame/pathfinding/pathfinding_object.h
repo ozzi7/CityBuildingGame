@@ -13,8 +13,8 @@ enum ObjectType { edge, tree };
 struct NodeObject
 {
 	Coordinate coordinate;
-	unsigned short distanceToStart;
-	NodeObject* parent;
+	unsigned short distanceToStart{};
+	NodeObject* parent{};
 };
 
 struct NodeCompareObject
@@ -48,9 +48,9 @@ private:
 	std::priority_queue<NodeObject*, std::deque<NodeObject*>, NodeCompareObject> open;
 	bool visited[MAP_WIDTH][MAP_HEIGHT]{false};
 
-	Grid* grid;
-	NodeObject* start;
-	NodeObject* current;
+	Grid* grid{};
+	NodeObject* start{};
+	NodeObject* current{};
 	ObjectType objectType;
 
 	bool objectFound = false;

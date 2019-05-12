@@ -13,9 +13,9 @@ public:
 	void CombineNoiseMaps(std::vector<std::vector<float>>& pHeightmap, int octaveCount, float aPersistence);
 
 private:
-	int width, height;
+	int width{}, height{};
 
-	float totalAmplitude;
+	float totalAmplitude{};
 	std::vector<std::vector<std::vector<float>>> smoothNoiseList; //an array of 2D arrays containing
 
 	void GenerateWhiteNoise(std::vector<std::vector<float>>& pHeightmap) const;

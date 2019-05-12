@@ -2,8 +2,6 @@
 #pragma once
 #include "camera.h"
 
-Camera::Camera() {};
-
 Camera::Camera(glm::vec3 position, GLFWwindow* aWindow)
 {
 	Position = position;

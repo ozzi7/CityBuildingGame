@@ -41,5 +41,5 @@ public:
 
 	std::vector<float> settlerAnimationSeconds;
 	std::vector<float> lumberjackAnimationSeconds;
-	Terrain* terrain; // TODO:
+	Terrain* terrain{}; // TODO:
 };

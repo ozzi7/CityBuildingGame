@@ -12,7 +12,7 @@ public:
 	void SetLumberjackHut(LumberjackHut* aLumberjackHut);
 	void GameStep() override;
 
-	LumberjackHut* lumberjackHut;
+	LumberjackHut* lumberjackHut{};
 
 protected:
 	int workTimeLeft = 0;

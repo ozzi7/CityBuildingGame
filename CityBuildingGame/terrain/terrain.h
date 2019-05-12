@@ -44,8 +44,8 @@ private:
 	void AddTexturesToGrid();
 	int ReloadGPUData();
 
-	GLuint VBO, VAO, EBO;
-	unsigned int texture_id_grass;
+	GLuint VBO{}, VAO{}, EBO{};
+	unsigned int texture_id_grass{};
 	std::string texture_grass = "grass.png";
 
 	int gridHeight;

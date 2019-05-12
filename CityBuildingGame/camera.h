@@ -36,12 +36,12 @@ const float ROOT3 = (float)sqrt(3); // ROOT3 if viewing angle is 45°
 class Camera
 {
 public:
-	Camera();
+	Camera() = default;
 	Camera(glm::vec3 position, GLFWwindow* window);
 
 	glm::vec3 Position;
 	float ZoomLevel = ZOOM_DEFAULT;
-	Grid* Grid;
+	Grid* Grid{};
 	LightSource DirectionalLight;
 
 	glm::mat4 GetViewMatrix() const;			// Returns the view matrix calculated using LookAt Matrix
@@ -64,5 +64,5 @@ private:
 	glm::vec3 up;
 	glm::vec3 right;
 	glm::vec3 lookat;
-	GLFWwindow* window;
+	GLFWwindow* window{};
 };

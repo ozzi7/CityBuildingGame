@@ -18,7 +18,7 @@ struct Node
 	unsigned short distanceToStart = 0;
 	unsigned short distanceToDestination = 0;
 	unsigned short distanceTotal = 0;
-	Node* parent;
+	Node* parent{};
 	Coordinate destination;
 };
 

@@ -30,14 +30,14 @@ public:
 	void StartGame();
 
 private:
-	Renderer* renderer;
-	Shadow* shadow;
-	Grid* grid;
-	Camera* camera;
-	Camera* lightSource;
-	GLFWwindow* window;
-	InputHandler* inputHandler;
-	TripleBuffer<RenderBuffer>* renderBuffers;
+	Renderer* renderer{};
+	Shadow* shadow{};
+	Grid* grid{};
+	Camera* camera{};
+	Camera* lightSource{};
+	GLFWwindow* window{};
+	InputHandler* inputHandler{};
+	TripleBuffer<RenderBuffer>* renderBuffers{};
 
 	// timing
 	float deltaTime = 0.0f;	// time between current frame and last frame

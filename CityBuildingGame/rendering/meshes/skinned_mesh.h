@@ -50,8 +50,8 @@ private:
 
 	struct VertexBoneData
 	{
-		unsigned int IDs[NUM_BONES_PER_VERTEX];
-		float Weights[NUM_BONES_PER_VERTEX];
+		unsigned int IDs[NUM_BONES_PER_VERTEX]{};
+		float Weights[NUM_BONES_PER_VERTEX]{};
 
 		VertexBoneData()
 		{
@@ -105,8 +105,8 @@ private:
 	};
 
 	GLuint m_VAO;
-	GLuint m_Buffers[NUM_VBs];
-	GLuint m_ColorBuffer;
+	GLuint m_Buffers[NUM_VBs]{};
+	GLuint m_ColorBuffer{};
 	std::vector<glm::vec3> Colors;
 
 	struct MeshEntry
@@ -141,7 +141,7 @@ private:
 	glm::mat4 m_GlobalInverseTransform;
 
 	/* duration of the animation, can be changed if frames are not present in all interval */
-	double animDuration;
+	double animDuration{};
 
 	const aiScene* m_pScene;
 	Assimp::Importer m_Importer;
