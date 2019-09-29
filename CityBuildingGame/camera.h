@@ -14,12 +14,12 @@
 #include "grid.h"
 
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
-enum Camera_Movement
+enum CameraMovement
 {
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT
+	Up,
+	Down,
+	Left,
+	Right
 };
 
 struct LightSource
@@ -54,15 +54,15 @@ public:
 	glm::vec2 GridBottomRightVisible() const;
 	glm::vec3 CursorPositionOnGrid() const;
 
-	void Scroll(Camera_Movement, float);
+	void Scroll(CameraMovement, float);
 	void Zoom(float);
 	void UpdateLightDirection();		// Call this after LightSource Position update
 
 	float ProjectionIncrease = 2.0f;
 
 private:
-	glm::vec3 Up;
-	glm::vec3 Right;
+	glm::vec3 VecUp;
+	glm::vec3 VecRight;
 	glm::vec3 LookAt;
 	GLFWwindow* Window{};
 };

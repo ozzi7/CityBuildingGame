@@ -12,13 +12,13 @@ void InputHandler::Keypress(int button, int action) const
 
 		// Keyboard scrolling, maybe to be removed
 		if (button == GLFW_KEY_W || button == GLFW_KEY_UP)
-			Camera->Scroll(UP, 0.05f);
+			Camera->Scroll(Up, 0.05f);
 		if (button == GLFW_KEY_S || button == GLFW_KEY_DOWN)
-			Camera->Scroll(DOWN, 0.05f);
+			Camera->Scroll(Down, 0.05f);
 		if (button == GLFW_KEY_A || button == GLFW_KEY_LEFT)
-			Camera->Scroll(LEFT, 0.05f);
+			Camera->Scroll(Left, 0.05f);
 		if (button == GLFW_KEY_D || button == GLFW_KEY_RIGHT)
-			Camera->Scroll(RIGHT, 0.05f);
+			Camera->Scroll(Right, 0.05f);
 	}
 }
 
@@ -94,12 +94,12 @@ void InputHandler::MouseScroll() const
 		glfwGetWindowSize(Window, &width, &height);
 
 		if (xpos == 0)
-			Camera->Scroll(LEFT, 0.01f);
+			Camera->Scroll(Left, 0.01f);
 		if (ypos == 0)
-			Camera->Scroll(UP, 0.01f);
+			Camera->Scroll(Up, 0.01f);
 		if (width - (int)xpos <= 1)
-			Camera->Scroll(RIGHT, 0.01f);
+			Camera->Scroll(Right, 0.01f);
 		if (height - (int)ypos <= 1)
-			Camera->Scroll(DOWN, 0.01f);
+			Camera->Scroll(Down, 0.01f);
 	}
 }

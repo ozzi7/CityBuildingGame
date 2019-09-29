@@ -7,21 +7,21 @@ Camera::Camera(const glm::vec3 position, GLFWwindow* window)
 	Position = position;
 	Window = window;
 
-	Up = glm::vec3(-1.0f, 1.0f, 0.0f);
-	Right = glm::vec3(1.0f, 1.0f, 0.0f);
+	VecUp = glm::vec3(-1.0f, 1.0f, 0.0f);
+	VecRight = glm::vec3(1.0f, 1.0f, 0.0f);
 	LookAt = glm::vec3(-50.0f, 50.0f, -50.0f);
 }
 
 // Returns the view matrix calculated using LookAt Matrix
 glm::mat4 Camera::GetViewMatrix() const
 {
-	return lookAt(Position, Position + LookAt, Up);
+	return lookAt(Position, Position + LookAt, VecUp);
 }
 
 glm::mat4 Camera::GetLightViewMatrix() const
 {
 	//return glm::lookAt(DirectionalLight.Position, DirectionalLight.Position + lookAt, glm::vec3(0.0, 0.0, 1.0));
-	return lookAt(Position + LookAt + DirectionalLight.PositionOffset, Position + LookAt, Up);
+	return lookAt(Position + LookAt + DirectionalLight.PositionOffset, Position + LookAt, VecUp);
 }
 
 glm::mat4 Camera::GetProjectionMatrix() const
@@ -100,16 +100,16 @@ glm::vec3 Camera::CursorPositionOnGrid() const
 	return result;
 }
 
-void Camera::Scroll(Camera_Movement direction, float yOffset)
+void Camera::Scroll(CameraMovement direction, float yOffset)
 {
-	if (direction == UP)
-		Position += Up * yOffset * ZoomLevel * ROOT3;
-	if (direction == DOWN)
-		Position -= Up * yOffset * ZoomLevel * ROOT3;
-	if (direction == LEFT)
-		Position -= Right * yOffset * ZoomLevel;
-	if (direction == RIGHT)
-		Position += Right * yOffset * ZoomLevel;
+	if (direction == Up)
+		Position += VecUp * yOffset * ZoomLevel * ROOT3;
+	if (direction == Down)
+		Position -= VecUp * yOffset * ZoomLevel * ROOT3;
+	if (direction == Left)
+		Position -= VecRight * yOffset * ZoomLevel;
+	if (direction == Right)
+		Position += VecRight * yOffset * ZoomLevel;
 }
 
 void Camera::Zoom(float yOffset)
