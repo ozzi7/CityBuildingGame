@@ -44,25 +44,60 @@ public:
 	Grid* Grid{};
 	LightSource DirectionalLight;
 
-	glm::mat4 GetViewMatrix() const;			// Returns the view matrix calculated using LookAt Matrix
+	// Returns the view matrix, calculated using LookAt Matrix
+	glm::mat4 GetViewMatrix() const;
+	
+	// Returns the view matrix of directional light, calculated using LookAt Matrix
 	glm::mat4 GetLightViewMatrix() const;
-	glm::mat4 GetProjectionMatrix() const;	// Returns the projection orthographic projection matrix
+
+	// Returns the orthographic projection matrix
+	glm::mat4 GetProjectionMatrix() const;
+
+	// Returns the projection matrix of directional light
 	glm::mat4 GetLightProjectionMatrix() const;
+
+	// Top left position on Grid that is visible by camera
 	glm::vec2 GridTopLeftVisible() const;
+
+	// Top right position on Grid that is visible by camera
 	glm::vec2 GridTopRightVisible() const;
+
+	// Bottom left position on Grid that is visible by camera
 	glm::vec2 GridBottomLeftVisible() const;
+
+	// Bottom right position on Grid that is visible by camera
 	glm::vec2 GridBottomRightVisible() const;
+
+	// Current cursor position on Grid
 	glm::vec3 CursorPositionOnGrid() const;
 
+	// Move position on map
 	void Scroll(CameraMovement, float);
 	void Zoom(float);
-	void UpdateLightDirection();		// Call this after LightSource Position update
+
+	// Call this after directional light position update
+	void UpdateLightDirection();
+
+	// Calculates edges of visible grid, call this before getting grid visible coordinates
+	void CalculateVisibleGrid();
 
 	float ProjectionIncrease = 2.0f;
 
 private:
+	int MaxX;
+	int MaxY;
 	glm::vec3 VecUp;
 	glm::vec3 VecRight;
 	glm::vec3 LookAt;
 	GLFWwindow* Window{};
+	std::pair<int, int> TopLeftVisible, TopRightVisible, BottomLeftVisible, BottomRightVisible;
+
+	// Gets exact game coordinate from a screen coordinate, can only be called from openGL thread
+	glm::vec3 PixelTo3DCoordinate(const glm::vec2 pixelCoordinates) const;
+
+	// Gets exact game coordinate from a screen coordinate and z buffer depth
+	glm::vec3 PixelTo3DCoordinate(glm::vec2 pixelCoordinates, float z) const;
+
+	// Determines if a 3D coordinate is visible on the screen
+	bool CoordinateVisible(glm::vec3 coordinate) const;
 };

@@ -125,11 +125,14 @@ void Game::gameLoop() const
 			}
 		}
 
-		grid->terrain->SetRenderWindow(camera->GridTopLeftVisible(), camera->GridTopRightVisible(),
-		                               camera->GridBottomLeftVisible(),
-		                               camera->GridBottomRightVisible());
-		grid->UpdateVisibleList(camera->GridTopLeftVisible(), camera->GridTopRightVisible(),
-		                        camera->GridBottomLeftVisible(),
+		camera->CalculateVisibleGrid();
+		grid->terrain->SetRenderWindow(camera->GridTopLeftVisible(),
+										camera->GridTopRightVisible(),
+										camera->GridBottomLeftVisible(),
+										camera->GridBottomRightVisible());
+		grid->UpdateVisibleList(camera->GridTopLeftVisible(),
+								camera->GridTopRightVisible(),
+								camera->GridBottomLeftVisible(),
 		                        camera->GridBottomRightVisible());
 
 		/* Extract data for the renderer*/
