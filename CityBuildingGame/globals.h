@@ -6,18 +6,31 @@
 #include <logging_event_handler.h>
 #include <resources.h>
 
-// user settings
+/************************************************
+ *  Graphics settings
+ ***********************************************/
 const unsigned int DEFAULT_SCREEN_WIDTH = 1920;
 const unsigned int DEFAULT_SCREEN_HEIGHT = 1080;
 
-const unsigned int MAP_WIDTH = 200;
-const unsigned int MAP_HEIGHT = 200;
-
-// rendering
+const bool SHADOW_ENABLED = true;
 const unsigned int SHADOW_WIDTH = 2048;
 const unsigned int SHADOW_HEIGHT = 2048;
 
-#define MANUAL_MIPMAPS true;
+const bool CUSTOM_MIPMAPS = true;
+
+
+/************************************************
+ *  Sound settings
+ ***********************************************/
+const bool SOUND_ENABLED = false;
+const bool MUSIC_ENABLED = false;
+
+
+/************************************************
+ *  Map settings
+ ***********************************************/
+const unsigned int MAP_WIDTH = 200;
+const unsigned int MAP_HEIGHT = 200;
 
 /* vegetation generation */
 // the higher the tree persistence the higher the frequency of trees => easier to find all types of resources nearby
@@ -54,9 +67,14 @@ const float VALLEY_PERCENTAGE = 30.0f; //[0 - 100] flattens x percent of lowest 
 // if 0 => the tree noise map defines tree distribution, 1=> the terrain height defines tree distribution
 const float TERRAIN_WEIGHT_FACTOR = 0.7f; // [0,1]
 
+
+/************************************************
+ *  Game settings
+ ***********************************************/
 const float SCROLL_SPEED = 5.0f;
-const float VISIBLE_RANGE = 1.6f;	// ~1.6 is entire screen
 const float ZOOM_DEFAULT = 10.0f;
+
+
 
 extern std::string Path;
 
@@ -65,8 +83,6 @@ extern unsigned int ScreenHeight;
 extern float ScreenRatio;
 // TODO: gameloop fps
 
-const bool SOUND_ENABLED = false;
-const bool MUSIC_ENABLED = false;
 extern GameEventHandler* unitEventHandler; // ?? save in every object?! same with grid?
 extern SoundEventHandler* soundEventHandler; // ?? save in every object?! same with grid?
 extern LoggingEventHandler* loggingEventHandler;

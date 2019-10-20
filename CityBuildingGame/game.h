@@ -31,7 +31,6 @@ public:
 
 private:
 	Renderer* renderer{};
-	Shadow* shadow{};
 	Grid* grid{};
 	Camera* camera{};
 	Camera* lightSource{};

@@ -14,7 +14,6 @@
     <ClCompile Include="terrain\terrain.cpp" />
     <ClCompile Include="terrain\tree_generator.cpp" />
     <ClCompile Include="utility\buffer.cpp" />
-    <ClCompile Include="rendering\shadow.cpp" />
     <ClCompile Include="rendering\meshes\instanced_mesh.cpp" />
     <ClCompile Include="rendering\meshes\instanced_model.cpp" />
     <ClCompile Include="rendering\meshes\mesh.cpp" />
@@ -60,7 +59,6 @@
     <ClInclude Include="terrain\tree_generator.h" />
     <ClInclude Include="utility\triple_buffer.h" />
     <ClInclude Include="utility\buffer.h" />
-    <ClInclude Include="rendering\shadow.h" />
     <ClInclude Include="rendering\meshes\instanced_mesh.h" />
     <ClInclude Include="rendering\meshes\instanced_model.h" />
     <ClInclude Include="rendering\meshes\mesh.h" />

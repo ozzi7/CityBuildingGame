@@ -49,7 +49,6 @@
     <ClInclude Include="pathfinding\pathfinding.h" />
     <ClInclude Include="pathfinding\pathfinding_object.h" />
     <ClInclude Include="rendering\render_data.h" />
-    <ClInclude Include="rendering\shadow.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="utility\buffer.h" />
     <ClInclude Include="camera.h" />
@@ -108,7 +107,6 @@
     <ClCompile Include="rendering\meshes\model.cpp" />
     <ClCompile Include="rendering\shader.cpp" />
     <ClCompile Include="rendering\meshes\skinned_mesh.cpp" />
-    <ClCompile Include="rendering\shadow.cpp" />
     <ClCompile Include="resources.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

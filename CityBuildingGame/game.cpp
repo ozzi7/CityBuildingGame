@@ -62,33 +62,31 @@ void Game::StartGame()
 void Game::renderLoop()
 {
 	renderer = new Renderer(*camera);
-	shadow = new Shadow();
 
 	camera->DirectionalLight.Color = {1.0f, 1.0f, 1.0f};
 	camera->DirectionalLight.PositionOffset = glm::vec3{-1.0f, -2.0f, 1.0f};
 	camera->UpdateLightDirection();
 
 	grid->terrain->InitOpenGL(renderer->terrain_shader);
-	shadow->InitShadowMap();
+	renderer->InitShadowMap();
 
 	while (!glfwWindowShouldClose(window))
 	{
 		// Shadow pass
-		shadow->BindShadowMap();
+		renderer->BindShadowMap();
 		glm::mat4 projection = camera->GetLightProjectionMatrix();
 		glm::mat4 view = camera->GetLightViewMatrix();
 		glm::mat4 lightSpaceMatrix = projection * view;
-
 		renderer->SetShadowMatrices(projection, view, lightSpaceMatrix);
 		renderer->CalculateShadow(renderBuffers->GetConsumerBuffer());
 
 		// Render pass
-		shadow->UnbindShadowMap();
+		renderer->UnbindShadowMap();
 		projection = camera->GetProjectionMatrix();
 		view = camera->GetViewMatrix();
-
-		renderer->SetMatrices(projection, view, lightSpaceMatrix, shadow->DepthMap);
+		renderer->SetMatrices(projection, view, lightSpaceMatrix, renderer->ShadowDepthMap);
 		renderer->Render(renderBuffers->GetConsumerBuffer());
+		
 
 		glfwSwapBuffers(window);
 

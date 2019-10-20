@@ -11,7 +11,6 @@
 #include "model.h"
 #include "skinned_mesh.h"
 #include "instanced_model.h"
-#include "shadow.h"
 
 #include "tree.h"
 #include "lumberjack.h"
@@ -39,7 +38,7 @@ public:
 
 	glm::vec3 ambientLight;
 
-	float z = 0.0f;
+	unsigned int ShadowDepthMap;
 
 	Renderer(Camera& aCamera) : camera(aCamera)
 	{
@@ -86,6 +85,39 @@ public:
 		mesh_lumberjack->PrecalculateBoneTransforms();
 
 		ambientLight = {0.3f, 0.3f, 0.3f};
+	}
+
+	void InitShadowMap()
+	{
+		glGenFramebuffers(1, &shadowDepthMapFBO);
+		glBindFramebuffer(GL_FRAMEBUFFER, shadowDepthMapFBO);
+
+		glGenTextures(1, &ShadowDepthMap);
+		glActiveTexture(GL_TEXTURE0 + ShadowDepthMap);
+		glBindTexture(GL_TEXTURE_2D, ShadowDepthMap);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT,
+		             nullptr);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, ShadowDepthMap, 0);
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
+	}
+
+	void BindShadowMap() const
+	{
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, shadowDepthMapFBO);
+		glClear(GL_DEPTH_BUFFER_BIT);
+	}
+
+	void UnbindShadowMap()
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glViewport(0, 0, ScreenWidth, ScreenHeight);
 	}
 
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix, unsigned int shadowMapID) const
@@ -149,6 +181,7 @@ public:
 
 private:
 	bool shadowPass = false;
+	unsigned int shadowDepthMapFBO;
 
 	void renderTerrain(RenderBuffer* renderBuffer) const
 	{
