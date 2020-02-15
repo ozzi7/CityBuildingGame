@@ -8,11 +8,12 @@ A real-time strategy city building game.
 
 ## Requirements
 
-* Windows 10
-* OpenGL 4.5 GPU
+* Windows 10 x64
+* OpenGL 4.5 compatible GPU
 
 ## Setup
-
+# Run Release
+# Build from Source
 
 ## Gameplay
 
