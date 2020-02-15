@@ -13,6 +13,10 @@ A real-time strategy city building game.
 
 ## Setup
 ### Execute Release Build
+
+* Download the most recent release zip file.
+* Unpack the files and run /bin/CityBuildingGame.exe 
+
 ### Build from Source
 
 ## Gameplay
