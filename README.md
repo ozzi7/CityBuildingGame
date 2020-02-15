@@ -12,7 +12,7 @@ A real-time strategy city building game.
 * OpenGL 4.5 compatible GPU
 
 ## Setup
-### Run Release
+### Execute Release Build
 ### Build from Source
 
 ## Gameplay
