@@ -42,7 +42,11 @@ public:
 	glm::vec3 Position;
 	float ZoomLevel = ZOOM_DEFAULT;
 	Grid* Grid{};
-	LightSource DirectionalLight;
+
+	LightSource GetDirectionalLight() const;
+
+	void SetDirectionalLightPositionOffset(glm::vec3 coordinateOffset);
+	void SetDirectionalLightColor(glm::vec3 color);
 
 	// Returns the view matrix, calculated using LookAt Matrix
 	glm::mat4 GetViewMatrix() const;
@@ -71,17 +75,12 @@ public:
 	// Current cursor position on Grid
 	glm::vec3 CursorPositionOnGrid() const;
 
-	// Move position on map
-	void Scroll(CameraMovement, float);
-	void Zoom(float);
-
-	// Call this after directional light position update
-	void UpdateLightDirection();
-
 	// Calculates edges of visible grid, call this before getting grid visible coordinates
 	void CalculateVisibleGrid();
 
-	float ProjectionIncrease = 2.0f;
+	// Move position on map
+	void Scroll(CameraMovement, float);
+	void Zoom(float);
 
 private:
 	int MaxX;
@@ -89,6 +88,8 @@ private:
 	glm::vec3 VecUp;
 	glm::vec3 VecRight;
 	glm::vec3 LookAt;
+	LightSource DirectionalLight;
+	glm::mat4 LightProjectionMatrix;
 	GLFWwindow* Window{};
 	std::pair<int, int> TopLeftVisible, TopRightVisible, BottomLeftVisible, BottomRightVisible;
 
@@ -100,4 +101,10 @@ private:
 
 	// Determines if a 3D coordinate is visible on the screen
 	bool CoordinateVisible(glm::vec3 coordinate) const;
+
+	// Determines if a 3D coordinate is visible by render matrices
+	static bool CoordinateVisible(glm::vec3 coordinate, glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
+
+	// Calculates the viewport for the directional light, call this after changing the DirectionalLight.PositionOffset
+	void CalculateLightProjectionMatrix();
 };

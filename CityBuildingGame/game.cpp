@@ -63,9 +63,8 @@ void Game::renderLoop()
 {
 	renderer = new Renderer(*camera);
 
-	camera->DirectionalLight.Color = {1.0f, 1.0f, 1.0f};
-	camera->DirectionalLight.PositionOffset = glm::vec3{-1.0f, -2.0f, 1.0f};
-	camera->UpdateLightDirection();
+	camera->SetDirectionalLightColor(glm::vec3{1.0f, 1.0f, 1.0f});
+	camera->SetDirectionalLightPositionOffset(glm::vec3{-0.4f, -0.8f, 1.0f});
 
 	grid->terrain->InitOpenGL(renderer->terrain_shader);
 	renderer->InitShadowMap();

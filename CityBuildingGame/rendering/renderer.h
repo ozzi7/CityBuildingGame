@@ -129,8 +129,8 @@ public:
 		terrain_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
 		terrain_shader->setInt("shadowMap", shadowMapID);
 		terrain_shader->setVec3("light.ambient", ambientLight);
-		terrain_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
-		terrain_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
+		terrain_shader->setVec3("light.diffuse", camera.GetDirectionalLight().Color);
+		terrain_shader->setVec3("light.direction", camera.GetDirectionalLight().Direction);
 
 		skinned_mesh_shader->use();
 		skinned_mesh_shader->setMat4("projection", aProjection);
@@ -138,8 +138,8 @@ public:
 		skinned_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
 		skinned_mesh_shader->setInt("shadowMap", shadowMapID);
 		skinned_mesh_shader->setVec3("light.ambient", ambientLight);
-		skinned_mesh_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
-		skinned_mesh_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
+		skinned_mesh_shader->setVec3("light.diffuse", camera.GetDirectionalLight().Color);
+		skinned_mesh_shader->setVec3("light.direction", camera.GetDirectionalLight().Direction);
 
 		instanced_mesh_shader->use();
 		instanced_mesh_shader->setMat4("projection", aProjection);
@@ -147,8 +147,8 @@ public:
 		instanced_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
 		instanced_mesh_shader->setInt("shadowMap", shadowMapID);
 		instanced_mesh_shader->setVec3("light.ambient", ambientLight);
-		instanced_mesh_shader->setVec3("light.diffuse", camera.DirectionalLight.Color);
-		instanced_mesh_shader->setVec3("light.direction", camera.DirectionalLight.Direction);
+		instanced_mesh_shader->setVec3("light.diffuse", camera.GetDirectionalLight().Color);
+		instanced_mesh_shader->setVec3("light.direction", camera.GetDirectionalLight().Direction);
 	}
 
 	void SetShadowMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix) const
