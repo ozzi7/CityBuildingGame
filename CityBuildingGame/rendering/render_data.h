@@ -4,6 +4,7 @@
 #include <game_object.h>
 #include <lumberjack.h>
 #include <euro_beech.h>
+#include "euro_beech_2.h"
 #include <toona.h>
 #include <oak.h>
 #include <pine.h>
@@ -17,6 +18,7 @@ public:
 	RenderBuffer();
 	void Visit(GameObject*);
 	void Visit(EuroBeech*) override;
+	void Visit(EuroBeech2*) override;
 	void Visit(Oak*) override;
 	void Visit(Pine*) override;
 	void Visit(Toona*) override;
@@ -31,6 +33,7 @@ public:
 
 	std::vector<glm::mat4> pineModels;
 	std::vector<glm::mat4> euroBeechModels;
+	std::vector<glm::mat4> euroBeech2Models;
 	std::vector<glm::mat4> toonaModels;
 	std::vector<glm::mat4> oakModels;
 	std::vector<glm::mat4> lumberjackModels;

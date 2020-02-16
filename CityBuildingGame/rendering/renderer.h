@@ -31,6 +31,7 @@ public:
 	InstancedModel* instanced_model_pine;
 	InstancedModel* instanced_model_toona;
 	InstancedModel* instanced_model_euroBeech;
+	InstancedModel* instanced_model_euroBeech2;
 	InstancedModel* instanced_model_oak;
 	InstancedModel* instanced_model_dwelling;
 	InstancedModel* instanced_model_lumberjack_hut;
@@ -72,10 +73,11 @@ public:
 		model_path = Path + "/../models/toona/toona.dae";
 		instanced_model_toona = new InstancedModel(model_path);
 
-		//model_path = Path + "/../models/euroBeech/euroBeech.dae";
-		//instanced_model_euroBeech = new InstancedModel(model_path);
 		model_path = Path + "/../models/euro_beech/euro_beech.dae";
 		instanced_model_euroBeech = new InstancedModel(model_path);
+
+		model_path = Path + "/../models/euro_beech/euro_beech2.dae";
+		instanced_model_euroBeech2 = new InstancedModel(model_path);
 
 		model_path = Path + "/../models/oak/oak.dae";
 		instanced_model_oak = new InstancedModel(model_path);
@@ -202,6 +204,7 @@ private:
 		instanced_model_pine->Draw(*shader, renderBuffer->pineModels);
 		instanced_model_oak->Draw(*shader, renderBuffer->oakModels);
 		instanced_model_euroBeech->Draw(*shader, renderBuffer->euroBeechModels);
+		instanced_model_euroBeech2->Draw(*shader, renderBuffer->euroBeech2Models);
 		instanced_model_toona->Draw(*shader, renderBuffer->toonaModels);
 		instanced_model_lumberjack_hut->Draw(*shader, renderBuffer->lumberjackHutModels);
 		instanced_model_dwelling->Draw(*shader, renderBuffer->dwellingModels_growth1);

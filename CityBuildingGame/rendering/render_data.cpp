@@ -13,7 +13,10 @@ void RenderBuffer::Visit(EuroBeech* obj)
 {
 	euroBeechModels.push_back(obj->model);
 }
-
+void RenderBuffer::Visit(EuroBeech2* obj)
+{
+	euroBeech2Models.push_back(obj->model);
+}
 void RenderBuffer::Visit(Oak* obj)
 {
 	oakModels.push_back(obj->model);
@@ -83,6 +86,7 @@ void RenderBuffer::ClearData()
 {
 	pineModels.clear();
 	euroBeechModels.clear();
+	euroBeech2Models.clear();
 	toonaModels.clear();
 	oakModels.clear();
 	lumberjackModels.clear();

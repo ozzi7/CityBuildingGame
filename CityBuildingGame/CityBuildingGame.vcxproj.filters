@@ -98,6 +98,7 @@
     <ClInclude Include="events\return_home_event.h" />
     <ClInclude Include="gameObjects\toona.h" />
     <ClInclude Include="gameObjects\euro_beech.h" />
+    <ClInclude Include="gameObjects\euro_beech_2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

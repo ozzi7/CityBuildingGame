@@ -4,6 +4,7 @@ class Tree;
 class Oak;
 class Toona;
 class EuroBeech;
+class EuroBeech2;
 class Pine;
 class Terrain;
 class Lumberjack;
@@ -20,6 +21,7 @@ public:
 	virtual void Visit(Tree* tree) = 0;
 	virtual void Visit(Oak* oak) = 0;
 	virtual void Visit(EuroBeech* euroBeech) = 0;
+	virtual void Visit(EuroBeech2* euroBeech) = 0;
 	virtual void Visit(Pine* pine) = 0;
 	virtual void Visit(Toona* toona) = 0;
 
