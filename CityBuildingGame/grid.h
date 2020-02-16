@@ -7,7 +7,7 @@
 
 #include "terrain.h"
 #include "oak.h"
-#include "spruce.h"
+#include "euro_beech.h"
 #include "toona.h"
 #include "pine.h"
 #include "bone_animated.h"

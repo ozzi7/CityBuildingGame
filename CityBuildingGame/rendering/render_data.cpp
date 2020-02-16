@@ -9,9 +9,9 @@ void RenderBuffer::Visit(Pine* obj)
 	pineModels.push_back(obj->model);
 }
 
-void RenderBuffer::Visit(Spruce* obj)
+void RenderBuffer::Visit(EuroBeech* obj)
 {
-	spruceModels.push_back(obj->model);
+	euroBeechModels.push_back(obj->model);
 }
 
 void RenderBuffer::Visit(Oak* obj)
@@ -82,7 +82,7 @@ void RenderBuffer::Visit(Tree* obj) {}
 void RenderBuffer::ClearData()
 {
 	pineModels.clear();
-	spruceModels.clear();
+	euroBeechModels.clear();
 	toonaModels.clear();
 	oakModels.clear();
 	lumberjackModels.clear();

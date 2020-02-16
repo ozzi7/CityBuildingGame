@@ -91,13 +91,13 @@
     <ClInclude Include="gameObjects\oak.h" />
     <ClInclude Include="gameObjects\pine.h" />
     <ClInclude Include="gameObjects\settler.h" />
-    <ClInclude Include="gameObjects\spruce.h" />
     <ClInclude Include="gameObjects\tree.h" />
     <ClInclude Include="events\logging_event.h" />
     <ClInclude Include="events\logging_event_visitor.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="events\return_home_event.h" />
     <ClInclude Include="gameObjects\toona.h" />
+    <ClInclude Include="gameObjects\euro_beech.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

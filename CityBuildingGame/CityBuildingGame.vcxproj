@@ -43,7 +43,7 @@
     <ClInclude Include="gameObjects\oak.h" />
     <ClInclude Include="gameObjects\pine.h" />
     <ClInclude Include="gameObjects\settler.h" />
-    <ClInclude Include="gameObjects\spruce.h" />
+    <ClInclude Include="gameObjects\euro_beech.h" />
     <ClInclude Include="events\gather_resource_event.h" />
     <ClInclude Include="rendering\meshes\mipmap_generator.h" />
     <ClInclude Include="pathfinding\pathfinding.h" />

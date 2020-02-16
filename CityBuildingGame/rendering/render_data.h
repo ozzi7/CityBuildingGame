@@ -3,7 +3,7 @@
 #include "buffer.h"
 #include <game_object.h>
 #include <lumberjack.h>
-#include <spruce.h>
+#include <euro_beech.h>
 #include <toona.h>
 #include <oak.h>
 #include <pine.h>
@@ -16,7 +16,7 @@ class RenderBuffer : public Buffer, public Visitor
 public:
 	RenderBuffer();
 	void Visit(GameObject*);
-	void Visit(Spruce*) override;
+	void Visit(EuroBeech*) override;
 	void Visit(Oak*) override;
 	void Visit(Pine*) override;
 	void Visit(Toona*) override;
@@ -30,7 +30,7 @@ public:
 	void ClearData();
 
 	std::vector<glm::mat4> pineModels;
-	std::vector<glm::mat4> spruceModels;
+	std::vector<glm::mat4> euroBeechModels;
 	std::vector<glm::mat4> toonaModels;
 	std::vector<glm::mat4> oakModels;
 	std::vector<glm::mat4> lumberjackModels;

@@ -5,7 +5,7 @@
 #include "grid.h"
 #include "oak.h"
 #include "toona.h"
-#include "spruce.h"
+#include "euro_beech.h"
 #include "pine.h"
 #include "lumberjack.h"
 #include <cmath>
