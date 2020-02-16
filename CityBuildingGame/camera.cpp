@@ -300,18 +300,17 @@ bool Camera::CoordinateVisible(glm::vec3 coordinate, glm::mat4 projectionMatrix,
 
 void Camera::CalculateLightProjectionMatrix()
 {
-	//LightProjectionMatrix = glm::ortho(20.0f * -ZoomLevel, 20.0f * ZoomLevel,-1.0f * 50.0f * ZoomLevel, 50.0f * ZoomLevel, -100.0f, 100.0f);
 	LightProjectionMatrix = glm::ortho(-ZoomLevel,  ZoomLevel,-1.0f * ZoomLevel,  ZoomLevel, -100.0f, 100.0f);
 	float angle;
 	float heightTopRight;
 	float heightTopLeft;
 	float heightBottomRight;
-	float projectionIncrease = 0.1f;
+	float projectionIncrease = 0.5f;
 
 	if (TopRightVisible.first > MaxX || TopRightVisible.second > MaxY ||
 		TopRightVisible.first <= 0 || TopRightVisible.second <= 0)
 	{
-		heightTopRight = 0;
+		heightTopRight = 0.0f;
 	} else
 	{
 		heightTopRight = Grid->GetHeight(TopRightVisible.first, TopRightVisible.second);
@@ -320,7 +319,7 @@ void Camera::CalculateLightProjectionMatrix()
 	if (TopLeftVisible.first > MaxX || TopLeftVisible.second > MaxY ||
 		TopLeftVisible.first <= 0 || TopLeftVisible.second <= 0)
 	{
-		heightTopLeft = 0;
+		heightTopLeft = 0.0f;
 	} else
 	{
 		heightTopLeft = Grid->GetHeight(TopLeftVisible.first, TopLeftVisible.second);
@@ -329,7 +328,7 @@ void Camera::CalculateLightProjectionMatrix()
 	if (BottomRightVisible.first > MaxX || BottomRightVisible.second > MaxY ||
 		BottomRightVisible.first <= 0 || BottomRightVisible.second <= 0)
 	{
-		heightBottomRight = 0;
+		heightBottomRight = 0.0f;
 	} else
 	{
 		heightBottomRight = Grid->GetHeight(BottomRightVisible.first, BottomRightVisible.second);
@@ -339,8 +338,51 @@ void Camera::CalculateLightProjectionMatrix()
 		!CoordinateVisible(glm::vec3(TopLeftVisible.first, TopLeftVisible.second, heightTopLeft), LightProjectionMatrix, GetLightViewMatrix()) ||
 		!CoordinateVisible(glm::vec3(BottomRightVisible.first, BottomRightVisible.second, heightBottomRight), LightProjectionMatrix, GetLightViewMatrix()))
 	{
-		projectionIncrease *= 1.1;
+		projectionIncrease *= 1.1f;
 		LightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncrease,  ZoomLevel * projectionIncrease,-1.0f * ZoomLevel * projectionIncrease,  ZoomLevel * projectionIncrease, -100.0f, 100.0f);
-		if (projectionIncrease > 5) { return; } // This shouldn't happen, but just in case to prevent infinite loop
+		if (projectionIncrease > 10.0f) { return; } // This shouldn't happen, but just in case to prevent infinite loop
 	}
+
+	float projectionIncreaseA = projectionIncrease;
+	float projectionIncreaseB = projectionIncrease;
+	float projectionIncreaseC = projectionIncrease;
+	float projectionIncreaseD = projectionIncrease;
+
+	while (CoordinateVisible(glm::vec3(TopRightVisible.first, TopRightVisible.second, heightTopRight), LightProjectionMatrix, GetLightViewMatrix()) &&
+		CoordinateVisible(glm::vec3(TopLeftVisible.first, TopLeftVisible.second, heightTopLeft), LightProjectionMatrix, GetLightViewMatrix()) &&
+		CoordinateVisible(glm::vec3(BottomRightVisible.first, BottomRightVisible.second, heightBottomRight), LightProjectionMatrix, GetLightViewMatrix()))
+	{
+		projectionIncreaseA *= 0.9f;
+		LightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA,  ZoomLevel * projectionIncreaseB,-1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
+	}
+	projectionIncreaseA *= 1.1112f;
+
+	while (CoordinateVisible(glm::vec3(TopRightVisible.first, TopRightVisible.second, heightTopRight), LightProjectionMatrix, GetLightViewMatrix()) &&
+		CoordinateVisible(glm::vec3(TopLeftVisible.first, TopLeftVisible.second, heightTopLeft), LightProjectionMatrix, GetLightViewMatrix()) &&
+		CoordinateVisible(glm::vec3(BottomRightVisible.first, BottomRightVisible.second, heightBottomRight), LightProjectionMatrix, GetLightViewMatrix()))
+	{
+		projectionIncreaseB *= 0.9f;
+		LightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA,  ZoomLevel * projectionIncreaseB,-1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
+	}
+	projectionIncreaseB *= 1.1112f;
+
+	while (CoordinateVisible(glm::vec3(TopRightVisible.first, TopRightVisible.second, heightTopRight), LightProjectionMatrix, GetLightViewMatrix()) &&
+		CoordinateVisible(glm::vec3(TopLeftVisible.first, TopLeftVisible.second, heightTopLeft), LightProjectionMatrix, GetLightViewMatrix()) &&
+		CoordinateVisible(glm::vec3(BottomRightVisible.first, BottomRightVisible.second, heightBottomRight), LightProjectionMatrix, GetLightViewMatrix()))
+	{
+		projectionIncreaseC *= 0.9f;
+		LightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA,  ZoomLevel * projectionIncreaseB,-1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
+	}
+	projectionIncreaseC *= 1.1112;
+
+	while (CoordinateVisible(glm::vec3(TopRightVisible.first, TopRightVisible.second, heightTopRight), LightProjectionMatrix, GetLightViewMatrix()) &&
+		CoordinateVisible(glm::vec3(TopLeftVisible.first, TopLeftVisible.second, heightTopLeft), LightProjectionMatrix, GetLightViewMatrix()) &&
+		CoordinateVisible(glm::vec3(BottomRightVisible.first, BottomRightVisible.second, heightBottomRight), LightProjectionMatrix, GetLightViewMatrix()))
+	{
+		projectionIncreaseD *= 0.9f;
+		LightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA,  ZoomLevel * projectionIncreaseB,-1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
+	}
+	projectionIncreaseD *= 1.1112f;
+
+	LightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA,  ZoomLevel * projectionIncreaseB,-1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
 }

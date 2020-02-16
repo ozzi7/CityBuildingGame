@@ -13,8 +13,8 @@ const unsigned int DEFAULT_SCREEN_WIDTH = 1920;
 const unsigned int DEFAULT_SCREEN_HEIGHT = 1080;
 
 const bool SHADOW_ENABLED = true; // TODO: not implemented yet
-const unsigned int SHADOW_WIDTH = 2500;
-const unsigned int SHADOW_HEIGHT = 2500;
+const unsigned int SHADOW_WIDTH = 2048;
+const unsigned int SHADOW_HEIGHT = 2048;
 
 const bool CUSTOM_MIPMAPS = true;
 
