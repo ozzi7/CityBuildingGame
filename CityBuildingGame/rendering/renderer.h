@@ -72,7 +72,9 @@ public:
 		model_path = Path + "/../models/juniper/juniper.dae";
 		instanced_model_juniper = new InstancedModel(model_path);
 
-		model_path = Path + "/../models/spruce/spruce.dae";
+		//model_path = Path + "/../models/spruce/spruce.dae";
+		//instanced_model_spruce = new InstancedModel(model_path);
+		model_path = Path + "/../models/euro_beech/euro_beech.dae";
 		instanced_model_spruce = new InstancedModel(model_path);
 
 		model_path = Path + "/../models/oak/oak.dae";

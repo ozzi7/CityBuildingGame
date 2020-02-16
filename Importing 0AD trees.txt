@@ -1,0 +1,10 @@
+find for example pine.xml
+it shows the same mesh is used with many different textures
+drag and drop .dae file into maya, resize it to whatever the other objects are..
+click modify freeze transformations, this way the scaling is set back to 1 1 1 and actually saved to the model!
+now go to windows hypershade, create a lambert material
+drag and drop the dds file or maybe better save dds to png with paint.net and use the png..
+the alpha might be wrong in maya, ignore it
+select model and export selection using dae fbx export
+during export set y as up axis
+open .dae file in text editor and change the image absolute path to relative
