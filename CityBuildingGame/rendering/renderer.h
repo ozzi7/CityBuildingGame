@@ -59,7 +59,7 @@ public:
 		model_path = Path + "/../models/buildings/lumberjack_hut/lumberjack_hut.dae";
 		instanced_model_lumberjack_hut = new InstancedModel(model_path);
 
-		model_path = Path + "/../models/buildings/building_outline.dae";
+		model_path = Path + "/../models/buildings/building_outline/building_outline.dae";
 		instanced_model_building_outline = new InstancedModel(model_path);
 
 		/*model_path = Path + "/../models/buildings/lumberjack_hut/lumberjack_hut.dae";
