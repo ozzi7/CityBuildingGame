@@ -24,19 +24,48 @@ uniform sampler2D shadowMap;
 
 float ShadowCalculation()
 {
-	// perform perspective divide
+    float shadow;
+    float closestDepth;
+
+    float bias = 0.0004; // 0.005 -> detached shadows, 0.00005 -> shadow calculation inaccuracy/shadow acne
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+
+    // perform perspective divide
     vec3 projCoords = FragPosLightSpace.xyz/ FragPosLightSpace.w;
     // transform to [0,1] range
     projCoords = projCoords * 0.5 + 0.5;
-    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-    float closestDepth = texture(shadowMap, projCoords.xy).r; 
-    // get depth of current fragment from light's perspective
-    float currentDepth = projCoords.z;
 
-	float bias = 0.0004; // 0.005 -> detached shadows, 0.00005 -> shadow calculation inaccuracy/shadow acne
-    // check whether current frag pos is in shadow
-    float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+    ////////////////////////////
+    // Gaussian blur sampling //
+    ////////////////////////////
+    closestDepth = texture(shadowMap, projCoords.xy * texelSize).r;           
+    shadow += projCoords.z - bias > closestDepth ? 4.0 : 0.0;
 
+    closestDepth = texture(shadowMap, projCoords.xy + vec2(0,-1) * texelSize).r;           
+    shadow += projCoords.z - bias > closestDepth ? 2.0 : 0.0;
+
+    closestDepth = texture(shadowMap, projCoords.xy + vec2(0,1) * texelSize).r;           
+    shadow += projCoords.z - bias > closestDepth ? 2.0 : 0.0;
+
+    closestDepth = texture(shadowMap, projCoords.xy + vec2(1,0) * texelSize).r;           
+    shadow += projCoords.z - bias > closestDepth ? 2.0 : 0.0;
+
+    closestDepth = texture(shadowMap, projCoords.xy + vec2(-1,0) * texelSize).r;           
+    shadow += projCoords.z - bias > closestDepth ? 2.0 : 0.0;
+
+    closestDepth = texture(shadowMap, projCoords.xy + vec2(-1,-1) * texelSize).r;           
+    shadow += projCoords.z - bias > closestDepth ? 1.0 : 0.0;
+
+    closestDepth = texture(shadowMap, projCoords.xy + vec2(-1,1) * texelSize).r;           
+    shadow += projCoords.z - bias > closestDepth ? 1.0 : 0.0;
+
+    closestDepth = texture(shadowMap, projCoords.xy + vec2(1,1) * texelSize).r;           
+    shadow += projCoords.z - bias > closestDepth ? 1.0 : 0.0;
+
+    closestDepth = texture(shadowMap, projCoords.xy + vec2(1,-1) * texelSize).r;           
+    shadow += projCoords.z - bias > closestDepth ? 1.0 : 0.0;
+
+    shadow /= 16.0;
     return shadow;
 }
 
