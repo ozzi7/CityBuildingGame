@@ -29,7 +29,7 @@ public:
 	Shader* shadow_instanced_shader;
 	Shader* shadow_skinned_shader;
 	InstancedModel* instanced_model_pine;
-	InstancedModel* instanced_model_juniper;
+	InstancedModel* instanced_model_toona;
 	InstancedModel* instanced_model_spruce;
 	InstancedModel* instanced_model_oak;
 	InstancedModel* instanced_model_dwelling;
@@ -69,8 +69,8 @@ public:
 		model_path = Path + "/../models/pine/pine.dae";
 		instanced_model_pine = new InstancedModel(model_path);
 
-		model_path = Path + "/../models/juniper/juniper.dae";
-		instanced_model_juniper = new InstancedModel(model_path);
+		model_path = Path + "/../models/toona/toona.dae";
+		instanced_model_toona = new InstancedModel(model_path);
 
 		//model_path = Path + "/../models/spruce/spruce.dae";
 		//instanced_model_spruce = new InstancedModel(model_path);
@@ -202,7 +202,7 @@ private:
 		instanced_model_pine->Draw(*shader, renderBuffer->pineModels);
 		instanced_model_oak->Draw(*shader, renderBuffer->oakModels);
 		instanced_model_spruce->Draw(*shader, renderBuffer->spruceModels);
-		instanced_model_juniper->Draw(*shader, renderBuffer->juniperModels);
+		instanced_model_toona->Draw(*shader, renderBuffer->toonaModels);
 		instanced_model_lumberjack_hut->Draw(*shader, renderBuffer->lumberjackHutModels);
 		instanced_model_dwelling->Draw(*shader, renderBuffer->dwellingModels_growth1);
 		instanced_model_building_outline->Draw(*shader, renderBuffer->buildingOutlineModels);

@@ -86,7 +86,6 @@
     <ClInclude Include="gameObjects\building.h" />
     <ClInclude Include="gameObjects\dwelling.h" />
     <ClInclude Include="gameObjects\game_object.h" />
-    <ClInclude Include="gameObjects\juniper.h" />
     <ClInclude Include="gameObjects\lumberjack.h" />
     <ClInclude Include="gameObjects\lumberjack_hut.h" />
     <ClInclude Include="gameObjects\oak.h" />
@@ -98,6 +97,7 @@
     <ClInclude Include="events\logging_event_visitor.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="events\return_home_event.h" />
+    <ClInclude Include="gameObjects\toona.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

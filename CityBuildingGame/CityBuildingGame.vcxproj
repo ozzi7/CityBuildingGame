@@ -38,7 +38,7 @@
     <ClInclude Include="gameObjects\building.h" />
     <ClInclude Include="gameObjects\dwelling.h" />
     <ClInclude Include="gameObjects\game_object.h" />
-    <ClInclude Include="gameObjects\juniper.h" />
+    <ClInclude Include="gameObjects\toona.h" />
     <ClInclude Include="gameObjects\lumberjack_hut.h" />
     <ClInclude Include="gameObjects\oak.h" />
     <ClInclude Include="gameObjects\pine.h" />

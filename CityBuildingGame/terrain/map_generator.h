@@ -4,7 +4,7 @@
 #include <globals.h>
 #include "grid.h"
 #include "oak.h"
-#include "juniper.h"
+#include "toona.h"
 #include "spruce.h"
 #include "pine.h"
 #include "lumberjack.h"

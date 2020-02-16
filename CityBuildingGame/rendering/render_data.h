@@ -4,7 +4,7 @@
 #include <game_object.h>
 #include <lumberjack.h>
 #include <spruce.h>
-#include <juniper.h>
+#include <toona.h>
 #include <oak.h>
 #include <pine.h>
 #include <lumberjack_hut.h>
@@ -19,7 +19,7 @@ public:
 	void Visit(Spruce*) override;
 	void Visit(Oak*) override;
 	void Visit(Pine*) override;
-	void Visit(Juniper*) override;
+	void Visit(Toona*) override;
 	void Visit(Lumberjack*) override;
 	void Visit(Terrain* obj) override;
 	void Visit(Tree* obj) override;
@@ -31,7 +31,7 @@ public:
 
 	std::vector<glm::mat4> pineModels;
 	std::vector<glm::mat4> spruceModels;
-	std::vector<glm::mat4> juniperModels;
+	std::vector<glm::mat4> toonaModels;
 	std::vector<glm::mat4> oakModels;
 	std::vector<glm::mat4> lumberjackModels;
 	std::vector<glm::mat4> lumberjackHutModels;

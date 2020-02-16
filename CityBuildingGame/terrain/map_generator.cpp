@@ -112,12 +112,12 @@ void MapGenerator::generateTrees()
 	float maxHeight = getHeightAtPercentage(treeMap, 100.0f);
 
 	float pine_mean = getHeightAtPercentage(treeMap, PINE_GAUSSIAN_MEAN_PERCENTAGE);
-	float juniper_mean = getHeightAtPercentage(treeMap, JUNIPER_GAUSSIAN_MEAN_PERCENTAGE);
+	float toona_mean = getHeightAtPercentage(treeMap, TOONA_GAUSSIAN_MEAN_PERCENTAGE);
 	float oak_mean = getHeightAtPercentage(treeMap, OAK_GAUSSIAN_MEAN_PERCENTAGE);
 	float spruce_mean = getHeightAtPercentage(treeMap, SPRUCE_GAUSSIAN_MEAN_PERCENTAGE);
 
 	float pine_var = 0.01f * PINE_GAUSSIAN_VARIANCE_PERCENTAGE * (maxHeight - minHeight);
-	float juniper_var = 0.01f * JUNIPER_GAUSSIAN_VARIANCE_PERCENTAGE * (maxHeight - minHeight);
+	float toona_var = 0.01f * TOONA_GAUSSIAN_VARIANCE_PERCENTAGE * (maxHeight - minHeight);
 	float oak_var = 0.01f * OAK_GAUSSIAN_VARIANCE_PERCENTAGE * (maxHeight - minHeight);
 	float spruce_var = 0.01f * SPRUCE_GAUSSIAN_VARIANCE_PERCENTAGE * (maxHeight - minHeight);
 
@@ -126,22 +126,22 @@ void MapGenerator::generateTrees()
 		for (int j = 0; j < grid->gridWidth; ++j)
 		{
 			float pine_prob = std::min(1.0f, PINE_DENSITY * getGaussianPDFValue(pine_mean, pine_var, treeMap[i][j]));
-			float juniper_prob = std::min(
-				1.0f, JUNIPER_DENSITY * getGaussianPDFValue(juniper_mean, juniper_var, treeMap[i][j]));
+			float toona_prob = std::min(
+				1.0f, TOONA_DENSITY * getGaussianPDFValue(toona_mean, toona_var, treeMap[i][j]));
 			float spruce_prob = std::min(
 				1.0f, SPRUCE_DENSITY * getGaussianPDFValue(spruce_mean, spruce_var, treeMap[i][j]));
 			float oak_prob = std::min(1.0f, OAK_DENSITY * getGaussianPDFValue(oak_mean, oak_var, treeMap[i][j]));
 
 			std::bernoulli_distribution pine_distribution(pine_prob);
 			bool isPine = pine_distribution(gen);
-			std::bernoulli_distribution juniper_distribution(juniper_prob);
-			bool isJuniper = juniper_distribution(gen);
+			std::bernoulli_distribution toona_distribution(toona_prob);
+			bool isToona = toona_distribution(gen);
 			std::bernoulli_distribution spruce_distribution(spruce_prob);
 			bool isSpruce = spruce_distribution(gen);
 			std::bernoulli_distribution oak_distribution(oak_prob);
 			bool isOak = oak_distribution(gen);
 
-			int nofTies = isPine + isJuniper + isSpruce + isOak;
+			int nofTies = isPine + isToona + isSpruce + isOak;
 
 			if (nofTies == 0) continue;
 
@@ -165,10 +165,10 @@ void MapGenerator::generateTrees()
 					                   scale * TREE_SCALE_FACTOR),
 					         glm::vec3(1.5707963f, 0, rotation(gen))));
 			}
-			else if (chosenTree <= 1 && isJuniper)
+			else if (chosenTree <= 1 && isToona)
 			{
 				grid->gridUnits[i][j]->objects.push_back(
-					new Juniper(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
+					new Toona(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 					            glm::vec3(scale * TREE_SCALE_FACTOR, scale * TREE_SCALE_FACTOR,
 					                      scale * TREE_SCALE_FACTOR),
 					            glm::vec3(1.5707963f, 0, rotation(gen))));
