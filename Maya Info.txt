@@ -1,4 +1,7 @@
-create ew maya scene
+open3mod.exe can be used to check models..
+
+
+create new maya scene
 drag and drop mariolow.obj into maya
 select the complete mesh (via windows-> outliner & shift select)
 select rigging in drop down, then skeleton -> quickrig -> auto rig button
