@@ -31,5 +31,8 @@ private:
 	void generateTrees();
 	void flattenMap(std::vector<std::vector<float>>& pHeightmap) const;
 	float getHeightAtPercentage(std::vector<std::vector<float>>& pHeightmap, float percentage) const;
+	float getHeightAtPercentageExact(std::vector<std::vector<float>>& pHeightmap, float percentage) const;
 	float getGaussianPDFValue(float mean, float stddev, float x);
+	float getMinValue(std::vector<std::vector<float>>& pHeightmap) const;
+	float getMaxValue(std::vector<std::vector<float>>& pHeightmap) const;
 };
