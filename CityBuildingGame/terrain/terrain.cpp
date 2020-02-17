@@ -100,7 +100,9 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	int endX = std::max(std::max((int)upperLeft.x, int(lowerLeft.x)), std::max((int)upperRight.x, int(lowerRight.x)));
 	int fromY = std::min(std::min((int)upperLeft.y, int(lowerLeft.y)), std::min((int)upperRight.y, int(lowerRight.y)));
 	int endY = std::max(std::max((int)upperLeft.y, int(lowerLeft.y)), std::max((int)upperRight.y, int(lowerRight.y)));
-
+	int loopCounter = 0;
+	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
+	
 	for (int i = std::max(0, fromY + 1); i <= std::min(gridHeight - 1, endY); ++i)
 	{
 		for (int j = std::max(0, fromX + 1); j <= std::min(gridWidth - 1, endX); ++j)
@@ -115,6 +117,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 				if (0 <= dot(AM, AB) && dot(AM, AB) < dot(AB, AB) &&
 					dot(AM, AD) < dot(AD, AD) && 0 <= dot(AM, AD))
 				{
+					loopCounter++;
 					float float_i = float(i);
 					float float_j = float(j);
 
@@ -194,6 +197,11 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 		}
 	}
 loopExit:
+	loggingEventHandler->AddEvent(new LoggingEvent(DEBUG, "LoadVisibleGeometry loop count: " + std::to_string(loopCounter)));
+	std::chrono::high_resolution_clock::duration elapsedTime = std::chrono::high_resolution_clock::now() - start;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(DEBUG, "LoadVisibleGeometry time elapsed: " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
+	loggingEventHandler->AddEvent(new LoggingEvent(DEBUG, "Approximate CPU cycles per loop: " + std::to_string(elapsedTimeMicroseconds * 4000 / loopCounter)));
 	renderDataMutex.lock();
 	if (currRenderData == 1)
 	{
