@@ -10,14 +10,14 @@
 
 #define max(x,y) ((x) > (y) ? (x) : (y))
 
-typedef std::pair<unsigned short, unsigned short> Coordinate;
+typedef std::pair<int, int> Coordinate;
 
 struct Node
 {
 	Coordinate coordinate;
-	unsigned short distanceToStart = 0;
-	unsigned short distanceToDestination = 0;
-	unsigned short distanceTotal = 0;
+	int distanceToStart = 0;
+	int distanceToDestination = 0;
+	int distanceTotal = 0;
 	Node* parent{};
 	Coordinate destination;
 };
@@ -31,26 +31,10 @@ struct NodeCompare
 		if (node1->distanceTotal < node2->distanceTotal)
 			return false;
 
-		//double distance1 =
-		//	std::sqrt(
-		//		std::pow((node1->coordinate.first - node1->destination.first), 2) +
-		//		std::pow((node1->coordinate.second - node1->destination.second), 2)
-		//	);
-		//double distance2 =
-		//	std::sqrt(
-		//		std::pow((node2->coordinate.first - node1->destination.first), 2) +
-		//		std::pow((node2->coordinate.second - node1->destination.second), 2)
-		//	);
-
-		//if (distance1 > distance2)
-		//	return true;
-
-		//return false;
-
-		short xDistance1 = std::abs(node1->coordinate.first - node1->destination.first);
-		short yDistance1 = std::abs(node1->coordinate.second - node1->destination.second);
-		short xDistance2 = std::abs(node2->coordinate.first - node1->destination.first);
-		short yDistance2 = std::abs(node2->coordinate.second - node1->destination.second);
+		int xDistance1 = std::abs(node1->coordinate.first - node1->destination.first);
+		int yDistance1 = std::abs(node1->coordinate.second - node1->destination.second);
+		int xDistance2 = std::abs(node2->coordinate.first - node1->destination.first);
+		int yDistance2 = std::abs(node2->coordinate.second - node1->destination.second);
 
 		if (xDistance1 > yDistance1 &&
 			xDistance1 > xDistance2 &&
@@ -88,11 +72,11 @@ private:
 	bool pathFound = false;
 	bool unreachable = false;
 
-	const unsigned short maxX = (unsigned short)MAP_WIDTH - 1;
-	const unsigned short maxY = (unsigned short)MAP_HEIGHT - 1;
+	const int maxX = (int)(MAP_WIDTH - 1);
+	const int maxY = (int)(MAP_HEIGHT - 1);
 
 	void createNode(Coordinate coordinate);
-	unsigned short distanceToDestination(Coordinate coordinate) const;
+	int distanceToDestination(Coordinate coordinate) const;
 	void setNextNode();
 	void adjustParentNode(Node* node);
 };

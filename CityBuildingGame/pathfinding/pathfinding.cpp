@@ -38,7 +38,7 @@ void Pathfinding::CalculatePath()
 
 std::list<Coordinate> Pathfinding::GetPath()
 {
-	std::list<std::pair<unsigned short, unsigned short>> path;
+	std::list<std::pair<int, int>> path;
 	if (pathFound)
 	{
 		while (current->parent != nullptr)
@@ -75,7 +75,7 @@ void Pathfinding::createNode(const Coordinate coordinate)
 	}
 }
 
-unsigned short Pathfinding::distanceToDestination(const Coordinate coordinate) const
+int Pathfinding::distanceToDestination(const Coordinate coordinate) const
 {
 	return
 		std::abs(coordinate.first - destination->coordinate.first) +

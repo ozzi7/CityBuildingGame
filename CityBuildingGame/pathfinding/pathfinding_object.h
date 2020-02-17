@@ -6,14 +6,14 @@
 #include <grid.h>
 #include <globals.h>
 
-typedef std::pair<unsigned short, unsigned short> Coordinate;
+typedef std::pair<int, int> Coordinate;
 
 enum ObjectType { edge, tree };
 
 struct NodeObject
 {
 	Coordinate coordinate;
-	unsigned short distanceToStart{};
+	int distanceToStart{};
 	NodeObject* parent{};
 };
 
@@ -57,8 +57,8 @@ private:
 	bool unreachable = false;
 	NodeObject* destination = nullptr;
 
-	const unsigned short maxX = (unsigned short)MAP_WIDTH - 1;
-	const unsigned short maxY = (unsigned short)MAP_HEIGHT - 1;
+	const int maxX = (int)(MAP_WIDTH - 1);
+	const int maxY = (int)(MAP_HEIGHT - 1);
 
 	void calculatePath();
 	void createNode(Coordinate coordinate);
