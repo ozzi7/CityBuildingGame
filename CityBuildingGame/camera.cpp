@@ -301,7 +301,6 @@ bool Camera::CoordinateVisible(glm::vec3 coordinate, glm::mat4 projectionMatrix,
 void Camera::CalculateLightProjectionMatrix()
 {
 	LightProjectionMatrix = glm::ortho(-ZoomLevel,  ZoomLevel,-1.0f * ZoomLevel,  ZoomLevel, -100.0f, 100.0f);
-	float angle;
 	float heightTopRight;
 	float heightTopLeft;
 	float heightBottomRight;
