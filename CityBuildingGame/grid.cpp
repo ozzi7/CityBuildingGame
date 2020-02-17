@@ -14,9 +14,11 @@ Grid::Grid(int aGridHeight, int aGridWidth)
 void Grid::Init()
 {
 	/* create gridUnits */
+	gridUnits.reserve(gridHeight);
 	for (int i = 0; i < gridHeight; ++i)
 	{
 		std::vector<Unit*> temp = std::vector<Unit*>();
+		temp.reserve(gridWidth);
 		for (int j = 0; j < gridWidth; ++j)
 		{
 			temp.push_back(new Unit());

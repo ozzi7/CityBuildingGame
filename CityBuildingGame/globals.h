@@ -29,8 +29,8 @@ const bool MUSIC_ENABLED = false;
 /************************************************
  *  Map settings
  ***********************************************/
-const unsigned int MAP_WIDTH = 1000;
-const unsigned int MAP_HEIGHT = 1000;
+const unsigned int MAP_WIDTH = 3000;
+const unsigned int MAP_HEIGHT = 3000;
 
 /* vegetation generation */
 // the higher the tree persistence the higher the frequency of trees => easier to find all types of resources nearby
