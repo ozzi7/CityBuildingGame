@@ -3,7 +3,7 @@
   <asset><contributor><author></author><authoring_tool>FBX COLLADA exporter</authoring_tool><comments></comments></contributor><created>2020-02-16T18:37:36Z</created><keywords></keywords><modified>2020-02-16T18:37:36Z</modified><revision></revision><subject></subject><title></title><unit meter="0.010000" name="centimeter"></unit><up_axis>Y_UP</up_axis></asset>
   <library_images>
     <image id="trunk_beech_a_2-image" name="trunk_beech_a_2"><init_from>trunk_beech_a.png</init_from></image>
-    <image id="tree_euro_beech_a_aut_2-image" name="tree_euro_beech_a_aut_2"><init_from>tree_euro_beech_b.png</init_from></image>
+    <image id="tree_euro_beech_a_aut_2-image" name="tree_euro_beech_a_aut_2"><init_from>tree_euro_beech_a_aut.png</init_from></image>
   </library_images>
   <library_materials>
     <material id="lambert10" name="lambert10">

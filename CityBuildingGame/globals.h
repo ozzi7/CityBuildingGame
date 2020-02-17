@@ -38,22 +38,22 @@ const float PERSISTENCE_TREES = 0.8f;
 
 // defines on which height the species grows the most in percentage of the terrain height
 const float PINE_GAUSSIAN_MEAN_PERCENTAGE = 82.0f;		// [0 - 100]
-const float JUNIPER_GAUSSIAN_MEAN_PERCENTAGE = 57.0f;	// [0 - 100]
+const float TOONA_GAUSSIAN_MEAN_PERCENTAGE = 57.0f;	// [0 - 100]
 const float OAK_GAUSSIAN_MEAN_PERCENTAGE = 37.0f;		// [0 - 100]
-const float SPRUCE_GAUSSIAN_MEAN_PERCENTAGE = 72.0f;	// [0 - 100]
+const float EUROBEECH_GAUSSIAN_MEAN_PERCENTAGE = 72.0f;	// [0 - 100]
 
 // high variance => tree can grow at a larger spectrum of height around its mean
 const float PINE_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
-const float JUNIPER_GAUSSIAN_VARIANCE_PERCENTAGE = 1.0f;	// [0 - 100]
+const float TOONA_GAUSSIAN_VARIANCE_PERCENTAGE = 1.0f;	// [0 - 100]
 const float OAK_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
-const float SPRUCE_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
+const float EUROBEECH_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 
 const float TREE_SCALE_FACTOR = 0.011f; // to resize all trees
 const float SMALL_TREE_CUTOFF_PERCENTAGE = 30.0f; // [0,100), removes midget trees
 const float PINE_DENSITY = 0.3f;		//0.4 [0 - 1]
-const float JUNIPER_DENSITY = 0.3f;		//0.1 [0 - 1]
+const float TOONA_DENSITY = 0.3f;		//0.1 [0 - 1]
 const float OAK_DENSITY = 0.15f;		// 0.4[0 - 1]
-const float SPRUCE_DENSITY = 0.3f;		//0.4 [0 - 1]
+const float EUROBEECH_DENSITY = 0.3f;		//0.4 [0 - 1]
 
 /* terrain generation */
 const float HILL_HEIGHT = 15.0f;	// ~ 0 - 15

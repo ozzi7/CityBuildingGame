@@ -2,8 +2,9 @@
 
 class Tree;
 class Oak;
-class Juniper;
-class Spruce;
+class Toona;
+class EuroBeech;
+class EuroBeech2;
 class Pine;
 class Terrain;
 class Lumberjack;
@@ -19,9 +20,10 @@ public:
 
 	virtual void Visit(Tree* tree) = 0;
 	virtual void Visit(Oak* oak) = 0;
-	virtual void Visit(Spruce* spruce) = 0;
+	virtual void Visit(EuroBeech* euroBeech) = 0;
+	virtual void Visit(EuroBeech2* euroBeech) = 0;
 	virtual void Visit(Pine* pine) = 0;
-	virtual void Visit(Juniper* juniper) = 0;
+	virtual void Visit(Toona* toona) = 0;
 
 	virtual void Visit(Lumberjack* lumberjack) = 0;
 	virtual void Visit(Settler* settler) = 0;

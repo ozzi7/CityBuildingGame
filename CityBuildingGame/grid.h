@@ -7,8 +7,9 @@
 
 #include "terrain.h"
 #include "oak.h"
-#include "spruce.h"
-#include "juniper.h"
+#include "euro_beech.h"
+#include "euro_beech_2.h"
+#include "toona.h"
 #include "pine.h"
 #include "bone_animated.h"
 

@@ -9,19 +9,22 @@ void RenderBuffer::Visit(Pine* obj)
 	pineModels.push_back(obj->model);
 }
 
-void RenderBuffer::Visit(Spruce* obj)
+void RenderBuffer::Visit(EuroBeech* obj)
 {
-	spruceModels.push_back(obj->model);
+	euroBeechModels.push_back(obj->model);
 }
-
+void RenderBuffer::Visit(EuroBeech2* obj)
+{
+	euroBeech2Models.push_back(obj->model);
+}
 void RenderBuffer::Visit(Oak* obj)
 {
 	oakModels.push_back(obj->model);
 }
 
-void RenderBuffer::Visit(Juniper* obj)
+void RenderBuffer::Visit(Toona* obj)
 {
-	juniperModels.push_back(obj->model);
+	toonaModels.push_back(obj->model);
 }
 
 void RenderBuffer::Visit(Lumberjack* obj)
@@ -82,8 +85,9 @@ void RenderBuffer::Visit(Tree* obj) {}
 void RenderBuffer::ClearData()
 {
 	pineModels.clear();
-	spruceModels.clear();
-	juniperModels.clear();
+	euroBeechModels.clear();
+	euroBeech2Models.clear();
+	toonaModels.clear();
 	oakModels.clear();
 	lumberjackModels.clear();
 	lumberjackHutModels.clear();
