@@ -48,7 +48,7 @@ void Terrain::Draw()
 
 int Terrain::ReloadGPUData()
 {
-	renderDataMutex.lock();
+	std::unique_lock<std::mutex> lock(renderDataMutex);
 	int vertexCount = -1;
 	if (reloadGPUData)
 	{
@@ -77,7 +77,6 @@ int Terrain::ReloadGPUData()
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 		glEnableVertexAttribArray(2);
 	}
-	renderDataMutex.unlock();
 	return vertexCount;
 }
 
@@ -87,12 +86,12 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	/* Create geometry data for visible area */
 
 	std::vector<GLfloat>* renderDataTemp;
-	renderDataMutex.lock();
+	std::unique_lock<std::mutex> lock(renderDataMutex);
 	if (currRenderData)
 		renderDataTemp = renderData0;
 	else
 		renderDataTemp = renderData1;
-	renderDataMutex.unlock();
+	lock.unlock();
 
 	/* Load GPU data for visible area */
 	int index = 0;
@@ -202,7 +201,7 @@ loopExit:
 	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
 	loggingEventHandler->AddEvent(new LoggingEvent(DEBUG, "LoadVisibleGeometry time elapsed: " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 	loggingEventHandler->AddEvent(new LoggingEvent(DEBUG, "Approximate CPU cycles per loop: " + std::to_string(elapsedTimeMicroseconds * 4000 / loopCounter)));
-	renderDataMutex.lock();
+	lock.lock();
 	if (currRenderData == 1)
 	{
 		currRenderData = 0;
@@ -213,7 +212,6 @@ loopExit:
 	}
 	renderDataVertexCount = index / 48 * 6;
 	reloadGPUData = true;
-	renderDataMutex.unlock();
 }
 
 void Terrain::CreateGeometry()
