@@ -240,7 +240,7 @@ float MapGenerator::getHeightAtPercentage(std::vector<std::vector<float>>& pHeig
 
 		std::random_device rd;     // only used once to initialise (seed) engine
 		std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-		std::uniform_int_distribution<int> uni(0, pHeightmap.size()* pHeightmap[0].size()); // guaranteed unbiased
+		std::uniform_int_distribution<int> uni(0, pHeightmap.size()* pHeightmap[0].size()-1); // guaranteed unbiased
 
 		for (int j = 0; j < maxNofSamples; j++)
 		{
