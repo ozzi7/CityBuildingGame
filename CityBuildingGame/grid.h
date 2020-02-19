@@ -35,7 +35,7 @@ public:
 	void Init();
 	float GetHeight(float posX, float posY) const;
 	bool IsAreaFlat(int fromX, int toX, int fromY, int toY) const;
-	void UpdateVisibleList(glm::vec2& upperLeft, glm::vec2& upperRight, glm::vec2& lowerLeft, glm::vec2& lowerRight);
+	void UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 
 	// [y][x]
 	std::vector<std::vector<Unit*>> gridUnits;

@@ -39,7 +39,7 @@ void Grid::Init()
 	visibleUnits = std::vector<Unit*>(maximumVisibleUnits);
 }
 
-void Grid::UpdateVisibleList(glm::vec2& upperLeft, glm::vec2& upperRight, glm::vec2& lowerLeft, glm::vec2& lowerRight)
+void Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
 {
 	/* Check if we need to recalculate visible grid */
 	if (currUpperLeftX != (int)upperLeft.x || currUpperLeftY != (int)upperLeft.y ||

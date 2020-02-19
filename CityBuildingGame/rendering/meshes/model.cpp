@@ -178,7 +178,7 @@ std::vector<Texture> Model::loadMaterialTextures(const aiMaterial* mat, aiTextur
 }
 
 // utility function for loading a 2D texture from file
-unsigned int Model::TextureFromFile(std::string& path)
+unsigned int Model::TextureFromFile(std::string path)
 {
 	unsigned int textureID;
 	glGenTextures(1, &textureID);

@@ -28,7 +28,7 @@ public:
 
 	// draws the model, and thus all its meshes
 	void Draw(Shader& shader);
-	unsigned int TextureFromFile(std::string& path);
+	unsigned int TextureFromFile(std::string path);
 
 protected:
 	void init(const std::string& path);
