@@ -43,7 +43,7 @@ private:
 	float lastFrame = 0.0f;
 
 	// Called by the application class to update the game logic
-	void gameLoop() const;
+	void gameLoop();
 
 	// Continuously redraws all visible objects
 	void renderLoop();

@@ -61,6 +61,9 @@ void Game::StartGame()
 
 void Game::renderLoop()
 {
+	// TODO: Wait for game loop to finish once instead of sleep
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
 	renderer = new Renderer(*camera);
 
 	camera->SetDirectionalLightColor(glm::vec3{1.0f, 1.0f, 1.0f});
@@ -94,12 +97,10 @@ void Game::renderLoop()
 	delete renderer;
 }
 
-void Game::gameLoop() const
+void Game::gameLoop()
 {
 	const int TICKS_PER_SECOND = 100;
 	const int SKIP_TICKS = 1000000 / TICKS_PER_SECOND; // microseconds
-
-	int loops = 0;
 
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 	std::chrono::high_resolution_clock::time_point next_game_tick(start + std::chrono::microseconds(SKIP_TICKS));
@@ -157,7 +158,6 @@ void Game::gameLoop() const
 			std::chrono::duration_cast<std::chrono::microseconds>(
 				next_game_tick - std::chrono::high_resolution_clock::now()));
 		next_game_tick = next_game_tick + std::chrono::microseconds(SKIP_TICKS);
-		loops++;
 	}
 }
 
