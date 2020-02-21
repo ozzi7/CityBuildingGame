@@ -15,14 +15,13 @@ LoggingEventHandler::LoggingEventHandler(LoggingLevel aFileLoggingLevel, Logging
 			timeinfo->tm_min) + "m" +
 		std::to_string(timeinfo->tm_sec) + "s" + ".log";
 
-	file.open(Path + "/../log/" + logFileName, std::ios::out);
+	std::string logfilePath = Path + "/" + logFileName;
+	file.open(logfilePath, std::ios::out);
 
-	if (!file)
-	{
+	if (!file.is_open())
 		std::cout << "Could not create log file!" << std::endl;
-	}
 	else
-		std::cout << "Log file located at " << Path + "/../log/" + logFileName << std::endl;
+		std::cout << "Log file can be found at " << logfilePath << std::endl;
 
 	fileLoggingLevel = aFileLoggingLevel;
 	consoleLoggingLevel = aConsoleLoggingLevel;

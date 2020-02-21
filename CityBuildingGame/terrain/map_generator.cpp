@@ -14,25 +14,25 @@ void MapGenerator::GenerateMap()
 
 void MapGenerator::generateTerrain() const
 {
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, std::this_thread::get_id(), GetTickCount64(),
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 		"Creating terrain..."));
 
 	NoiseGen noise_gen;
 	std::vector<std::vector<float>> heightmap = std::vector<std::vector<float>>(
 		grid->gridHeight + 1, std::vector<float>(grid->gridWidth + 1, 0));
 
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, std::this_thread::get_id(), GetTickCount64(),
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 		"Generating perlin noise for terrain"));
 
 	noise_gen.GeneratePerlinNoise(heightmap, grid->gridHeight + 1, grid->gridWidth + 1, -HILL_HEIGHT / 2.0f,
 	                              HILL_HEIGHT / 2.0f, 6, PERSISTENCE);
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, std::this_thread::get_id(), GetTickCount64(),
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 		"Flattening map to create valleys and plateaus"));
 	flattenMap(heightmap);
 
 	grid->terrain->heightmap = heightmap;
 
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, std::this_thread::get_id(), GetTickCount64(),
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 		"Creating geometry for the terrain"));
 	grid->terrain->CreateGeometry();
 
@@ -41,7 +41,7 @@ void MapGenerator::generateTerrain() const
 
 void MapGenerator::generateTrees()
 {
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, std::this_thread::get_id(), GetTickCount64(),
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 		"Creating trees..."));
 
 	std::mt19937 gen(rd());
@@ -52,13 +52,13 @@ void MapGenerator::generateTrees()
 	/* create trees using noise */
 	treeMap = std::vector<std::vector<float>>(grid->gridHeight, std::vector<float>(grid->gridWidth, 0));
 
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, std::this_thread::get_id(), GetTickCount64(),
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 		"Generating perlin noise for trees"));
 
 	noiseGen.GeneratePerlinNoise(treeMap, grid->gridHeight, grid->gridWidth, 0.0f, 10.0f, 6, PERSISTENCE_TREES);
 
 	/*Add terrain factor to the tree map*/
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, std::this_thread::get_id(), GetTickCount64(),
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 		"Combining terrain and tree noise to create probabilities for each type of tree"));
 	for (int i = 0; i < grid->gridHeight; ++i)
 	{
@@ -81,7 +81,7 @@ void MapGenerator::generateTrees()
 	float oak_var = 0.01f * OAK_GAUSSIAN_VARIANCE_PERCENTAGE * (maxHeight - minHeight);
 	float euroBeech_var = 0.01f * EUROBEECH_GAUSSIAN_VARIANCE_PERCENTAGE * (maxHeight - minHeight);
 
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, std::this_thread::get_id(), GetTickCount64(),
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 		"Planting trees"));
 
 	for (int i = 0; i < grid->gridHeight; ++i)

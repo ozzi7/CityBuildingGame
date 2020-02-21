@@ -221,7 +221,7 @@ void SkinnedMesh::InitMesh(unsigned int MeshIndex,
 {
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
 
-	std::cout << "Num vertices = " << paiMesh->mNumVertices << std::endl;
+	//std::cout << "Num vertices = " << paiMesh->mNumVertices << std::endl;
 	/* Populize the vertex attribute vectors */
 	for (unsigned int i = 0; i < paiMesh->mNumVertices; ++i)
 	{
