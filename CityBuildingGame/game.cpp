@@ -107,7 +107,7 @@ void Game::gameLoop()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		//glfwPollEvents();
+		glfwPollEvents();
 		inputHandler->MouseScroll();
 
 		for (int i = 0; i < grid->gridUnits.size(); i++)
