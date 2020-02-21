@@ -66,19 +66,22 @@ void LoggingEventHandler::Visit(LoggingEvent* aLoggingEvent)
 	ss << aLoggingEvent->thread_id;
 	uint64_t id = std::stoull(ss.str());
 
-	//DWORD milliseconds = aLoggingEvent->timestamp % 1000;
-	//aLoggingEvent->timestamp /= 1000;
-	//DWORD seconds = aLoggingEvent->timestamp % 60;
-	//aLoggingEvent->timestamp /= 60;
-	//DWORD minutes = aLoggingEvent->timestamp % 60;
-	//aLoggingEvent->timestamp /= 60;
-	//DWORD hours = aLoggingEvent->timestamp; // may exceed 24 hours.
+	DWORD milliseconds = aLoggingEvent->timestamp % 1000;
+	aLoggingEvent->timestamp /= 1000;
+	DWORD seconds = aLoggingEvent->timestamp / 60;
+	aLoggingEvent->timestamp /= 60;
+	DWORD minutes = aLoggingEvent->timestamp % 60;
+	aLoggingEvent->timestamp /= 60;
+	DWORD hours = aLoggingEvent->timestamp; // may exceed 24 hours.
 
-	/*std::string output = "[" + std::to_string(hours)+":"+ std::to_string(minutes)+":"+ std::to_string(seconds)+"."+
-		std::to_string(milliseconds)+"] " + "Thread " + std::to_string(id) + ": " + aLoggingEvent->log_text;*/
 	std::stringstream output;
-	output << "[" << std::to_string(aLoggingEvent->timestamp) << "] " << "Thread " << std::to_string(id) << " " <<
-		logging_levels[int(aLoggingEvent->loggingLevel)] << std::setw(10) << ": " + aLoggingEvent->log_text << std::endl;
+	//output << "[" + std::to_string(hours) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds) + "." +
+	//	std::to_string(milliseconds) + "] " << "Thread " << std::to_string(id) << " " <<
+	//	logging_levels[int(aLoggingEvent->loggingLevel)] << std::setw(10) << ": " + aLoggingEvent->log_text << std::endl;
+
+	output << "[" + std::to_string(seconds) + "." << std::setprecision(3) <<
+		std::to_string(milliseconds) + "] [" << logging_levels[int(aLoggingEvent->loggingLevel)] <<
+		"] Thread " << std::to_string(id) << std::setprecision(10) << " - " << aLoggingEvent->log_text << std::endl;
 	std::string output_s = output.str();
 	if (aLoggingEvent->loggingLevel <= fileLoggingLevel)
 	{

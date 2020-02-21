@@ -22,7 +22,7 @@ const bool CUSTOM_MIPMAPS = true;
 /************************************************
  *  Sound settings
  ***********************************************/
-const bool SOUND_ENABLED = false;
+const bool SOUND_ENABLED = true;
 const bool MUSIC_ENABLED = false;
 
 
