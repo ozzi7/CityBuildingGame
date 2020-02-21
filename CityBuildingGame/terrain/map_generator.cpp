@@ -59,7 +59,7 @@ void MapGenerator::generateTrees()
 
 	/*Add terrain factor to the tree map*/
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
-		"Combining terrain and tree noise to create probabilities for each type of tree"));
+		"Combining terrain & tree noise to create tree distributions"));
 	for (int i = 0; i < grid->gridHeight; ++i)
 	{
 		for (int j = 0; j < grid->gridWidth; ++j)
