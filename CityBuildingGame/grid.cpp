@@ -17,11 +17,11 @@ void Grid::Init()
 	gridUnits.reserve(gridHeight);
 	for (int i = 0; i < gridHeight; ++i)
 	{
-		std::vector<Unit*> temp = std::vector<Unit*>();
+		std::vector<Unit> temp = std::vector<Unit>();
 		temp.reserve(gridWidth);
 		for (int j = 0; j < gridWidth; ++j)
 		{
-			temp.push_back(new Unit());
+			temp.push_back(Unit());
 		}
 		gridUnits.push_back(temp);
 	}
@@ -31,12 +31,12 @@ void Grid::Init()
 	{
 		for (int j = 0; j < terrain->heightmap[i].size() - 1; ++j)
 		{
-			gridUnits[i][j]->averageHeight = (terrain->heightmap[i + 1][j] + terrain->heightmap[i][j + 1]) / 2.0f;
+			gridUnits[i][j].averageHeight = (terrain->heightmap[i + 1][j] + terrain->heightmap[i][j + 1]) / 2.0f;
 		}
 	}
 
 	/*Initialize the vectors used for determining what to render*/
-	visibleUnits = std::vector<Unit*>(maximumVisibleUnits);
+	visibleUnits = std::vector<Unit>(maximumVisibleUnits);
 }
 
 void Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)

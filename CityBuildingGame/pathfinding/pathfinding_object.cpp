@@ -61,8 +61,7 @@ GameObject* PathfindingObject::GetDestinationObject() const
 {
 	if (objectFound)
 	{
-		for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first]->
-		     objects)
+		for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].objects)
 		{
 			if (objectType == ObjectType::tree)
 			{
@@ -99,7 +98,7 @@ void PathfindingObject::createNode(const Coordinate coordinate)
 {
 	if (!visited[coordinate.first][coordinate.second])
 	{
-		if (!grid->gridUnits[coordinate.second][coordinate.first]->occupied)
+		if (!grid->gridUnits[coordinate.second][coordinate.first].occupied)
 		{
 			NodeObject* node = new NodeObject();
 			node->coordinate = coordinate;
@@ -118,7 +117,7 @@ void PathfindingObject::checkObjectFound(Coordinate coordinate)
 	switch (objectType)
 	{
 	case ObjectType::tree:
-		if (grid->gridUnits[coordinate.second][coordinate.first]->hasTree)
+		if (grid->gridUnits[coordinate.second][coordinate.first].hasTree)
 		{
 			objectFound = true;
 			destination = new NodeObject();

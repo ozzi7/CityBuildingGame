@@ -122,7 +122,7 @@ void MapGenerator::generateTrees()
 
 			if (chosenTree == 0 && isPine)
 			{
-				grid->gridUnits[i][j]->objects.push_back(
+				grid->gridUnits[i][j].objects.push_back(
 					new Pine(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 					         glm::vec3(scale * TREE_SCALE_FACTOR, scale * TREE_SCALE_FACTOR,
 					                   scale * TREE_SCALE_FACTOR),
@@ -130,7 +130,7 @@ void MapGenerator::generateTrees()
 			}
 			else if (chosenTree <= 1 && isToona)
 			{
-				grid->gridUnits[i][j]->objects.push_back(
+				grid->gridUnits[i][j].objects.push_back(
 					new Toona(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 					            glm::vec3(scale * TREE_SCALE_FACTOR, scale * TREE_SCALE_FACTOR,
 					                      scale * TREE_SCALE_FACTOR),
@@ -141,14 +141,14 @@ void MapGenerator::generateTrees()
 				float which_model_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
 				if (which_model_rand < 0.5f) {
-					grid->gridUnits[i][j]->objects.push_back(
+					grid->gridUnits[i][j].objects.push_back(
 						new EuroBeech(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 							glm::vec3(scale * TREE_SCALE_FACTOR, scale * TREE_SCALE_FACTOR,
 								scale * TREE_SCALE_FACTOR),
 							glm::vec3(1.5707963f, 0, rotation(gen))));
 				}
 				else {
-					grid->gridUnits[i][j]->objects.push_back(
+					grid->gridUnits[i][j].objects.push_back(
 						new EuroBeech2(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 							glm::vec3(scale * TREE_SCALE_FACTOR, scale * TREE_SCALE_FACTOR,
 								scale * TREE_SCALE_FACTOR),
@@ -157,14 +157,14 @@ void MapGenerator::generateTrees()
 			}
 			else if (chosenTree <= 3 && isOak)
 			{
-				grid->gridUnits[i][j]->objects.push_back(
+				grid->gridUnits[i][j].objects.push_back(
 					new Oak(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 					        glm::vec3(scale * TREE_SCALE_FACTOR, scale * TREE_SCALE_FACTOR,
 					                  scale * TREE_SCALE_FACTOR),
 					        glm::vec3(1.5707963f, 0, rotation(gen))));
 			}
-			grid->gridUnits[i][j]->occupied = true;
-			grid->gridUnits[i][j]->hasTree = true;
+			grid->gridUnits[i][j].occupied = true;
+			grid->gridUnits[i][j].hasTree = true;
 		}
 	}
 }

@@ -45,13 +45,13 @@ void GameEventHandler::Visit(MoveEvent* aMoveEvent)
 {
 	/* removes element found by reference */
 	BoneAnimated* toMove = nullptr;
-	for (auto it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.begin(); it !=
-	     grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.end(); ++it)
+	for (auto it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX].movingObjects.begin(); it !=
+	     grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX].movingObjects.end(); ++it)
 	{
 		if (*it == aMoveEvent->gameObject)
 		{
 			toMove = *it;
-			it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX]->movingObjects.erase(it);
+			it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX].movingObjects.erase(it);
 			break;
 		}
 	}
@@ -59,7 +59,7 @@ void GameEventHandler::Visit(MoveEvent* aMoveEvent)
 		// should not happen
 		bool problem = true;
 	else
-		grid->gridUnits[aMoveEvent->toY][aMoveEvent->toX]->movingObjects.push_back(toMove);
+		grid->gridUnits[aMoveEvent->toY][aMoveEvent->toX].movingObjects.push_back(toMove);
 }
 
 void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
@@ -152,7 +152,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	{
 		for (int j = fromY; j < toY; ++j)
 		{
-			if (grid->gridUnits[j][i]->occupied)
+			if (grid->gridUnits[j][i].occupied)
 			{
 				return;
 			}
@@ -182,7 +182,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	{
 		for (int j = fromY; j < toY; ++j)
 		{
-			grid->gridUnits[j][i]->occupied = true;
+			grid->gridUnits[j][i].occupied = true;
 		}
 	}
 
@@ -222,8 +222,8 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		settler->SetNewPath(glmPath);
 
 		/* save building in the coordinate where the 3d object center is located in->good for rendering */
-		grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(dwelling);
-		grid->gridUnits[pathCoordinates.back().second][pathCoordinates.back().first]->movingObjects.push_back(settler);
+		grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(dwelling);
+		grid->gridUnits[pathCoordinates.back().second][pathCoordinates.back().first].movingObjects.push_back(settler);
 
 		break;
 	}
@@ -281,7 +281,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			}
 
 			// store reference to lumby
-			grid->gridUnits[lumby->posY][lumby->posX]->movingObjects.push_back(lumby);
+			grid->gridUnits[lumby->posY][lumby->posX].movingObjects.push_back(lumby);
 
 			/* delete the settlers */
 			for (int i = 0; i < settlers.size(); ++i)
@@ -291,7 +291,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		}
 
 		// store reference to grid
-		grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x]->objects.push_back(lumberjackHut);
+		grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(lumberjackHut);
 
 		break;
 	}
@@ -301,21 +301,21 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 {
 	/* deletes reference to element */
-	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->movingObjects.begin(); it !=
-	     grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->movingObjects.end(); ++it)
+	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX].movingObjects.begin(); it !=
+	     grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX].movingObjects.end(); ++it)
 	{
 		if (*it == aDeleteEvent->gameObject)
 		{
-			it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->movingObjects.erase(it);
+			it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX].movingObjects.erase(it);
 			break;
 		}
 	}
-	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.begin(); it !=
-	     grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.end(); ++it)
+	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX].objects.begin(); it !=
+	     grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX].objects.end(); ++it)
 	{
 		if (*it == aDeleteEvent->gameObject)
 		{
-			it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX]->objects.erase(it);
+			it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX].objects.erase(it);
 			break;
 		}
 	}
@@ -341,7 +341,7 @@ void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 			{
 				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
 			}
-			grid->gridUnits[path->GetDestinationObject()->posY][path->GetDestinationObject()->posX]->hasTree = false;
+			grid->gridUnits[path->GetDestinationObject()->posY][path->GetDestinationObject()->posX].hasTree = false;
 			aGatherResourceEvent->person->SetNewPath(glmPath);
 			aGatherResourceEvent->person->destination = path->GetDestinationObject();
 			aGatherResourceEvent->person->state = State::walkingToTarget;

@@ -54,7 +54,7 @@ void Pathfinding::createNode(const Coordinate coordinate)
 {
 	if (!visited[coordinate.first][coordinate.second])
 	{
-		if (!grid->gridUnits[coordinate.second][coordinate.first]->occupied ||
+		if (!grid->gridUnits[coordinate.second][coordinate.first].occupied ||
 			coordinate == destination->coordinate)
 		{
 			Node* node = new Node();

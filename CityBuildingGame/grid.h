@@ -38,9 +38,9 @@ public:
 	void UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 
 	// [y][x]
-	std::vector<std::vector<Unit*>> gridUnits;
+	std::vector<std::vector<Unit>> gridUnits;
 
-	std::vector<Unit*> visibleUnits;
+	std::vector<Unit> visibleUnits;
 	int nofVisibleUnits = 0;
 	int maximumVisibleUnits = 600 * 500; // maximum number of units stored in visibleUnits
 	int currUpperLeftX = 0;

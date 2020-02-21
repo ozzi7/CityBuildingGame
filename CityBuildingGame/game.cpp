@@ -114,8 +114,8 @@ void Game::gameLoop()
 		{
 			for (int j = 0; j < grid->gridUnits[i].size(); j++)
 			{
-				for (std::list<BoneAnimated*>::iterator it = grid->gridUnits[i][j]->movingObjects.begin();
-				     it != grid->gridUnits[i][j]->movingObjects.end(); ++it)
+				for (std::list<BoneAnimated*>::iterator it = grid->gridUnits[i][j].movingObjects.begin();
+				     it != grid->gridUnits[i][j].movingObjects.end(); ++it)
 				{
 					(*it)->UpdatePosition(grid);
 					(*it)->GameStep();
@@ -137,13 +137,13 @@ void Game::gameLoop()
 		RenderBuffer* producerBuffer = renderBuffers->GetProducerBuffer();
 		for (int i = 0; i < grid->nofVisibleUnits; i++)
 		{
-			for (std::list<GameObject*>::iterator it = grid->visibleUnits[i]->objects.begin();
-			     it != grid->visibleUnits[i]->objects.end(); ++it)
+			for (std::list<GameObject*>::iterator it = grid->visibleUnits[i].objects.begin();
+			     it != grid->visibleUnits[i].objects.end(); ++it)
 			{
 				(*it)->Accept(*producerBuffer);
 			}
-			for (std::list<BoneAnimated*>::iterator it = grid->visibleUnits[i]->movingObjects.begin();
-			     it != grid->visibleUnits[i]->movingObjects.end(); ++it)
+			for (std::list<BoneAnimated*>::iterator it = grid->visibleUnits[i].movingObjects.begin();
+			     it != grid->visibleUnits[i].movingObjects.end(); ++it)
 			{
 				(*it)->Accept(*producerBuffer);
 			}
