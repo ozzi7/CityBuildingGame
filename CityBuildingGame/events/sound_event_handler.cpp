@@ -54,7 +54,7 @@ void SoundEventHandler::Visit(PlaySoundEvent* aSoundEvent)
 	if (sounds.size() == 0)
 	{
 		sounds.push_back(sf::Sound());
-		sounds.at(0).setBuffer(soundBuffers[aSoundEvent->soundType]);
+		sounds.at(0).setBuffer(soundBuffers[int(aSoundEvent->soundType)]);
 		sounds.at(0).play();
 	}
 	else
@@ -71,13 +71,13 @@ void SoundEventHandler::Visit(PlaySoundEvent* aSoundEvent)
 
 		if (location != -1)
 		{
-			sounds.at(location).setBuffer(soundBuffers[aSoundEvent->soundType]);
+			sounds.at(location).setBuffer(soundBuffers[int(aSoundEvent->soundType)]);
 			sounds.at(location).play();
 		}
 		else if (location == -1 && sounds.size() < maxSounds)
 		{
 			sounds.push_back(sf::Sound());
-			sounds.at(sounds.size() - 1).setBuffer(soundBuffers[aSoundEvent->soundType]);
+			sounds.at(sounds.size() - 1).setBuffer(soundBuffers[int(aSoundEvent->soundType)]);
 			sounds.at(sounds.size() - 1).play();
 		}
 	}

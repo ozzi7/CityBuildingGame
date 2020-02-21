@@ -22,9 +22,9 @@ void Settler::GameStep()
 	if (hasArrived && dwelling->evolutionStage == 0)
 	{
 		dwelling->Evolve();
-		soundEventHandler->AddEvent(new PlaySoundEvent(SettlerArrivedID));
+		soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::SettlerArrivedID));
 		visible = false;
-		state = idle;
+		state = State::idle;
 		resources->AddIdleSettler(this);
 	}
 	else

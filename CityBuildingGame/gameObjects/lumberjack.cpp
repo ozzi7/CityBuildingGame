@@ -20,7 +20,7 @@ void Lumberjack::GameStep()
 {
 	if (hasArrived)
 	{
-		if (state == returningHome)
+		if (state == State::returningHome)
 		{
 			// arrived back home..
 			// TODO: add resources
@@ -31,21 +31,21 @@ void Lumberjack::GameStep()
 			}
 			unitEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
 		}
-		else if (state == walkingToTarget)
+		else if (state == State::walkingToTarget)
 		{
 			// arrived at tree, start working..
-			state = working;
+			state = State::working;
 			workTimeLeft = 1000;
 		}
 	}
-	if (state == working && workTimeLeft == 0)
+	if (state == State::working && workTimeLeft == 0)
 	{
 		// done working.. delete tree, go home
 		unitEventHandler->AddEvent(new DeleteEvent(destination->posX, destination->posY, destination));
-		unitEventHandler->AddEvent(new ReturnHomeEvent(this, LumberjackID));
-		state = returningHome;
+		unitEventHandler->AddEvent(new ReturnHomeEvent(this, PersonType::LumberjackID));
+		state = State::returningHome;
 	}
-	else if (state == working)
+	else if (state == State::working)
 	{
 		workTimeLeft--;
 	}

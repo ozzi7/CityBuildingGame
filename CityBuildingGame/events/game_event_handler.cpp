@@ -270,14 +270,14 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 					glmPath.push_back(glm::vec2((*it).first + 0.5f, (*it).second) + 0.5f);
 
 				lumby->SetNewPath(glmPath);
-				lumby->state = returningHome;
+				lumby->state = State::returningHome;
 				lumby->SetLumberjackHut(lumberjackHut);
 				lumby->destination = lumberjackHut;
 			}
 			else
 			{
 				loggingEventHandler->AddEvent(
-					new LoggingEvent(ERROR_L, "The lumberjack can't walk from dwelling to lumberjackhut (no path)"));
+					new LoggingEvent(LoggingLevel::ERROR_L, "The lumberjack can't walk from dwelling to lumberjackhut (no path)"));
 			}
 
 			// store reference to lumby
@@ -344,11 +344,11 @@ void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 			grid->gridUnits[path.GetDestinationObject()->posY][path.GetDestinationObject()->posX]->hasTree = false;
 			aGatherResourceEvent->person->SetNewPath(glmPath);
 			aGatherResourceEvent->person->destination = path.GetDestinationObject();
-			aGatherResourceEvent->person->state = walkingToTarget;
+			aGatherResourceEvent->person->state = State::walkingToTarget;
 		}
 		else
 		{
-			aGatherResourceEvent->person->state = idle;
+			aGatherResourceEvent->person->state = State::idle;
 		}
 		break;
 
@@ -361,7 +361,7 @@ void GameEventHandler::Visit(ReturnHomeEvent* aReturnHomeEvent)
 {
 	switch (aReturnHomeEvent->personType)
 	{
-	case LumberjackID:
+	case PersonType::LumberjackID:
 		Lumberjack* lumby = (Lumberjack*)aReturnHomeEvent->person; // or extract coordinates??
 		Pathfinding path = Pathfinding(
 			grid, Coordinate(aReturnHomeEvent->person->position.x, aReturnHomeEvent->person->position.y),
@@ -376,7 +376,7 @@ void GameEventHandler::Visit(ReturnHomeEvent* aReturnHomeEvent)
 			glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
 		}
 		lumby->SetNewPath(glmPath);
-		lumby->state = returningHome;
+		lumby->state = State::returningHome;
 		break;
 	}
 }

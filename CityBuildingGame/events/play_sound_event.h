@@ -1,7 +1,7 @@
 #pragma once
 #include <sound_event.h>
 
-enum SoundType { SettlerArrivedID };
+enum class SoundType { SettlerArrivedID };
 
 class PlaySoundEvent : public SoundEvent
 {

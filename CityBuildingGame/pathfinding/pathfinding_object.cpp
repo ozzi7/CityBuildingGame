@@ -32,13 +32,13 @@ PathfindingObject::~PathfindingObject()
 
 void PathfindingObject::FindClosestTree()
 {
-	objectType = tree;
+	objectType = ObjectType::tree;
 	calculatePath();
 }
 
 void PathfindingObject::FindClosestEdge()
 {
-	objectType = edge;
+	objectType = ObjectType::edge;
 	calculatePath();
 }
 
@@ -64,7 +64,7 @@ GameObject* PathfindingObject::GetDestinationObject() const
 		for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first]->
 		     objects)
 		{
-			if (objectType == tree)
+			if (objectType == ObjectType::tree)
 			{
 				try
 				{
@@ -117,7 +117,7 @@ void PathfindingObject::checkObjectFound(Coordinate coordinate)
 {
 	switch (objectType)
 	{
-	case tree:
+	case ObjectType::tree:
 		if (grid->gridUnits[coordinate.second][coordinate.first]->hasTree)
 		{
 			objectFound = true;
@@ -127,7 +127,7 @@ void PathfindingObject::checkObjectFound(Coordinate coordinate)
 		}
 		break;
 
-	case edge:
+	case ObjectType::edge:
 		if (coordinate.first == maxX ||
 			coordinate.first == 0 ||
 			coordinate.second == maxY ||

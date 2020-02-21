@@ -8,7 +8,7 @@
 
 typedef std::pair<int, int> Coordinate;
 
-enum ObjectType { edge, tree };
+enum class ObjectType { edge, tree };
 
 struct NodeObject
 {

@@ -79,7 +79,7 @@ void LoggingEventHandler::Visit(LoggingEvent* aLoggingEvent)
 		std::to_string(milliseconds)+"] " + "Thread " + std::to_string(id) + ": " + aLoggingEvent->log_text;*/
 	std::stringstream output;
 	output << "[" << std::to_string(aLoggingEvent->timestamp) << "] " << "Thread " << std::to_string(id) << " " <<
-		logging_levels[aLoggingEvent->loggingLevel] << std::setw(10) << ": " + aLoggingEvent->log_text << std::endl;
+		logging_levels[int(aLoggingEvent->loggingLevel)] << std::setw(10) << ": " + aLoggingEvent->log_text << std::endl;
 	std::string output_s = output.str();
 	if (aLoggingEvent->loggingLevel <= fileLoggingLevel)
 	{

@@ -197,11 +197,11 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 		}
 	}
 loopExit:
-	loggingEventHandler->AddEvent(new LoggingEvent(DEBUG, "LoadVisibleGeometry loop count: " + std::to_string(loopCounter)));
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "LoadVisibleGeometry loop count: " + std::to_string(loopCounter)));
 	std::chrono::high_resolution_clock::duration elapsedTime = std::chrono::high_resolution_clock::now() - start;
 	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
-	loggingEventHandler->AddEvent(new LoggingEvent(DEBUG, "LoadVisibleGeometry time elapsed: " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
-	loggingEventHandler->AddEvent(new LoggingEvent(DEBUG, "Approximate CPU cycles per loop: " + std::to_string(elapsedTimeMicroseconds * 4000 / loopCounter)));
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "LoadVisibleGeometry time elapsed: " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Approximate CPU cycles per loop: " + std::to_string(elapsedTimeMicroseconds * 4000 / loopCounter)));
 	renderDataMutex.lock();
 	if (currRenderData == 1)
 	{

@@ -6,7 +6,7 @@
 
 class Grid;
 
-enum State { idle, walkingToTarget, returningHome, working };
+enum class State { idle, walkingToTarget, returningHome, working };
 
 class BoneAnimated : public GameObject
 {
@@ -23,7 +23,7 @@ public:
 	float animationSecond = 0.0f;
 
 	GameObject* destination = nullptr;
-	State state = idle;
+	State state = State::idle;
 
 protected:
 	bool hasArrived = true;

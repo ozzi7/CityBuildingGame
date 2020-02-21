@@ -3,7 +3,7 @@
 
 class BoneAnimated;
 
-enum PersonType { LumberjackID };
+enum class PersonType { LumberjackID };
 
 class ReturnHomeEvent : public GameEvent
 {
