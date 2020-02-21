@@ -169,9 +169,10 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	modelCenter.z = grid->GetHeight(modelCenter.x, modelCenter.y);
 
 	/* find path*/
-	PathfindingObject *path = new PathfindingObject(grid, Coordinate(fromX + 1, fromY));
+	PathfindingObject* path = new PathfindingObject(grid, Coordinate(fromX + 1, fromY));
 	path->FindClosestEdge();
 	std::list<Coordinate> pathCoordinates = path->GetPath();
+	delete path;
 
 	/* if no path found do nothing..*/
 	if (pathCoordinates.empty())
@@ -323,7 +324,7 @@ void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 
 void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 {
-	PathfindingObject *path = new PathfindingObject(
+	PathfindingObject* path = new PathfindingObject(
 		grid, Coordinate(aGatherResourceEvent->person->position.x, aGatherResourceEvent->person->position.y));
 	std::list<Coordinate> pathCoordinates;
 	std::vector<glm::vec2> glmPath;
@@ -355,6 +356,7 @@ void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 	default:
 		break;
 	}
+	delete path;
 }
 
 void GameEventHandler::Visit(ReturnHomeEvent* aReturnHomeEvent)
@@ -363,11 +365,12 @@ void GameEventHandler::Visit(ReturnHomeEvent* aReturnHomeEvent)
 	{
 	case PersonType::LumberjackID:
 		Lumberjack* lumby = (Lumberjack*)aReturnHomeEvent->person; // or extract coordinates??
-		Pathfinding path = Pathfinding(
+		Pathfinding* path = new Pathfinding(
 			grid, Coordinate(aReturnHomeEvent->person->position.x, aReturnHomeEvent->person->position.y),
 			Coordinate(lumby->lumberjackHut->entranceX, lumby->lumberjackHut->entranceY));
-		path.CalculatePath();
-		std::list<Coordinate> pathCoordinates = path.GetPath();
+		path->CalculatePath();
+		std::list<Coordinate> pathCoordinates = path->GetPath();
+		delete path;
 		std::vector<glm::vec2> glmPath;
 
 		glmPath.push_back(glm::vec2(lumby->position.x, lumby->position.y));
