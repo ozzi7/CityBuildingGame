@@ -43,8 +43,6 @@ public:
 
 	Renderer(Camera& aCamera) : camera(aCamera)
 	{
-		std::string model_path;
-
 		terrain_shader = new Shader("shaders/mesh.vert", "shaders/mesh.frag");
 		skinned_mesh_shader = new Shader("shaders/mesh_skinned.vert", "shaders/mesh.frag");
 		instanced_mesh_shader = new Shader("shaders/mesh_instanced.vert", "shaders/mesh.frag");
@@ -54,38 +52,23 @@ public:
 		shadow_skinned_shader = new Shader("shaders/shadow_depth_skinned.vert", "shaders/shadow_depth.frag");
 
 		/* buildings */
-		model_path = Path + "/../models/buildings/dwelling/dwelling.dae";
-		instanced_model_dwelling = new InstancedModel(model_path);
-
-		model_path = Path + "/../models/buildings/lumberjack_hut/lumberjack_hut.dae";
-		instanced_model_lumberjack_hut = new InstancedModel(model_path);
-
-		model_path = Path + "/../models/buildings/building_outline/building_outline.dae";
-		instanced_model_building_outline = new InstancedModel(model_path);
+		instanced_model_dwelling = new InstancedModel(Path + "/../models/buildings/dwelling/dwelling.dae");
+		instanced_model_lumberjack_hut = new InstancedModel(Path + "/../models/buildings/lumberjack_hut/lumberjack_hut.dae");
+		instanced_model_building_outline = new InstancedModel(Path + "/../models/buildings/building_outline/building_outline.dae");
 
 		/*model_path = Path + "/../models/buildings/lumberjack_hut/lumberjack_hut.dae";
 		instanced_model_dwelling = new InstancedModel(model_path);*/
 
 		/* vegetation */
-		model_path = Path + "/../models/pine/pine.dae";
-		instanced_model_pine = new InstancedModel(model_path);
-
-		model_path = Path + "/../models/toona/toona.dae";
-		instanced_model_toona = new InstancedModel(model_path);
-
-		model_path = Path + "/../models/euro_beech/euro_beech.dae";
-		instanced_model_euroBeech = new InstancedModel(model_path);
-
-		model_path = Path + "/../models/euro_beech/euro_beech2.dae";
-		instanced_model_euroBeech2 = new InstancedModel(model_path);
-
-		model_path = Path + "/../models/oak/oak.dae";
-		instanced_model_oak = new InstancedModel(model_path);
+		instanced_model_pine = new InstancedModel(Path + "/../models/pine/pine.dae");
+		instanced_model_toona = new InstancedModel(Path + "/../models/toona/toona.dae");
+		instanced_model_euroBeech = new InstancedModel(Path + "/../models/euro_beech/euro_beech.dae");
+		instanced_model_euroBeech2 = new InstancedModel(Path + "/../models/euro_beech/euro_beech2.dae");
+		instanced_model_oak = new InstancedModel(Path + "/../models/oak/oak.dae");
 
 		/* lumberjack init*/
-		model_path = Path + "/../models/lumberjack/lumberjack.dae";
 		mesh_lumberjack = new SkinnedMesh();
-		mesh_lumberjack->LoadMesh(model_path);
+		mesh_lumberjack->LoadMesh(Path + "/../models/lumberjack/lumberjack.dae");
 		mesh_lumberjack->PrecalculateBoneTransforms();
 
 		ambientLight = {0.3f, 0.3f, 0.3f};
