@@ -80,7 +80,7 @@ void LoggingEventHandler::Visit(LoggingEvent* aLoggingEvent)
 
 	output << "[" << std::setprecision(3) << std::fixed << timestamp << 
 		"] [" << std::left << std::setw(8) << logging_levels[int(aLoggingEvent->loggingLevel)] <<
-		"] " << "Thread " << std::to_string(id) << " - " << aLoggingEvent->log_text << std::endl;
+		"] " << "Thread " << std::left << std::setw(5) << std::to_string(id) << " - " << aLoggingEvent->log_text << std::endl;
 	std::string output_s = output.str();
 	if (aLoggingEvent->loggingLevel <= fileLoggingLevel)
 	{
