@@ -1,7 +1,7 @@
 #pragma once
 #include <game_event.h>
 
-enum BuildingType { LumberjackHutID, DwellingID };
+enum class BuildingType { LumberjackHutID, DwellingID };
 
 class CreateBuildingEvent : public GameEvent
 {

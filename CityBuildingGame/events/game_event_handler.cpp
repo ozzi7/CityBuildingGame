@@ -75,16 +75,16 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 	switch (aCreateBuildingEvent->buildingType)
 	{
-	case DwellingID:
-	{
-		buildingSize = std::make_tuple(2, 2);
-		break;
-	}
-	case LumberjackHutID:
-	{
-		buildingSize = std::make_tuple(2, 2);
-		break;
-	}
+		case BuildingType::DwellingID:
+		{
+			buildingSize = std::make_tuple(2, 2);
+			break;
+		}
+		case BuildingType::LumberjackHutID:
+		{
+			buildingSize = std::make_tuple(2, 2);
+			break;
+		}
 	}
 
 	/* Calculate correct occupied units and save in fromX, toX, fromY, toY */
@@ -189,7 +189,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	/* Create the building object etc.. */
 	switch (aCreateBuildingEvent->buildingType)
 	{
-	case DwellingID:
+	case BuildingType::DwellingID:
 	{
 		/* create building  */
 		Dwelling* dwelling = new Dwelling(modelCenter, // translate
@@ -227,7 +227,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 		break;
 	}
-	case LumberjackHutID:
+	case BuildingType::LumberjackHutID:
 	{
 		LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
 		                                                 glm::vec3(0.012f, 0.006f, 0.012f), // rescale

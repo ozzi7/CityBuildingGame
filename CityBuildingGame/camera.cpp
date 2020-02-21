@@ -90,13 +90,13 @@ glm::vec3 Camera::CursorPositionOnGrid() const
 
 void Camera::Scroll(CameraMovement direction, float yOffset)
 {
-	if (direction == Up)
+	if (direction == CameraMovement::Up)
 		Position += VecUp * yOffset * ZoomLevel * ROOT3;
-	if (direction == Down)
+	if (direction == CameraMovement::Down)
 		Position -= VecUp * yOffset * ZoomLevel * ROOT3;
-	if (direction == Left)
+	if (direction == CameraMovement::Left)
 		Position -= VecRight * yOffset * ZoomLevel;
-	if (direction == Right)
+	if (direction == CameraMovement::Right)
 		Position += VecRight * yOffset * ZoomLevel;
 	CalculateLightProjectionMatrix();
 }

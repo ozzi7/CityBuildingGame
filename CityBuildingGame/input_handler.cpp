@@ -12,13 +12,13 @@ void InputHandler::Keypress(int button, int action) const
 
 		// Keyboard scrolling, maybe to be removed
 		if (button == GLFW_KEY_W || button == GLFW_KEY_UP)
-			Camera->Scroll(Up, 0.05f);
+			Camera->Scroll(CameraMovement::Up, 0.05f);
 		if (button == GLFW_KEY_S || button == GLFW_KEY_DOWN)
-			Camera->Scroll(Down, 0.05f);
+			Camera->Scroll(CameraMovement::Down, 0.05f);
 		if (button == GLFW_KEY_A || button == GLFW_KEY_LEFT)
-			Camera->Scroll(Left, 0.05f);
+			Camera->Scroll(CameraMovement::Left, 0.05f);
 		if (button == GLFW_KEY_D || button == GLFW_KEY_RIGHT)
-			Camera->Scroll(Right, 0.05f);
+			Camera->Scroll(CameraMovement::Right, 0.05f);
 	}
 }
 
@@ -40,11 +40,11 @@ void InputHandler::Mouseclick(int button, int action) const
 			if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 			{
 				unitEventHandler->AddEvent(
-					new CreateBuildingEvent(LumberjackHutID, cursor_position.x, cursor_position.y));
+					new CreateBuildingEvent(BuildingType::LumberjackHutID, cursor_position.x, cursor_position.y));
 			}
 			else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 			{
-				unitEventHandler->AddEvent(new CreateBuildingEvent(DwellingID, cursor_position.x, cursor_position.y));
+				unitEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::DwellingID, cursor_position.x, cursor_position.y));
 			}
 		}
 	}
@@ -94,12 +94,12 @@ void InputHandler::MouseScroll() const
 		glfwGetWindowSize(Window, &width, &height);
 
 		if (xpos == 0)
-			Camera->Scroll(Left, 0.01f);
+			Camera->Scroll(CameraMovement::Left, 0.01f);
 		if (ypos == 0)
-			Camera->Scroll(Up, 0.01f);
+			Camera->Scroll(CameraMovement::Up, 0.01f);
 		if (width - (int)xpos <= 1)
-			Camera->Scroll(Right, 0.01f);
+			Camera->Scroll(CameraMovement::Right, 0.01f);
 		if (height - (int)ypos <= 1)
-			Camera->Scroll(Down, 0.01f);
+			Camera->Scroll(CameraMovement::Down, 0.01f);
 	}
 }
