@@ -169,9 +169,9 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	modelCenter.z = grid->GetHeight(modelCenter.x, modelCenter.y);
 
 	/* find path*/
-	PathfindingObject path = PathfindingObject(grid, Coordinate(fromX + 1, fromY));
-	path.FindClosestEdge();
-	std::list<Coordinate> pathCoordinates = path.GetPath();
+	PathfindingObject *path = new PathfindingObject(grid, Coordinate(fromX + 1, fromY));
+	path->FindClosestEdge();
+	std::list<Coordinate> pathCoordinates = path->GetPath();
 
 	/* if no path found do nothing..*/
 	if (pathCoordinates.empty())
@@ -256,11 +256,11 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			lumby->SetLumberjackHut(lumberjackHut);
 
 			/* there should always be a path here because of roads */
-			Pathfinding pathfinding = Pathfinding(grid, Coordinate(settlers[0]->posX, settlers[0]->posY),
+			Pathfinding * pathfinding = new Pathfinding(grid, Coordinate(settlers[0]->posX, settlers[0]->posY),
 			                                      Coordinate(lumberjackHut->entranceX, lumberjackHut->entranceY));
-			pathfinding.CalculatePath();
+			pathfinding->CalculatePath();
 
-			std::list<Coordinate> pathCoordinates = pathfinding.GetPath();
+			std::list<Coordinate> pathCoordinates = pathfinding->GetPath();
 
 			if (pathCoordinates.size() != 0)
 			{
@@ -323,7 +323,7 @@ void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 
 void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 {
-	PathfindingObject path = PathfindingObject(
+	PathfindingObject *path = new PathfindingObject(
 		grid, Coordinate(aGatherResourceEvent->person->position.x, aGatherResourceEvent->person->position.y));
 	std::list<Coordinate> pathCoordinates;
 	std::vector<glm::vec2> glmPath;
@@ -331,8 +331,8 @@ void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 	switch (aGatherResourceEvent->resource)
 	{
 	case Wood:
-		path.FindClosestTree();
-		pathCoordinates = path.GetPath();
+		path->FindClosestTree();
+		pathCoordinates = path->GetPath();
 
 		if (pathCoordinates.size() != 0)
 		{
@@ -341,9 +341,9 @@ void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 			{
 				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
 			}
-			grid->gridUnits[path.GetDestinationObject()->posY][path.GetDestinationObject()->posX]->hasTree = false;
+			grid->gridUnits[path->GetDestinationObject()->posY][path->GetDestinationObject()->posX]->hasTree = false;
 			aGatherResourceEvent->person->SetNewPath(glmPath);
-			aGatherResourceEvent->person->destination = path.GetDestinationObject();
+			aGatherResourceEvent->person->destination = path->GetDestinationObject();
 			aGatherResourceEvent->person->state = State::walkingToTarget;
 		}
 		else
