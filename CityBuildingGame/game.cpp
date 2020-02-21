@@ -62,7 +62,7 @@ void Game::StartGame()
 void Game::renderLoop()
 {
 	// TODO: Wait for game loop to finish once instead of sleep
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	//std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
 	renderer = new Renderer(*camera);
 
@@ -151,7 +151,7 @@ void Game::gameLoop()
 		grid->terrain->Accept(*producerBuffer); // TODO
 		renderBuffers->ExchangeProducerBuffer();
 
-		/*Handle all object moving, deleting, creating, no locks needed because no other thread is currently doing anything..*/
+		//*Handle all object moving, deleting, creating, no locks needed because no other thread is currently doing anything..*/
 		while (unitEventHandler->ProcessEvent());
 
 		std::this_thread::sleep_for(

@@ -77,7 +77,7 @@ void RenderBuffer::Visit(Building* obj) {}
 
 void RenderBuffer::Visit(Terrain* obj)
 {
-	terrain = obj;
+	terrainVector.push_back(obj);
 }
 
 void RenderBuffer::Visit(Tree* obj) {}
@@ -97,4 +97,6 @@ void RenderBuffer::ClearData()
 
 	settlerAnimationSeconds.clear();
 	lumberjackAnimationSeconds.clear();
+
+	terrainVector.clear();
 }

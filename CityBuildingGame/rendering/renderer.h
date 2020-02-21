@@ -189,8 +189,10 @@ private:
 
 	void renderTerrain(RenderBuffer* renderBuffer) const
 	{
-		terrain_shader->use();
-		renderBuffer->terrain->Draw();
+		if (renderBuffer->terrainVector.size() != 0) {
+			terrain_shader->use();
+			renderBuffer->terrainVector[0]->Draw();
+		}
 	}
 
 	void renderInstancedObjects(RenderBuffer* renderBuffer) const
