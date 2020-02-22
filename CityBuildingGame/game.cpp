@@ -66,7 +66,7 @@ void Game::renderLoop()
 	camera->SetDirectionalLightColor(glm::vec3{1.0f, 1.0f, 1.0f});
 	camera->SetDirectionalLightPositionOffset(glm::vec3{-0.4f, -0.8f, 1.0f});
 
-	// Only needs to be done for the first time, afterwards handled by zoom and scroll events of camera
+	// Only needs to be done the first time, afterwards handled by zoom and scroll events of camera
 	camera->CalculateVisibleGrid();
 	camera->CalculateLightProjectionMatrix();
 
