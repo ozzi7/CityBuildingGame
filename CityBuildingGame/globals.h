@@ -71,7 +71,7 @@ const float TERRAIN_WEIGHT_FACTOR = 0.7f; // [0,1]
 /************************************************
  *  Game settings
  ***********************************************/
-const float SCROLL_SPEED = 5.0f;
+const float SCROLL_SPEED = 10.0f;
 const float ZOOM_DEFAULT = 10.0f;
 
 

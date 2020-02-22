@@ -63,9 +63,6 @@ void Game::renderLoop()
 {
 	renderer = new Renderer(*camera);
 
-	camera->SetDirectionalLightColor(glm::vec3{1.0f, 1.0f, 1.0f});
-	camera->SetDirectionalLightPositionOffset(glm::vec3{-0.4f, -0.8f, 1.0f});
-
 	// Only needs to be done the first time, afterwards handled by zoom and scroll events of camera
 	camera->CalculateVisibleGrid();
 	camera->CalculateLightProjectionMatrix();
@@ -102,15 +99,48 @@ void Game::gameLoop()
 {
 	const int TICKS_PER_SECOND = 100;
 	const int SKIP_TICKS = 1000000 / TICKS_PER_SECOND; // microseconds
+	long int loopCount = 0;
+	float lightXOffset;
+	float lightYOffset;
+	glm::vec3 directionLightColor;
 
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 	std::chrono::high_resolution_clock::time_point next_game_tick(start + std::chrono::microseconds(SKIP_TICKS));
+
+	camera->SetDirectionalLightColor(glm::vec3{1.0f, 1.0f, 1.0f});
+	camera->SetDirectionalLightPositionOffset(glm::vec3{-0.4f, -0.8f, 1.0f});
 
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
 		inputHandler->MouseScroll();
 
+		// Change light direction and color
+		float loopPercentage = (float)(loopCount % 1500) / 15.0f;
+		if (loopPercentage < 50)
+		{
+			lightXOffset = lightXOffset = -2.0f + loopPercentage / 100.0f * 8.0f;
+			lightYOffset = lightXOffset - 0.5f;
+		}
+		else
+		{
+			lightXOffset = lightXOffset = -2.0f + (100.0f - loopPercentage) / 100.0f * 8.0f;
+			lightYOffset = lightXOffset - 0.5f;
+		}
+		camera->SetDirectionalLightPositionOffset(glm::vec3{lightXOffset, lightYOffset, 1.0f});
+		if (loopPercentage < 20)
+			directionLightColor = {1.0f ,1.0f * (loopPercentage + 20.0f) / 40.0f, 1.0f * (loopPercentage + 20.0f) / 40.0f};
+		else if (loopPercentage > 80)
+			directionLightColor = {1.0f ,1.0f * (100.0f - loopPercentage + 20.0f) / 40.0f, 1.0f * (100.0f -loopPercentage + 20.0f) / 40.0f};
+		else if (loopPercentage >= 50 && loopPercentage < 70)
+			directionLightColor = {1.0f ,1.0f * (loopPercentage -50.0f + 20) / 40.0f, 1.0f * (loopPercentage - 50.0f + 20.0f) / 40.0f};
+		else if (loopPercentage < 50 && loopPercentage > 30)
+			directionLightColor = {1.0f ,1.0f * (50.0f - loopPercentage + 20.0f) / 40.0f, 1.0f * (50.0f -loopPercentage + 20.0f) / 40.0f};
+		else
+			directionLightColor = {1.0f, 1.0f, 1.0f};
+		camera->SetDirectionalLightColor(directionLightColor);
+
+		
 		for (int i = 0; i < grid->gridUnits.size(); i++)
 		{
 			for (int j = 0; j < grid->gridUnits[i].size(); j++)
@@ -154,6 +184,8 @@ void Game::gameLoop()
 
 		grid->terrain->Accept(*producerBuffer); // TODO
 		renderBuffers->ExchangeProducerBuffer();
+
+		loopCount++;
 
 		std::this_thread::sleep_for(
 			std::chrono::duration_cast<std::chrono::microseconds>(
