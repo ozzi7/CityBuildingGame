@@ -201,7 +201,8 @@ loopExit:
 	std::chrono::high_resolution_clock::duration elapsedTime = std::chrono::high_resolution_clock::now() - start;
 	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "LoadVisibleGeometry time elapsed: " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Approximate CPU cycles per loop: " + std::to_string(elapsedTimeMicroseconds * 4000 / loopCounter)));
+	if (loopCounter > 0)
+		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Approximate CPU cycles per loop: " + std::to_string(elapsedTimeMicroseconds * 4000 / loopCounter)));
 	renderDataMutex.lock();
 	if (currRenderData == 1)
 	{

@@ -61,13 +61,14 @@ void Game::StartGame()
 
 void Game::renderLoop()
 {
-	// TODO: Wait for game loop to finish once instead of sleep
-	//std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
 	renderer = new Renderer(*camera);
 
 	camera->SetDirectionalLightColor(glm::vec3{1.0f, 1.0f, 1.0f});
 	camera->SetDirectionalLightPositionOffset(glm::vec3{-0.4f, -0.8f, 1.0f});
+
+	// Only needs to be done for the first time, afterwards handled by zoom and scroll events of camera
+	camera->CalculateVisibleGrid();
+	camera->CalculateLightProjectionMatrix();
 
 	grid->terrain->InitOpenGL(renderer->terrain_shader);
 	renderer->InitShadowMap();
@@ -123,7 +124,6 @@ void Game::gameLoop()
 			}
 		}
 
-		camera->CalculateVisibleGrid();
 		grid->terrain->SetRenderWindow(camera->GridTopLeftVisible(),
 										camera->GridTopRightVisible(),
 										camera->GridBottomLeftVisible(),
