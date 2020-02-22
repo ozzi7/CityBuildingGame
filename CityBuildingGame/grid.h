@@ -40,7 +40,7 @@ public:
 	// [y][x]
 	std::vector<std::vector<Unit>> gridUnits;
 
-	std::vector<Unit> visibleUnits;
+	std::vector<Unit*> visibleUnits; // TODO: what about making this a vec of tuples of indices into gridUnits?
 	int nofVisibleUnits = 0;
 	int maximumVisibleUnits = 600 * 500; // maximum number of units stored in visibleUnits
 	int currUpperLeftX = 0;
