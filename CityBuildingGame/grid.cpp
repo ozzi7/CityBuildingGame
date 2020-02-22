@@ -36,7 +36,7 @@ void Grid::Init()
 	}
 
 	/*Initialize the vectors used for determining what to render*/
-	visibleUnits = std::vector<Unit>(maximumVisibleUnits);
+	visibleUnits = std::vector<Unit*>(maximumVisibleUnits);
 }
 
 void Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
@@ -74,7 +74,7 @@ void Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec
 					if (0 <= dot(AM, AB) && dot(AM, AB) < dot(AB, AB) &&
 						dot(AM, AD) < dot(AD, AD) && 0 <= dot(AM, AD))
 					{
-						visibleUnits[nofVisibleUnits++] = gridUnits[i][j];
+						visibleUnits[nofVisibleUnits++] = &gridUnits[i][j];
 					}
 				}
 				else
