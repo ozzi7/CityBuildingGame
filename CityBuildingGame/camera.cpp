@@ -12,8 +12,6 @@ Camera::Camera(const glm::vec3 position, GLFWwindow* window)
 	VecUp = glm::vec3(-1.0f, 1.0f, 0.0f);
 	VecRight = glm::vec3(1.0f, 1.0f, 0.0f);
 	LookAt = glm::vec3(-50.0f, 50.0f, -50.0f);
-	
-	CalculateLightProjectionMatrix();
 }
 
 LightSource Camera::GetDirectionalLight() const
@@ -51,9 +49,6 @@ glm::mat4 Camera::GetProjectionMatrix() const
 glm::mat4 Camera::GetLightProjectionMatrix() const
 {
 	return LightProjectionMatrix;
-	//return glm::ortho(-ZoomLevel, ZoomLevel,
-	//                  -1.0f * ZoomLevel, ZoomLevel, -100.0f, 100.0f);
-	//return glm::ortho(-20.0f * ZoomLevel, 20.0f * ZoomLevel,-1.0f * 50.0f * ZoomLevel, 50.0f * ZoomLevel, -100.0f, 100.0f);
 }
 
 glm::vec2 Camera::GridTopLeftVisible() const
@@ -98,6 +93,7 @@ void Camera::Scroll(CameraMovement direction, float yOffset)
 		Position -= VecRight * yOffset * ZoomLevel;
 	if (direction == CameraMovement::Right)
 		Position += VecRight * yOffset * ZoomLevel;
+	CalculateVisibleGrid();
 	CalculateLightProjectionMatrix();
 }
 
@@ -109,6 +105,7 @@ void Camera::Zoom(float yOffset)
 		ZoomLevel = ZOOM_MIN;
 	if (ZoomLevel >= ZOOM_MAX)
 		ZoomLevel = ZOOM_MAX;
+	CalculateVisibleGrid();
 	CalculateLightProjectionMatrix();
 }
 

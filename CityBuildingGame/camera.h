@@ -78,6 +78,9 @@ public:
 	// Calculates edges of visible grid, call this before getting grid visible coordinates
 	void CalculateVisibleGrid();
 
+	// Calculates the viewport for the directional light, call this after changing the DirectionalLight.PositionOffset
+	void CalculateLightProjectionMatrix();
+
 	// Move position on map
 	void Scroll(CameraMovement, float);
 	void Zoom(float);
@@ -104,7 +107,4 @@ private:
 
 	// Determines if a 3D coordinate is visible by render matrices
 	static bool CoordinateVisible(glm::vec3 coordinate, glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
-
-	// Calculates the viewport for the directional light, call this after changing the DirectionalLight.PositionOffset
-	void CalculateLightProjectionMatrix();
 };
