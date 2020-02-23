@@ -116,7 +116,7 @@ void Game::gameLoop()
 		inputHandler->MouseScroll();
 
 		// Change light direction and color
-		float loopPercentage = (float)(loopCount % 1500) / 15.0f;
+		float loopPercentage = (float)(loopCount % 150000) / 1500.0f;
 		if (loopPercentage < 50)
 		{
 			lightXOffset = lightXOffset = -2.0f + loopPercentage / 100.0f * 8.0f;
