@@ -193,21 +193,21 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	case BuildingType::DwellingID:
 	{
 		/* create building  */
-		Dwelling dwelling = Dwelling(modelCenter, // translate
+		Dwelling* dwelling = new Dwelling(modelCenter, // translate
 		                                  glm::vec3(0.012f, 0.006f, 0.012f), // rescale
 		                                  glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
 
 		/* save some stuff needed later.. TODO: dedicated building exit,check road etc (for other buildings)*/
-		dwelling.fromX = fromX;
-		dwelling.fromY = fromY;
-		dwelling.toX = toX;
-		dwelling.toY = toY;
-		dwelling.sizeX = std::get<0>(buildingSize);
-		dwelling.sizeY = std::get<1>(buildingSize);
-		dwelling.entranceX = fromX + 1;
-		dwelling.entranceY = fromY;
+		dwelling->fromX = fromX;
+		dwelling->fromY = fromY;
+		dwelling->toX = toX;
+		dwelling->toY = toY;
+		dwelling->sizeX = std::get<0>(buildingSize);
+		dwelling->sizeY = std::get<1>(buildingSize);
+		dwelling->entranceX = fromX + 1;
+		dwelling->entranceY = fromY;
 
-		dwelling.CreateBuildingOutline();
+		dwelling->CreateBuildingOutline();
 
 		std::vector<glm::vec2> glmPath;
 		for (std::list<Coordinate>::iterator it = --pathCoordinates.end(); it != pathCoordinates.begin(); --it)
@@ -215,50 +215,50 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		glmPath.push_back(glm::vec2(pathCoordinates.front().first + 0.5f, pathCoordinates.front().second + 0.5f));
 
 		/* create settler.. */
-		Settler settler = Settler(glm::vec3(pathCoordinates.back().first + 0.5f, pathCoordinates.back().second + 0.5f,
+		Settler* settler = new Settler(glm::vec3(pathCoordinates.back().first + 0.5f, pathCoordinates.back().second + 0.5f,
 		                                         grid->GetHeight(pathCoordinates.back().first, pathCoordinates.back().second)),
 		                               glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
 
-		settler.SetDwelling(&dwelling);
-		settler.SetNewPath(glmPath);
+		settler->SetDwelling(dwelling);
+		settler->SetNewPath(glmPath);
 
 		/* save building in the coordinate where the 3d object center is located in->good for rendering */
-		grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(&dwelling);
-		grid->gridUnits[pathCoordinates.back().second][pathCoordinates.back().first].movingObjects.push_back(&settler);
+		grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(dwelling);
+		grid->gridUnits[pathCoordinates.back().second][pathCoordinates.back().first].movingObjects.push_back(settler);
 
 		break;
 	}
 	case BuildingType::LumberjackHutID:
 	{
-		LumberjackHut lumberjackHut = LumberjackHut(modelCenter, // translate
+		LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
 		                                                 glm::vec3(0.012f, 0.006f, 0.012f), // rescale
 		                                                 glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
 
-		lumberjackHut.fromX = fromX;
-		lumberjackHut.fromY = fromY;
-		lumberjackHut.toX = toX;
-		lumberjackHut.toY = toY;
-		lumberjackHut.sizeX = std::get<0>(buildingSize);
-		lumberjackHut.sizeY = std::get<1>(buildingSize);
-		lumberjackHut.entranceX = fromX + 1;
-		lumberjackHut.entranceY = fromY;
+		lumberjackHut->fromX = fromX;
+		lumberjackHut->fromY = fromY;
+		lumberjackHut->toX = toX;
+		lumberjackHut->toY = toY;
+		lumberjackHut->sizeX = std::get<0>(buildingSize);
+		lumberjackHut->sizeY = std::get<1>(buildingSize);
+		lumberjackHut->entranceX = fromX + 1;
+		lumberjackHut->entranceY = fromY;
 
-		lumberjackHut.CreateBuildingOutline();
+		lumberjackHut->CreateBuildingOutline();
 
 		/*get settlers if there are enough, here we get 2 settlers, kill them and create 1 lumby */
 		std::vector<Settler*> settlers = resources->GetIdleSettlers(2);
 		if (settlers.size() != 0)
 		{
 			// copy first settlers position to new lumby
-			Lumberjack lumby = Lumberjack(glm::vec3(settlers[0]->posX, settlers[0]->posY,
+			Lumberjack* lumby = new Lumberjack(glm::vec3(settlers[0]->posX, settlers[0]->posY,
 			                                             grid->GetHeight(settlers[0]->posX, settlers[0]->posY)),
 			                                   glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
 
-			lumby.SetLumberjackHut(&lumberjackHut);
+			lumby->SetLumberjackHut(lumberjackHut);
 
 			/* there should always be a path here because of roads */
-			Pathfinding* pathfinding = new Pathfinding(grid, Coordinate(settlers[0]->posX, settlers[0]->posY),
-			                                      Coordinate(lumberjackHut.entranceX, lumberjackHut.entranceY));
+			Pathfinding * pathfinding = new Pathfinding(grid, Coordinate(settlers[0]->posX, settlers[0]->posY),
+			                                      Coordinate(lumberjackHut->entranceX, lumberjackHut->entranceY));
 			pathfinding->CalculatePath();
 
 			std::list<Coordinate> pathCoordinates = pathfinding->GetPath();
@@ -270,10 +270,10 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 				for (std::list<Coordinate>::iterator it = pathCoordinates.begin(); it != pathCoordinates.end(); ++it)
 					glmPath.push_back(glm::vec2((*it).first + 0.5f, (*it).second) + 0.5f);
 
-				lumby.SetNewPath(glmPath);
-				lumby.state = State::returningHome;
-				lumby.SetLumberjackHut(&lumberjackHut);
-				lumby.destination = &lumberjackHut;
+				lumby->SetNewPath(glmPath);
+				lumby->state = State::returningHome;
+				lumby->SetLumberjackHut(lumberjackHut);
+				lumby->destination = lumberjackHut;
 			}
 			else
 			{
@@ -282,7 +282,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			}
 
 			// store reference to lumby
-			grid->gridUnits[lumby.posY][lumby.posX].movingObjects.push_back(&lumby);
+			grid->gridUnits[lumby->posY][lumby->posX].movingObjects.push_back(lumby);
 
 			/* delete the settlers */
 			for (int i = 0; i < settlers.size(); ++i)
@@ -292,7 +292,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		}
 
 		// store reference to grid
-		grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(&lumberjackHut);
+		grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(lumberjackHut);
 
 		break;
 	}
