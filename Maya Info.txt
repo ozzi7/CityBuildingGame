@@ -1,25 +1,59 @@
-open3mod.exe can be used to check models..
+Open3mod.exe can be used to check models
 
+General maya hacks:
+- Ctrl double click in outliner lets you rename objects
+- pressing down alt and moving mouse or clicking is used to navigate the scene
+- things can be hidden, select and go to display -> hide and display -> show
+- select two meshes and go to mesh->combine to combine them
+- ctrl a attribute editor
+- for walking export frame 0_29
+- also center lumby
+- fix mesh with mesh -> cleanup before animation
 
-create new maya scene
-drag and drop mariolow.obj into maya
-select the complete mesh (via windows-> outliner & shift select)
-select rigging in drop down, then skeleton -> quickrig -> auto rig button
-drag and drop the animation fbx into maya
-in drop down of rigging stuff (which is still open) select source: humanoid1 (animation now works, check with slider..)
-in outliner select quickrigcharacter_reference & all the meshes
-click file -> export selection, select dae/fbx and change settings to bake animation with keyframes so that the complete animation is contained..
-done.. 
+How to export the lumberjack to .dae with an animation sequence (but with low quality animation):
+- create new maya scene
+- set bottom right to 30 fps
+- drag and drop mariolow.obj into maya
+- select the complete mesh (via windows-> outliner & shift select)
+- select rigging in drop down, then skeleton -> quickrig -> auto rig button
+- drag and drop the animation fbx into maya
+- in drop down of rigging stuff (which is still open) select source: humanoid1 (animation now works, check with slider..)
+- in outliner select quickrigcharacter_reference & all the meshes
+- click file -> export selection, select dae/fbx and change settings to bake animation with keyframes so that the complete animation is contained, most likely y should be set as up axis (or Z, actually its random!)
+- change the .dae file in text editor, on top change the texture paths to relative ones (relative to dae file)
 
-change the .dae file in text editor, on top change the texture paths to relative ones (relative to dae file) (copy paste them from another .dae..)
+How to create a better quality animation:
+- create maya scene
+- set bottom right to 30 fps
+- drag and drop lumby_and_axe_mesh
+- rigging-> quickrig, step by step, in first step where guides are created, 
+- after creating move the guide positions to fit arm length etc.
+- create rest including skinning (last step)
+- drag and drop walk cycle the fixed one .mb
+- apply it.. (charcater: quickrigcharacter and source: inplace_walk blabla) bake it to lumby (blue icon bake to skeleton),
+select all frames here! 29 for walk, and then remove it again (not necessary),
+if we bake to control rig then we can change the skeleton inside the lumby.. no clue.. 
+also then we can constraina locator to a bone.. 
+- if we select inplace_walk or whatever we called the imported skeleton we can see it has keyframes and
+lines in graph editor
+- to resize/resize skeleton select the master node in windows generaral hypergraph hierarchy.. 
+- quickrigcharacter_reference is the curly stuff with keyframes (select _hips for example)
+- with a specific bone selceced for exmaple elbow, go to graph eidtoor select a curve to change
+and enter += 50 in stats field to add 50 to all keyframes, this is saved automaticaly i think
+- create joint click on floor or so (twice), then ENTER or RETURN, then connect the joint to another one
+(this is all very buggy to do for some reason, but the idea is to shift click the new bone with the two joints
+and the hand joint of lumby and go to skeleton -> connect which should merge the joints)
+try not parent but normal connect and hit apply, the joint moves yet they are not becoming one for some reason
+- move it to the axe or wherever
+- create IK handle
+- skin -> interactive bind skin or so, and test it out by rotating elbow
 
-// new
-create maya scene
-drag and drop from asset/lumberjack lumberjack.dae
-rigging-> quickrig, step by step, in first step after create move the positions to fit arm length..
-create rest but dont create quickrig character only skeleton
-drag and drop walk cycle the fixed one .mb..
-apply it.. bake it to lumberjack and then remove it again
-now the animated lumby can be changed with keyframes or in graph editor..
-to add an axe simply choose the last node in skeleton and shift click the object then make a parent constraint 
-to resize skeleton select the master node in windows generaral hypergraph hierarchy.. 
+To add an axe:
+- after baking:
+- create a locator
+- shift click lumby and locator, select edit parent
+- then shift click locator and the last bone node in the hand basicallly, and make constrain parent..
+
+third trial:
+start with 3_guides_placed, move the axe in position, generate skin but never combine meshes.. now
+arm also moves the axe 

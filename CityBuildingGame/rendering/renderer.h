@@ -68,7 +68,9 @@ public:
 
 		/* lumberjack init*/
 		mesh_lumberjack = new SkinnedMesh();
-		mesh_lumberjack->LoadMesh(Path + "/../models/lumberjack/lumberjack.dae");
+		//mesh_lumberjack->LoadMesh(Path + "/../models/lumberjack/lumberjack.dae");
+		mesh_lumberjack->LoadMesh(Path + "/../models/lumberjack/lumberjack_carrying/lumberjack_carrying.dae");
+
 		mesh_lumberjack->PrecalculateBoneTransforms();
 
 		ambientLight = {0.3f, 0.3f, 0.3f};
