@@ -37,6 +37,7 @@ public:
 	std::vector<glm::mat4> toonaModels;
 	std::vector<glm::mat4> oakModels;
 	std::vector<glm::mat4> lumberjackModels;
+	std::vector<glm::mat4> lumberjackWoodModels;
 	std::vector<glm::mat4> lumberjackHutModels;
 	std::vector<glm::mat4> dwellingModels_growth1;
 	std::vector<glm::mat4> buildingOutlineModels;
@@ -44,5 +45,7 @@ public:
 
 	std::vector<float> settlerAnimationSeconds;
 	std::vector<float> lumberjackAnimationSeconds;
+	std::vector<float> lumberjackWoodAnimationSeconds;
+
 	std::vector<Terrain*> terrainVector;
 };

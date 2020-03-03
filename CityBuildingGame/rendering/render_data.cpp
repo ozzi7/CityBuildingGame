@@ -31,8 +31,14 @@ void RenderBuffer::Visit(Lumberjack* obj)
 {
 	if (obj->visible)
 	{
-		lumberjackModels.push_back(obj->model);
-		lumberjackAnimationSeconds.push_back(obj->animationSecond);
+		if (obj->state == State::returningHome) {
+			lumberjackWoodModels.push_back(obj->model);
+			lumberjackWoodAnimationSeconds.push_back(obj->animationSecond);
+		}
+		else {
+			lumberjackModels.push_back(obj->model);
+			lumberjackAnimationSeconds.push_back(obj->animationSecond);
+		}
 	}
 }
 
@@ -90,6 +96,7 @@ void RenderBuffer::ClearData()
 	toonaModels.clear();
 	oakModels.clear();
 	lumberjackModels.clear();
+	lumberjackWoodModels.clear();
 	lumberjackHutModels.clear();
 	dwellingModels_growth1.clear();
 	buildingOutlineModels.clear();
@@ -97,6 +104,7 @@ void RenderBuffer::ClearData()
 
 	settlerAnimationSeconds.clear();
 	lumberjackAnimationSeconds.clear();
+	lumberjackWoodAnimationSeconds.clear();
 
 	terrainVector.clear();
 }
