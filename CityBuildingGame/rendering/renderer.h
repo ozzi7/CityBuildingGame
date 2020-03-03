@@ -23,6 +23,7 @@ public:
 
 	SkinnedMesh* mesh_lumby_walk_w_axe;
 	SkinnedMesh* mesh_lumby_walk_w_wood;
+	SkinnedMesh* mesh_settler;
 	Shader* terrain_shader;
 	Shader* skinned_mesh_shader;
 	Shader* instanced_mesh_shader;
@@ -61,20 +62,24 @@ public:
 		instanced_model_dwelling = new InstancedModel(model_path);*/
 
 		/* vegetation */
-		instanced_model_pine = new InstancedModel(Path + "/../models/pine/pine.dae");
-		instanced_model_toona = new InstancedModel(Path + "/../models/toona/toona.dae");
-		instanced_model_euroBeech = new InstancedModel(Path + "/../models/euro_beech/euro_beech.dae");
-		instanced_model_euroBeech2 = new InstancedModel(Path + "/../models/euro_beech/euro_beech2.dae");
-		instanced_model_oak = new InstancedModel(Path + "/../models/oak/oak.dae");
+		instanced_model_pine = new InstancedModel(Path + "/../models/vegetation/pine/pine.dae");
+		instanced_model_toona = new InstancedModel(Path + "/../models/vegetation/toona/toona.dae");
+		instanced_model_euroBeech = new InstancedModel(Path + "/../models/vegetation/euro_beech/euro_beech.dae");
+		instanced_model_euroBeech2 = new InstancedModel(Path + "/../models/vegetation/euro_beech/euro_beech2.dae");
+		instanced_model_oak = new InstancedModel(Path + "/../models/vegetation/oak/oak.dae");
 
 		/* lumberjack init*/
 		mesh_lumby_walk_w_axe = new SkinnedMesh();
-		mesh_lumby_walk_w_axe->LoadMesh(Path + "/../models/lumberjack/walking_w_axe/lumberjack.dae");
+		mesh_lumby_walk_w_axe->LoadMesh(Path + "/../models/people/lumberjack/walking_w_axe/lumberjack.dae");
 		mesh_lumby_walk_w_axe->PrecalculateBoneTransforms();
 
 		mesh_lumby_walk_w_wood = new SkinnedMesh();
-		mesh_lumby_walk_w_wood->LoadMesh(Path + "/../models/lumberjack/walking_w_wood/lumberjack.dae");
+		mesh_lumby_walk_w_wood->LoadMesh(Path + "/../models/people/lumberjack/walking_w_wood/lumberjack.dae");
 		mesh_lumby_walk_w_wood->PrecalculateBoneTransforms();
+
+		mesh_settler = new SkinnedMesh();
+		mesh_settler->LoadMesh(Path + "/../models/people/settler/walking.dae");
+		mesh_settler->PrecalculateBoneTransforms();
 
 		ambientLight = {0.3f, 0.3f, 0.3f};
 	}
@@ -226,10 +231,10 @@ private:
 		}
 		for (int i = 0; i < renderBuffer->settlerModels.size(); ++i)
 		{
-			mesh_lumby_walk_w_axe->BindBoneTransform(renderBuffer->settlerAnimationSeconds[i], shader);
+			mesh_settler->BindBoneTransform(renderBuffer->settlerAnimationSeconds[i], shader);
 
 			shader->setMat4("model", renderBuffer->settlerModels[i]);
-			mesh_lumby_walk_w_axe->Render(*shader);
+			mesh_settler->Render(*shader);
 		}
 	}
 };
