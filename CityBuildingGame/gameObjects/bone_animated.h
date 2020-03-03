@@ -14,8 +14,7 @@ public:
 	BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation);
 
 	void UpdatePosition(Grid* grid);
-	void SetNewPath(std::vector<glm::vec2> aWayPoints);
-	void UpdatePath(std::vector<glm::vec2> aWayPoints);
+	void SetNewPath(std::vector<std::pair<int,int>> aWayPoints);
 
 	virtual void GameStep() = 0;
 	bool visible = true;
@@ -35,7 +34,7 @@ private:
 	bool proxyHasArrived = true;
 
 	glm::vec2 proxyObjectPos = glm::vec2(0.0f, 0.0f);
-	std::vector<glm::vec2> wayPoints;
+	std::vector<std::pair<int,int>> wayPoints;
 	int proxyWPIdx = 0;
 
 	float proxySpeed = 0.006f;

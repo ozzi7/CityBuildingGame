@@ -6,13 +6,11 @@
 #include <grid.h>
 #include <globals.h>
 
-typedef std::pair<int, int> Coordinate;
-
 enum class ObjectType { edge, tree };
 
 struct NodeObject
 {
-	Coordinate coordinate;
+	std::pair<int,int> coordinate;
 	int distanceToStart{};
 	NodeObject* parent{};
 };
@@ -34,14 +32,14 @@ class PathfindingObject
 {
 public:
 	PathfindingObject() {};
-	PathfindingObject(Grid* aGrid, Coordinate XYstart);
+	PathfindingObject(Grid* aGrid, std::pair<int,int> XYstart);
 
 	~PathfindingObject();
 
 	void FindClosestTree();
 	void FindClosestEdge();
 
-	std::list<Coordinate> GetPath();
+	std::list<std::pair<int,int>> GetPath();
 	GameObject* GetDestinationObject() const;
 private:
 	std::forward_list<NodeObject*> closed; // maybe not needed, only for storing pointers for deleting
@@ -61,7 +59,7 @@ private:
 	const int maxY = (int)(MAP_HEIGHT - 1);
 
 	void calculatePath();
-	void createNode(Coordinate coordinate);
-	void checkObjectFound(Coordinate coordinate);
+	void createNode(std::pair<int,int> coordinate);
+	void checkObjectFound(std::pair<int,int> coordinate);
 	void setNextNode();
 };

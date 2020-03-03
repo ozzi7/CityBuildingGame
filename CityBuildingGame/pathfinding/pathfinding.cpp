@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "pathfinding.h"
 
-Pathfinding::Pathfinding(Grid* aGrid, const Coordinate XYstart, const Coordinate XYdestination)
+Pathfinding::Pathfinding(Grid* aGrid, const std::pair<int,int> XYstart, const std::pair<int,int> XYdestination)
 {
 	grid = aGrid;
 
@@ -24,19 +24,19 @@ void Pathfinding::CalculatePath()
 	while (!pathFound && !unreachable)
 	{
 		if (current->coordinate.first < maxX)
-			createNode(Coordinate(current->coordinate.first + 1, current->coordinate.second));
+			createNode(std::pair<int,int>(current->coordinate.first + 1, current->coordinate.second));
 		if (current->coordinate.second < maxY)
-			createNode(Coordinate(current->coordinate.first, current->coordinate.second + 1));
+			createNode(std::pair<int,int>(current->coordinate.first, current->coordinate.second + 1));
 		if (current->coordinate.first > 0)
-			createNode(Coordinate(current->coordinate.first - 1, current->coordinate.second));
+			createNode(std::pair<int,int>(current->coordinate.first - 1, current->coordinate.second));
 		if (current->coordinate.second > 0)
-			createNode(Coordinate(current->coordinate.first, current->coordinate.second - 1));
+			createNode(std::pair<int,int>(current->coordinate.first, current->coordinate.second - 1));
 
 		setNextNode();
 	}
 }
 
-std::list<Coordinate> Pathfinding::GetPath()
+std::list<std::pair<int,int>> Pathfinding::GetPath()
 {
 	std::list<std::pair<int, int>> path;
 	if (pathFound)
@@ -50,7 +50,7 @@ std::list<Coordinate> Pathfinding::GetPath()
 	return path;
 }
 
-void Pathfinding::createNode(const Coordinate coordinate)
+void Pathfinding::createNode(const std::pair<int,int> coordinate)
 {
 	if (!visited[coordinate.first][coordinate.second])
 	{
@@ -75,7 +75,7 @@ void Pathfinding::createNode(const Coordinate coordinate)
 	}
 }
 
-int Pathfinding::distanceToDestination(const Coordinate coordinate) const
+int Pathfinding::distanceToDestination(const std::pair<int,int> coordinate) const
 {
 	return
 		std::abs(coordinate.first - destination->coordinate.first) +

@@ -10,16 +10,14 @@
 
 #define max(x,y) ((x) > (y) ? (x) : (y))
 
-typedef std::pair<int, int> Coordinate;
-
 struct Node
 {
-	Coordinate coordinate;
+	std::pair<int,int> coordinate;
 	int distanceToStart = 0;
 	int distanceToDestination = 0;
 	int distanceTotal = 0;
 	Node* parent{};
-	Coordinate destination;
+	std::pair<int,int> destination;
 };
 
 struct NodeCompare
@@ -53,11 +51,11 @@ struct NodeCompare
 class Pathfinding
 {
 public:
-	Pathfinding(Grid* aGrid, Coordinate XYstart, Coordinate XYdestination);
+	Pathfinding(Grid* aGrid, std::pair<int,int> XYstart, std::pair<int,int> XYdestination);
 	~Pathfinding();
 
 	void CalculatePath();
-	std::list<Coordinate> GetPath();
+	std::list<std::pair<int,int>> GetPath();
 
 private:
 	std::forward_list<Node*> closed; // maybe not needed, only for storing pointers for deleting
@@ -75,8 +73,8 @@ private:
 	const int maxX = (int)(MAP_WIDTH - 1);
 	const int maxY = (int)(MAP_HEIGHT - 1);
 
-	void createNode(Coordinate coordinate);
-	int distanceToDestination(Coordinate coordinate) const;
+	void createNode(std::pair<int,int> coordinate);
+	int distanceToDestination(std::pair<int,int> coordinate) const;
 	void setNextNode();
 	void adjustParentNode(Node* node);
 };

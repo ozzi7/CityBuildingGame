@@ -66,8 +66,7 @@ void LoggingEventHandler::Visit(LoggingEvent* aLoggingEvent)
 	ss << aLoggingEvent->thread_id;
 	uint64_t id = std::stoull(ss.str());
 
-	float timestamp = aLoggingEvent->timestamp;
-	timestamp /= 1000.0f;
+	float timestamp = (float)(aLoggingEvent->timestamp / 1000.0f);
 /*	aLoggingEvent->timestamp /= 60;
 	DWORD minutes = aLoggingEvent->timestamp % 60;
 	aLoggingEvent->timestamp /= 60;

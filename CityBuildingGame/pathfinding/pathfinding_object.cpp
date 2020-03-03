@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "pathfinding_object.h"
 
-PathfindingObject::PathfindingObject(Grid* aGrid, const Coordinate XYstart)
+PathfindingObject::PathfindingObject(Grid* aGrid, const std::pair<int,int> XYstart)
 {
 	grid = aGrid;
 
@@ -26,8 +26,7 @@ PathfindingObject::~PathfindingObject()
 		delete current;
 	}
 
-	if (destination)
-		delete destination;
+	delete destination;
 }
 
 void PathfindingObject::FindClosestTree()
@@ -42,9 +41,9 @@ void PathfindingObject::FindClosestEdge()
 	calculatePath();
 }
 
-std::list<Coordinate> PathfindingObject::GetPath()
+std::list<std::pair<int,int>> PathfindingObject::GetPath()
 {
-	std::list<Coordinate> path;
+	std::list<std::pair<int,int>> path;
 	if (objectFound)
 	{
 		current = destination;
@@ -82,19 +81,19 @@ void PathfindingObject::calculatePath()
 	while (!objectFound && !unreachable)
 	{
 		if (current->coordinate.first < maxX)
-			createNode(Coordinate(current->coordinate.first + 1, current->coordinate.second));
+			createNode(std::pair<int,int>(current->coordinate.first + 1, current->coordinate.second));
 		if (current->coordinate.second < maxY)
-			createNode(Coordinate(current->coordinate.first, current->coordinate.second + 1));
+			createNode(std::pair<int,int>(current->coordinate.first, current->coordinate.second + 1));
 		if (current->coordinate.first > 0)
-			createNode(Coordinate(current->coordinate.first - 1, current->coordinate.second));
+			createNode(std::pair<int,int>(current->coordinate.first - 1, current->coordinate.second));
 		if (current->coordinate.second > 0)
-			createNode(Coordinate(current->coordinate.first, current->coordinate.second - 1));
+			createNode(std::pair<int,int>(current->coordinate.first, current->coordinate.second - 1));
 
 		setNextNode();
 	}
 }
 
-void PathfindingObject::createNode(const Coordinate coordinate)
+void PathfindingObject::createNode(const std::pair<int,int> coordinate)
 {
 	if (!visited[coordinate.first][coordinate.second])
 	{
@@ -112,7 +111,7 @@ void PathfindingObject::createNode(const Coordinate coordinate)
 	}
 }
 
-void PathfindingObject::checkObjectFound(Coordinate coordinate)
+void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 {
 	switch (objectType)
 	{
