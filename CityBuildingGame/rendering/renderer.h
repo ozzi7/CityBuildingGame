@@ -21,7 +21,8 @@ class Renderer
 public:
 	Camera& camera;
 
-	SkinnedMesh* mesh_lumberjack;
+	SkinnedMesh* mesh_lumby_walk_w_axe;
+	SkinnedMesh* mesh_lumby_walk_w_wood;
 	Shader* terrain_shader;
 	Shader* skinned_mesh_shader;
 	Shader* instanced_mesh_shader;
@@ -67,11 +68,13 @@ public:
 		instanced_model_oak = new InstancedModel(Path + "/../models/oak/oak.dae");
 
 		/* lumberjack init*/
-		mesh_lumberjack = new SkinnedMesh();
-		//mesh_lumberjack->LoadMesh(Path + "/../models/lumberjack/lumberjack.dae");
-		mesh_lumberjack->LoadMesh(Path + "/../models/lumberjack/lumberjack_carrying/lumberjack_carrying.dae");
+		mesh_lumby_walk_w_axe = new SkinnedMesh();
+		mesh_lumby_walk_w_axe->LoadMesh(Path + "/../models/lumberjack/walking_w_axe/lumberjack.dae");
+		mesh_lumby_walk_w_axe->PrecalculateBoneTransforms();
 
-		mesh_lumberjack->PrecalculateBoneTransforms();
+		mesh_lumby_walk_w_wood = new SkinnedMesh();
+		mesh_lumby_walk_w_wood->LoadMesh(Path + "/../models/lumberjack/walking_w_wood/lumberjack.dae");
+		mesh_lumby_walk_w_wood->PrecalculateBoneTransforms();
 
 		ambientLight = {0.3f, 0.3f, 0.3f};
 	}
@@ -209,17 +212,24 @@ private:
 
 		for (int i = 0; i < renderBuffer->lumberjackModels.size(); ++i)
 		{
-			mesh_lumberjack->BindBoneTransform(renderBuffer->lumberjackAnimationSeconds[i], shader);
+			mesh_lumby_walk_w_axe->BindBoneTransform(renderBuffer->lumberjackAnimationSeconds[i], shader);
 
 			shader->setMat4("model", renderBuffer->lumberjackModels[i]);
-			mesh_lumberjack->Render(*shader);
+			mesh_lumby_walk_w_axe->Render(*shader);
+		}
+		for (int i = 0; i < renderBuffer->lumberjackWoodModels.size(); ++i)
+		{
+			mesh_lumby_walk_w_wood->BindBoneTransform(renderBuffer->lumberjackWoodAnimationSeconds[i], shader);
+
+			shader->setMat4("model", renderBuffer->lumberjackWoodModels[i]);
+			mesh_lumby_walk_w_wood->Render(*shader);
 		}
 		for (int i = 0; i < renderBuffer->settlerModels.size(); ++i)
 		{
-			mesh_lumberjack->BindBoneTransform(renderBuffer->settlerAnimationSeconds[i], shader);
+			mesh_lumby_walk_w_axe->BindBoneTransform(renderBuffer->settlerAnimationSeconds[i], shader);
 
 			shader->setMat4("model", renderBuffer->settlerModels[i]);
-			mesh_lumberjack->Render(*shader);
+			mesh_lumby_walk_w_axe->Render(*shader);
 		}
 	}
 };
