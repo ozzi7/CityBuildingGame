@@ -52,21 +52,17 @@ void GameEventHandler::Visit(MoveEvent* aMoveEvent)
 		{
 			toMove = *it;
 			it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX].movingObjects.erase(it);
+			grid->gridUnits[aMoveEvent->toY][aMoveEvent->toX].movingObjects.push_back(toMove);
 			break;
 		}
 	}
-	if (toMove == nullptr)
-		// should not happen
-		bool problem = true;
-	else
-		grid->gridUnits[aMoveEvent->toY][aMoveEvent->toX].movingObjects.push_back(toMove);
 }
 
 void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 {
-	std::tuple<int, int> closestToClick = std::make_tuple(round(aCreateBuildingEvent->posX),
+	std::pair<int, int> closestToClick = std::make_pair(round(aCreateBuildingEvent->posX),
 	                                                      round(aCreateBuildingEvent->posY));
-	std::tuple<int, int> buildingSize;
+	std::pair<int, int> buildingSize;
 
 	glm::vec3 modelCenter = glm::vec3(-1.0f, -1.0f, -1.0f);
 
@@ -77,12 +73,12 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	{
 		case BuildingType::DwellingID:
 		{
-			buildingSize = std::make_tuple(2, 2);
+			buildingSize = std::make_pair(2, 2);
 			break;
 		}
 		case BuildingType::LumberjackHutID:
 		{
-			buildingSize = std::make_tuple(2, 2);
+			buildingSize = std::make_pair(2, 2);
 			break;
 		}
 	}
@@ -141,42 +137,11 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		}
 	}
 
-	/* Check if the building is outside of the grid */
-	if (fromX < 0 || toX >= grid->gridWidth || fromY < 0 || toY >= grid->gridHeight)
-	{
+	if (!ValidBuildingPosition(fromX, fromY, toX, toY))
 		return;
-	}
-
-	/* Check if the grid is not occupied */
-	for (int i = fromX; i < toX; ++i)
-	{
-		for (int j = fromY; j < toY; ++j)
-		{
-			if (grid->gridUnits[j][i].occupied)
-			{
-				return;
-			}
-		}
-	}
-
-	/* Check if the floor is flat */
-	if (!grid->IsAreaFlat(fromX, toX, fromY, toY))
-	{
-		return;
-	}
 
 	/* calculate 3d model position height*/
 	modelCenter.z = grid->GetHeight(modelCenter.x, modelCenter.y);
-
-	/* find path*/
-	PathfindingObject* path = new PathfindingObject(grid, Coordinate(fromX + 1, fromY));
-	path->FindClosestEdge();
-	std::list<Coordinate> pathCoordinates = path->GetPath();
-	delete path;
-
-	/* if no path found do nothing..*/
-	if (pathCoordinates.empty())
-		return;
 
 	/* set grid to occupied*/
 	for (int i = fromX; i < toX; ++i)
@@ -190,113 +155,138 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	/* Create the building object etc.. */
 	switch (aCreateBuildingEvent->buildingType)
 	{
-	case BuildingType::DwellingID:
-	{
-		/* create building  */
-		Dwelling* dwelling = new Dwelling(modelCenter, // translate
-		                                  glm::vec3(0.012f, 0.006f, 0.012f), // rescale
-		                                  glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
-
-		/* save some stuff needed later.. TODO: dedicated building exit,check road etc (for other buildings)*/
-		dwelling->fromX = fromX;
-		dwelling->fromY = fromY;
-		dwelling->toX = toX;
-		dwelling->toY = toY;
-		dwelling->sizeX = std::get<0>(buildingSize);
-		dwelling->sizeY = std::get<1>(buildingSize);
-		dwelling->entranceX = fromX + 1;
-		dwelling->entranceY = fromY;
-
-		dwelling->CreateBuildingOutline();
-
-		std::vector<glm::vec2> glmPath;
-		for (std::list<Coordinate>::iterator it = --pathCoordinates.end(); it != pathCoordinates.begin(); --it)
-			glmPath.push_back(glm::vec2((*it).first + 0.5f, (*it).second) + 0.5f);
-		glmPath.push_back(glm::vec2(pathCoordinates.front().first + 0.5f, pathCoordinates.front().second + 0.5f));
-
-		/* create settler.. */
-		Settler* settler = new Settler(glm::vec3(pathCoordinates.back().first + 0.5f, pathCoordinates.back().second + 0.5f,
-		                                         grid->GetHeight(pathCoordinates.back().first, pathCoordinates.back().second)),
-		                               glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
-
-		settler->SetDwelling(dwelling);
-		settler->SetNewPath(glmPath);
-
-		/* save building in the coordinate where the 3d object center is located in->good for rendering */
-		grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(dwelling);
-		grid->gridUnits[pathCoordinates.back().second][pathCoordinates.back().first].movingObjects.push_back(settler);
-
-		break;
-	}
-	case BuildingType::LumberjackHutID:
-	{
-		LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
-		                                                 glm::vec3(0.012f, 0.006f, 0.012f), // rescale
-		                                                 glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
-
-		lumberjackHut->fromX = fromX;
-		lumberjackHut->fromY = fromY;
-		lumberjackHut->toX = toX;
-		lumberjackHut->toY = toY;
-		lumberjackHut->sizeX = std::get<0>(buildingSize);
-		lumberjackHut->sizeY = std::get<1>(buildingSize);
-		lumberjackHut->entranceX = fromX + 1;
-		lumberjackHut->entranceY = fromY;
-
-		lumberjackHut->CreateBuildingOutline();
-
-		/*get settlers if there are enough, here we get 2 settlers, kill them and create 1 lumby */
-		std::vector<Settler*> settlers = resources->GetIdleSettlers(2);
-		if (settlers.size() != 0)
+		case BuildingType::DwellingID:
 		{
-			// copy first settlers position to new lumby
-			Lumberjack* lumby = new Lumberjack(glm::vec3(settlers[0]->posX, settlers[0]->posY,
-			                                             grid->GetHeight(settlers[0]->posX, settlers[0]->posY)),
-			                                   glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
+			/* find path*/
+			PathfindingObject* path = new PathfindingObject(grid, std::pair<int,int>(fromX + 1, fromY));
+			path->FindClosestEdge();
+			std::list<std::pair<int,int>> pathCoordinatesList = path->GetPath();
+			pathCoordinatesList.reverse();
+			std::vector<std::pair<int,int>> pathCoordinates {std::make_move_iterator(std::begin(pathCoordinatesList)), 
+															 std::make_move_iterator(std::end(pathCoordinatesList))};
+			delete path;
 
-			lumby->SetLumberjackHut(lumberjackHut);
+			/* if no path found do nothing..*/
+			if (pathCoordinates.empty())
+				return;
+			
+			/* create building  */
+			Dwelling* dwelling = new Dwelling(modelCenter, // translate
+			                                  glm::vec3(0.012f, 0.006f, 0.012f), // rescale
+			                                  glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
 
-			/* there should always be a path here because of roads */
-			Pathfinding * pathfinding = new Pathfinding(grid, Coordinate(settlers[0]->posX, settlers[0]->posY),
-			                                      Coordinate(lumberjackHut->entranceX, lumberjackHut->entranceY));
-			pathfinding->CalculatePath();
+			/* save some stuff needed later.. TODO: dedicated building exit,check road etc (for other buildings)*/
+			dwelling->fromX = fromX;
+			dwelling->fromY = fromY;
+			dwelling->toX = toX;
+			dwelling->toY = toY;
+			dwelling->sizeX = std::get<0>(buildingSize);
+			dwelling->sizeY = std::get<1>(buildingSize);
+			dwelling->entranceX = fromX + 1;
+			dwelling->entranceY = fromY;
 
-			std::list<Coordinate> pathCoordinates = pathfinding->GetPath();
+			dwelling->CreateBuildingOutline();
 
-			if (pathCoordinates.size() != 0)
-			{
-				std::vector<glm::vec2> glmPath;
-				glmPath.push_back(glm::vec2(pathCoordinates.front().first + 0.5f, pathCoordinates.front().second + 0.5f));
-				for (std::list<Coordinate>::iterator it = pathCoordinates.begin(); it != pathCoordinates.end(); ++it)
-					glmPath.push_back(glm::vec2((*it).first + 0.5f, (*it).second) + 0.5f);
+			/* create settler.. */
+			Settler* settler = new Settler(glm::vec3(pathCoordinates.front().first + 0.5f, pathCoordinates.front().second + 0.5f,
+													 grid->GetHeight(pathCoordinates.front().first, pathCoordinates.front().second)),
+			                               glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
 
-				lumby->SetNewPath(glmPath);
-				lumby->state = State::returningHome;
-				lumby->SetLumberjackHut(lumberjackHut);
-				lumby->destination = lumberjackHut;
-			}
-			else
-			{
-				loggingEventHandler->AddEvent(
-					new LoggingEvent(LoggingLevel::ERROR_L, "The lumberjack can't walk from dwelling to lumberjackhut (no path)"));
-			}
+			settler->SetDwelling(dwelling);
+			settler->SetNewPath(pathCoordinates);
 
-			// store reference to lumby
-			grid->gridUnits[lumby->posY][lumby->posX].movingObjects.push_back(lumby);
+			/* save building in the coordinate where the 3d object center is located in->good for rendering */
+			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(dwelling);
+			grid->gridUnits[pathCoordinates.back().second][pathCoordinates.back().first].movingObjects.push_back(settler);
 
-			/* delete the settlers */
-			for (int i = 0; i < settlers.size(); ++i)
-			{
-				this->AddEvent(new DeleteEvent(settlers[i]->posX, settlers[i]->posY, settlers[i])); // kill the settlers
-			}
+			break;
 		}
+		case BuildingType::LumberjackHutID:
+		{
+			LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
+			                                                 glm::vec3(0.012f, 0.006f, 0.012f), // rescale
+			                                                 glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
 
-		// store reference to grid
-		grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(lumberjackHut);
+			lumberjackHut->fromX = fromX;
+			lumberjackHut->fromY = fromY;
+			lumberjackHut->toX = toX;
+			lumberjackHut->toY = toY;
+			lumberjackHut->sizeX = std::get<0>(buildingSize);
+			lumberjackHut->sizeY = std::get<1>(buildingSize);
+			lumberjackHut->entranceX = fromX + 1;
+			lumberjackHut->entranceY = fromY;
 
-		break;
+			lumberjackHut->CreateBuildingOutline();
+
+			/*get settlers if there are enough, here we get 2 settlers, kill them and create 1 lumby */
+			std::vector<Settler*> settlers = resources->GetIdleSettlers(2);
+			if (settlers.size() != 0)
+			{
+				// copy first settlers position to new lumby
+				Lumberjack* lumby = new Lumberjack(glm::vec3(settlers[0]->posX, settlers[0]->posY,
+				                                             grid->GetHeight(settlers[0]->posX, settlers[0]->posY)),
+				                                   glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
+
+				lumby->SetLumberjackHut(lumberjackHut);
+
+				/* there should always be a path here because of roads */
+				Pathfinding* path = new Pathfinding(grid, std::pair<int,int>(settlers[0]->posX, settlers[0]->posY),
+				                                      std::pair<int,int>(lumberjackHut->entranceX, lumberjackHut->entranceY));
+				path->CalculatePath();
+				std::list<std::pair<int,int>> pathCoordinatesList = path->GetPath();
+				std::vector<std::pair<int,int>> pathCoordinates {std::make_move_iterator(std::begin(pathCoordinatesList)), 
+																		std::make_move_iterator(std::end(pathCoordinatesList))};
+				delete path;
+
+				if (pathCoordinates.size() != 0)
+				{
+					lumby->SetNewPath(pathCoordinates);
+					lumby->state = State::returningHome;
+					lumby->SetLumberjackHut(lumberjackHut);
+					lumby->destination = lumberjackHut;
+				}
+				else
+				{
+					loggingEventHandler->AddEvent(
+						new LoggingEvent(LoggingLevel::ERROR_L, "The lumberjack can't walk from dwelling to lumberjackhut (no path)"));
+				}
+
+				// store reference to lumby
+				grid->gridUnits[lumby->posY][lumby->posX].movingObjects.push_back(lumby);
+
+				/* delete the settlers */
+				for (int i = 0; i < settlers.size(); ++i)
+				{
+					this->AddEvent(new DeleteEvent(settlers[i]->posX, settlers[i]->posY, settlers[i])); // kill the settlers
+				}
+			}
+
+			// store reference to grid
+			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(lumberjackHut);
+
+			break;
+		}
 	}
-	}
+}
+
+// Move to different class?
+bool GameEventHandler::ValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
+{
+	/* Check if the building is outside of the grid */
+	if (fromX < 0 || toX >= grid->gridWidth || fromY < 0 || toY >= grid->gridHeight)
+		return false;
+
+	/* Check if the grid is not occupied */
+	for (int i = fromX; i < toX; ++i)
+		for (int j = fromY; j < toY; ++j)
+			if (grid->gridUnits[j][i].occupied)
+				return false;
+
+	/* Check if the floor is flat */
+	if (!grid->IsAreaFlat(fromX, toX, fromY, toY))
+		return false;
+	
+	return true;
 }
 
 void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
@@ -324,37 +314,34 @@ void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 
 void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 {
+	
 	PathfindingObject* path = new PathfindingObject(
-		grid, Coordinate(aGatherResourceEvent->person->position.x, aGatherResourceEvent->person->position.y));
-	std::list<Coordinate> pathCoordinates;
-	std::vector<glm::vec2> glmPath;
-
+		grid, std::pair<int,int>(aGatherResourceEvent->person->position.x, aGatherResourceEvent->person->position.y));
+	
 	switch (aGatherResourceEvent->resource)
 	{
-	case Wood:
-		path->FindClosestTree();
-		pathCoordinates = path->GetPath();
-
-		if (pathCoordinates.size() != 0)
+		case Wood:
 		{
-			glmPath.push_back(glm::vec2(aGatherResourceEvent->person->posX, aGatherResourceEvent->person->posY));
-			for (std::list<Coordinate>::iterator it = pathCoordinates.begin(); it != pathCoordinates.end(); ++it)
+			path->FindClosestTree();
+			std::list<std::pair<int,int>> pathCoordinatesList = path->GetPath();
+			std::vector<std::pair<int,int>> pathCoordinates{std::make_move_iterator(std::begin(pathCoordinatesList)), 
+															std::make_move_iterator(std::end(pathCoordinatesList))};
+			
+			if (pathCoordinates.size() != 0)
 			{
-				glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
+				grid->gridUnits[path->GetDestinationObject()->posY][path->GetDestinationObject()->posX].hasTree = false;
+				aGatherResourceEvent->person->SetNewPath(pathCoordinates);
+				aGatherResourceEvent->person->destination = path->GetDestinationObject();
+				aGatherResourceEvent->person->state = State::walkingToTarget;
 			}
-			grid->gridUnits[path->GetDestinationObject()->posY][path->GetDestinationObject()->posX].hasTree = false;
-			aGatherResourceEvent->person->SetNewPath(glmPath);
-			aGatherResourceEvent->person->destination = path->GetDestinationObject();
-			aGatherResourceEvent->person->state = State::walkingToTarget;
+			else
+			{
+				aGatherResourceEvent->person->state = State::idle;
+			}
+			break;
 		}
-		else
-		{
-			aGatherResourceEvent->person->state = State::idle;
-		}
-		break;
-
-	default:
-		break;
+		default:
+			break;
 	}
 	delete path;
 }
@@ -366,19 +353,15 @@ void GameEventHandler::Visit(ReturnHomeEvent* aReturnHomeEvent)
 	case PersonType::LumberjackID:
 		Lumberjack* lumby = (Lumberjack*)aReturnHomeEvent->person; // or extract coordinates??
 		Pathfinding* path = new Pathfinding(
-			grid, Coordinate(aReturnHomeEvent->person->position.x, aReturnHomeEvent->person->position.y),
-			Coordinate(lumby->lumberjackHut->entranceX, lumby->lumberjackHut->entranceY));
+			grid, std::pair<int,int>(aReturnHomeEvent->person->position.x, aReturnHomeEvent->person->position.y),
+			std::pair<int,int>(lumby->lumberjackHut->entranceX, lumby->lumberjackHut->entranceY));
 		path->CalculatePath();
-		std::list<Coordinate> pathCoordinates = path->GetPath();
+		std::list<std::pair<int,int>> pathCoordinatesList = path->GetPath();
+		std::vector<std::pair<int,int>> pathCoordinates{std::make_move_iterator(std::begin(pathCoordinatesList)), 
+														std::make_move_iterator(std::end(pathCoordinatesList))};
 		delete path;
-		std::vector<glm::vec2> glmPath;
 
-		glmPath.push_back(glm::vec2(lumby->position.x, lumby->position.y));
-		for (std::list<Coordinate>::iterator it = pathCoordinates.begin(); it != pathCoordinates.end(); ++it)
-		{
-			glmPath.push_back(glm::vec2((*it).first, (*it).second) + 0.5f);
-		}
-		lumby->SetNewPath(glmPath);
+		lumby->SetNewPath(pathCoordinates);
 		lumby->state = State::returningHome;
 		break;
 	}
