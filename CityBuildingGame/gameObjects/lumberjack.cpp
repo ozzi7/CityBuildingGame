@@ -48,6 +48,9 @@ void Lumberjack::GameStep()
 	else if (state == State::working)
 	{
 		workTimeLeft--;
+
+		if (workTimeLeft % 300 == 0)
+			soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::TreeChoppingSound));
 	}
 
 	/*Update animation*/

@@ -18,6 +18,7 @@ void SoundEventHandler::LoadFiles()
 		music.play();
 	}
 	soundBuffers[0].loadFromFile(Path + "/../music/sound_effects/lvlup.ogg");
+	soundBuffers[1].loadFromFile(Path + "/../music/sound_effects/tree_chopping.wav");
 }
 // TODO: make playMusicEvent to change music
 void SoundEventHandler::AddEvent(SoundEvent* e)
