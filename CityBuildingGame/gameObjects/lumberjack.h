@@ -16,4 +16,5 @@ public:
 
 protected:
 	int workTimeLeft = 0;
+	bool soundPlayed = false;
 };

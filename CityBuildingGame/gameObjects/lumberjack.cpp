@@ -36,6 +36,7 @@ void Lumberjack::GameStep()
 			// arrived at tree, start working..
 			state = State::working;
 			workTimeLeft = 1000;
+			animationSecond = 0.0f;
 		}
 	}
 	if (state == State::working && workTimeLeft == 0)
@@ -49,8 +50,12 @@ void Lumberjack::GameStep()
 	{
 		workTimeLeft--;
 
-		if (workTimeLeft % 300 == 0)
+		if (fmod(animationSecond, 1.0f) < (16.0f/30.0f))
+			soundPlayed = false;
+		if (fmod(animationSecond, 1.0f) >= (16.0f/30.0f) && !soundPlayed) {
 			soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::TreeChoppingSound));
+			soundPlayed = true;
+		}
 	}
 
 	/*Update animation*/

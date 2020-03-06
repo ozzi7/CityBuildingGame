@@ -9,6 +9,7 @@ General maya hacks:
 - for walking export frame 0_29
 - also center lumby
 - fix mesh with mesh -> cleanup before animation
+- its possible to move vertices/faces etc. after baking
 
 How to export the lumberjack to .dae with an animation sequence (but with low quality animation):
 - create new maya scene

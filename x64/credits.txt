@@ -13,3 +13,11 @@ Royalty Free License
 
 Trees and Buildings from 0 A.D.
 https://creativecommons.org/licenses/by-sa/2.0/
+
+mocap files (converted to maya)
+https://sites.google.com/a/cgspeed.com/cgspeed/motion-capture/cmu-bvh-conversion
+
+Tools
+Importing BVH format to Maya
+https://github.com/jhoolmans/mayaImporterBVH
+Use script editor
