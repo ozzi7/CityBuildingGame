@@ -7,6 +7,7 @@ SoundEventHandler::SoundEventHandler(int nofSounds)
 {
 	// note 1 channel must be free for music as well.. total <= 256
 	maxSounds = nofSounds;
+	sounds = std::vector<sf::Sound>(nofSounds);
 }
 
 void SoundEventHandler::LoadFiles()
@@ -52,34 +53,19 @@ void SoundEventHandler::Visit(PlaySoundEvent* aSoundEvent)
 	if (!SOUND_ENABLED)
 		return;
 
-	if (sounds.size() == 0)
+	int location = -1;
+	for (int i = 0; i < sounds.size(); i++)
 	{
-		sounds.push_back(sf::Sound());
-		sounds.at(0).setBuffer(soundBuffers[int(aSoundEvent->soundType)]);
-		sounds.at(0).play();
+		if (sounds[i].getStatus() != sf::Sound::Playing)
+		{
+			location = i;
+			break;
+		}
 	}
-	else
+	std::cout << location << std::endl;
+	if (location != -1)
 	{
-		int location = -1;
-		for (int i = 0; i < sounds.size(); i++)
-		{
-			if (!sounds.at(i).getStatus() != sf::Sound::Playing)
-			{
-				location = i;
-				break;
-			}
-		}
-
-		if (location != -1)
-		{
-			sounds.at(location).setBuffer(soundBuffers[int(aSoundEvent->soundType)]);
-			sounds.at(location).play();
-		}
-		else if (location == -1 && sounds.size() < maxSounds)
-		{
-			sounds.push_back(sf::Sound());
-			sounds.at(sounds.size() - 1).setBuffer(soundBuffers[int(aSoundEvent->soundType)]);
-			sounds.at(sounds.size() - 1).play();
-		}
+		sounds[location].setBuffer(soundBuffers[int(aSoundEvent->soundType)]);
+		sounds[location].play();
 	}
 }

@@ -30,8 +30,9 @@ void InputHandler::Mouseclick(int button, int action) const
 		{
 			return;
 		}
-		for (int i = 0; i < 300; ++i) // lol
-			soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::SettlerArrivedSound)); // TODO:
+
+		soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::SettlerArrivedSound)); // TODO:
+
 		// Test Code
 		glm::vec3 cursor_position = Camera->CursorPositionOnGrid();
 		if (cursor_position.x >= 0 && cursor_position.y >= 0 && Grid->gridHeight > (int)cursor_position.y && Grid->
