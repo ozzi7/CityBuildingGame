@@ -62,7 +62,6 @@ void SoundEventHandler::Visit(PlaySoundEvent* aSoundEvent)
 			break;
 		}
 	}
-	std::cout << location << std::endl;
 	if (location != -1)
 	{
 		sounds[location].setBuffer(soundBuffers[int(aSoundEvent->soundType)]);
