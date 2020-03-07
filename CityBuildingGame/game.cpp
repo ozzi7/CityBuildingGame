@@ -154,10 +154,11 @@ void Game::gameLoop()
 			}
 		}
 
+
 		grid->terrain->SetRenderWindow(camera->GridTopLeftVisible(),
-										camera->GridTopRightVisible(),
-										camera->GridBottomLeftVisible(),
-										camera->GridBottomRightVisible());
+									   camera->GridTopRightVisible(),
+									   camera->GridBottomLeftVisible(),
+									   camera->GridBottomRightVisible());
 		grid->UpdateVisibleList(camera->GridTopLeftVisible(),
 								camera->GridTopRightVisible(),
 								camera->GridBottomLeftVisible(),

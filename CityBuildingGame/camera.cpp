@@ -111,56 +111,59 @@ void Camera::Zoom(float yOffset)
 
 void Camera::CalculateVisibleGrid()
 {
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "CalculateVisibleGrid called"));
 	const int xLookat = (int)(Position.x + LookAt.x);
 	const int yLookat = (int)(Position.y + LookAt.y);
 	
-	float z;
+	float z; 
 	
 
 	// Find left edge
-	TopLeftVisible = std::make_pair(xLookat, yLookat);
+	std::pair<int, int> topLeftVisible = std::make_pair(xLookat, yLookat);
 	do
 	{
-		TopLeftVisible.first--;
-		TopLeftVisible.second--;
-		if (TopLeftVisible.first >= 0 &&
-			TopLeftVisible.first <= MaxX &&
-			TopLeftVisible.second >= 0 &&
-			TopLeftVisible.second <= MaxY)
+		topLeftVisible.first--;
+		topLeftVisible.second--;
+		if (topLeftVisible.first >= 0 &&
+			topLeftVisible.first <= MaxX &&
+			topLeftVisible.second >= 0 &&
+			topLeftVisible.second <= MaxY)
 		{
-			z = Grid->GetHeight((float)TopLeftVisible.first, (float)TopLeftVisible.second);
+			z = Grid->GetHeight((float)topLeftVisible.first, (float)topLeftVisible.second);
 		} else 
 		{
 			z = 0;
 		}
-	} while (CoordinateVisible(glm::vec3((float)TopLeftVisible.first,(float)TopLeftVisible.second,z)));
-	BottomLeftVisible = TopLeftVisible;
+	} while (CoordinateVisible(glm::vec3((float)topLeftVisible.first,(float)topLeftVisible.second,z)));
+
+	std::pair<int, int> bottomLeftVisible = topLeftVisible;
 
 	
 	// Find right edge
-	TopRightVisible = std::make_pair(xLookat, yLookat);
+	std::pair<int, int> topRightVisible = std::make_pair(xLookat, yLookat);
 	do
 	{
-		TopRightVisible.first++;
-		TopRightVisible.second++;
-		if (TopRightVisible.first >= 0 &&
-			TopRightVisible.first <= MaxX &&
-			TopRightVisible.second >= 0 &&
-			TopRightVisible.second <= MaxY)
+		topRightVisible.first++;
+		topRightVisible.second++;
+		if (topRightVisible.first >= 0 &&
+			topRightVisible.first <= MaxX &&
+			topRightVisible.second >= 0 &&
+			topRightVisible.second <= MaxY)
 		{
-			z = Grid->GetHeight((float)TopRightVisible.first, (float)TopRightVisible.second);
+			z = Grid->GetHeight((float)topRightVisible.first, (float)topRightVisible.second);
 		} else 
 		{
 			z = 0;
 		}
-	} while (CoordinateVisible(glm::vec3((float)TopRightVisible.first,(float)TopRightVisible.second,z)));
-	BottomRightVisible = TopRightVisible;
+	} while (CoordinateVisible(glm::vec3((float)topRightVisible.first,(float)topRightVisible.second,z)));
+
+	std::pair<int, int> bottomRightVisible = topRightVisible;
 
 	
 	/* Increase top edge until all grid points are outside of view */
 	// Move x/y along the left edge to the top, until out of vision
-	int x = TopLeftVisible.first + 1;
-	int y = TopLeftVisible.second + 1;
+	int x = topLeftVisible.first + 1;
+	int y = topLeftVisible.second + 1;
 	do
 	{
 		x--;
@@ -176,8 +179,8 @@ void Camera::CalculateVisibleGrid()
 			z = 0;
 		}
 	} while (CoordinateVisible(glm::vec3((float)x,(float)y,z)));
-	TopLeftVisible.first = x - 2;
-	TopLeftVisible.second = y - 2;
+	topLeftVisible.first = x - 2;
+	topLeftVisible.second = y - 2;
 	
 	// Move x/y along the top edge, until in vision again, if in vision, move one higher
 	do
@@ -198,18 +201,18 @@ void Camera::CalculateVisibleGrid()
 		{
 			x--;
 			y++;
-			TopLeftVisible.first--;
-			TopLeftVisible.second++;
+			topLeftVisible.first--;
+			topLeftVisible.second++;
 		}
-	} while (TopRightVisible.first + TopRightVisible.second > x + y);
-	// When all the way to top right, set TopRightVisible to current x/y
-	TopRightVisible = std::make_pair(x, y);
+	} while (topRightVisible.first + topRightVisible.second > x + y);
+	// When all the way to top right, set topRightVisible to current x/y
+	topRightVisible = std::make_pair(x, y);
 
 	
 	/* Decrease bottom edge until all grid points are outside of view */
 	// Move x/y along the left edge to the bottom, until out of vision
-	x = BottomLeftVisible.first + 1;
-	y = BottomLeftVisible.second + 1;
+	x = bottomLeftVisible.first + 1;
+	y = bottomLeftVisible.second + 1;
 	do
 	{
 		x++;
@@ -225,8 +228,8 @@ void Camera::CalculateVisibleGrid()
 			z = 0;
 		}
 	} while (CoordinateVisible(glm::vec3((float)x,(float)y,z)));
-	BottomLeftVisible.first = x - 2;
-	BottomLeftVisible.second = y - 2;
+	bottomLeftVisible.first = x - 2;
+	bottomLeftVisible.second = y - 2;
 
 	// Move x/y along the bottom edge, until in vision again, if in vision, move one lower
 	do
@@ -247,18 +250,24 @@ void Camera::CalculateVisibleGrid()
 		{
 			x++;
 			y--;
-			BottomLeftVisible.first++;
-			BottomLeftVisible.second--;
+			bottomLeftVisible.first++;
+			bottomLeftVisible.second--;
 		}
-	} while (BottomRightVisible.first + BottomRightVisible.second > x + y);
-	// When all the way to top right, set BottomRightVisible to current x/y
-	BottomRightVisible = std::make_pair(x, y);
+	} while (bottomRightVisible.first + bottomRightVisible.second > x + y);
+	// When all the way to top right, set bottomRightVisible to current x/y
+	bottomRightVisible = std::make_pair(x, y);
 
-	BottomLeftVisible.first++;
-	BottomLeftVisible.second--;
+	bottomLeftVisible.first++;
+	bottomLeftVisible.second--;
 
-	BottomRightVisible.first++;
-	BottomRightVisible.second--;
+	bottomRightVisible.first++;
+	bottomRightVisible.second--;
+
+
+	TopLeftVisible = topLeftVisible;
+	TopRightVisible = topRightVisible;
+	BottomLeftVisible = bottomLeftVisible;
+	BottomRightVisible = bottomRightVisible;
 }
 
 glm::vec3 Camera::PixelTo3DCoordinate(glm::vec2 pixelCoordinates) const
