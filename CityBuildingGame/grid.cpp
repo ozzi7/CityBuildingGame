@@ -14,7 +14,8 @@ Grid::Grid(int aGridHeight, int aGridWidth)
 void Grid::Init()
 {
 	/* create gridUnits */
-	gridUnits.reserve(gridHeight);
+	gridUnits = std::vector<std::vector<Unit>>(gridHeight, std::vector<Unit>(gridWidth, Unit()));
+	/*gridUnits.reserve(gridHeight);
 	for (int i = 0; i < gridHeight; ++i)
 	{
 		std::vector<Unit> temp = std::vector<Unit>();
@@ -24,7 +25,7 @@ void Grid::Init()
 			temp.push_back(Unit());
 		}
 		gridUnits.push_back(temp);
-	}
+	}*/
 
 	/* calculate height of each grid unit */
 	for (int i = 0; i < terrain->heightmap.size() - 1; ++i)
@@ -134,8 +135,8 @@ Grid::~Grid()
 
 Unit::Unit()
 {
-	objects = std::list<GameObject*>();
-	movingObjects = std::list<BoneAnimated*>();
+	//objects = std::list<GameObject*>();
+	//movingObjects = std::list<BoneAnimated*>();
 }
 
 Unit::~Unit()
