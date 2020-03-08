@@ -189,7 +189,7 @@ private:
 	{
 		if (renderBuffer->terrainVector.size() != 0) {
 			terrain_shader->use();
-			renderBuffer->terrainVector[0]->Draw();
+			renderBuffer->terrainVector[0]->Draw(*terrain_shader);
 		}
 	}
 

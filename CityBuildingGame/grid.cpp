@@ -8,7 +8,7 @@ Grid::Grid(int aGridHeight, int aGridWidth)
 	gridHeight = aGridHeight;
 	gridWidth = aGridWidth;
 
-	terrain = new Terrain(gridHeight, gridWidth);
+	terrain = new Terrain(gridHeight, gridWidth, this);
 }
 
 void Grid::Init()
@@ -127,6 +127,25 @@ bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY) const
 	}
 	return isFlat;
 }
+
+bool Grid::ValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
+	{
+		/* Check if the building is outside of the grid */
+		if (fromX < 0 || toX >= gridWidth || fromY < 0 || toY >= gridHeight)
+			return false;
+
+		/* Check if the grid is not occupied */
+		for (int i = fromX; i < toX; ++i)
+			for (int j = fromY; j < toY; ++j)
+				if (gridUnits[j][i].occupied)
+					return false;
+
+		/* Check if the floor is flat */
+		if (!IsAreaFlat(fromX, toX, fromY, toY))
+			return false;
+	
+		return true;
+	};
 
 Grid::~Grid()
 {

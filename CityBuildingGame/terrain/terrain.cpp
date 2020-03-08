@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include "terrain.h"
 
-Terrain::Terrain(int aGridHeight, int aGridWidth)
+Terrain::Terrain(int aGridHeight, int aGridWidth, Grid* aGrid)
 {
 	gridWidth = aGridWidth;
 	gridHeight = aGridHeight;
+	grid = aGrid;
 }
 
 void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
@@ -21,7 +22,7 @@ void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::ve
 	}
 }
 
-void Terrain::Draw()
+void Terrain::Draw(Shader& shader)
 {
 	int vertexCount = ReloadGPUData();
 
@@ -31,6 +32,9 @@ void Terrain::Draw()
 	
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture_id_grass);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture_id_grass_red);
 
 	glBindVertexArray(VAO);
 
@@ -51,25 +55,29 @@ int Terrain::ReloadGPUData()
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 		if (currRenderData)
-			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 8, &(*renderData1)[0],
+			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 9, &(*renderData1)[0],
 			             GL_STATIC_DRAW);
 		else
-			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 8, &(*renderData0)[0],
+			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 9, &(*renderData0)[0],
 			             GL_STATIC_DRAW);
 
 		vertexCount = renderDataVertexCount;
 
 		// position attribute, 5th attribute can be 0 for tightly packed, its equal to 3*sizeof(float)
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)nullptr);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)nullptr);
 		glEnableVertexAttribArray(0);
 
 		// position attribute, 5th attribute can be 0 for tightly packed, its equal to 3*sizeof(float)
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(1);
 
 		// texture coord attribute
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
 		glEnableVertexAttribArray(2);
+
+		// alternative texture attribute
+		glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(8 * sizeof(float)));
+		glEnableVertexAttribArray(3);
 	}
 	renderDataMutex.unlock();
 	return vertexCount;
@@ -94,14 +102,13 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	int endX = std::max(std::max((int)upperLeft.x, int(lowerLeft.x)), std::max((int)upperRight.x, int(lowerRight.x)));
 	int fromY = std::min(std::min((int)upperLeft.y, int(lowerLeft.y)), std::min((int)upperRight.y, int(lowerRight.y)));
 	int endY = std::max(std::max((int)upperLeft.y, int(lowerLeft.y)), std::max((int)upperRight.y, int(lowerRight.y)));
-	int loopCounter = 0;
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 	
 	for (int i = std::max(0, fromY + 1); i <= std::min(gridHeight - 1, endY); ++i)
 	{
 		for (int j = std::max(0, fromX + 1); j <= std::min(gridWidth - 1, endX); ++j)
 		{
-			if (index < maximumVisibleUnits * 48)
+			if (index < maximumVisibleUnits * 54)
 			{
 				/* Check if the point is inside the rectangle*/
 				glm::vec2 AM = glm::vec2(j - upperLeft.x, i - upperLeft.y);
@@ -111,9 +118,14 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 				if (0 <= dot(AM, AB) && dot(AM, AB) < dot(AB, AB) &&
 					dot(AM, AD) < dot(AD, AD) && 0 <= dot(AM, AD))
 				{
-					loopCounter++;
 					float float_i = float(i);
 					float float_j = float(j);
+					float occupied;
+
+					if (grid->ValidBuildingPosition(j,i,j,i))
+						occupied = 0.0f;
+					else
+						occupied = 1.0f;
 
 					// x/y/z of first vertex
 					(*renderDataTemp)[index++] = float_j;
@@ -129,6 +141,9 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = 0.0f;
 					(*renderDataTemp)[index++] = 0.0f;
 
+					// 0 = normal texture, 1.0 = secondary texture, etc.
+					(*renderDataTemp)[index++] = occupied;
+
 					
 					(*renderDataTemp)[index++] = float_j + 1;
 					(*renderDataTemp)[index++] = float_i;
@@ -140,6 +155,8 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 
 					(*renderDataTemp)[index++] = 1.0f;
 					(*renderDataTemp)[index++] = 0.0f;
+
+					(*renderDataTemp)[index++] = occupied;
 
 					
 					(*renderDataTemp)[index++] = float_j;
@@ -153,6 +170,8 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = 0.0f;
 					(*renderDataTemp)[index++] = 1.0f;
 
+					(*renderDataTemp)[index++] = occupied;
+					
 					
 					(*renderDataTemp)[index++] = float_j;
 					(*renderDataTemp)[index++] = float_i + 1;
@@ -165,6 +184,8 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = 0.0f;
 					(*renderDataTemp)[index++] = 1.0f;
 
+					(*renderDataTemp)[index++] = occupied;
+
 					
 					(*renderDataTemp)[index++] = float_j + 1;
 					(*renderDataTemp)[index++] = float_i;
@@ -176,6 +197,8 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 
 					(*renderDataTemp)[index++] = 1.0f;
 					(*renderDataTemp)[index++] = 0.0f;
+
+					(*renderDataTemp)[index++] = occupied;
 
 					
 					(*renderDataTemp)[index++] = float_j + 1;
@@ -188,6 +211,8 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 
 					(*renderDataTemp)[index++] = 1.0f;
 					(*renderDataTemp)[index++] = 1.0f;
+
+					(*renderDataTemp)[index++] = occupied;
 				}
 			}
 			else
@@ -195,12 +220,6 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 		}
 	}
 loopExit:
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "LoadVisibleGeometry loop count: " + std::to_string(loopCounter)));
-	std::chrono::high_resolution_clock::duration elapsedTime = std::chrono::high_resolution_clock::now() - start;
-	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "LoadVisibleGeometry time elapsed: " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
-	if (loopCounter > 0)
-		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Approximate CPU cycles per loop: " + std::to_string(elapsedTimeMicroseconds * 4000 / loopCounter)));
 	renderDataMutex.lock();
 	if (currRenderData == 1)
 	{
@@ -210,9 +229,16 @@ loopExit:
 	{
 		currRenderData = 1;
 	}
-	renderDataVertexCount = index / 48 * 6;
+	renderDataVertexCount = index * 6 / 54;
 	reloadGPUData = true;
 	renderDataMutex.unlock();
+
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "LoadVisibleGeometry loop count: " + std::to_string(renderDataVertexCount)));
+	std::chrono::high_resolution_clock::duration elapsedTime = std::chrono::high_resolution_clock::now() - start;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "LoadVisibleGeometry time elapsed: " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
+	if (renderDataVertexCount > 0)
+		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Approximate CPU cycles per loop: " + std::to_string(elapsedTimeMicroseconds * 4000 / renderDataVertexCount)));
 }
 
 void Terrain::CreateGeometry()

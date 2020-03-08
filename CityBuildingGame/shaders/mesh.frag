@@ -1,12 +1,6 @@
 #version 450 core
 out vec4 FragColor;
 
-struct Material {
-    sampler2D diffuse;
-    //vec3 specular;    
-    //float shininess;
-}; 
-
 struct Light {
     vec3 direction;
     vec3 ambient;
@@ -17,10 +11,12 @@ in vec3 FragPos;
 in vec3 Normal;
 in vec2 TexCoords;
 in vec4 FragPosLightSpace;
+in float AlternativeTexture; // 0 = normal texture, 1.0 = secondary texture, etc.
 
-uniform Material material;
 uniform Light light;
 uniform sampler2D shadowMap;
+layout(binding = 0) uniform sampler2D Texture0;
+layout(binding = 1) uniform sampler2D Texture1;
 
 float ShadowCalculation()
 {
@@ -71,8 +67,12 @@ float ShadowCalculation()
 
 void main()
 {
-	vec4 texColor = texture(material.diffuse, TexCoords);
-	if(texColor.a < 0.9)
+    vec4 texColor;
+    if (AlternativeTexture == 0.0)
+	    texColor = texture(Texture0, TexCoords);
+    if (AlternativeTexture == 1.0)
+        texColor = texture(Texture1, TexCoords);
+	if (texColor.a < 0.9)
 		discard;
 		
     vec3 ambient = light.ambient * texColor.rgb;
@@ -84,5 +84,4 @@ void main()
     float shadow = ShadowCalculation();
 	vec3 result = diffuse * (1 - shadow) + ambient;
     FragColor = vec4(result, texColor.a);
-	//FragColor = vec4(vec3(1.0-shadow), texColor.a);
 }

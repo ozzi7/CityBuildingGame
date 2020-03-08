@@ -137,7 +137,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		}
 	}
 
-	if (!ValidBuildingPosition(fromX, fromY, toX, toY))
+	if (!grid->ValidBuildingPosition(fromX, fromY, toX, toY))
 		return;
 
 	/* calculate 3d model position height*/
@@ -271,26 +271,6 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			break;
 		}
 	}
-}
-
-// Move to different class?
-bool GameEventHandler::ValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
-{
-	/* Check if the building is outside of the grid */
-	if (fromX < 0 || toX >= grid->gridWidth || fromY < 0 || toY >= grid->gridHeight)
-		return false;
-
-	/* Check if the grid is not occupied */
-	for (int i = fromX; i < toX; ++i)
-		for (int j = fromY; j < toY; ++j)
-			if (grid->gridUnits[j][i].occupied)
-				return false;
-
-	/* Check if the floor is flat */
-	if (!grid->IsAreaFlat(fromX, toX, fromY, toY))
-		return false;
-	
-	return true;
 }
 
 void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)

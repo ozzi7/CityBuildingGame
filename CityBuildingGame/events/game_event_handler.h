@@ -20,7 +20,6 @@ public:
 
 	void Visit(MoveEvent* aMoveEvent) override;
 	void Visit(CreateBuildingEvent* aCreateBuildingEvent) override;
-	bool ValidBuildingPosition(int fromX, int fromY, int toX, int toY) const; // Move to different class?
 	void Visit(DeleteEvent* aDeleteEvent) override;
 	void Visit(GatherResourceEvent* aGatherResourceEvent) override;
 	void Visit(ReturnHomeEvent* aReturnHomeEvent) override;

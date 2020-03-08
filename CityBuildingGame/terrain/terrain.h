@@ -18,16 +18,17 @@
 #include "noise_gen.h"
 #include "model.h"
 #include "game_object.h"
+#include "grid.h"
 
 class Terrain : GameObject
 {
 public:
-	Terrain(int gridHeight, int gridWidth);
+	Terrain(int gridHeight, int gridWidth, Grid* aGrid);
 	~Terrain();
 
 	void SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	void CreateGeometry();
-	void Draw();
+	void Draw(Shader& shader);
 	void InitOpenGL();
 	void Accept(Visitor& v) override;
 	std::vector<std::vector<float>> heightmap;
@@ -40,8 +41,10 @@ private:
 	void LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	int ReloadGPUData();
 
+	Grid* grid;
 	Model grass;
 	GLuint VBO{}, VAO{};
+	unsigned int secondary_texture;
 	unsigned int texture_id_grass{};
 	unsigned int texture_id_grass_red{};
 	std::string texture_grass = "grass.png";
@@ -64,7 +67,7 @@ private:
 	bool reloadGPUData = false;
 	int currRenderData = 1;
 	int renderDataVertexCount = 0;
-	std::vector<GLfloat>* renderData0 = new std::vector<GLfloat>(maximumVisibleUnits * 48); /* Gets sent to GPU */
-	std::vector<GLfloat>* renderData1 = new std::vector<GLfloat>(maximumVisibleUnits * 48); /* .. */
+	std::vector<GLfloat>* renderData0 = new std::vector<GLfloat>(maximumVisibleUnits * 54); /* Gets sent to GPU */
+	std::vector<GLfloat>* renderData1 = new std::vector<GLfloat>(maximumVisibleUnits * 54); /* .. */
 	std::vector<unsigned int> indices;
 };
