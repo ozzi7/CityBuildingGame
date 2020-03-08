@@ -198,7 +198,9 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			/* save building in the coordinate where the 3d object center is located in->good for rendering */
 			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(dwelling);
 			grid->gridUnits[pathCoordinates.back().second][pathCoordinates.back().first].movingObjects.push_back(settler);
-
+			resources->AddDwelling(dwelling);
+			resources->AddIdleSettler(settler);
+			resources->AddSettler(settler);
 			break;
 		}
 		case BuildingType::LumberjackHutID:
@@ -259,10 +261,12 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 				{
 					this->AddEvent(new DeleteEvent(settlers[i]->posX, settlers[i]->posY, settlers[i])); // kill the settlers
 				}
+				resources->AddLumberjack(lumby);
 			}
 
 			// store reference to grid
 			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(lumberjackHut);
+			resources->AddLumberjackHut(lumberjackHut);
 
 			break;
 		}
@@ -310,11 +314,12 @@ void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 			break;
 		}
 	}
+	// TODO: delete the object in resources
+	resources->RemoveObject(aDeleteEvent->gameObject);
 }
 
 void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 {
-	
 	PathfindingObject* path = new PathfindingObject(
 		grid, std::pair<int,int>(aGatherResourceEvent->person->position.x, aGatherResourceEvent->person->position.y));
 	

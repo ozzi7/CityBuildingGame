@@ -141,7 +141,7 @@ void Game::gameLoop()
 		camera->SetDirectionalLightColor(directionLightColor);
 
 		
-		for (int i = 0; i < grid->gridUnits.size(); i++)
+		/*for (int i = 0; i < grid->gridUnits.size(); i++)
 		{
 			for (int j = 0; j < grid->gridUnits[i].size(); j++)
 			{
@@ -152,8 +152,19 @@ void Game::gameLoop()
 					(*it)->GameStep();
 				}
 			}
+		}*/
+		for (std::list<Settler*>::iterator it = resources->settlers.begin(); 
+			it != resources->settlers.end(); ++it)
+		{
+			(*it)->UpdatePosition(grid);
+			(*it)->GameStep();
 		}
-
+		for (std::list<Lumberjack*>::iterator it = resources->lumberjacks.begin();
+			it != resources->lumberjacks.end(); ++it)
+		{
+			(*it)->UpdatePosition(grid);
+			(*it)->GameStep();
+		}
 
 		grid->terrain->SetRenderWindow(camera->GridTopLeftVisible(),
 									   camera->GridTopRightVisible(),
