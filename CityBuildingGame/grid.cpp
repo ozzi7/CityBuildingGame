@@ -15,17 +15,6 @@ void Grid::Init()
 {
 	/* create gridUnits */
 	gridUnits = std::vector<std::vector<Unit>>(gridHeight, std::vector<Unit>(gridWidth, Unit()));
-	/*gridUnits.reserve(gridHeight);
-	for (int i = 0; i < gridHeight; ++i)
-	{
-		std::vector<Unit> temp = std::vector<Unit>();
-		temp.reserve(gridWidth);
-		for (int j = 0; j < gridWidth; ++j)
-		{
-			temp.push_back(Unit());
-		}
-		gridUnits.push_back(temp);
-	}*/
 
 	/* calculate height of each grid unit */
 	for (int i = 0; i < terrain->heightmap.size() - 1; ++i)

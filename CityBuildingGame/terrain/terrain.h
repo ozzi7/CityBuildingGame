@@ -5,6 +5,8 @@
 #include <time.h>
 #include <mutex>
 #include <atomic>
+#include <algorithm>
+#include <execution>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>

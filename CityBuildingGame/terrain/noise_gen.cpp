@@ -12,16 +12,7 @@ void NoiseGen::GeneratePerlinNoise(std::vector<std::vector<float>>& pHeightmap, 
 
 	GenerateWhiteNoise(pHeightmap);
 
-	//generate smooth noise
-	for (int i = 0; i < octaveCount; i++)
-	{
-		std::vector<std::vector<float>> smoothNoise = std::vector<std::vector<float>>(
-			pHeight, std::vector<float>(pWidth, 0));
-		for (auto& j : smoothNoise)
-			fill(j.begin(), j.end(), 0);
-		GenerateSmoothNoise(pHeightmap, smoothNoise, i);
-		smoothNoiseList.push_back(smoothNoise);
-	}
+	GenerateSmoothNoise(pHeightmap, octaveCount);
 
 	CombineNoiseMaps(pHeightmap, octaveCount, persistence);
 
@@ -68,36 +59,54 @@ void NoiseGen::GenerateWhiteNoise(std::vector<std::vector<float>>& pHeightmap) c
 	}
 }
 
-void NoiseGen::GenerateSmoothNoise(std::vector<std::vector<float>>& baseNoise,
-                                   std::vector<std::vector<float>>& smoothNoise, int octave)
+void NoiseGen::GenerateSmoothNoise(std::vector<std::vector<float>>& baseNoise, int nofOctaves)
 {
-	int samplePeriod = 1 << octave; // calculates 2 ^ k
-	float sampleFrequency = 1.0f / samplePeriod;
+	smoothNoiseList = std::vector<std::vector<std::vector<float>>>(
+		nofOctaves, std::vector<std::vector<float>>(height, std::vector<float>(width, 0.0f)));
+	std::vector<int> samplePeriods = std::vector<int>(nofOctaves);
+	std::vector<float> sampleFrequencies = std::vector<float>(nofOctaves);
+	std::vector<int> sample_i0s = std::vector<int>(nofOctaves);
+	std::vector<int> sample_i1s = std::vector<int>(nofOctaves);
+	std::vector<int> sample_j0s = std::vector<int>(nofOctaves);
+	std::vector<int> sample_j1s = std::vector<int>(nofOctaves);	
+	std::vector<float> vertical_blends = std::vector<float>(nofOctaves);
+
+	for (int k = 0; k < nofOctaves; ++k)
+	{
+		samplePeriods[k] = 1 << k;
+		sampleFrequencies[k] = 1.0f / samplePeriods[k];
+	}
 
 	for (int i = 0; i < height; i++)
 	{
 		//calculate the horizontal sampling indices
-		int sample_i0 = i / samplePeriod * samplePeriod;
-		int sample_i1 = (sample_i0 + samplePeriod) % height; //wrap around
-		float vertical_blend = (i - sample_i0) * sampleFrequency;
+		for (int k = 0; k < nofOctaves; ++k)
+		{
+			sample_i0s[k] = i / samplePeriods[k] * samplePeriods[k];
+			sample_i1s[k] = (sample_i0s[k] + samplePeriods[k]) % height;
+			vertical_blends[k] = (i - sample_i0s[k]) * sampleFrequencies[k];
+		}
 
 		for (int j = 0; j < width; j++)
 		{
 			//calculate the vertical sampling indices
-			int sample_j0 = j / samplePeriod * samplePeriod;
-			int sample_j1 = (sample_j0 + samplePeriod) % width; //wrap around
-			float horizontal_blend = (j - sample_j0) * sampleFrequency;
+			for (int k = 0; k < nofOctaves; ++k)
+			{
+				sample_j0s[k] = j / samplePeriods[k] * samplePeriods[k];
+				sample_j1s[k] = (sample_j0s[k] + samplePeriods[k]) % width; //wrap around
+				float horizontal_blend = (j - sample_j0s[k]) * sampleFrequencies[k];
 
-			//blend the top two corners
-			float top = Interpolate(baseNoise[sample_i0][sample_j0],
-			                        baseNoise[sample_i1][sample_j0], vertical_blend);
+				//blend the top two corners
+				float top = Interpolate(baseNoise[sample_i0s[k]][sample_j0s[k]],
+					baseNoise[sample_i1s[k]][sample_j0s[k]], vertical_blends[k]);
 
-			//blend the bottom two corners
-			float bottom = Interpolate(baseNoise[sample_i0][sample_j1],
-			                           baseNoise[sample_i1][sample_j1], vertical_blend);
+				//blend the bottom two corners
+				float bottom = Interpolate(baseNoise[sample_i0s[k]][sample_j1s[k]],
+					baseNoise[sample_i1s[k]][sample_j1s[k]], vertical_blends[k]);
 
-			//final blend
-			smoothNoise[i][j] = Interpolate(top, bottom, horizontal_blend);
+				//final blend
+				smoothNoiseList[k][i][j] = Interpolate(top, bottom, horizontal_blend);
+			}
 		}
 	}
 }
