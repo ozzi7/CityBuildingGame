@@ -67,7 +67,7 @@ void Game::renderLoop()
 	camera->CalculateVisibleGrid();
 	camera->CalculateLightProjectionMatrix();
 
-	grid->terrain->InitOpenGL(renderer->terrain_shader);
+	grid->terrain->InitOpenGL();
 	renderer->InitShadowMap();
 
 	while (!glfwWindowShouldClose(window))

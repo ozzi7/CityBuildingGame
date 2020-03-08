@@ -109,8 +109,5 @@
     <None Include="shaders\mesh.vert" />
     <None Include="shaders\mesh_skinned.vert" />
     <None Include="shaders\shadow_depth_skinned.vert" />
-    <None Include="shaders\blur_filter.vert" />
-    <None Include="shaders\blur_filter_horizontal.frag" />
-    <None Include="shaders\blur_filter_vertical.frag" />
   </ItemGroup>
 </Project>

@@ -21,8 +21,6 @@ void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::ve
 	}
 }
 
-void Terrain::AddTexturesToGrid() {}
-
 void Terrain::Draw()
 {
 	int vertexCount = ReloadGPUData();
@@ -30,8 +28,7 @@ void Terrain::Draw()
 	// render
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	// bind textures on corresponding texture units
+	
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture_id_grass);
 
@@ -41,9 +38,6 @@ void Terrain::Draw()
 	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
 	glBindVertexArray(0);
-
-	// always good practice to set everything back to defaults once configured.
-	glActiveTexture(GL_TEXTURE0);
 }
 
 int Terrain::ReloadGPUData()
@@ -135,40 +129,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = 0.0f;
 					(*renderDataTemp)[index++] = 0.0f;
 
-					(*renderDataTemp)[index++] = float_j + 1;
-					(*renderDataTemp)[index++] = float_i;
-					(*renderDataTemp)[index++] = heightmap[i][j + 1];
-
-					// x/y/z of normal vector
-					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j + 1].x;
-					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j + 1].y;
-					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j + 1].z;
-
-					(*renderDataTemp)[index++] = 1.0f;
-					(*renderDataTemp)[index++] = 0.0f;
-
-					(*renderDataTemp)[index++] = float_j;
-					(*renderDataTemp)[index++] = float_i + 1;
-					(*renderDataTemp)[index++] = heightmap[i + 1][j];
-
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].x;
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].y;
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].z;
-
-					(*renderDataTemp)[index++] = 0.0f;
-					(*renderDataTemp)[index++] = 1.0f;
-
-					(*renderDataTemp)[index++] = float_j;
-					(*renderDataTemp)[index++] = float_i + 1;
-					(*renderDataTemp)[index++] = heightmap[i + 1][j];
-
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].x;
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].y;
-					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].z;
-
-					(*renderDataTemp)[index++] = 0.0f;
-					(*renderDataTemp)[index++] = 1.0f;
-
+					
 					(*renderDataTemp)[index++] = float_j + 1;
 					(*renderDataTemp)[index++] = float_i;
 					(*renderDataTemp)[index++] = heightmap[i][j + 1];
@@ -180,6 +141,43 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = 1.0f;
 					(*renderDataTemp)[index++] = 0.0f;
 
+					
+					(*renderDataTemp)[index++] = float_j;
+					(*renderDataTemp)[index++] = float_i + 1;
+					(*renderDataTemp)[index++] = heightmap[i + 1][j];
+
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].x;
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].y;
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].z;
+
+					(*renderDataTemp)[index++] = 0.0f;
+					(*renderDataTemp)[index++] = 1.0f;
+
+					
+					(*renderDataTemp)[index++] = float_j;
+					(*renderDataTemp)[index++] = float_i + 1;
+					(*renderDataTemp)[index++] = heightmap[i + 1][j];
+
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].x;
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].y;
+					(*renderDataTemp)[index++] = vertexNormals[(i + 1) * (gridWidth + 1) + j].z;
+
+					(*renderDataTemp)[index++] = 0.0f;
+					(*renderDataTemp)[index++] = 1.0f;
+
+					
+					(*renderDataTemp)[index++] = float_j + 1;
+					(*renderDataTemp)[index++] = float_i;
+					(*renderDataTemp)[index++] = heightmap[i][j + 1];
+
+					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j + 1].x;
+					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j + 1].y;
+					(*renderDataTemp)[index++] = vertexNormals[i * (gridWidth + 1) + j + 1].z;
+
+					(*renderDataTemp)[index++] = 1.0f;
+					(*renderDataTemp)[index++] = 0.0f;
+
+					
 					(*renderDataTemp)[index++] = float_j + 1;
 					(*renderDataTemp)[index++] = float_i + 1;
 					(*renderDataTemp)[index++] = heightmap[i + 1][j + 1];
@@ -344,23 +342,11 @@ void Terrain::Accept(Visitor& v)
 	v.Visit(this);
 }
 
-void Terrain::InitOpenGL(Shader* terrain_shader)
+void Terrain::InitOpenGL()
 {
-	terrain_shader->use();
-	LoadTextures(terrain_shader);
-	GenerateBuffers();
-}
-
-void Terrain::LoadTextures(Shader* terrain_shader)
-{
-	Model grass = Model();
 	texture_id_grass = grass.TextureFromFile(Path + "/../terrain/" + texture_grass.c_str());
-
-	terrain_shader->setInt("texture1", 0);
-}
-
-void Terrain::GenerateBuffers()
-{
+	texture_id_grass_red = grass.TextureFromFile(Path + "/../terrain/" + texture_grass_red.c_str());
+	
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 }

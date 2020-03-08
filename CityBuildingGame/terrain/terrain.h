@@ -16,7 +16,6 @@
 
 #include "globals.h"
 #include "noise_gen.h"
-#include "shader.h"
 #include "model.h"
 #include "game_object.h"
 
@@ -29,9 +28,7 @@ public:
 	void SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	void CreateGeometry();
 	void Draw();
-	void LoadTextures(Shader* shaderTerrain);
-	void GenerateBuffers();
-	void InitOpenGL(Shader* shaderTerrain);
+	void InitOpenGL();
 	void Accept(Visitor& v) override;
 	std::vector<std::vector<float>> heightmap;
 
@@ -41,12 +38,14 @@ public:
 
 private:
 	void LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
-	void AddTexturesToGrid();
 	int ReloadGPUData();
 
-	GLuint VBO{}, VAO{}, EBO{};
+	Model grass;
+	GLuint VBO{}, VAO{};
 	unsigned int texture_id_grass{};
+	unsigned int texture_id_grass_red{};
 	std::string texture_grass = "grass.png";
+	std::string texture_grass_red = "grass_red.png";
 
 	int gridHeight;
 	int gridWidth;
