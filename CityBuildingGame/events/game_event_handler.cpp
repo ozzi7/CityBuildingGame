@@ -73,7 +73,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	{
 		case BuildingType::DwellingID:
 		{
-			buildingSize = std::make_pair(2, 2);
+			buildingSize = std::make_pair(3, 3);
 			break;
 		}
 		case BuildingType::LumberjackHutID:
@@ -172,7 +172,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			
 			/* create building  */
 			Dwelling* dwelling = new Dwelling(modelCenter, // translate
-			                                  glm::vec3(0.012f, 0.006f, 0.012f), // rescale
+			                                  glm::vec3(0.016f, 0.009f, 0.016f), // rescale
 			                                  glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
 
 			/* save some stuff needed later.. TODO: dedicated building exit,check road etc (for other buildings)*/
