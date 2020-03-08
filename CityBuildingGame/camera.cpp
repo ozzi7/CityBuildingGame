@@ -365,6 +365,7 @@ void Camera::CalculateLightProjectionMatrix()
 	{
 		projectionIncreaseA *= 0.9f;
 		lightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA,  ZoomLevel * projectionIncreaseB,-1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
+		if (projectionIncreaseA < 0.1f) { return; } // This shouldn't happen, but just in case to prevent infinite loop
 	}
 	projectionIncreaseA *= 1.11112f;
 
@@ -374,6 +375,7 @@ void Camera::CalculateLightProjectionMatrix()
 	{
 		projectionIncreaseB *= 0.9f;
 		lightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA,  ZoomLevel * projectionIncreaseB,-1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
+		if (projectionIncreaseB < 0.1f) { return; }
 	}
 	projectionIncreaseB *= 1.11112f;
 
@@ -383,6 +385,7 @@ void Camera::CalculateLightProjectionMatrix()
 	{
 		projectionIncreaseC *= 0.9f;
 		lightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA,  ZoomLevel * projectionIncreaseB,-1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
+		if (projectionIncreaseC < 0.1f) { return; }
 	}
 	projectionIncreaseC *= 1.11112f;
 
@@ -392,6 +395,7 @@ void Camera::CalculateLightProjectionMatrix()
 	{
 		projectionIncreaseD *= 0.9f;
 		lightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA,  ZoomLevel * projectionIncreaseB,-1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
+		if (projectionIncreaseD < 0.1f) { return; }
 	}
 	projectionIncreaseD *= 1.11112f;
 
