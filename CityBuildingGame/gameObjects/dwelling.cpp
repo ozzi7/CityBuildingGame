@@ -14,7 +14,7 @@ void Dwelling::Evolve()
 {
 	evolutionStage++;
 
-	scale = glm::vec3(0.165f, 0.165f, 0.165f);
+	scale = glm::vec3(0.18f, 0.18f, 0.18f);
 	rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	recalculateModelMatix();

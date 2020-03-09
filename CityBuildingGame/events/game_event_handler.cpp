@@ -43,6 +43,8 @@ bool GameEventHandler::ProcessEvent()
 
 void GameEventHandler::Visit(MoveEvent* aMoveEvent)
 {
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "[EVENT] Move"));
+
 	/* removes element found by reference */
 	BoneAnimated* toMove = nullptr;
 	for (auto it = grid->gridUnits[aMoveEvent->fromY][aMoveEvent->fromX].movingObjects.begin(); it !=
@@ -60,6 +62,8 @@ void GameEventHandler::Visit(MoveEvent* aMoveEvent)
 
 void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 {
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "[EVENT] Create building"));
+
 	std::pair<int, int> closestToClick = std::make_pair(round(aCreateBuildingEvent->posX),
 	                                                      round(aCreateBuildingEvent->posY));
 	std::pair<int, int> buildingSize;
@@ -74,7 +78,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		}
 		case BuildingType::LumberjackHutID:
 		{
-			buildingSize = std::make_pair(2, 2);
+			buildingSize = std::make_pair(3, 3);
 			break;
 		}
 	}
@@ -135,13 +139,13 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			if (pathCoordinates.empty())
 			{
 				grid->SetGridFree(fromX, toX, fromY, toY);
-				new LoggingEvent(LoggingLevel::WARNING, "The settler can't walk to the dwelling (no path found)");
+				loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::WARNING, "The settler can't walk to the dwelling (no path found)"));
 				return;
 			}
 			
 			/* create building  */
 			Dwelling* dwelling = new Dwelling(modelCenter, // translate
-			                                  glm::vec3(0.016f, 0.009f, 0.016f), // rescale
+			                                  glm::vec3(0.014f, 0.008f, 0.014f), // rescale
 			                                  glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
 
 			/* save some stuff needed later.. TODO: dedicated building exit,check road etc (for other buildings)*/
@@ -159,7 +163,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			/* create settler.. */
 			Settler* settler = new Settler(glm::vec3(pathCoordinates.front().first + 0.5f, pathCoordinates.front().second + 0.5f,
 													 grid->GetHeight(pathCoordinates.front().first, pathCoordinates.front().second)),
-			                               glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
+			                               glm::vec3(0.6f, 0.6f, 0.6f), glm::vec3(0, 0, glm::pi<float>()));
 
 			settler->SetDwelling(dwelling);
 			settler->SetNewPath(pathCoordinates);
@@ -191,12 +195,12 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 			/*get settlers if there are enough, here we get 2 settlers, kill them and create 1 lumby */
 			std::vector<Settler*> settlers = resources->GetIdleSettlers(2);
-			if (settlers.size() != 0)
+			if (settlers.size() == 2)
 			{
 				// copy first settlers position to new lumby
 				Lumberjack* lumby = new Lumberjack(glm::vec3(settlers[0]->posX, settlers[0]->posY,
 				                                             grid->GetHeight(settlers[0]->posX, settlers[0]->posY)),
-				                                   glm::vec3(0.45f, 0.45f, 0.45f), glm::vec3(0, 0, glm::pi<float>()));
+					glm::vec3(0.6f, 0.6f, 0.6f), glm::vec3(0, 0, glm::pi<float>()));
 
 				lumby->SetLumberjackHut(lumberjackHut);
 
@@ -213,7 +217,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 				if (pathCoordinates.empty())
 				{
 					grid->SetGridFree(fromX, toX, fromY, toY);
-					new LoggingEvent(LoggingLevel::WARNING, "The lumberjack can't walk from dwelling to lumberjack hut (no path found)");
+					loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::WARNING, "The lumberjack can't walk from dwelling to lumberjack hut (no path found)"));
 					return;
 				}
 
@@ -244,6 +248,8 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 {
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "[EVENT] Delete"));
+
 	/* deletes reference to element */
 	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX].movingObjects.begin(); it !=
 	     grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX].movingObjects.end(); ++it)
@@ -269,6 +275,8 @@ void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 
 void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 {
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "[EVENT] Gather resource"));
+
 	PathfindingObject* path = new PathfindingObject(
 		grid, std::pair<int,int>(aGatherResourceEvent->person->position.x, aGatherResourceEvent->person->position.y));
 	
@@ -302,6 +310,8 @@ void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 
 void GameEventHandler::Visit(ReturnHomeEvent* aReturnHomeEvent)
 {
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "[EVENT] Return home"));
+
 	switch (aReturnHomeEvent->personType)
 	{
 	case PersonType::LumberjackID:
