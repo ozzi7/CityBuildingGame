@@ -172,7 +172,6 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(dwelling);
 			grid->gridUnits[pathCoordinates.back().second][pathCoordinates.back().first].movingObjects.push_back(settler);
 			resources->AddDwelling(dwelling);
-			resources->AddIdleSettler(settler);
 			resources->AddSettler(settler);
 			break;
 		}
