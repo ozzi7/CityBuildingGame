@@ -100,7 +100,6 @@ Input for a 2x2 building is (0,1, 0,1) but accesses heightmap (0,2, 0,2)
 Note: includes the points, no out of bounds checking*/
 bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY) const
 {
-	bool isFlat = true;
 	float height = terrain->heightmap[fromY][fromX];
 	for (int i = fromY; i <= toY + 1; ++i)
 	{
@@ -108,33 +107,50 @@ bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY) const
 		{
 			if (terrain->heightmap[i][j] != height)
 			{
-				isFlat = false;
-				i = toY + 1; // alternative to goto:
-				break;
+				return false;
 			}
 		}
 	}
-	return isFlat;
+	return true;
 }
-
-bool Grid::ValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
+void Grid::SetGridOccupied(int fromX, int toX, int fromY, int toY)
+{
+	for (int i = fromX; i <= toX; ++i)
 	{
-		/* Check if the building is outside of the grid */
-		if (fromX < 0 || toX >= gridWidth || fromY < 0 || toY >= gridHeight)
-			return false;
+		for (int j = fromY; j <= toY; ++j)
+		{
+			gridUnits[j][i].occupied = true;
+		}
+	}
+}
+void Grid::SetGridFree(int fromX, int toX, int fromY, int toY)
+{
+	for (int i = fromX; i <= toX; ++i)
+	{
+		for (int j = fromY; j <= toY; ++j)
+		{
+			gridUnits[j][i].occupied = false;
+		}
+	}
+}
+bool Grid::IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
+{
+	/* Check if the building is outside of the grid */
+	if (fromX < 0 || toX >= gridWidth || fromY < 0 || toY >= gridHeight)
+		return false;
 
-		/* Check if the grid is not occupied */
-		for (int i = fromX; i < toX; ++i)
-			for (int j = fromY; j < toY; ++j)
-				if (gridUnits[j][i].occupied)
-					return false;
+	/* Check if the grid is not occupied */
+	for (int i = fromX; i <= toX; ++i)
+		for (int j = fromY; j <= toY; ++j)
+			if (gridUnits[j][i].occupied)
+				return false;
 
-		/* Check if the floor is flat */
-		if (!IsAreaFlat(fromX, toX, fromY, toY))
-			return false;
+	/* Check if the floor is flat */
+	if (!IsAreaFlat(fromX, toX, fromY, toY))
+		return false;
 	
-		return true;
-	};
+	return true;
+};
 
 Grid::~Grid()
 {

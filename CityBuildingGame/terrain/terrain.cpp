@@ -122,7 +122,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					float float_j = float(j);
 					float occupied;
 
-					if (grid->ValidBuildingPosition(j,i,j,i))
+					if (grid->IsValidBuildingPosition(j,i,j,i))
 						occupied = 0.0f;
 					else
 						occupied = 1.0f;

@@ -35,8 +35,10 @@ public:
 	void Init();
 	float GetHeight(float posX, float posY) const;
 	bool IsAreaFlat(int fromX, int toX, int fromY, int toY) const;
-	bool ValidBuildingPosition(int fromX, int fromY, int toX, int toY) const;
+	bool IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const;
 	void UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
+	void SetGridOccupied(int fromX, int toX, int fromY, int toY);
+	void SetGridFree(int fromX, int toX, int fromY, int toY);
 
 	// [y][x]
 	std::vector<std::vector<Unit>> gridUnits;

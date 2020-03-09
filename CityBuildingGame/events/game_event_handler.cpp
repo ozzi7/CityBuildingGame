@@ -65,10 +65,6 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	std::pair<int, int> buildingSize;
 
 	glm::vec3 modelCenter = glm::vec3(-1.0f, -1.0f, -1.0f);
-
-	bool isXRoundedUp = std::get<0>(closestToClick) >= aCreateBuildingEvent->posX;
-	bool isYRoundedUp = std::get<1>(closestToClick) >= aCreateBuildingEvent->posY;
-
 	switch (aCreateBuildingEvent->buildingType)
 	{
 		case BuildingType::DwellingID:
@@ -83,74 +79,43 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		}
 	}
 
-	/* Calculate correct occupied units and save in fromX, toX, fromY, toY */
+	/* Calculate correct occupied units and save in fromX, toX, fromY, toY inclusive */
 	/* Set correct 3d model center point */
 	int fromX, toX, fromY, toY = 0;
 
 	if (std::get<0>(buildingSize) % 2 == 0)
 	{
 		fromX = std::get<0>(closestToClick) - std::get<0>(buildingSize) / 2;
-		toX = std::get<0>(closestToClick) + std::get<0>(buildingSize) / 2;
-
+		toX = std::get<0>(closestToClick) + std::get<0>(buildingSize)/ 2 - 1;
 		modelCenter.x = std::get<0>(closestToClick);
 	}
 	else
 	{
-		if (isXRoundedUp)
-		{
-			fromX = std::get<0>(closestToClick) - std::get<0>(buildingSize) / 2 - 1;
-			toX = std::get<0>(closestToClick) + std::get<0>(buildingSize) / 2 - 1;
-
-			modelCenter.x = std::get<0>(closestToClick) - 0.5f;
-		}
-		else
-		{
-			fromX = std::get<0>(closestToClick) - std::get<0>(buildingSize) / 2;
-			toX = std::get<0>(closestToClick) + std::get<0>(buildingSize) / 2;
-
-			modelCenter.x = std::get<0>(closestToClick) + 0.5f;
-		}
+		fromX = int(aCreateBuildingEvent->posX) - std::get<0>(buildingSize) / 2;
+		toX = int(aCreateBuildingEvent->posX) + std::get<0>(buildingSize) / 2;
+		modelCenter.x = int(aCreateBuildingEvent->posX) + 0.5f;
 	}
 
 	if (std::get<1>(buildingSize) % 2 == 0)
 	{
 		fromY = std::get<1>(closestToClick) - std::get<1>(buildingSize) / 2;
-		toY = std::get<1>(closestToClick) + std::get<1>(buildingSize) / 2;
-
+		toY = std::get<1>(closestToClick) + std::get<1>(buildingSize) / 2 - 1;
 		modelCenter.y = std::get<1>(closestToClick);
 	}
 	else
 	{
-		if (isYRoundedUp)
-		{
-			fromY = std::get<1>(closestToClick) - std::get<1>(buildingSize) / 2 - 1;
-			toY = std::get<1>(closestToClick) + std::get<1>(buildingSize) / 2 - 1;
-
-			modelCenter.y = std::get<1>(closestToClick) - 0.5f;
-		}
-		else
-		{
-			fromY = std::get<1>(closestToClick) - std::get<1>(buildingSize) / 2;
-			toY = std::get<1>(closestToClick) + std::get<1>(buildingSize) / 2;
-
-			modelCenter.y = std::get<1>(closestToClick) + 0.5f;
-		}
+		fromY = int(aCreateBuildingEvent->posY) - std::get<1>(buildingSize) / 2;
+		toY = int(aCreateBuildingEvent->posY) + std::get<1>(buildingSize) / 2;
+		modelCenter.y = int(aCreateBuildingEvent->posY) + 0.5f;
 	}
 
-	if (!grid->ValidBuildingPosition(fromX, fromY, toX, toY))
+	if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
 		return;
 
 	/* calculate 3d model position height*/
 	modelCenter.z = grid->GetHeight(modelCenter.x, modelCenter.y);
 
-	/* set grid to occupied*/
-	for (int i = fromX; i < toX; ++i)
-	{
-		for (int j = fromY; j < toY; ++j)
-		{
-			grid->gridUnits[j][i].occupied = true;
-		}
-	}
+	grid->SetGridOccupied(fromX, toX, fromY, toY);
 
 	/* Create the building object etc.. */
 	switch (aCreateBuildingEvent->buildingType)
@@ -168,7 +133,11 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 			/* if no path found do nothing..*/
 			if (pathCoordinates.empty())
+			{
+				grid->SetGridFree(fromX, toX, fromY, toY);
+				new LoggingEvent(LoggingLevel::WARNING, "The settler can't walk to the dwelling (no path found)");
 				return;
+			}
 			
 			/* create building  */
 			Dwelling* dwelling = new Dwelling(modelCenter, // translate
@@ -240,18 +209,18 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 																		std::make_move_iterator(std::end(pathCoordinatesList))};
 				delete path;
 
-				if (pathCoordinates.size() != 0)
+				/* if no path found do nothing..*/
+				if (pathCoordinates.empty())
 				{
-					lumby->SetNewPath(pathCoordinates);
-					lumby->state = State::returningHome;
-					lumby->SetLumberjackHut(lumberjackHut);
-					lumby->destination = lumberjackHut;
+					grid->SetGridFree(fromX, toX, fromY, toY);
+					new LoggingEvent(LoggingLevel::WARNING, "The lumberjack can't walk from dwelling to lumberjack hut (no path found)");
+					return;
 				}
-				else
-				{
-					loggingEventHandler->AddEvent(
-						new LoggingEvent(LoggingLevel::ERROR_L, "The lumberjack can't walk from dwelling to lumberjackhut (no path)"));
-				}
+
+				lumby->SetNewPath(pathCoordinates);
+				lumby->state = State::returningHome;
+				lumby->SetLumberjackHut(lumberjackHut);
+				lumby->destination = lumberjackHut;
 
 				// store reference to lumby
 				grid->gridUnits[lumby->posY][lumby->posX].movingObjects.push_back(lumby);

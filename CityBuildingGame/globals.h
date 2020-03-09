@@ -48,11 +48,11 @@ const float TOONA_GAUSSIAN_VARIANCE_PERCENTAGE = 1.0f;	// [0 - 100]
 const float OAK_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 const float EUROBEECH_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 
-const float TREE_SCALE_FACTOR = 0.011f; // to resize all trees
+const float TREE_SCALE_FACTOR = 0.015f; // to resize all trees
 const float SMALL_TREE_CUTOFF_PERCENTAGE = 30.0f; // [0,100), removes midget trees
 const float PINE_DENSITY = 0.3f;		//0.4 [0 - 1]
 const float TOONA_DENSITY = 0.3f;		//0.1 [0 - 1]
-const float OAK_DENSITY = 0.15f;		// 0.4[0 - 1]
+const float OAK_DENSITY = 0.15f;		//0.4 [0 - 1]
 const float EUROBEECH_DENSITY = 0.3f;		//0.4 [0 - 1]
 
 /* terrain generation */
@@ -83,8 +83,8 @@ extern unsigned int ScreenHeight;
 extern float ScreenRatio;
 // TODO: gameloop fps
 
-extern GameEventHandler* unitEventHandler; // ?? save in every object?! same with grid?
-extern SoundEventHandler* soundEventHandler; // ?? save in every object?! same with grid?
+extern GameEventHandler* unitEventHandler;
+extern SoundEventHandler* soundEventHandler;
 extern LoggingEventHandler* loggingEventHandler;
 
 extern Resources* resources;

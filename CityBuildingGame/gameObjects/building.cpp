@@ -19,7 +19,7 @@ void Building::CreateBuildingOutline()
 	float moreRot = 0.5;
 	float chance;
 
-	for (int i = fromX; i < toX; ++i)
+	for (int i = fromX; i <= toX; ++i)
 	{
 		// bottom right line where y = 0
 		model = glm::mat4(1.0f);
@@ -46,7 +46,7 @@ void Building::CreateBuildingOutline()
 
 		// top line where y = max
 		model = glm::mat4(1.0f);
-		model = translate(model, glm::vec3(i + 0.25f, toY - 0.25f, position.z));
+		model = translate(model, glm::vec3(i + 0.25f, toY + 0.75f, position.z));
 		model = rotate(model, rotation.z + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / twoPi)), rotationZ);
 		chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
 		model = rotate(model, rotation.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationX);
@@ -57,7 +57,7 @@ void Building::CreateBuildingOutline()
 		buildingOutlines.push_back(model);
 
 		model = glm::mat4(1.0f);
-		model = translate(model, glm::vec3(i + 0.75f, toY - 0.25f, position.z));
+		model = translate(model, glm::vec3(i + 0.75f, toY + 0.75f, position.z));
 		model = rotate(model, rotation.z + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / twoPi)), rotationZ);
 		chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
 		model = rotate(model, rotation.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationX);
@@ -69,7 +69,7 @@ void Building::CreateBuildingOutline()
 	}
 
 	// left line where x = 0
-	for (int i = fromY; i < toY; ++i)
+	for (int i = fromY; i <= toY; ++i)
 	{
 		if (i != fromY)
 		{
@@ -85,7 +85,7 @@ void Building::CreateBuildingOutline()
 			buildingOutlines.push_back(model);
 
 			model = glm::mat4(1.0f);
-			model = translate(model, glm::vec3(toX - 0.25f, i + 0.25f, position.z));
+			model = translate(model, glm::vec3(toX + 0.75f, i + 0.25f, position.z));
 			model = rotate(model, rotation.z + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / twoPi)), rotationZ);
 			chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
 			model = rotate(model, rotation.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationX);
@@ -95,7 +95,7 @@ void Building::CreateBuildingOutline()
 
 			buildingOutlines.push_back(model);
 		}
-		if (i != toY - 1)
+		if (i != toY)
 		{
 			model = glm::mat4(1.0f);
 			model = translate(model, glm::vec3(fromX + 0.25f, i + 0.75f, position.z));
@@ -109,7 +109,7 @@ void Building::CreateBuildingOutline()
 			buildingOutlines.push_back(model);
 
 			model = glm::mat4(1.0f);
-			model = translate(model, glm::vec3(toX - 0.25f, i + 0.75, position.z));
+			model = translate(model, glm::vec3(toX + 0.75f, i + 0.75, position.z));
 			model = rotate(model, rotation.z + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / twoPi)), rotationZ);
 			chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
 			model = rotate(model, rotation.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationX);
