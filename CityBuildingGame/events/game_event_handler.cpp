@@ -177,6 +177,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		}
 		case BuildingType::LumberjackHutID:
 		{
+			modelCenter.x = modelCenter.x - 0.45f;
 			LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
 			                                                 glm::vec3(0.012f, 0.006f, 0.012f), // rescale
 			                                                 glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate

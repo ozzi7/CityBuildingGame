@@ -75,7 +75,6 @@ const float SCROLL_SPEED = 10.0f;
 const float ZOOM_DEFAULT = 10.0f;
 
 
-
 extern std::string Path;
 
 extern unsigned int ScreenWidth;

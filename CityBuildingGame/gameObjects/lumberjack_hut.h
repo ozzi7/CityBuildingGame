@@ -12,7 +12,7 @@ public:
 	void Evolve() override;
 	void UpdateWoodModels();
 
-	int wood = 0;
+	int wood = 10;
 	const int woodCapacity = 9;
 
 private:
