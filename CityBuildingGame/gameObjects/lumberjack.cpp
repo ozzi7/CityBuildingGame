@@ -31,6 +31,7 @@ void Lumberjack::GameStep()
 			if (lumberjackHut->wood < lumberjackHut->woodCapacity) {
 				// find new tree if the hut can accept more wood...
 				unitEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
+				lumberjackHut->UpdateWoodModels();
 			}
 			else
 			{
@@ -63,6 +64,10 @@ void Lumberjack::GameStep()
 			soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::TreeChoppingSound));
 			soundPlayed = true;
 		}
+	}
+	if (state == State::idle)
+	{
+		// dont render 
 	}
 
 	/*Update animation*/
