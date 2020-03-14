@@ -50,10 +50,10 @@ const float EUROBEECH_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 
 const float TREE_SCALE_FACTOR = 0.015f; // to resize all trees
 const float SMALL_TREE_CUTOFF_PERCENTAGE = 30.0f; // [0,100), removes midget trees
-const float PINE_DENSITY = 0.3f;		//0.4 [0 - 1]
-const float TOONA_DENSITY = 0.3f;		//0.1 [0 - 1]
-const float OAK_DENSITY = 0.15f;		//0.4 [0 - 1]
-const float EUROBEECH_DENSITY = 0.3f;		//0.4 [0 - 1]
+const float PINE_DENSITY = 0.15f;		//0.3 [0 - 1]
+const float TOONA_DENSITY = 0.15f;		//0.3 [0 - 1]
+const float OAK_DENSITY = 0.05f;		//0.15 [0 - 1]
+const float EUROBEECH_DENSITY = 0.15f;		//0.3 [0 - 1]
 
 /* terrain generation */
 const float HILL_HEIGHT = 15.0f;	// ~ 0 - 15
@@ -62,7 +62,7 @@ const float HILL_HEIGHT = 15.0f;	// ~ 0 - 15
 const float PERSISTENCE = 0.5f; // ~ 0.4 - 0.7
 
 const float PLATEAU_PERCENTAGE = 10.0f; // [0 - 100] flattens x percent tallest terrain
-const float VALLEY_PERCENTAGE = 30.0f; //[0 - 100] flattens x percent of lowest terrain
+const float VALLEY_PERCENTAGE = 50.0f; //[0 - 100] flattens x percent of lowest terrain
 
 // if 0 => the tree noise map defines tree distribution, 1=> the terrain height defines tree distribution
 const float TERRAIN_WEIGHT_FACTOR = 0.7f; // [0,1]

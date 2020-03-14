@@ -89,10 +89,8 @@ void MapGenerator::generateTrees()
 		for (int j = 0; j < grid->gridWidth; ++j)
 		{
 			float pine_prob = std::min(1.0f, PINE_DENSITY * getGaussianPDFValue(pine_mean, pine_var, treeMap[i][j]));
-			float toona_prob = std::min(
-				1.0f, TOONA_DENSITY * getGaussianPDFValue(toona_mean, toona_var, treeMap[i][j]));
-			float euroBeech_prob = std::min(
-				1.0f, EUROBEECH_DENSITY * getGaussianPDFValue(euroBeech_mean, euroBeech_var, treeMap[i][j]));
+			float toona_prob = std::min(1.0f, TOONA_DENSITY * getGaussianPDFValue(toona_mean, toona_var, treeMap[i][j]));
+			float euroBeech_prob = std::min(1.0f, EUROBEECH_DENSITY * getGaussianPDFValue(euroBeech_mean, euroBeech_var, treeMap[i][j]));
 			float oak_prob = std::min(1.0f, OAK_DENSITY * getGaussianPDFValue(oak_mean, oak_var, treeMap[i][j]));
 
 			std::bernoulli_distribution pine_distribution(pine_prob);
