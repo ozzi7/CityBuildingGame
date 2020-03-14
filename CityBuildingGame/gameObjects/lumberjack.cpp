@@ -23,13 +23,19 @@ void Lumberjack::GameStep()
 		if (state == State::returningHome)
 		{
 			// arrived back home..
-			// TODO: add resources
-			// find new tree..
-			if (lumberjackHut->evolutionStage == 0)
-			{
-				lumberjackHut->Evolve();
+			lumberjackHut->wood++;
+			if (lumberjackHut->wood < lumberjackHut->woodCapacity) {
+				// find new tree if the hut can accept more wood...
+				if (lumberjackHut->evolutionStage == 0)
+				{
+					lumberjackHut->Evolve();
+				}
+				unitEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
 			}
-			unitEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
+			else
+			{
+				state = State::idle;
+			}
 		}
 		else if (state == State::walkingToTarget)
 		{
@@ -38,6 +44,7 @@ void Lumberjack::GameStep()
 			workTimeLeft = 1000;
 			animationSecond = 0.0f;
 		}
+		// TODO: check the idle workers here too? instead of doing it in returnhome above.. 
 	}
 	if (state == State::working && workTimeLeft == 0)
 	{

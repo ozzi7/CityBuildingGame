@@ -60,13 +60,14 @@ void RenderBuffer::Visit(LumberjackHut* obj)
 	switch (obj->evolutionStage)
 	{
 	case 0:
-		buildingOutlineModels.insert(buildingOutlineModels.end(), obj->buildingOutlines.begin(),
-		                             obj->buildingOutlines.end());
+		buildingOutlineModels.insert(buildingOutlineModels.end(), obj->buildingOutlines.begin(), 
+		                             obj->buildingOutlines.end()); // TODO: or clear the source vector on evolve ?
 		break;
 	case 1:
-		lumberjackHutModels.push_back(obj->model);
+		//lumberjackHutModels.push_back(obj->model);
 		break;
 	}
+	woodModels.insert(woodModels.end(), obj->woodModels.begin(), obj->woodModels.end());
 }
 
 void RenderBuffer::Visit(Dwelling* obj)
@@ -106,6 +107,7 @@ void RenderBuffer::ClearData()
 	dwellingModels_growth1.clear();
 	buildingOutlineModels.clear();
 	settlerModels.clear();
+	woodModels.clear();
 
 	settlerAnimationSeconds.clear();
 	lumberjackAnimationSeconds.clear();

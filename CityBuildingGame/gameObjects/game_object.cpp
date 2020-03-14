@@ -15,7 +15,7 @@ GameObject::GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotatio
 	recalculateModelMatix();
 
 	posX = (int)position.x,
-		posY = (int)position.y;
+	posY = (int)position.y;
 }
 
 GameObject::GameObject() {};

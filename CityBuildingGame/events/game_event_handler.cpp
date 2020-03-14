@@ -270,6 +270,7 @@ void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 	}
 	// TODO: delete the object in resources
 	resources->RemoveObject(aDeleteEvent->gameObject);
+	delete aDeleteEvent->gameObject;
 }
 
 void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
