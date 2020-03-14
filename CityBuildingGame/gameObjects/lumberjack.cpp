@@ -24,6 +24,7 @@ void Lumberjack::GameStep()
 		{
 			// arrived back home..
 			lumberjackHut->wood++;
+			lumberjackHut->UpdateWoodModels();
 			if (lumberjackHut->evolutionStage == 0)
 			{
 				lumberjackHut->Evolve();
@@ -31,7 +32,6 @@ void Lumberjack::GameStep()
 			if (lumberjackHut->wood < lumberjackHut->woodCapacity) {
 				// find new tree if the hut can accept more wood...
 				unitEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
-				lumberjackHut->UpdateWoodModels();
 			}
 			else
 			{
