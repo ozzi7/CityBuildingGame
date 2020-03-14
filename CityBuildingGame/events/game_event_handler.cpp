@@ -193,54 +193,103 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			lumberjackHut->CreateBuildingOutline();
 
 			/*get workers if there are enough, here we get 2 workers, kill them and create 1 lumby */
-			std::vector<Worker*> workers = resources->GetIdleWorkers(2);
-			if (workers.size() == 2)
-			{
-				// copy first workers position to new lumby
-				Lumberjack* lumby = new Lumberjack(glm::vec3(workers[0]->posX, workers[0]->posY,
-				                                             grid->GetHeight(workers[0]->posX, workers[0]->posY)),
-					glm::vec3(0.6f, 0.6f, 0.6f), glm::vec3(0, 0, glm::pi<float>()));
+			//std::vector<Worker*> workers = resources->GetIdleWorkers(2);
+			//if (workers.size() == 2)
+			//{
+			//	// copy first workers position to new lumby
+			//	Lumberjack* lumby = new Lumberjack(glm::vec3(workers[0]->posX, workers[0]->posY,
+			//	                                             grid->GetHeight(workers[0]->posX, workers[0]->posY)),
+			//		glm::vec3(0.6f, 0.6f, 0.6f), glm::vec3(0, 0, glm::pi<float>()));
 
-				lumby->SetLumberjackHut(lumberjackHut);
+			//	lumby->SetLumberjackHut(lumberjackHut);
 
-				/* there should always be a path here because of roads */
-				Pathfinding* path = new Pathfinding(grid, std::pair<int,int>(workers[0]->posX, workers[0]->posY),
-				                                      std::pair<int,int>(lumberjackHut->entranceX, lumberjackHut->entranceY));
-				path->CalculatePath();
-				std::list<std::pair<int,int>> pathCoordinatesList = path->GetPath();
-				std::vector<std::pair<int,int>> pathCoordinates {std::make_move_iterator(std::begin(pathCoordinatesList)), 
-																		std::make_move_iterator(std::end(pathCoordinatesList))};
-				delete path;
+			//	/* there should always be a path here because of roads */
+			//	Pathfinding* path = new Pathfinding(grid, std::pair<int,int>(workers[0]->posX, workers[0]->posY),
+			//	                                      std::pair<int,int>(lumberjackHut->entranceX, lumberjackHut->entranceY));
+			//	path->CalculatePath();
+			//	std::list<std::pair<int,int>> pathCoordinatesList = path->GetPath();
+			//	std::vector<std::pair<int,int>> pathCoordinates {std::make_move_iterator(std::begin(pathCoordinatesList)), 
+			//															std::make_move_iterator(std::end(pathCoordinatesList))};
+			//	delete path;
 
-				/* if no path found do nothing..*/
-				if (pathCoordinates.empty())
-				{
-					grid->SetGridFree(fromX, toX, fromY, toY);
-					loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::WARNING, "The lumberjack can't walk from dwelling to lumberjack hut (no path found)"));
-					return;
-				}
+			//	/* if no path found do nothing..*/
+			//	if (pathCoordinates.empty())
+			//	{
+			//		grid->SetGridFree(fromX, toX, fromY, toY);
+			//		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::WARNING, "The lumberjack can't walk from dwelling to lumberjack hut (no path found)"));
+			//		return;
+			//	}
 
-				lumby->SetNewPath(pathCoordinates);
-				lumby->state = State::returningHome;
-				lumby->SetLumberjackHut(lumberjackHut);
-				lumby->destination = lumberjackHut;
+			//	lumby->SetNewPath(pathCoordinates);
+			//	lumby->state = State::returningHome;
+			//	lumby->SetLumberjackHut(lumberjackHut);
+			//	lumby->destination = lumberjackHut;
 
-				// store reference to lumby
-				grid->gridUnits[lumby->posY][lumby->posX].movingObjects.push_back(lumby);
+			//	// store reference to lumby
+			//	grid->gridUnits[lumby->posY][lumby->posX].movingObjects.push_back(lumby);
 
-				/* delete the workers */
-				for (int i = 0; i < workers.size(); ++i)
-				{
-					this->AddEvent(new DeleteEvent(workers[i]->posX, workers[i]->posY, workers[i])); // kill the workers
-				}
-				resources->AddLumberjack(lumby);
-			}
+			//	/* delete the workers */
+			//	for (int i = 0; i < workers.size(); ++i)
+			//	{
+			//		this->AddEvent(new DeleteEvent(workers[i]->posX, workers[i]->posY, workers[i])); // kill the workers
+			//	}
+			//	resources->AddLumberjack(lumby);
+			//}
 
 			// store reference to grid
 			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(lumberjackHut);
 			resources->AddLumberjackHut(lumberjackHut);
+			resources->AddIdleBuilding(lumberjackHut);
 
 			break;
+		}
+	}
+}
+
+void GameEventHandler::AssignWorkToIdleWorkers()
+{
+	LumberjackHut* lumberjackHut = nullptr;
+	while (Worker* worker = resources->GetIdleWorker())
+	{
+		try {
+			lumberjackHut = dynamic_cast<LumberjackHut*>(resources->GetIdleBuilding());
+		}
+		catch(const std::exception& e) {} // Not an exception, expected behavior...
+
+		if (lumberjackHut)
+		{
+			// copy worker position to new lumby
+			Lumberjack* lumby = new Lumberjack(glm::vec3(worker->posX, worker->posY,
+			                                   grid->GetHeight(worker->posX, worker->posY)),
+											   glm::vec3(0.6f, 0.6f, 0.6f),
+											   glm::vec3(0, 0, glm::pi<float>()));
+
+			lumby->SetLumberjackHut(lumberjackHut);
+
+			/* there should always be a path here because of roads */
+			Pathfinding* path = new Pathfinding(grid, std::pair<int,int>(worker->posX, worker->posY),
+			                                    std::pair<int,int>(lumberjackHut->entranceX, lumberjackHut->entranceY));
+			path->CalculatePath();
+			std::list<std::pair<int,int>> pathCoordinatesList = path->GetPath();
+			std::vector<std::pair<int,int>> pathCoordinates {std::make_move_iterator(std::begin(pathCoordinatesList)), 
+																	std::make_move_iterator(std::end(pathCoordinatesList))};
+			delete path;
+
+			lumby->SetNewPath(pathCoordinates);
+			lumby->state = State::returningHome;
+			lumby->SetLumberjackHut(lumberjackHut);
+			lumby->destination = lumberjackHut;
+
+			// store reference to lumby
+			grid->gridUnits[lumby->posY][lumby->posX].movingObjects.push_back(lumby);
+
+			resources->AddLumberjack(lumby);
+		}
+
+		// add worker back into idleWorkers, if it could not be assigned a job
+		else {
+			resources->AddIdleWorker(worker);
+			return;
 		}
 	}
 }

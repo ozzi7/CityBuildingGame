@@ -141,18 +141,6 @@ void Game::gameLoop()
 		camera->SetDirectionalLightColor(directionLightColor);
 
 		
-		/*for (int i = 0; i < grid->gridUnits.size(); i++)
-		{
-			for (int j = 0; j < grid->gridUnits[i].size(); j++)
-			{
-				for (std::list<BoneAnimated*>::iterator it = grid->gridUnits[i][j].movingObjects.begin();
-				     it != grid->gridUnits[i][j].movingObjects.end(); ++it)
-				{
-					(*it)->UpdatePosition(grid);
-					(*it)->GameStep();
-				}
-			}
-		}*/
 		for (std::list<Worker*>::iterator it = resources->workers.begin(); 
 			it != resources->workers.end(); ++it)
 		{
@@ -177,6 +165,7 @@ void Game::gameLoop()
 
 		//*Handle all object moving, deleting, creating, no locks needed because no other thread is currently doing anything..*/
 		while (unitEventHandler->ProcessEvent());
+		unitEventHandler->AssignWorkToIdleWorkers();
 
 		/* Extract data for the renderer*/
 		RenderBuffer* producerBuffer = renderBuffers->GetProducerBuffer();

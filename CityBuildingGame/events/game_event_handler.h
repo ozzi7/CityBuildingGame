@@ -18,6 +18,8 @@ public:
 	GameEvent* GetEvent();
 	bool ProcessEvent();
 
+	void AssignWorkToIdleWorkers();
+
 	void Visit(MoveEvent* aMoveEvent) override;
 	void Visit(CreateBuildingEvent* aCreateBuildingEvent) override;
 	void Visit(DeleteEvent* aDeleteEvent) override;
