@@ -153,8 +153,8 @@ void Game::gameLoop()
 				}
 			}
 		}*/
-		for (std::list<Settler*>::iterator it = resources->settlers.begin(); 
-			it != resources->settlers.end(); ++it)
+		for (std::list<Worker*>::iterator it = resources->workers.begin(); 
+			it != resources->workers.end(); ++it)
 		{
 			(*it)->UpdatePosition(grid);
 			(*it)->GameStep();

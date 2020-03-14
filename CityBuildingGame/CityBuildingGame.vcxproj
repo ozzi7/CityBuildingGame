@@ -35,7 +35,7 @@
     <ClInclude Include="gameObjects\lumberjack_hut.h" />
     <ClInclude Include="gameObjects\oak.h" />
     <ClInclude Include="gameObjects\pine.h" />
-    <ClInclude Include="gameObjects\settler.h" />
+    <ClInclude Include="gameObjects\worker.h" />
     <ClInclude Include="gameObjects\euro_beech.h" />
     <ClInclude Include="events\gather_resource_event.h" />
     <ClInclude Include="rendering\meshes\mipmap_generator.h" />
@@ -85,7 +85,7 @@
     <ClCompile Include="gameObjects\game_object.cpp" />
     <ClCompile Include="gameObjects\lumberjack.cpp" />
     <ClCompile Include="gameObjects\lumberjack_hut.cpp" />
-    <ClCompile Include="gameObjects\settler.cpp" />
+    <ClCompile Include="gameObjects\worker.cpp" />
     <ClCompile Include="events\gather_resource_event.cpp" />
     <ClCompile Include="rendering\meshes\mipmap_generator.cpp" />
     <ClCompile Include="pathfinding\pathfinding.cpp" />

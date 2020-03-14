@@ -46,12 +46,12 @@ void RenderBuffer::Visit(Lumberjack* obj)
 	}
 }
 
-void RenderBuffer::Visit(Settler* obj)
+void RenderBuffer::Visit(Worker* obj)
 {
 	if (obj->visible)
 	{
-		settlerModels.push_back(obj->model);
-		settlerAnimationSeconds.push_back(obj->animationSecond);
+		workerModels.push_back(obj->model);
+		workerAnimationSeconds.push_back(obj->animationSecond);
 	}
 }
 
@@ -105,9 +105,9 @@ void RenderBuffer::ClearData()
 	lumberjackHutModels.clear();
 	dwellingModels_growth1.clear();
 	buildingOutlineModels.clear();
-	settlerModels.clear();
+	workerModels.clear();
 
-	settlerAnimationSeconds.clear();
+	workerAnimationSeconds.clear();
 	lumberjackAnimationSeconds.clear();
 	lumberjackWoodAnimationSeconds.clear();
 	lumberjackChoppingAnimationSeconds.clear();

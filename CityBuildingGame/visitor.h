@@ -11,7 +11,7 @@ class Lumberjack;
 class Building;
 class LumberjackHut;
 class Dwelling;
-class Settler;
+class Worker;
 
 class Visitor
 {
@@ -26,7 +26,7 @@ public:
 	virtual void Visit(Toona* toona) = 0;
 
 	virtual void Visit(Lumberjack* lumberjack) = 0;
-	virtual void Visit(Settler* settler) = 0;
+	virtual void Visit(Worker* worker) = 0;
 
 	virtual void Visit(Building* building) = 0;
 	virtual void Visit(LumberjackHut* lumberjackHut) = 0;
