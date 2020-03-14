@@ -31,7 +31,7 @@ void InputHandler::Mouseclick(int button, int action) const
 			return;
 		}
 
-		soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::SettlerArrivedSound)); // TODO:
+		soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::WorkerArrivedSound)); // TODO:
 
 		// Test Code
 		glm::vec3 cursor_position = Camera->CursorPositionOnGrid();

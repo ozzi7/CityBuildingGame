@@ -1,31 +1,31 @@
 #include "stdafx.h"
 #pragma once
-#include <settler.h>
+#include <worker.h>
 #include <dwelling.h>
 
-Settler::Settler(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
+Worker::Worker(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 	: BoneAnimated(aPosition, aScale * 0.35f, aRotation) {};
 
-void Settler::Accept(Visitor& v)
+void Worker::Accept(Visitor& v)
 {
 	v.Visit(this);
 };
 
-void Settler::SetDwelling(Dwelling* aDwelling)
+void Worker::SetDwelling(Dwelling* aDwelling)
 {
 	dwelling = aDwelling;
 }
 
-void Settler::GameStep()
+void Worker::GameStep()
 {
 	/* check if arrived at dwelling*/
 	if (hasArrived && dwelling->evolutionStage == 0)
 	{
 		dwelling->Evolve();
-		soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::SettlerArrivedSound));
+		soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::WorkerArrivedSound));
 		visible = false;
 		state = State::idle;
-		resources->AddIdleSettler(this);
+		resources->AddIdleWorker(this);
 	}
 	else
 	{

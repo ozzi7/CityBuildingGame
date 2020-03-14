@@ -18,14 +18,14 @@ void Resources::AddLumberjack(Lumberjack* lumberjack)
 {
 	lumberjacks.push_back(lumberjack);
 };
-void Resources::AddSettler(Settler* settler)
+void Resources::AddWorker(Worker* worker)
 {
-	settlers.push_back(settler);
+	workers.push_back(worker);
 };
-// not implicitly called on addsettler
-void Resources::AddIdleSettler(Settler* idleSettler)
+// not implicitly called on add worker
+void Resources::AddIdleWorker(Worker* idleWorker)
 {
-	idleSettlers.push_back(idleSettler);
+	idleWorkers.push_back(idleWorker);
 };
 // not implicitly called on addbuilding
 void Resources::AddIdleBuilding(Building* idleBuilding)
@@ -44,11 +44,11 @@ void Resources::RemoveObject(GameObject* gameObject)
 			return;
 		}
 	}
-	for (std::list<Settler*>::iterator it = settlers.begin(); it != settlers.end(); ++it)
+	for (std::list<Worker*>::iterator it = workers.begin(); it != workers.end(); ++it)
 	{
 		if (bla == (long)(void*)(*it))
 		{
-			it = settlers.erase(it);
+			it = workers.erase(it);
 			return;
 		}
 	}
@@ -70,13 +70,13 @@ void Resources::RemoveObject(GameObject* gameObject)
 	}
 };
 
-Settler* Resources::GetIdleSettler()
+Worker* Resources::GetIdleWorker()
 {
-	Settler* last = nullptr;
-	if (idleSettlers.size() != 0)
+	Worker* last = nullptr;
+	if (idleWorkers.size() != 0)
 	{
-		last = idleSettlers.back();
-		idleSettlers.pop_back();
+		last = idleWorkers.back();
+		idleWorkers.pop_back();
 	}
 	return last;
 };
@@ -92,15 +92,15 @@ Building* Resources::GetIdleBuilding()
 	return last;
 };
 
-// returns empty vector if not enough idle settlers found
-std::vector<Settler*> Resources::GetIdleSettlers(int nofSettlersNeeded)
+// returns empty vector if not enough idle workers found
+std::vector<Worker*> Resources::GetIdleWorkers(int nofWorkersNeeded)
 {
-	std::vector<Settler*> settlers = std::vector<Settler*>();
+	std::vector<Worker*> workers = std::vector<Worker*>();
 
-	if (idleSettlers.size() >= nofSettlersNeeded)
+	if (idleWorkers.size() >= nofWorkersNeeded)
 	{
-		for (int i = 0; i < nofSettlersNeeded; ++i)
-			settlers.push_back(GetIdleSettler());
+		for (int i = 0; i < nofWorkersNeeded; ++i)
+			workers.push_back(GetIdleWorker());
 	}
-	return settlers;
+	return workers;
 };

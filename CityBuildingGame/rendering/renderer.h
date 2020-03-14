@@ -24,7 +24,7 @@ public:
 	SkinnedMesh* mesh_lumby_walk_w_axe;
 	SkinnedMesh* mesh_lumby_walk_w_wood;
 	SkinnedMesh* mesh_lumby_chopping;
-	SkinnedMesh* mesh_settler;
+	SkinnedMesh* mesh_worker;
 	Shader* terrain_shader;
 	Shader* skinned_mesh_shader;
 	Shader* instanced_mesh_shader;
@@ -86,9 +86,9 @@ public:
 		mesh_lumby_chopping->LoadMesh(Path + "/../models/people/lumberjack/chopping_wood/lumberjack.dae");
 		mesh_lumby_chopping->PrecalculateBoneTransforms();
 
-		mesh_settler = new SkinnedMesh();
-		mesh_settler->LoadMesh(Path + "/../models/people/settler/walking.dae");
-		mesh_settler->PrecalculateBoneTransforms();
+		mesh_worker = new SkinnedMesh();
+		mesh_worker->LoadMesh(Path + "/../models/people/worker/walking.dae");
+		mesh_worker->PrecalculateBoneTransforms();
 
 		ambientLight = {0.3f, 0.3f, 0.3f};
 	}
@@ -246,12 +246,12 @@ private:
 			shader->setMat4("model", renderBuffer->lumberjackChoppingModels[i]);
 			mesh_lumby_chopping->Render(*shader);
 		}
-		for (int i = 0; i < renderBuffer->settlerModels.size(); ++i)
+		for (int i = 0; i < renderBuffer->workerModels.size(); ++i)
 		{
-			mesh_settler->BindBoneTransform(renderBuffer->settlerAnimationSeconds[i], shader);
+			mesh_worker->BindBoneTransform(renderBuffer->workerAnimationSeconds[i], shader);
 
-			shader->setMat4("model", renderBuffer->settlerModels[i]);
-			mesh_settler->Render(*shader);
+			shader->setMat4("model", renderBuffer->workerModels[i]);
+			mesh_worker->Render(*shader);
 		}
 	}
 };

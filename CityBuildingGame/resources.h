@@ -2,7 +2,7 @@
 #include <list>
 #include <vector>
 
-class Settler;
+class Worker;
 class Building;
 class Lumberjack;
 class Dwelling;
@@ -14,24 +14,24 @@ class Resources
 public:
 	Resources();
 	~Resources();
-	void AddIdleSettler(Settler* idleSettler);
+	void AddIdleWorker(Worker* idleWorker);
 	void AddIdleBuilding(Building* idleBuilding);
 
 	void AddLumberjack(Lumberjack* lumberjack);
-	void AddSettler(Settler* settler);
+	void AddWorker(Worker* worker);
 	void AddDwelling(Dwelling* dwelling);
 	void AddLumberjackHut(LumberjackHut* lumberjackHut);
 	void RemoveObject(GameObject* gameObject); 
 
-	Settler* GetIdleSettler();
+	Worker* GetIdleWorker();
 	Building* GetIdleBuilding();
-	std::vector<Settler*> GetIdleSettlers(int nofSettlersNeeded);
+	std::vector<Worker*> GetIdleWorkers(int nofWorkersNeeded);
 
-	std::list<Settler*> idleSettlers = std::list<Settler*>();
+	std::list<Worker*> idleWorkers = std::list<Worker*>();
 	std::list<Building*> idleBuildings = std::list<Building*>();
 
 	std::list<Lumberjack*> lumberjacks = std::list<Lumberjack*>();
-	std::list<Settler*> settlers = std::list<Settler*>();
+	std::list<Worker*> workers = std::list<Worker*>();
 	std::list<Dwelling*> dwellings = std::list<Dwelling*>();
 	std::list<LumberjackHut*> lumberjackHuts = std::list<LumberjackHut*>();
 };

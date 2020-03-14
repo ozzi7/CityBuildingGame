@@ -1,7 +1,7 @@
 #pragma once
 #include <sound_event.h>
 
-enum class SoundType { SettlerArrivedSound, TreeChoppingSound };
+enum class SoundType { WorkerArrivedSound, TreeChoppingSound };
 
 class PlaySoundEvent : public SoundEvent
 {

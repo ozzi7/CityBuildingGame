@@ -10,7 +10,7 @@
 #include <pine.h>
 #include <lumberjack_hut.h>
 #include <dwelling.h>
-#include <settler.h>
+#include <worker.h>
 
 class RenderBuffer : public Buffer, public Visitor
 {
@@ -28,7 +28,7 @@ public:
 	void Visit(Building* obj) override;
 	void Visit(LumberjackHut* obj) override;
 	void Visit(Dwelling* obj) override;
-	void Visit(Settler* obj) override;
+	void Visit(Worker* obj) override;
 	void ClearData();
 
 	std::vector<glm::mat4> pineModels;
@@ -42,11 +42,11 @@ public:
 	std::vector<glm::mat4> lumberjackChoppingModels;
 	std::vector<glm::mat4> dwellingModels_growth1;
 	std::vector<glm::mat4> buildingOutlineModels;
-	std::vector<glm::mat4> settlerModels;
+	std::vector<glm::mat4> workerModels;
 
 	std::vector<glm::mat4> woodModels;
 
-	std::vector<float> settlerAnimationSeconds;
+	std::vector<float> workerAnimationSeconds;
 	std::vector<float> lumberjackAnimationSeconds;
 	std::vector<float> lumberjackWoodAnimationSeconds;
 	std::vector<float> lumberjackChoppingAnimationSeconds;
