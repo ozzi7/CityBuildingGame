@@ -1,0 +1,17 @@
+Global resource: Money
+
+Dwelling : 
+	Cost: Money
+	Adds: 1 Settler, 1 Wood
+	
+Lumberjack Hut:
+	Cost: 2 Wood, 2 Settler (one works, one in building)
+	Adds: 
+	
+Worker:
+	State: Immigrating, Emigrating, Idle, Getting resource, Carrying resource, Going to workplace
+	
+Lumberjack:
+	State: Lazy, Going to tree, chopping tree, returning wood
+	
+	
