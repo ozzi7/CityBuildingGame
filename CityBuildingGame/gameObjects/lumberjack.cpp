@@ -36,6 +36,7 @@ void Lumberjack::GameStep()
 			else
 			{
 				state = State::idle;
+				visible = false;
 			}
 		}
 		else if (state == State::walkingToTarget)
@@ -64,10 +65,6 @@ void Lumberjack::GameStep()
 			soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::TreeChoppingSound));
 			soundPlayed = true;
 		}
-	}
-	if (state == State::idle)
-	{
-		// dont render 
 	}
 
 	/*Update animation*/
