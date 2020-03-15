@@ -19,11 +19,3 @@ void Dwelling::Evolve()
 
 	recalculateModelMatix();
 }
-void Dwelling::AddWoodBuildingMaterial()
-{
-
-}
-void Dwelling::AddStoneBuildingMaterial()
-{
-
-}

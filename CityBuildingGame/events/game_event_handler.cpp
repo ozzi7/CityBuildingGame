@@ -377,7 +377,7 @@ void GameEventHandler::Visit(ReturnHomeEvent* aReturnHomeEvent)
 		delete path;
 
 		lumby->SetNewPath(pathCoordinates);
-		lumby->state = State::carryingResource;
+		lumby->state = State::carryingWood;
 		break;
 	}
 }

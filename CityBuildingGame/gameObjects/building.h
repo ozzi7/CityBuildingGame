@@ -29,8 +29,8 @@ public:
 
 	void CreateBuildingOutline();
 	virtual void Evolve() = 0;
-	void AddWoodBuildingMaterial() = 0;
-	void AddStoneBuildingMaterial() = 0;
+	void AddWoodBuildingMaterial();
+	void AddStoneBuildingMaterial();
 
 protected:
 	/*building materials needed & delivered.. */

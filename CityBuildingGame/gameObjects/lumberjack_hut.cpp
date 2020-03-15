@@ -19,14 +19,6 @@ void LumberjackHut::Evolve()
 	recalculateModelMatix();
 	UpdateWoodModels();
 }
-void LumberjackHut::AddWoodBuildingMaterial()
-{
-
-}
-void LumberjackHut::AddStoneBuildingMaterial()
-{
-
-}
 void LumberjackHut::UpdateWoodModels()
 {
 	woodModels.clear();

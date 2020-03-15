@@ -20,7 +20,7 @@ void Lumberjack::GameStep()
 {
 	if (hasArrived)
 	{
-		if (state == State::carryingResource)
+		if (state == State::carryingWood)
 		{
 			// arrived back home..
 			lumberjackHut->wood++;
@@ -50,7 +50,7 @@ void Lumberjack::GameStep()
 		// done working.. delete tree, go home
 		unitEventHandler->AddEvent(new DeleteEvent(destination->posX, destination->posY, destination));
 		unitEventHandler->AddEvent(new ReturnHomeEvent(this, PersonType::LumberjackID));
-		state = State::carryingResource;
+		state = State::carryingWood;
 	}
 	else if (state == State::working)
 	{
