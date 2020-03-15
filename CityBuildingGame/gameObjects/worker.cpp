@@ -40,7 +40,7 @@ void Worker::GameStep()
 	}
 	else if (hasArrived && state == State::goingToWork)
 	{
-		unitEventHandler->AddEvent(new AddWorkerEvent(destination->posX, destination->posY, destination));
+		unitEventHandler->AddEvent(new WorkerArrivedEvent(destination));
 		unitEventHandler->AddEvent(new DeleteEvent(posX, posY, this));
 	}
 	else

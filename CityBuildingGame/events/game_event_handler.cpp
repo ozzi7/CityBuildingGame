@@ -381,9 +381,58 @@ void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 			break;
 		}
 	}
-	// TODO: delete the object in resources
 	resources->RemoveObject(aDeleteEvent->gameObject);
 	delete aDeleteEvent->gameObject;
+}
+
+void GameEventHandler::Visit(WorkerArrivedEvent* aWorkerArrivedEvent)
+{
+	LumberjackHut* lumberjackHut = nullptr;
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "[EVENT] Worker arrived at workplace"));
+	try {
+		lumberjackHut = dynamic_cast<LumberjackHut*>(aWorkerArrivedEvent->gameObject);
+	}
+	catch (const std::exception & e)  // This should not happen
+	{
+		return;
+	}
+	lumberjackHut->workersPresent++;
+	lumberjackHut->workersOnTheWay--;
+	lumberjackHut->Evolve;
+
+	if (lumberjackHut->workersRequired == lumberjackHut->workersPresent + lumberjackHut->workersOnTheWay) {
+		// all workers arrived
+
+		Building* building = nullptr;
+		try {
+			building = dynamic_cast<Building*>(aWorkerArrivedEvent->gameObject);
+		}
+		catch (const std::exception & e)  // This should not happen
+		{
+			return;
+		}
+		resources->RemoveWorkerTask(building); // building has enough workers now (TODO: )
+	}
+
+	// copy worker position to new lumby
+	Lumberjack* lumby = new Lumberjack(glm::vec3(lumberjackHut->entranceX, lumberjackHut->entranceY, 
+		grid->GetHeight(lumberjackHut->entranceX, lumberjackHut->entranceY)),
+		glm::vec3(0.6f, 0.6f, 0.6f),
+		glm::vec3(0, 0, glm::pi<float>()));
+
+	lumby->SetLumberjackHut(lumberjackHut);
+	lumby->state = State::idle;
+	lumby->destination = lumberjackHut;
+	lumby->visible = false;
+
+	if (lumberjackHut->workersRequired == lumberjackHut->workersPresent + lumberjackHut->workersOnTheWay) { // last lumby starts working
+		lumby->visible = true;
+		unitEventHandler->AddEvent(new GatherResourceEvent(Resource::Wood, lumby));
+	}
+
+	// store reference to lumby
+	grid->gridUnits[lumby->posY][lumby->posX].movingObjects.push_back(lumby);
+	resources->AddLumberjack(lumby);
 }
 
 void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
@@ -400,7 +449,7 @@ void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 			path->FindClosestTree();
 			std::list<std::pair<int,int>> pathCoordinatesList = path->GetPath();
 			
-			if (!pathCoordinatesList.size() != 0)
+			if (pathCoordinatesList.size() != 0)
 			{
 				std::vector<std::pair<int,int>> pathCoordinates{std::make_move_iterator(std::begin(pathCoordinatesList)), 
 															    std::make_move_iterator(std::end(pathCoordinatesList))};

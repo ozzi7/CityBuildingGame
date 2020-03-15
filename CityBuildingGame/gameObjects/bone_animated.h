@@ -6,8 +6,11 @@
 
 class Grid;
 
-// goingToWork = lumberjack has axe, gettingResource = no axe, normal walking
-enum class State { idle, immigrating, carryingWood, carryingStone, gettingResource, goingToWork, working, walking };
+/*	goingToWork : lumberjack has axe and walks to tree
+	goingToWorkplace: worker walks to lumberjackhut 
+	gettingResource = worker walks to resource to pick it up
+*/
+enum class State { idle, immigrating, carryingWood, carryingStone, gettingResource, goingToWork, goingToWorkplace, working, walking };
 
 class BoneAnimated : public GameObject
 {

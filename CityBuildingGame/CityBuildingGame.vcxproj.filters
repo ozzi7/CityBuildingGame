@@ -41,6 +41,7 @@
     <ClCompile Include="resources.cpp" />
     <ClCompile Include="events\return_home_event.cpp" />
     <ClCompile Include="gameObjects\worker.cpp" />
+    <ClCompile Include="worker_arrived_event.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
@@ -99,6 +100,7 @@
     <ClInclude Include="gameObjects\euro_beech.h" />
     <ClInclude Include="gameObjects\euro_beech_2.h" />
     <ClInclude Include="gameObjects\worker.h" />
+    <ClInclude Include="worker_arrived_event.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

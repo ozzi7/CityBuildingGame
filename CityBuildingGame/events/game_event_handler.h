@@ -6,6 +6,7 @@
 #include <delete_event.h>
 #include <gather_resource_event.h>
 #include <return_home_event.h>
+#include <worker_arrived_event.h>
 #include <tuple>
 
 class Grid;
@@ -25,6 +26,8 @@ public:
 	void Visit(DeleteEvent* aDeleteEvent) override;
 	void Visit(GatherResourceEvent* aGatherResourceEvent) override;
 	void Visit(ReturnHomeEvent* aReturnHomeEvent) override;
+	void Visit(WorkerArrivedEvent* aWorkerArrivedEvent) override;
+
 	Grid* grid;
 
 private:
