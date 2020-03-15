@@ -414,7 +414,7 @@ void GameEventHandler::Visit(WorkerArrivedEvent* aWorkerArrivedEvent)
 	}
 	lumberjackHut->workersPresent++;
 	lumberjackHut->workersOnTheWay--;
-	lumberjackHut->Evolve;
+	lumberjackHut->Evolve();
 
 	if (lumberjackHut->workersRequired == lumberjackHut->workersPresent + lumberjackHut->workersOnTheWay) {
 		// all workers arrived
