@@ -167,6 +167,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 			worker->SetDwelling(dwelling);
 			worker->SetNewPath(pathCoordinates);
+			worker->state = State::immigrating;
 
 			/* save building in the coordinate where the 3d object center is located in->good for rendering */
 			grid->gridUnits[(int)modelCenter.y][(int)modelCenter.x].objects.push_back(dwelling);
@@ -277,7 +278,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 			delete path;
 
 			lumby->SetNewPath(pathCoordinates);
-			lumby->state = State::returningHome;
+			lumby->state = State::goingToWork;
 			lumby->SetLumberjackHut(lumberjackHut);
 			lumby->destination = lumberjackHut;
 
@@ -344,7 +345,7 @@ void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 				grid->gridUnits[path->GetDestinationObject()->posY][path->GetDestinationObject()->posX].hasTree = false;
 				aGatherResourceEvent->person->SetNewPath(pathCoordinates);
 				aGatherResourceEvent->person->destination = path->GetDestinationObject();
-				aGatherResourceEvent->person->state = State::walkingToTarget;
+				aGatherResourceEvent->person->state = State::goingToWork;
 			}
 			else
 			{
@@ -376,7 +377,7 @@ void GameEventHandler::Visit(ReturnHomeEvent* aReturnHomeEvent)
 		delete path;
 
 		lumby->SetNewPath(pathCoordinates);
-		lumby->state = State::returningHome;
+		lumby->state = State::carryingResource;
 		break;
 	}
 }

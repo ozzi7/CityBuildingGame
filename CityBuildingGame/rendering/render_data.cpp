@@ -31,11 +31,11 @@ void RenderBuffer::Visit(Lumberjack* obj)
 {
 	if (obj->visible)
 	{
-		if (obj->state == State::returningHome) {
+		if (obj->state == State::goingToWork) {
 			lumberjackWoodModels.push_back(obj->model);
 			lumberjackWoodAnimationSeconds.push_back(obj->animationSecond);
 		}
-		else if (obj->state == State::walkingToTarget) {
+		else if (obj->state == State::immigrating) {
 			lumberjackModels.push_back(obj->model);
 			lumberjackAnimationSeconds.push_back(obj->animationSecond);
 		}

@@ -12,6 +12,8 @@ public:
 	void SetDwelling(Dwelling* aDwelling);
 	void GameStep() override;
 
+	Building* targetBuilding{};
+
 protected:
 	Dwelling* dwelling{};
 };

@@ -22,13 +22,20 @@ public:
 	int entranceX = 0;
 	int entranceY = 0;
 
-	/* 0 when created, 1 when done constructing ? what about during construction? used to change 3d model currently */
+	/* 0 when created, 1 when done constructing (used for 3d model selection) */
 	unsigned short evolutionStage = 0;
 	std::vector<glm::mat4> buildingOutlines;
 	std::vector<glm::mat4> woodModels;
 
 	void CreateBuildingOutline();
 	virtual void Evolve() = 0;
+	void AddWoodBuildingMaterial() = 0;
+	void AddStoneBuildingMaterial() = 0;
 
 protected:
+	/*building materials needed & delivered.. */
+	int woodRequired = 0;
+	int woodDelivered = 0;
+	int stoneRequired = 0;
+	int stoneDelivered = 0;
 };

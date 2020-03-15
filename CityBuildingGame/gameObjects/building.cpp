@@ -121,3 +121,21 @@ void Building::CreateBuildingOutline()
 		}
 	}
 };
+void Building::AddWoodBuildingMaterial()
+{
+	woodDelivered++;
+
+	if (woodDelivered == woodRequired && stoneDelivered == stoneRequired)
+	{
+		Evolve();
+	}
+}
+void Building::AddStoneBuildingMaterial()
+{
+	stoneDelivered++;
+
+	if (woodDelivered == woodRequired && stoneDelivered == stoneRequired)
+	{
+		Evolve();
+	}
+}
