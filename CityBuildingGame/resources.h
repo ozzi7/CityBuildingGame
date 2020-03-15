@@ -16,12 +16,14 @@ public:
 	~Resources();
 	void AddIdleWorker(Worker* idleWorker);
 	void AddIdleBuilding(Building* idleBuilding);
+	void RemoveIdleWorker(Worker* idleWorker);
+	void RemoveIdleBuilding(Building* idleBuilding); 
 
 	void AddLumberjack(Lumberjack* lumberjack);
 	void AddWorker(Worker* worker);
 	void AddDwelling(Dwelling* dwelling);
 	void AddLumberjackHut(LumberjackHut* lumberjackHut);
-	void RemoveObject(GameObject* gameObject); 
+	void RemoveObject(GameObject* gameObject);
 
 	Worker* GetIdleWorker();
 	Building* GetIdleBuilding();

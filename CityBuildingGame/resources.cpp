@@ -31,14 +31,42 @@ void Resources::AddIdleWorker(Worker* idleWorker)
 void Resources::AddIdleBuilding(Building* idleBuilding)
 {
 	idleBuildings.push_back(idleBuilding);
+}
+
+// not implicitly called on RemoveObject
+void Resources::RemoveIdleWorker(Worker* idleWorker)
+{
+	long pointer = (long)(void*)idleWorker;
+	for (std::list<Worker*>::iterator it = idleWorkers.begin();it != idleWorkers.end(); ++it)
+	{
+		if (pointer == (long)(void*)(*it))
+		{
+			it = idleWorkers.erase(it);
+			return;
+		}
+	}
+}
+
+// not implicitly called on RemoveObject
+void Resources::RemoveIdleBuilding(Building* idleBuilding)
+{
+	long pointer = (long)(void*)idleBuilding;
+	for (std::list<Building*>::iterator it = idleBuildings.begin();it != idleBuildings.end(); ++it)
+	{
+		if (pointer == (long)(void*)(*it))
+		{
+			it = idleBuildings.erase(it);
+			return;
+		}
+	}
 };
 
 void Resources::RemoveObject(GameObject* gameObject)
 {
-	long bla = (long)(void*)gameObject;
+	long pointer = (long)(void*)gameObject;
 	for (std::list<Lumberjack*>::iterator it = lumberjacks.begin();it != lumberjacks.end(); ++it)
 	{
-		if (bla == (long)(void*)(*it))
+		if (pointer == (long)(void*)(*it))
 		{
 			it = lumberjacks.erase(it);
 			return;
@@ -46,7 +74,7 @@ void Resources::RemoveObject(GameObject* gameObject)
 	}
 	for (std::list<Worker*>::iterator it = workers.begin(); it != workers.end(); ++it)
 	{
-		if (bla == (long)(void*)(*it))
+		if (pointer == (long)(void*)(*it))
 		{
 			it = workers.erase(it);
 			return;
@@ -54,7 +82,7 @@ void Resources::RemoveObject(GameObject* gameObject)
 	}
 	for (std::list<LumberjackHut*>::iterator it = lumberjackHuts.begin(); it != lumberjackHuts.end(); ++it)
 	{
-		if (bla == (long)(void*)(*it))
+		if (pointer == (long)(void*)(*it))
 		{
 			it = lumberjackHuts.erase(it);
 			return;
@@ -62,7 +90,7 @@ void Resources::RemoveObject(GameObject* gameObject)
 	}
 	for (std::list<Dwelling*>::iterator it = dwellings.begin(); it != dwellings.end(); ++it)
 	{
-		if (bla == (long)(void*)(*it))
+		if (pointer == (long)(void*)(*it))
 		{
 			it = dwellings.erase(it);
 			return;

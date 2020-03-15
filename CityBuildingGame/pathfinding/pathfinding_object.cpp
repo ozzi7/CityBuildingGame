@@ -41,6 +41,17 @@ void PathfindingObject::FindClosestEdge()
 	calculatePath();
 }
 
+void PathfindingObject::FindClosestIdleWorker()
+{
+	objectType = ObjectType::idleWorker;
+	calculatePath();
+}
+void PathfindingObject::FindClosestIdleBuilding()
+{
+	objectType = ObjectType::idleBuilding;
+	calculatePath();
+}
+
 std::list<std::pair<int,int>> PathfindingObject::GetPath()
 {
 	std::list<std::pair<int,int>> path;
@@ -60,17 +71,55 @@ GameObject* PathfindingObject::GetDestinationObject() const
 {
 	if (objectFound)
 	{
-		for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].objects)
+		switch (objectType)
 		{
-			if (objectType == ObjectType::tree)
+			case ObjectType::tree:
 			{
-				try
+				for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].objects)
 				{
-					Tree* tree = dynamic_cast<Tree*>(object);
-					return object;
+					try
+					{
+						Tree* tree = dynamic_cast<Tree*>(object);
+						if (tree)
+							return object;
+					}
+					catch (const std::exception& e) {} // Not an exception, expected behavior...
+					break;
 				}
-				catch (const std::exception& e) {} // Not an exception, expected behavior...
 			}
+
+			case ObjectType::idleWorker:
+			{
+				for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].movingObjects)
+				{
+					try
+					{
+						Worker* worker = dynamic_cast<Worker*>(object);
+						if (worker)
+							if (worker->state == State::idle)
+								return object;
+					}
+					catch (const std::exception& e) {} // Not an exception, expected behavior...
+				}
+			}
+
+			case ObjectType::idleBuilding:
+			{
+				for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].objects)
+				{
+					try
+					{
+						Building* building = dynamic_cast<Building*>(object);
+						if (building)
+							return object;
+					}
+					catch (const std::exception& e) {} // Not an exception, expected behavior...
+					break;
+				}
+			}
+
+			default:
+				return nullptr;
 		}
 	}
 	return nullptr;
@@ -115,28 +164,63 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 {
 	switch (objectType)
 	{
-	case ObjectType::tree:
-		if (grid->gridUnits[coordinate.second][coordinate.first].hasTree)
+		case ObjectType::tree:
 		{
-			objectFound = true;
-			destination = new NodeObject();
-			destination->coordinate = coordinate;
-			destination->parent = current;
+			if (grid->gridUnits[coordinate.second][coordinate.first].hasTree)
+				objectFound = true;
+			break;
 		}
-		break;
 
-	case ObjectType::edge:
-		if (coordinate.first == maxX ||
-			coordinate.first == 0 ||
-			coordinate.second == maxY ||
-			coordinate.second == 0)
+		case ObjectType::idleWorker:
 		{
-			objectFound = true;
-			destination = new NodeObject();
-			destination->coordinate = coordinate;
-			destination->parent = current;
+			for (BoneAnimated* object : grid->gridUnits[coordinate.second][coordinate.first].movingObjects)
+			{
+				try
+				{
+					Worker* worker = dynamic_cast<Worker*>(object);
+					if (worker)
+						if (worker->state == State::idle)
+							objectFound = true;
+				}
+				catch (const std::exception& e) {} // Not an exception, expected behavior...
+			}
+			break;
 		}
-		break;
+
+		case ObjectType::idleBuilding:
+		{
+			for (GameObject* object : grid->gridUnits[coordinate.second][coordinate.first].objects)
+			{
+				try
+				{
+					Building* building = dynamic_cast<Building*>(object);
+					if (building)
+						if (building->workers < building->requiredWorkers)
+							objectFound = true;
+				}
+				catch (const std::exception& e) {} // Not an exception, expected behavior...
+			}
+			break;
+		}
+
+		case ObjectType::edge:
+		{
+			if (coordinate.first == maxX ||
+				coordinate.first == 0 ||
+				coordinate.second == maxY ||
+				coordinate.second == 0)
+			{
+				objectFound = true;
+			}
+			break;
+		}
+	}
+	
+	if (objectFound)
+	{
+		destination = new NodeObject();
+		destination->coordinate = coordinate;
+		destination->parent = current;
 	}
 }
 

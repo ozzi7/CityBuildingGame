@@ -11,7 +11,8 @@
 #include "euro_beech_2.h"
 #include "toona.h"
 #include "pine.h"
-#include "bone_animated.h"
+#include "worker.h"
+#include "building.h"
 
 /* Represents a grid subunit */
 class Unit

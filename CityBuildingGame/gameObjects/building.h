@@ -22,6 +22,9 @@ public:
 	int entranceX = 0;
 	int entranceY = 0;
 
+	int workers = 0;
+	int requiredWorkers = 0;
+	
 	/* 0 when created, 1 when done constructing (used for 3d model selection) */
 	unsigned short evolutionStage = 0;
 	std::vector<glm::mat4> buildingOutlines;
