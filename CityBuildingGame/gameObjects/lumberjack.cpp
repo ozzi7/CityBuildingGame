@@ -20,24 +20,23 @@ void Lumberjack::GameStep()
 {
 	if (hasArrived)
 	{
-		if (state == State::returningHome)
+		if (state == State::carryingResource)
 		{
 			// arrived back home..
 			lumberjackHut->wood++;
+			lumberjackHut->UpdateWoodModels();
+
 			if (lumberjackHut->wood < lumberjackHut->woodCapacity) {
 				// find new tree if the hut can accept more wood...
-				if (lumberjackHut->evolutionStage == 0)
-				{
-					lumberjackHut->Evolve();
-				}
 				unitEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
 			}
 			else
 			{
 				state = State::idle;
+				visible = false;
 			}
 		}
-		else if (state == State::walkingToTarget)
+		else if (state == State::goingToWork)
 		{
 			// arrived at tree, start working..
 			state = State::working;
@@ -51,7 +50,7 @@ void Lumberjack::GameStep()
 		// done working.. delete tree, go home
 		unitEventHandler->AddEvent(new DeleteEvent(destination->posX, destination->posY, destination));
 		unitEventHandler->AddEvent(new ReturnHomeEvent(this, PersonType::LumberjackID));
-		state = State::returningHome;
+		state = State::carryingResource;
 	}
 	else if (state == State::working)
 	{

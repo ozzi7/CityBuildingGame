@@ -5,7 +5,7 @@
 LumberjackHut::LumberjackHut(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 	: Building(aPosition, aScale, aRotation) {
 	requiredWorkers = 2;
-};
+}
 
 void LumberjackHut::Accept(Visitor& v)
 {
@@ -21,19 +21,71 @@ void LumberjackHut::Evolve()
 	recalculateModelMatix();
 	UpdateWoodModels();
 }
+void LumberjackHut::AddWoodBuildingMaterial()
+{
+
+}
+void LumberjackHut::AddStoneBuildingMaterial()
+{
+
+}
 void LumberjackHut::UpdateWoodModels()
 {
 	woodModels.clear();
 
-	glm::vec3 scale = glm::vec3(0.3f, 0.3f,0.3f); //glm::vec3(0.012f, 0.006f, 0.012f);
+	glm::vec3 scale = glm::vec3(0.22f, 0.2f, 0.2f); //glm::vec3(0.012f, 0.006f, 0.012f);
 	const glm::vec3 rotationZ = glm::vec3(0.0f, 0.0f, 1.0f); //glm::vec3(0.0f, 0.0f, 1.0f);
-	const glm::vec3 rotationX = glm::vec3(0.0f, 0.0f, 1.0f); //glm::vec3(1.0f, 0.0f, 0.0f);
+	const glm::vec3 rotationX = glm::vec3(1.0f, 0.0f, 0.0f); //glm::vec3(1.0f, 0.0f, 0.0f);
 	const glm::vec3 rotationY = glm::vec3(0.0f, 1.0f, 0.0f); //glm::vec3(0.0f, 1.0f, 0.0f);
 
-	for (int i = 0; i <= 9; ++i)
+	for (int i = 0; i < std::min(4, wood); ++i)
 	{
 		glm::mat4 model = glm::mat4(1.0f);
-		model = translate(model, glm::vec3(posX + 2.25f, posY + 2.25f + i * 0.25f, position.z));
+
+		model = translate(model, glm::vec3(toX + (i-1) * 0.175f, posY + 0.45f, position.z + 0.075f));
+
+		model = rotate(model, glm::half_pi<float>(), rotationZ);
+		model = rotate(model, rotation.x, rotationX); // TODO:
+		model = rotate(model, rotation.y, rotationY);
+		model = glm::scale(model, scale);
+
+		woodModels.push_back(model);
+	}
+	for (int i = 0; i < std::min(3, wood - 4); ++i)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+
+		model = translate(model, glm::vec3(toX + (i - 1) * 0.175f + 0.09f, posY + 0.45f, position.z + 0.071f*3));
+
+		model = rotate(model, glm::half_pi<float>(), rotationZ);
+		model = rotate(model, rotation.x, rotationX); // TODO:
+		model = rotate(model, rotation.y, rotationY);
+		model = glm::scale(model, scale);
+
+		woodModels.push_back(model);
+	}
+	for (int i = 0; i < std::min(2, wood - 7); ++i)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+
+		model = translate(model, glm::vec3(toX + (i - 1) * 0.175f + 0.09f*2, posY + 0.45f, position.z + 0.071f*5));
+
+		model = rotate(model, glm::half_pi<float>(), rotationZ);
+		model = rotate(model, rotation.x, rotationX); // TODO:
+		model = rotate(model, rotation.y, rotationY);
+		model = glm::scale(model, scale);
+
+		woodModels.push_back(model);
+	}
+	for (int i = 0; i < std::min(1, wood - 9); ++i)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+
+		model = translate(model, glm::vec3(toX + (i - 1) * 0.175f + 0.09f*3, posY + 0.45f, position.z + 0.071f*7));
+
+		model = rotate(model, glm::half_pi<float>(), rotationZ);
+		model = rotate(model, rotation.x, rotationX); // TODO:
+		model = rotate(model, rotation.y, rotationY);
 		model = glm::scale(model, scale);
 
 		woodModels.push_back(model);

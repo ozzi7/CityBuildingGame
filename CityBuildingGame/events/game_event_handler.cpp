@@ -167,6 +167,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 			worker->SetDwelling(dwelling);
 			worker->SetNewPath(pathCoordinates);
+			worker->state = State::immigrating;
 
 			/* save building in the coordinate where the 3d object center is located in->good for rendering */
 			grid->gridUnits[dwelling->entranceY][dwelling->entranceX].objects.push_back(dwelling);
@@ -177,6 +178,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		}
 		case BuildingType::LumberjackHutID:
 		{
+			modelCenter.x = modelCenter.x - 0.45f;
 			LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
 			                                                 glm::vec3(0.012f, 0.006f, 0.012f), // rescale
 			                                                 glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
@@ -438,7 +440,7 @@ void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 				grid->gridUnits[path->GetDestinationObject()->posY][path->GetDestinationObject()->posX].hasTree = false;
 				aGatherResourceEvent->person->SetNewPath(pathCoordinates);
 				aGatherResourceEvent->person->destination = path->GetDestinationObject();
-				aGatherResourceEvent->person->state = State::walkingToTarget;
+				aGatherResourceEvent->person->state = State::goingToWork;
 			}
 			else
 				aGatherResourceEvent->person->state = State::idle;
@@ -468,7 +470,7 @@ void GameEventHandler::Visit(ReturnHomeEvent* aReturnHomeEvent)
 		delete path;
 
 		lumby->SetNewPath(pathCoordinates);
-		lumby->state = State::returningHome;
+		lumby->state = State::carryingResource;
 		break;
 	}
 }

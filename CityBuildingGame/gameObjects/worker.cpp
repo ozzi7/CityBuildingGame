@@ -19,13 +19,20 @@ void Worker::SetDwelling(Dwelling* aDwelling)
 void Worker::GameStep()
 {
 	/* check if arrived at dwelling*/
-	if (hasArrived && dwelling->evolutionStage == 0)
+	if (hasArrived && state == State::immigrating && dwelling->evolutionStage == 0)
 	{
 		dwelling->Evolve();
 		soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::WorkerArrivedSound));
 		visible = false;
 		state = State::idle;
 		resources->AddIdleWorker(this);
+	}
+	else if (hasArrived && state == State::carryingWood) {
+		targetBuilding->AddWoodBuildingMaterial();
+	}
+	else if (hasArrived && state == State::carryingStone)
+	{
+		targetBuilding->AddStoneBuildingMaterial();
 	}
 	else
 	{
