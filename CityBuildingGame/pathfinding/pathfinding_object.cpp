@@ -195,7 +195,7 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 				{
 					Building* building = dynamic_cast<Building*>(object);
 					if (building)
-						if (building->workers < building->requiredWorkers)
+						if (building->workersPresent < building->workersRequired)
 							objectFound = true;
 				}
 				catch (const std::exception& e) {} // Not an exception, expected behavior...

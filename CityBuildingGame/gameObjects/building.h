@@ -21,9 +21,6 @@ public:
 
 	int entranceX = 0;
 	int entranceY = 0;
-
-	int workers = 0;
-	int requiredWorkers = 0;
 	
 	/* 0 when created, 1 when done constructing (used for 3d model selection) */
 	unsigned short evolutionStage = 0;
@@ -35,10 +32,19 @@ public:
 	void AddWoodBuildingMaterial();
 	void AddStoneBuildingMaterial();
 
-protected:
-	/*building materials needed & delivered.. */
+	/*building requirements needed & delivered.. */
+	int workersPresent = 0;
+	int workersRequired = 0;
+	int workersOnTheWay = 0;
+
 	int woodRequired = 0;
 	int woodDelivered = 0;
+	int woodOnTheWay = 0;
+
 	int stoneRequired = 0;
 	int stoneDelivered = 0;
+	int stoneOnTheWay = 0;
+
+protected:
+
 };

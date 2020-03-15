@@ -12,7 +12,7 @@ public:
 	void SetDwelling(Dwelling* aDwelling);
 	void GameStep() override;
 
-	Building* targetBuilding{};
+	Building* resourceTargetBuilding{};
 
 protected:
 	Dwelling* dwelling{};

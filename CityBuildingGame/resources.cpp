@@ -28,9 +28,9 @@ void Resources::AddIdleWorker(Worker* idleWorker)
 	idleWorkers.push_back(idleWorker);
 };
 // not implicitly called on addbuilding
-void Resources::AddIdleBuilding(Building* idleBuilding)
+void Resources::AddWorkerTask(Building* workplace)
 {
-	idleBuildings.push_back(idleBuilding);
+	workerTasks.push_back(workplace);
 }
 
 // not implicitly called on RemoveObject
@@ -48,14 +48,14 @@ void Resources::RemoveIdleWorker(Worker* idleWorker)
 }
 
 // not implicitly called on RemoveObject
-void Resources::RemoveIdleBuilding(Building* idleBuilding)
+void Resources::RemoveWorkerTask(Building* workplace)
 {
-	long pointer = (long)(void*)idleBuilding;
-	for (std::list<Building*>::iterator it = idleBuildings.begin();it != idleBuildings.end(); ++it)
+	long pointer = (long)(void*)workplace;
+	for (std::list<Building*>::iterator it = workerTasks.begin();it != workerTasks.end(); ++it)
 	{
 		if (pointer == (long)(void*)(*it))
 		{
-			it = idleBuildings.erase(it);
+			it = workerTasks.erase(it);
 			return;
 		}
 	}
@@ -109,13 +109,13 @@ Worker* Resources::GetIdleWorker()
 	return last;
 };
 
-Building* Resources::GetIdleBuilding()
+Building* Resources::GetWorkerTask()
 {
 	Building* last = nullptr;
-	if (idleBuildings.size() != 0)
+	if (workerTasks.size() != 0)
 	{
-		last = idleBuildings.back();
-		idleBuildings.pop_back();
+		last = workerTasks.back();
+		workerTasks.pop_back();
 	}
 	return last;
 };

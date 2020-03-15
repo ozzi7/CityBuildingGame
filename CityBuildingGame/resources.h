@@ -15,9 +15,9 @@ public:
 	Resources();
 	~Resources();
 	void AddIdleWorker(Worker* idleWorker);
-	void AddIdleBuilding(Building* idleBuilding);
+	void AddWorkerTask(Building* workplace);
 	void RemoveIdleWorker(Worker* idleWorker);
-	void RemoveIdleBuilding(Building* idleBuilding); 
+	void RemoveWorkerTask(Building* idleBuilding);
 
 	void AddLumberjack(Lumberjack* lumberjack);
 	void AddWorker(Worker* worker);
@@ -26,11 +26,11 @@ public:
 	void RemoveObject(GameObject* gameObject);
 
 	Worker* GetIdleWorker();
-	Building* GetIdleBuilding();
+	Building* GetWorkerTask();
 	std::vector<Worker*> GetIdleWorkers(int nofWorkersNeeded);
 
 	std::list<Worker*> idleWorkers = std::list<Worker*>();
-	std::list<Building*> idleBuildings = std::list<Building*>();
+	std::list<Building*> workerTasks = std::list<Building*>();
 
 	std::list<Lumberjack*> lumberjacks = std::list<Lumberjack*>();
 	std::list<Worker*> workers = std::list<Worker*>();

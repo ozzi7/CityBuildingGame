@@ -28,11 +28,20 @@ void Worker::GameStep()
 		resources->AddIdleWorker(this);
 	}
 	else if (hasArrived && state == State::carryingWood) {
-		targetBuilding->AddWoodBuildingMaterial();
+		resourceTargetBuilding->AddWoodBuildingMaterial();
+		state = State::idle;
+		resources->AddIdleWorker(this);
 	}
 	else if (hasArrived && state == State::carryingStone)
 	{
-		targetBuilding->AddStoneBuildingMaterial();
+		resourceTargetBuilding->AddStoneBuildingMaterial();
+		state = State::idle;
+		resources->AddIdleWorker(this);
+	}
+	else if (hasArrived && state == State::goingToWork)
+	{
+		unitEventHandler->AddEvent(new AddWorkerEvent(destination->posX, destination->posY, destination));
+		unitEventHandler->AddEvent(new DeleteEvent(posX, posY, this));
 	}
 	else
 	{

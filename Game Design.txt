@@ -12,6 +12,15 @@ Worker:
 	State: Immigrating, Emigrating, Idle, Getting resource, Carrying resource, Going to workplace
 	
 Lumberjack:
-	State: Lazy, Going to tree, chopping tree, returning wood
+	State: Lazy, Going to tree, chopping tree, returning wood, idle
+	
+
+Sequence: 
+	Worker immigrating, idle
+	Îdle, getting resource (if not at dwelling), carrying resource to target, idle
+	idle -> going to workplace -> cast to lumberjack
 	
 	
+Priorities pathfinding
+
+	1. building new buildings has priority over going to work inside a building
