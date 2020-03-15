@@ -38,6 +38,7 @@
     <ClInclude Include="gameObjects\worker.h" />
     <ClInclude Include="gameObjects\euro_beech.h" />
     <ClInclude Include="events\gather_resource_event.h" />
+    <ClInclude Include="pathfinding\pathfinding_resource.h" />
     <ClInclude Include="rendering\meshes\mipmap_generator.h" />
     <ClInclude Include="pathfinding\pathfinding.h" />
     <ClInclude Include="pathfinding\pathfinding_object.h" />
@@ -88,6 +89,7 @@
     <ClCompile Include="gameObjects\lumberjack_hut.cpp" />
     <ClCompile Include="gameObjects\worker.cpp" />
     <ClCompile Include="events\gather_resource_event.cpp" />
+    <ClCompile Include="pathfinding\pathfinding_resource.cpp" />
     <ClCompile Include="rendering\meshes\mipmap_generator.cpp" />
     <ClCompile Include="pathfinding\pathfinding.cpp" />
     <ClCompile Include="pathfinding\pathfinding_object.cpp" />

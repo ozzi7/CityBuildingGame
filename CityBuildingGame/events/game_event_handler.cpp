@@ -9,6 +9,7 @@
 #include <lumberjack_hut.h>
 #include <pathfinding.h>
 #include <pathfinding_object.h>
+#include "pathfinding_resource.h"
 
 GameEventHandler::GameEventHandler(Grid* aGrid)
 {
@@ -218,12 +219,13 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 		while (Worker* worker = resources->GetIdleWorker())
 		{
 			/* bring resource to a building task... */
-			PathfindingObject* pathFindingObj = new PathfindingObject(grid, std::pair<int, int>(worker->posX, worker->posY));
-			pathFindingObj->FindResourceUsage(); // TODO: find closest resource
+			PathfindingResource* pathFindingRes = new PathfindingResource(grid, std::pair<int, int>(worker->posX, worker->posY));
+			pathFindingRes->FindResource(); // TODO: find closest resource
 
-			if (pathFindingObj.resourceBuilding != nullptr && pathFindingObj.targetBuilding != nullptr) {
+			if (pathFindingRes->resourceBuilding != nullptr && pathFindingRes->targetBuilding != nullptr) {
 				Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(worker->posX, worker->posY),
-					std::pair<int, int>(pathFindingObj.resourceBuilding->posX, pathFindingObj.resourceBuilding->posY)); // path from worker to resource
+														   std::pair<int, int>(pathFindingRes->resourceBuilding->posX, 
+														                       pathFindingRes->resourceBuilding->posY)); // path from worker to resource
 
 				std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
 				std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
@@ -233,11 +235,11 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 
 				worker->SetNewPath(pathCoordinates);
 				worker->state = State::gettingResource;
-				worker->destination = pathFindingObj.resourceBuilding;
-				worker->resourceTargetBuilding = pathFindingObj.targetBuilding;
+				worker->destination = pathFindingRes->resourceBuilding;
+				worker->resourceTargetBuilding = pathFindingRes->targetBuilding;
 
 				grid->gridUnits[worker->posY][worker->posX].movingObjects.push_back(worker);
-				worker->destination = pathFindingObj.targetBuilding->woodOnTheWay++;
+				pathFindingRes->targetBuilding->woodOnTheWay++;
 			}
 			/* ... until here*/
 
@@ -280,66 +282,86 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				}
 				delete pathFinding;
 			}
-			delete pathFindingObj;
+			delete pathFindingRes;
 			/* ... until here*/
 		}
 	}
+	
 	else if (!resources->idleWorkers.empty() && !resources->workerTasks.empty() &&
 			 resources->idleWorkers.size() > resources->workerTasks.size())
 	{
 		while (Building* building = resources->GetWorkerTask())
 		{
-			LumberjackHut* lumberjackHut = nullptr;
-			Worker* worker = nullptr;
-			PathfindingObject* pathFinding = new PathfindingObject(grid, std::pair<int,int>(building->posX, building->posY));
-			pathFinding->FindClosestIdleWorker();
-			std::list<std::pair<int,int>> pathCoordinatesList = pathFinding->GetPath();
-			
-			if (!pathCoordinatesList.empty())
-			{
-				std::vector<std::pair<int,int>> pathCoordinates{std::make_move_iterator(std::end(pathCoordinatesList)), 
-															    std::make_move_iterator(std::begin(pathCoordinatesList))};
+			/* bring resource to a building task... */
+			PathfindingResource* pathFindingRes = new PathfindingResource(grid, std::pair<int, int>(building->posX, building->posY));
+			pathFindingRes->FindResource(); // TODO: find closest resource
 
-				try {
-					worker = dynamic_cast<Worker*>(pathFinding->GetDestinationObject());
-				}
-				catch(const std::exception& e)  // This should not happen
-				{
-					loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected worker from pathfinding is not a worker"));
-				}
+			if (pathFindingRes->resourceBuilding != nullptr && pathFindingRes->targetWorker != nullptr) {
+				Pathfinding* pathFinding = new Pathfinding(grid, 
+														   std::pair<int, int>(pathFindingRes->targetWorker->posX, pathFindingRes->targetWorker->posY),
+														   std::pair<int, int>(pathFindingRes->resourceBuilding->posX,
+														                       pathFindingRes->resourceBuilding->posY)); // path from worker to resource
+
+				std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
+				std::vector<std::pair<int, int>> pathCoordinates{std::make_move_iterator(std::begin(pathCoordinatesList)),
+																 std::make_move_iterator(std::end(pathCoordinatesList))};
 
 				delete pathFinding;
+
+				pathFindingRes->targetWorker->SetNewPath(pathCoordinates);
+				pathFindingRes->targetWorker->state = State::gettingResource;
+				pathFindingRes->targetWorker->destination = pathFindingRes->resourceBuilding;
+				pathFindingRes->targetWorker->resourceTargetBuilding = building;
+
+				grid->gridUnits[pathFindingRes->targetWorker->posY][pathFindingRes->targetWorker->posX].movingObjects.push_back(pathFindingRes->targetWorker);
+				building->woodOnTheWay++;
+			}
+			/* ... until here*/
+
+			/* all other cases (going to work etc)*/
+			else
+			{
+				LumberjackHut* lumberjackHut = nullptr;
+				Worker* worker = nullptr;
+				PathfindingObject* pathFinding = new PathfindingObject(grid, std::pair<int,int>(building->posX, building->posY));
+				pathFinding->FindClosestIdleWorker();
+				std::list<std::pair<int,int>> pathCoordinatesList = pathFinding->GetPath();
 				
-				try {
-					lumberjackHut = dynamic_cast<LumberjackHut*>(building);
-				}
-				catch(const std::exception& e) {} // Not an exception, expected behavior...
-
-				if (lumberjackHut)
+				if (!pathCoordinatesList.empty())
 				{
-					// copy worker position to new lumby
-					Lumberjack* lumby = new Lumberjack(glm::vec3(worker->posX, worker->posY, grid->GetHeight(worker->posX, worker->posY)),
-													   glm::vec3(0.6f, 0.6f, 0.6f),
-													   glm::vec3(0, 0, glm::pi<float>()));
+					std::vector<std::pair<int,int>> pathCoordinates{std::make_move_iterator(std::end(pathCoordinatesList)), 
+																    std::make_move_iterator(std::begin(pathCoordinatesList))};
 
-					lumby->SetLumberjackHut(lumberjackHut);
-					lumberjackHut->workersPresent++;
+					try {
+						worker = dynamic_cast<Worker*>(pathFinding->GetDestinationObject());
+					}
+					catch(const std::exception& e)  // This should not happen
+					{
+						loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected worker from pathfinding is not a worker"));
+					}
 
-					lumby->SetNewPath(pathCoordinates);
-					lumby->state = State::walking;
-					lumby->SetLumberjackHut(lumberjackHut);
-					lumby->destination = lumberjackHut;
+					delete pathFinding;
+					
+					try {
+						lumberjackHut = dynamic_cast<LumberjackHut*>(building);
+					}
+					catch(const std::exception& e) {} // Not an exception, expected behavior...
 
-					// store reference to lumby
-					grid->gridUnits[lumby->posY][lumby->posX].movingObjects.push_back(lumby);
+					if (lumberjackHut)
+					{
+						worker->destination = lumberjackHut;
+						lumberjackHut->workersOnTheWay++;
 
-					resources->AddLumberjack(lumby);
+						worker->SetNewPath(pathCoordinates);
+						worker->state = State::goingToWork;
+						worker->destination = lumberjackHut;
 
-					resources->RemoveIdleWorker(worker);
+						resources->RemoveIdleWorker(worker);
 
-					// add building back into workerTasks, number of required workers is not yet reached
-					if (lumberjackHut->workersPresent < lumberjackHut->workersRequired)
-						resources->AddWorkerTask(building);
+						// add building back into workerTasks, number of required workers is not yet reached
+						if (lumberjackHut->workersPresent < lumberjackHut->workersRequired)
+							resources->AddWorkerTask(building);
+					}
 				}
 				// add building back into workerTasks, if it could not be assigned a task
 				else 
@@ -347,12 +369,6 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 					resources->AddWorkerTask(building);
 					return;
 				}
-			}
-			// add building back into workerTasks, if it could not be assigned a task
-			else 
-			{
-				resources->AddWorkerTask(building);
-				return;
 			}
 		}
 	}
