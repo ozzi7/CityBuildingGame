@@ -15,11 +15,11 @@ void PathfindingResource::FindResourceFromWorker()
 
 	if (pathFindingWood->GetDestinationObject() != nullptr)
 	{
-		PathfindingObject* pathFindingRequiredWood = new PathfindingObject(grid, std::pair<int, int>(pathFindingWood->GetDestinationObject()->posX,
-																									 pathFindingWood->GetDestinationObject()->posY));
+		PathfindingObject* pathFindingRequiredWood = new PathfindingObject(grid, std::pair<int, int>(pathFindingWood->GetPath().back().first,
+																									 pathFindingWood->GetPath().back().second));
 		pathFindingRequiredWood->FindClosestWoodRequired();
 
-		if (pathFindingRequiredWood != nullptr)
+		if (pathFindingRequiredWood->GetDestinationObject() != nullptr)
 		{
 			resource = pathFindingWood->GetDestinationObject();
 			destination = pathFindingRequiredWood->GetDestinationObject();
@@ -28,18 +28,18 @@ void PathfindingResource::FindResourceFromWorker()
 	}
 	delete pathFindingWood;
 	
-	if (resource != nullptr || destination != nullptr)
+	if (resource == nullptr || destination == nullptr)
 	{
 		PathfindingObject* pathFindingStone = new PathfindingObject(grid, startCoordinate);
 		pathFindingStone->FindClosestUnusedStone();
 
 		if (pathFindingStone->GetDestinationObject() != nullptr)
 		{
-			PathfindingObject* pathFindingRequiredStone = new PathfindingObject(grid, std::pair<int, int>(pathFindingStone->GetDestinationObject()->posX,
-																										  pathFindingStone->GetDestinationObject()->posY));
+			PathfindingObject* pathFindingRequiredStone = new PathfindingObject(grid, std::pair<int, int>(pathFindingStone->GetPath().back().first,
+																										  pathFindingStone->GetPath().back().second));
 			pathFindingRequiredStone->FindClosestStoneRequired();
 
-			if (pathFindingRequiredStone != nullptr)
+			if (pathFindingRequiredStone->GetDestinationObject() != nullptr)
 			{
 				resource = pathFindingStone->GetDestinationObject();
 				destination = pathFindingRequiredStone->GetDestinationObject();
@@ -69,11 +69,11 @@ void PathfindingResource::FindResourceFromBuilding()
 
 	if (pathFindingWood->GetDestinationObject() != nullptr)
 	{
-		PathfindingObject* pathFindingWorker = new PathfindingObject(grid, std::pair<int, int>(pathFindingWood->GetDestinationObject()->posX,
-																							   pathFindingWood->GetDestinationObject()->posY));
+		PathfindingObject* pathFindingWorker = new PathfindingObject(grid, std::pair<int, int>(pathFindingWood->GetPath().back().first,
+																							   pathFindingWood->GetPath().back().second));
 		pathFindingWorker->FindClosestIdleWorker();
 
-		if (pathFindingWorker != nullptr)
+		if (pathFindingWorker->GetDestinationObject() != nullptr)
 		{
 			resource = pathFindingWood->GetDestinationObject();
 			destination = pathFindingWorker->GetDestinationObject();
@@ -82,18 +82,18 @@ void PathfindingResource::FindResourceFromBuilding()
 	}
 	delete pathFindingWood;
 	
-	if (resource != nullptr || destination != nullptr)
+	if (resource == nullptr || destination == nullptr)
 	{
 		PathfindingObject* pathFindingStone = new PathfindingObject(grid, startCoordinate);
 		pathFindingStone->FindClosestUnusedStone();
 
 		if (pathFindingStone->GetDestinationObject() != nullptr)
 		{
-			PathfindingObject* pathFindingWorker = new PathfindingObject(grid, std::pair<int, int>(pathFindingStone->GetDestinationObject()->posX,
-																								   pathFindingStone->GetDestinationObject()->posY));
+			PathfindingObject* pathFindingWorker = new PathfindingObject(grid, std::pair<int, int>(pathFindingStone->GetPath().back().first,
+																								   pathFindingStone->GetPath().back().second));
 			pathFindingWorker->FindClosestIdleWorker();
 
-			if (pathFindingWorker != nullptr)
+			if (pathFindingWorker->GetDestinationObject() != nullptr)
 			{
 				resource = pathFindingStone->GetDestinationObject();
 				destination = pathFindingWorker->GetDestinationObject();

@@ -99,7 +99,6 @@ GameObject* PathfindingObject::GetDestinationObject() const
 		switch (objectType)
 		{
 			case ObjectType::tree:
-			{
 				for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].objects)
 				{
 					try
@@ -111,10 +110,8 @@ GameObject* PathfindingObject::GetDestinationObject() const
 					catch (const std::exception& e) {} // Not an exception, expected behavior...
 				}
 				break;
-			}
 
 			case ObjectType::idleWorker:
-			{
 				for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].movingObjects)
 				{
 					try
@@ -127,86 +124,21 @@ GameObject* PathfindingObject::GetDestinationObject() const
 					catch (const std::exception& e) {} // Not an exception, expected behavior...
 				}
 				break;
-			}
 
 			case ObjectType::idleBuilding:
-			{
-				for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].objects)
-				{
-					try
-					{
-						Building* building = dynamic_cast<Building*>(object);
-						if (building)
-							return object;
-					}
-					catch (const std::exception& e) {} // Not an exception, expected behavior...
-				}
-				break;
-			}
+				return findBuildingReference(destination->coordinate);
 
 			case ObjectType::unusedWood:
-			{
-				for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].objects)
-				{
-					try
-					{
-						Building* building = dynamic_cast<Building*>(object);
-						if (building)
-							if (building->woodStored - building->woodRequired > 0)
-								return object;
-					}
-					catch (const std::exception& e) {} // Not an exception, expected behavior...
-				}
-				break;
-			}
+				return findBuildingReference(destination->coordinate);
 
 			case ObjectType::unusedStone:
-			{
-				for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].objects)
-				{
-					try
-					{
-						Building* building = dynamic_cast<Building*>(object);
-						if (building)
-							if (building->stoneStored - building->stoneRequired > 0)
-								return object;
-					}
-					catch (const std::exception& e) {} // Not an exception, expected behavior...
-				}
-				break;
-			}
+				return findBuildingReference(destination->coordinate);
 
 			case ObjectType::woodRequired:
-			{
-				for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].objects)
-				{
-					try
-					{
-						Building* building = dynamic_cast<Building*>(object);
-						if (building)
-							if (building->woodRequired > building->woodStored + building->woodOnTheWay)
-								return object;
-					}
-					catch (const std::exception& e) {} // Not an exception, expected behavior...
-				}
-				break;
-			}
+				return findBuildingReference(destination->coordinate);
 
 			case ObjectType::stoneRequired:
-			{
-				for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].objects)
-				{
-					try
-					{
-						Building* building = dynamic_cast<Building*>(object);
-						if (building)
-							if (building->stoneRequired > building->stoneStored + building->stoneOnTheWay)
-								return object;
-					}
-					catch (const std::exception& e) {} // Not an exception, expected behavior...
-				}
-				break;
-			}
+				return findBuildingReference(destination->coordinate);
 
 			default:
 				return nullptr;

@@ -207,6 +207,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 void GameEventHandler::AssignWorkToIdleWorkers()
 {
+	int i = 0;
 	/* 
 	 * If there are fewer idle workers (probably 1) than idle buildings:
 	 * find nearest idle building for (each) idle worker.
@@ -224,8 +225,8 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 
 			if (pathFindingRes->resourceBuilding != nullptr && pathFindingRes->targetBuilding != nullptr) {
 				Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(worker->posX, worker->posY),
-														   std::pair<int, int>(pathFindingRes->resourceBuilding->posX, 
-														                       pathFindingRes->resourceBuilding->posY)); // path from worker to resource
+														   std::pair<int, int>(pathFindingRes->resourceBuilding->entranceX, 
+														                       pathFindingRes->resourceBuilding->entranceY)); // path from worker to resource
 
 				std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
 				std::vector<std::pair<int, int>> pathCoordinates {std::make_move_iterator(std::begin(pathCoordinatesList)),
@@ -261,7 +262,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 					try {
 						lumberjackHut = dynamic_cast<LumberjackHut*>(pathFinding->GetDestinationObject());
 					}
-					catch (const std::exception & e) {} // Not an exception, expected behavior...
+					catch (const std::exception & e) {} // Not an exception. Expected behavior...
 
 					if (lumberjackHut)
 					{
@@ -288,6 +289,9 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				delete pathFinding;
 			}
 			delete pathFindingRes;
+			i++;
+			if (i == 10) // TODO: find other way to prevent infinite loop 
+				return;
 			/* ... until here*/
 		}
 	}
@@ -298,14 +302,14 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 		while (Building* building = resources->GetWorkerTask())
 		{
 			/* bring resource to a building task... */
-			PathfindingResource* pathFindingRes = new PathfindingResource(grid, std::pair<int, int>(building->posX, building->posY));
+			PathfindingResource* pathFindingRes = new PathfindingResource(grid, std::pair<int, int>(building->entranceX, building->entranceY));
 			pathFindingRes->FindResourceFromBuilding(); // TODO: find closest resource
 
 			if (pathFindingRes->resourceBuilding != nullptr && pathFindingRes->targetWorker != nullptr) {
 				Pathfinding* pathFinding = new Pathfinding(grid, 
 														   std::pair<int, int>(pathFindingRes->targetWorker->posX, pathFindingRes->targetWorker->posY),
-														   std::pair<int, int>(pathFindingRes->resourceBuilding->posX,
-														                       pathFindingRes->resourceBuilding->posY)); // path from worker to resource
+														   std::pair<int, int>(pathFindingRes->resourceBuilding->entranceX,
+														                       pathFindingRes->resourceBuilding->entranceY)); // path from worker to resource
 
 				std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
 				std::vector<std::pair<int, int>> pathCoordinates{std::make_move_iterator(std::begin(pathCoordinatesList)),
@@ -321,6 +325,14 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 
 				grid->gridUnits[pathFindingRes->targetWorker->posY][pathFindingRes->targetWorker->posX].movingObjects.push_back(pathFindingRes->targetWorker);
 				building->woodOnTheWay++;
+
+				// add building back into workerTasks if number of required workers or resources is not yet reached
+				if (building->workersPresent < building->workersRequired ||
+					building->woodStored + building->woodOnTheWay < building->woodRequired ||
+					building->stoneStored + building->stoneOnTheWay < building->stoneRequired)
+				{
+					resources->AddWorkerTask(building);
+				}
 			}
 			/* ... until here*/
 
@@ -329,7 +341,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 			{
 				LumberjackHut* lumberjackHut = nullptr;
 				Worker* worker = nullptr;
-				PathfindingObject* pathFinding = new PathfindingObject(grid, std::pair<int,int>(building->posX, building->posY));
+				PathfindingObject* pathFinding = new PathfindingObject(grid, std::pair<int,int>(building->entranceX, building->entranceY));
 				pathFinding->FindClosestIdleWorker();
 				std::list<std::pair<int,int>> pathCoordinatesList = pathFinding->GetPath();
 				
@@ -349,7 +361,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 					try {
 						lumberjackHut = dynamic_cast<LumberjackHut*>(building);
 					}
-					catch(const std::exception& e) {} // Not an exception, expected behavior...
+					catch(const std::exception& e) {} // Not an exception. Expected behavior...
 
 					if (lumberjackHut)
 					{
@@ -363,9 +375,13 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 
 						resources->RemoveIdleWorker(worker);
 
-						// add building back into workerTasks, number of required workers is not yet reached
-						if (lumberjackHut->workersPresent < lumberjackHut->workersRequired)
-							resources->AddWorkerTask(building);
+					}
+					// add building back into workerTasks if number of required workers or resources is not yet reached
+					if (building->workersPresent < building->workersRequired ||
+						building->woodStored + building->woodOnTheWay < building->woodRequired ||
+						building->stoneStored + building->stoneOnTheWay < building->stoneRequired)
+					{
+						resources->AddWorkerTask(building);
 					}
 				}
 				// add building back into workerTasks, if it could not be assigned a task
@@ -379,6 +395,9 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				delete pathFinding;
 			}
 			delete pathFindingRes;
+			i++;
+			if (i == 10) // TODO: find other way to prevent infinite loop 
+				return;
 		}
 	}
 }
@@ -522,21 +541,20 @@ void GameEventHandler::Visit(BringResourceEvent* aBringResourceEvent)
 
 
 	Worker* worker = aBringResourceEvent->worker;
-	Pathfinding* path = new Pathfinding(
-		grid, std::pair<int, int>(worker->position.x, worker->position.y),
-		std::pair<int, int>(worker->resourceTargetBuilding->entranceX, worker->resourceTargetBuilding->entranceY));
+	Pathfinding* path = new Pathfinding(grid, std::pair<int, int>(worker->position.x, worker->position.y),
+										std::pair<int, int>(worker->resourceTargetBuilding->entranceX, worker->resourceTargetBuilding->entranceY));
 	path->CalculatePath();
 	std::list<std::pair<int, int>> pathCoordinatesList = path->GetPath();
 	delete path;
 
 	if (!pathCoordinatesList.empty())
 	{
-		std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
-										std::make_move_iterator(std::end(pathCoordinatesList)) };
+		std::vector<std::pair<int, int>> pathCoordinates{std::make_move_iterator(std::begin(pathCoordinatesList)),
+														 std::make_move_iterator(std::end(pathCoordinatesList))};
 
 		Building* building;
 		try {
-			building = dynamic_cast<LumberjackHut*>(worker->destination);
+			building = dynamic_cast<Building*>(worker->destination);
 		}
 		catch (const std::exception & e)  // This should not happen
 		{
