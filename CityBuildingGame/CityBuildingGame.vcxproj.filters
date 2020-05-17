@@ -43,6 +43,7 @@
     <ClCompile Include="gameObjects\worker.cpp" />
     <ClCompile Include="worker_arrived_event.cpp" />
     <ClCompile Include="pathfinding\pathfinding_resource.cpp" />
+    <ClCompile Include="globals.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
@@ -103,6 +104,7 @@
     <ClInclude Include="gameObjects\worker.h" />
     <ClInclude Include="worker_arrived_event.h" />
     <ClInclude Include="pathfinding\pathfinding_resource.h" />
+    <ClInclude Include="iniparser.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

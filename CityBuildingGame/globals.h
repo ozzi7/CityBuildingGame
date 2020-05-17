@@ -5,12 +5,16 @@
 #include <sound_event_handler.h>
 #include <logging_event_handler.h>
 #include <resources.h>
+#include <fstream>
+#include "iniparser.hpp"
+
 
 /************************************************
  *  Graphics settings
  ***********************************************/
-const unsigned int DEFAULT_SCREEN_WIDTH = 1920;
-const unsigned int DEFAULT_SCREEN_HEIGHT = 1080;
+
+extern unsigned int DEFAULT_SCREEN_WIDTH;
+extern unsigned int DEFAULT_SCREEN_HEIGHT;
 
 const bool SHADOW_ENABLED = true; // TODO: not implemented yet
 const unsigned int SHADOW_WIDTH = 2048;
@@ -29,6 +33,8 @@ const bool MUSIC_ENABLED = false;
 /************************************************
  *  Map settings
  ***********************************************/
+//extern unsigned int MAP_WIDTH;
+//extern unsigned int MAP_HEIGHT;
 const unsigned int MAP_WIDTH = 200;
 const unsigned int MAP_HEIGHT = 200;
 
@@ -87,3 +93,5 @@ extern SoundEventHandler* soundEventHandler;
 extern LoggingEventHandler* loggingEventHandler;
 
 extern Resources* resources;
+
+void LoadFromConfigFile();

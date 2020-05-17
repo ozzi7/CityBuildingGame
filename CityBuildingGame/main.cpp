@@ -41,6 +41,8 @@ int main(int argc, char* argv[])
 	Path = Path.substr(0, Path.find_last_of("\\/"));
 	std::replace(Path.begin(), Path.end(), '\\', '/');
 
+	LoadFromConfigFile();
+
 	ScreenWidth = DEFAULT_SCREEN_WIDTH;
 	ScreenHeight = DEFAULT_SCREEN_HEIGHT;
 	ScreenRatio = (float)ScreenWidth / (float)ScreenHeight;
