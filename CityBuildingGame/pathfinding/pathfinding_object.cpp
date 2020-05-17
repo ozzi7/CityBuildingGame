@@ -46,6 +46,7 @@ void PathfindingObject::FindClosestIdleWorker()
 	objectType = ObjectType::idleWorker;
 	calculatePath();
 }
+
 void PathfindingObject::FindClosestIdleBuilding()
 {
 	objectType = ObjectType::idleBuilding;
@@ -84,8 +85,8 @@ GameObject* PathfindingObject::GetDestinationObject() const
 							return object;
 					}
 					catch (const std::exception& e) {} // Not an exception, expected behavior...
-					break;
 				}
+				break;
 			}
 
 			case ObjectType::idleWorker:
@@ -101,6 +102,7 @@ GameObject* PathfindingObject::GetDestinationObject() const
 					}
 					catch (const std::exception& e) {} // Not an exception, expected behavior...
 				}
+				break;
 			}
 
 			case ObjectType::idleBuilding:
@@ -114,8 +116,8 @@ GameObject* PathfindingObject::GetDestinationObject() const
 							return object;
 					}
 					catch (const std::exception& e) {} // Not an exception, expected behavior...
-					break;
 				}
+				break;
 			}
 
 			default:
