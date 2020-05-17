@@ -4,30 +4,114 @@
 PathfindingResource::PathfindingResource(Grid* aGrid, const std::pair<int, int> XYstart)
 {
 	grid = aGrid;
+	startCoordinate = XYstart;
 }
 
-// TODO, dummy code
-void PathfindingResource::FindResource()
-{
-	PathfindingObject* pathFinding = new PathfindingObject(grid, std::make_pair(0,0));
-	pathFinding->FindClosestIdleBuilding();
-	std::list<std::pair<int,int>> pathCoordinatesList = pathFinding->GetPath();
-	std::pair<int,int> coordinate = pathCoordinatesList.back(); // TODO crash if empty pathcoordinateslist
-	try
-	{
-		targetBuilding = dynamic_cast<Building*>(grid->gridUnits[coordinate.second][coordinate.first].objects.front());
-		resourceBuilding = targetBuilding;
-	} catch (const std::exception& e) {}
 
-	pathFinding = new PathfindingObject(grid, std::make_pair(0,0));
-	pathFinding->FindClosestIdleWorker();
-	pathCoordinatesList = pathFinding->GetPath();
-	coordinate = pathCoordinatesList.back();
+void PathfindingResource::FindResourceFromWorker()
+{
+	PathfindingObject* pathFindingWood = new PathfindingObject(grid, startCoordinate);
+	pathFindingWood->FindClosestUnusedWood();
+
+	if (pathFindingWood->GetDestinationObject() != nullptr)
+	{
+		PathfindingObject* pathFindingRequiredWood = new PathfindingObject(grid, std::pair<int, int>(pathFindingWood->GetDestinationObject()->posX,
+																								 pathFindingWood->GetDestinationObject()->posY));
+		pathFindingRequiredWood->FindClosestWoodRequired();
+
+		if (pathFindingRequiredWood != nullptr)
+		{
+			resource = pathFindingWood->GetDestinationObject();
+			destination = pathFindingRequiredWood->GetDestinationObject();
+		}
+		delete pathFindingRequiredWood;
+	}
+	delete pathFindingWood;
+	
+	if (resource != nullptr || destination != nullptr)
+	{
+		PathfindingObject* pathFindingStone = new PathfindingObject(grid, startCoordinate);
+		pathFindingStone->FindClosestUnusedStone();
+
+		if (pathFindingStone->GetDestinationObject() != nullptr)
+		{
+			PathfindingObject* pathFindingRequiredStone = new PathfindingObject(grid, std::pair<int, int>(pathFindingStone->GetDestinationObject()->posX,
+																									  pathFindingStone->GetDestinationObject()->posY));
+			pathFindingRequiredStone->FindClosestStoneRequired();
+
+			if (pathFindingRequiredStone != nullptr)
+			{
+				resource = pathFindingStone->GetDestinationObject();
+				destination = pathFindingRequiredStone->GetDestinationObject();
+			}
+			delete pathFindingRequiredStone;
+		}
+		delete pathFindingStone;
+	}
+	
 	try
 	{
-		targetWorker = dynamic_cast<Worker*>(grid->gridUnits[coordinate.second][coordinate.first].movingObjects.front()); // TODO: crash if movingObjects empty
-	} 
-	catch (const std::exception& e) 
-	{
+		resourceBuilding = dynamic_cast<Building*>(resource);
 	}
+	catch (const std::exception& e) {} // Should not happen!
+
+	try
+	{
+		targetBuilding = dynamic_cast<Building*>(destination);
+	}
+	catch (const std::exception& e) {} // Should not happen!
+}
+
+void PathfindingResource::FindResourceFromBuilding()
+{
+	PathfindingObject* pathFindingWood = new PathfindingObject(grid, startCoordinate);
+	pathFindingWood->FindClosestUnusedWood();
+
+	if (pathFindingWood->GetDestinationObject() != nullptr)
+	{
+		PathfindingObject* pathFindingWorker = new PathfindingObject(grid, std::pair<int, int>(pathFindingWood->GetDestinationObject()->posX,
+																							   pathFindingWood->GetDestinationObject()->posY));
+		pathFindingWorker->FindClosestIdleWorker();
+
+		if (pathFindingWorker != nullptr)
+		{
+			resource = pathFindingWood->GetDestinationObject();
+			destination = pathFindingWorker->GetDestinationObject();
+		}
+		delete pathFindingWorker;
+	}
+	delete pathFindingWood;
+	
+	if (resource != nullptr || destination != nullptr)
+	{
+		PathfindingObject* pathFindingStone = new PathfindingObject(grid, startCoordinate);
+		pathFindingStone->FindClosestUnusedStone();
+
+		if (pathFindingStone->GetDestinationObject() != nullptr)
+		{
+			PathfindingObject* pathFindingWorker = new PathfindingObject(grid, std::pair<int, int>(pathFindingStone->GetDestinationObject()->posX,
+																								   pathFindingStone->GetDestinationObject()->posY));
+			pathFindingWorker->FindClosestIdleWorker();
+
+			if (pathFindingWorker != nullptr)
+			{
+				resource = pathFindingStone->GetDestinationObject();
+				destination = pathFindingWorker->GetDestinationObject();
+			}
+			delete pathFindingWorker;
+		}
+		delete pathFindingStone;
+	}
+	
+	try
+	{
+		resourceBuilding = dynamic_cast<Building*>(resource);
+	}
+	catch (const std::exception& e) {} // Should not happen!
+
+	try
+	{
+		targetWorker = dynamic_cast<Worker*>(destination);
+	}
+	catch (const std::exception& e) {} // Should not happen!
 }

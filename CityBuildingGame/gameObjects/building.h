@@ -37,12 +37,12 @@ public:
 	int workersRequired = 0;
 	int workersOnTheWay = 0;
 
+	int woodStored = 0;
 	int woodRequired = 0;
-	int woodDelivered = 0;
 	int woodOnTheWay = 0;
 
+	int stoneStored = 0;
 	int stoneRequired = 0;
-	int stoneDelivered = 0;
 	int stoneOnTheWay = 0;
 
 protected:

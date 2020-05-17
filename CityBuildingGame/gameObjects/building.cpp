@@ -123,18 +123,18 @@ void Building::CreateBuildingOutline()
 };
 void Building::AddWoodBuildingMaterial()
 {
-	woodDelivered++;
+	woodStored++;
 
-	if (woodDelivered == woodRequired && stoneDelivered == stoneRequired)
+	if (woodStored == woodRequired && stoneStored == stoneRequired)
 	{
 		Evolve();
 	}
 }
 void Building::AddStoneBuildingMaterial()
 {
-	stoneDelivered++;
+	stoneStored++;
 
-	if (woodDelivered == woodRequired && stoneDelivered == stoneRequired)
+	if (woodStored == woodRequired && stoneStored == stoneRequired)
 	{
 		Evolve();
 	}

@@ -6,7 +6,7 @@
 #include <grid.h>
 #include <globals.h>
 
-enum class ObjectType { edge, tree, idleWorker, idleBuilding };
+enum class ObjectType { edge, tree, idleWorker, idleBuilding, unusedWood, unusedStone, woodRequired, stoneRequired };
 
 struct NodeObject
 {
@@ -40,6 +40,10 @@ public:
 	void FindClosestEdge();
 	void FindClosestIdleWorker();
 	void FindClosestIdleBuilding();
+	void FindClosestUnusedWood();
+	void FindClosestUnusedStone();
+	void FindClosestWoodRequired();
+	void FindClosestStoneRequired();
 
 	std::list<std::pair<int,int>> GetPath();
 	GameObject* GetDestinationObject() const;
