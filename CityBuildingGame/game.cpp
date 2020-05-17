@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "game.h"
 
-GameEventHandler* unitEventHandler;
+GameEventHandler* gameEventHandler;
 SoundEventHandler* soundEventHandler;
 LoggingEventHandler* loggingEventHandler;
 Resources* resources;
@@ -15,7 +15,7 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler)
 
 	grid = new Grid(MAP_HEIGHT, MAP_WIDTH);
 	loggingEventHandler = new LoggingEventHandler(LoggingLevel::INFO, LoggingLevel::DEBUG);
-	unitEventHandler = new GameEventHandler(grid);
+	gameEventHandler = new GameEventHandler(grid);
 	soundEventHandler = new SoundEventHandler(255);
 	resources = new Resources();
 
@@ -164,8 +164,8 @@ void Game::gameLoop()
 		                        camera->GridBottomRightVisible());
 
 		//*Handle all object moving, deleting, creating, no locks needed because no other thread is currently doing anything..*/
-		while (unitEventHandler->ProcessEvent());
-		unitEventHandler->AssignWorkToIdleWorkers();
+		while (gameEventHandler->ProcessEvent());
+		gameEventHandler->AssignWorkToIdleWorkers();
 
 		/* Extract data for the renderer*/
 		RenderBuffer* producerBuffer = renderBuffers->GetProducerBuffer();

@@ -44,6 +44,7 @@
     <ClCompile Include="worker_arrived_event.cpp" />
     <ClCompile Include="pathfinding\pathfinding_resource.cpp" />
     <ClCompile Include="globals.cpp" />
+    <ClCompile Include="events\bring_resource_event.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
@@ -105,6 +106,7 @@
     <ClInclude Include="worker_arrived_event.h" />
     <ClInclude Include="pathfinding\pathfinding_resource.h" />
     <ClInclude Include="iniparser.hpp" />
+    <ClInclude Include="events\bring_resource_event.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

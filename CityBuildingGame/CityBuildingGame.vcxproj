@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="events\blockingconcurrentqueue.h" />
+    <ClInclude Include="events\bring_resource_event.h" />
     <ClInclude Include="events\concurrentqueue.h" />
     <ClInclude Include="events\create_building_event.h" />
     <ClInclude Include="events\delete_event.h" />
@@ -73,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="events\bring_resource_event.cpp" />
     <ClCompile Include="events\create_building_event.cpp" />
     <ClCompile Include="events\delete_event.cpp" />
     <ClCompile Include="events\game_event_handler.cpp" />

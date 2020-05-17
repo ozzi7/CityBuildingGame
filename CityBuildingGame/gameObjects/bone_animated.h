@@ -8,9 +8,12 @@ class Grid;
 
 /*	goingToWork : lumberjack has axe and walks to tree
 	goingToWorkplace: worker walks to lumberjackhut 
-	gettingResource = worker walks to resource to pick it up
+	gettingResource : worker walks to resource to pick it up
+
+	pending : waiting for game event to be processed
+
 */
-enum class State { idle, immigrating, carryingWood, carryingStone, gettingResource, goingToWork, goingToWorkplace, working, walking };
+enum class State { idle, pending, immigrating, carryingWood, carryingStone, gettingWood, gettingStone, goingToWork, goingToWorkplace, working, walking };
 
 class BoneAnimated : public GameObject
 {

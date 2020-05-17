@@ -40,12 +40,12 @@ void InputHandler::Mouseclick(int button, int action) const
 		{
 			if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 			{
-				unitEventHandler->AddEvent(
+				gameEventHandler->AddEvent(
 					new CreateBuildingEvent(BuildingType::LumberjackHutID, cursor_position.x, cursor_position.y));
 			}
 			else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 			{
-				unitEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::DwellingID, cursor_position.x, cursor_position.y));
+				gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::DwellingID, cursor_position.x, cursor_position.y));
 			}
 		}
 	}

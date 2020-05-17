@@ -28,7 +28,7 @@ void Lumberjack::GameStep()
 
 			if (lumberjackHut->wood < lumberjackHut->woodCapacity) {
 				// find new tree if the hut can accept more wood...
-				unitEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
+				gameEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
 			}
 			else
 			{
@@ -48,8 +48,8 @@ void Lumberjack::GameStep()
 	if (state == State::working && workTimeLeft == 0)
 	{
 		// done working.. delete tree, go home
-		unitEventHandler->AddEvent(new DeleteEvent(destination->posX, destination->posY, destination));
-		unitEventHandler->AddEvent(new ReturnHomeEvent(this, PersonType::LumberjackID));
+		gameEventHandler->AddEvent(new DeleteEvent(destination->posX, destination->posY, destination));
+		gameEventHandler->AddEvent(new ReturnHomeEvent(this, PersonType::LumberjackID));
 		state = State::carryingWood;
 	}
 	else if (state == State::working)

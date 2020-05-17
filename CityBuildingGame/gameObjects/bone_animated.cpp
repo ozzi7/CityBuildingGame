@@ -109,13 +109,17 @@ void BoneAnimated::SetNewPath(std::vector<std::pair<int,int>> aWayPoints)
 		updateProxyPosition(1.0f); // set initial proxy position
 		hasArrived = false;
 	}
+	else
+	{
+		hasArrived = true;
+	}
 }
 
 void BoneAnimated::updateGridUnit()
 {
 	if ((int)position.x != posX || (int)position.y != posY)
 	{
-		unitEventHandler->AddEvent(new MoveEvent(posX, posY, (int)position.x, (int)position.y, this));
+		gameEventHandler->AddEvent(new MoveEvent(posX, posY, (int)position.x, (int)position.y, this));
 		posX = (int)position.x;
 		posY = (int)position.y;
 	}

@@ -234,7 +234,9 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				delete pathFinding;
 
 				worker->SetNewPath(pathCoordinates);
-				worker->state = State::gettingResource;
+				worker->state = State::gettingWood; // TODO wood or stone..?
+				worker->visible = true;
+
 				worker->destination = pathFindingRes->resourceBuilding;
 				worker->resourceTargetBuilding = pathFindingRes->targetBuilding;
 
@@ -268,6 +270,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 
 						worker->SetNewPath(pathCoordinates);
 						worker->state = State::goingToWork;
+						worker->visible = true;
 						worker->destination = lumberjackHut;
 
 						if (lumberjackHut->workersPresent + lumberjackHut->workersOnTheWay == lumberjackHut->workersRequired)
@@ -311,7 +314,8 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				delete pathFinding;
 
 				pathFindingRes->targetWorker->SetNewPath(pathCoordinates);
-				pathFindingRes->targetWorker->state = State::gettingResource;
+				pathFindingRes->targetWorker->state = State::gettingWood; // TODO wood or stone..?
+				pathFindingRes->targetWorker->visible = true;
 				pathFindingRes->targetWorker->destination = pathFindingRes->resourceBuilding;
 				pathFindingRes->targetWorker->resourceTargetBuilding = building;
 
@@ -354,6 +358,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 
 						worker->SetNewPath(pathCoordinates);
 						worker->state = State::goingToWork;
+						worker->visible = true;
 						worker->destination = lumberjackHut;
 
 						resources->RemoveIdleWorker(worker);
@@ -447,7 +452,7 @@ void GameEventHandler::Visit(WorkerArrivedEvent* aWorkerArrivedEvent)
 
 	if (lumberjackHut->workersRequired == lumberjackHut->workersPresent + lumberjackHut->workersOnTheWay) { // last lumby starts working
 		lumby->visible = true;
-		unitEventHandler->AddEvent(new GatherResourceEvent(Resource::Wood, lumby));
+		gameEventHandler->AddEvent(new GatherResourceEvent(Resource::Wood, lumby));
 	}
 
 	// store reference to lumby
@@ -477,6 +482,7 @@ void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 				aGatherResourceEvent->person->SetNewPath(pathCoordinates);
 				aGatherResourceEvent->person->destination = path->GetDestinationObject();
 				aGatherResourceEvent->person->state = State::goingToWork;
+				aGatherResourceEvent->person->visible = true;
 			}
 			else
 				aGatherResourceEvent->person->state = State::idle;
@@ -497,7 +503,7 @@ void GameEventHandler::Visit(ReturnHomeEvent* aReturnHomeEvent)
 	case PersonType::LumberjackID:
 		Lumberjack* lumby = (Lumberjack*)aReturnHomeEvent->person; // or extract coordinates??
 		Pathfinding* path = new Pathfinding(
-			grid, std::pair<int,int>(aReturnHomeEvent->person->position.x, aReturnHomeEvent->person->position.y),
+			grid, std::pair<int,int>(lumby->position.x, lumby->position.y),
 			std::pair<int,int>(lumby->lumberjackHut->entranceX, lumby->lumberjackHut->entranceY));
 		path->CalculatePath();
 		std::list<std::pair<int,int>> pathCoordinatesList = path->GetPath();
@@ -509,4 +515,71 @@ void GameEventHandler::Visit(ReturnHomeEvent* aReturnHomeEvent)
 		lumby->state = State::carryingWood;
 		break;
 	}
+}
+void GameEventHandler::Visit(BringResourceEvent* aBringResourceEvent)
+{
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "[EVENT] Bring resource"));
+
+
+	Worker* worker = aBringResourceEvent->worker;
+	Pathfinding* path = new Pathfinding(
+		grid, std::pair<int, int>(worker->position.x, worker->position.y),
+		std::pair<int, int>(worker->resourceTargetBuilding->entranceX, worker->resourceTargetBuilding->entranceY));
+	path->CalculatePath();
+	std::list<std::pair<int, int>> pathCoordinatesList = path->GetPath();
+	delete path;
+
+	if (!pathCoordinatesList.empty())
+	{
+		std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
+										std::make_move_iterator(std::end(pathCoordinatesList)) };
+
+		Building* building;
+		try {
+			building = dynamic_cast<LumberjackHut*>(worker->destination);
+		}
+		catch (const std::exception & e)  // This should not happen
+		{
+			return;
+		}
+
+		switch (aBringResourceEvent->prevWorkerState)
+		{
+			case (0) :
+				worker->state = State::carryingWood;
+
+				if (building->woodStored - building->woodRequired > 0)
+				{
+					worker->visible = true;
+					building->woodStored--;
+				}
+				else
+				{
+					worker->state = State::idle;
+					resources->AddIdleWorker(worker);
+					return;
+				}
+				break;
+
+			case (1):
+				worker->state = State::carryingStone;
+				worker->visible = true;
+
+				if (building->stoneStored - building->stoneRequired > 0)
+				{
+					building->stoneStored--;
+				}
+				else
+				{
+					worker->visible = true;
+					worker->state = State::idle;
+					resources->AddIdleWorker(worker);
+					return;
+				}
+				break;
+		}
+		worker->SetNewPath(pathCoordinates);
+		worker->destination = worker->resourceTargetBuilding;
+	}
+
 }

@@ -41,8 +41,13 @@ void Worker::GameStep()
 	}
 	else if (hasArrived && state == State::goingToWork)
 	{
-		unitEventHandler->AddEvent(new WorkerArrivedEvent(destination));
-		unitEventHandler->AddEvent(new DeleteEvent(posX, posY, this));
+		gameEventHandler->AddEvent(new WorkerArrivedEvent(destination));
+		gameEventHandler->AddEvent(new DeleteEvent(posX, posY, this));
+	}
+	else if (hasArrived && state == State::gettingWood || state == State::gettingStone)
+	{
+		state = State::pending;
+		gameEventHandler->AddEvent(new BringResourceEvent(this, 0));
 	}
 	else
 	{

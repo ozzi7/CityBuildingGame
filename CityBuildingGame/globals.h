@@ -24,7 +24,7 @@ const bool CUSTOM_MIPMAPS = true;
 
 
 /************************************************
- *  Sound settings
+ *  Sound settings0
  ***********************************************/
 const bool SOUND_ENABLED = true;
 const bool MUSIC_ENABLED = false;
@@ -88,7 +88,7 @@ extern unsigned int ScreenHeight;
 extern float ScreenRatio;
 // TODO: gameloop fps
 
-extern GameEventHandler* unitEventHandler;
+extern GameEventHandler* gameEventHandler;
 extern SoundEventHandler* soundEventHandler;
 extern LoggingEventHandler* loggingEventHandler;
 
