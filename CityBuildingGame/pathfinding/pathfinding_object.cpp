@@ -272,91 +272,76 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 						if (worker->state == State::idle)
 							objectFound = true;
 				}
-				catch (const std::exception& e) {} // Not an exception, expected behavior...
+				catch (const std::exception& e) {} // Not an exception. Expected behavior.
 			}
 			break;
 		}
 
 		case ObjectType::idleBuilding:
 		{
-			for (GameObject* object : grid->gridUnits[coordinate.second][coordinate.first].objects)
+			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree) // TODO: Use hasBuilding flag instead 
 			{
-				try
-				{
-					Building* building = dynamic_cast<Building*>(object);
-					if (building)
+				Building* building = findBuildingReference(coordinate);
+				if (building != nullptr)
+					if (building->entranceX == coordinate.first && building->entranceY == coordinate.second) 
 						if (building->workersPresent < building->workersRequired)
 							objectFound = true;
-				}
-				catch (const std::exception& e) {} // Not an exception, expected behavior...
 			}
 			break;
 		}
 
 		case ObjectType::unusedWood:
+		{
+			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree) // TODO: Use hasBuilding flag instead 
 			{
-				for (GameObject* object : grid->gridUnits[coordinate.second][coordinate.first].objects)
-				{
-					try
-					{
-						Building* building = dynamic_cast<Building*>(object);
-						if (building)
-							if (building->woodStored - building->woodRequired > 0)
-								objectFound = true;
-					}
-					catch (const std::exception& e) {} // Not an exception, expected behavior...
-				}
-				break;
+				Building* building = findBuildingReference(coordinate);
+				if (building != nullptr)
+					if (building->entranceX == coordinate.first && building->entranceY == coordinate.second) 
+						if (building->woodStored - building->woodRequired > 0)
+							objectFound = true;
 			}
+			break;
+		}
 
 
 		case ObjectType::unusedStone:
+		{
+			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree) // TODO: Use hasBuilding flag instead 
 			{
-				for (GameObject* object : grid->gridUnits[coordinate.second][coordinate.first].objects)
-				{
-					try
-					{
-						Building* building = dynamic_cast<Building*>(object);
-						if (building)
-							if (building->stoneStored - building->stoneRequired > 0)
-								objectFound = true;
-					}
-					catch (const std::exception& e) {} // Not an exception, expected behavior...
-				}
-				break;
+				Building* building = findBuildingReference(coordinate);
+				if (building != nullptr)
+					if (building->entranceX == coordinate.first && building->entranceY == coordinate.second) 
+						if (building->stoneStored - building->stoneRequired > 0)
+							objectFound = true;
 			}
+			break;
+		}
 
 		case ObjectType::woodRequired:
+		{
+			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree) // TODO: Use hasBuilding flag instead 
 			{
-				for (GameObject* object : grid->gridUnits[coordinate.second][coordinate.first].objects)
-				{
-					try
-					{
-						Building* building = dynamic_cast<Building*>(object);
-						if (building)
-							if (building->woodRequired > building->woodStored + building->woodOnTheWay)
-								objectFound = true;
-					}
-					catch (const std::exception& e) {} // Not an exception, expected behavior...
-				}
-				break;
+				Building* building = findBuildingReference(coordinate);
+				if (building != nullptr)
+					if (building->entranceX == coordinate.first && building->entranceY == coordinate.second) 
+						if (building->woodRequired > building->woodStored + building->woodOnTheWay)
+							objectFound = true;
 			}
+			break;
+		}
 
 		case ObjectType::stoneRequired:
+		{
+			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree) // TODO: Use hasBuilding flag instead 
 			{
-				for (GameObject* object : grid->gridUnits[coordinate.second][coordinate.first].objects)
-				{
-					try
-					{
-						Building* building = dynamic_cast<Building*>(object);
-						if (building)
-							if (building->stoneRequired > building->stoneStored + building->stoneOnTheWay)
-								objectFound = true;
-					}
-					catch (const std::exception& e) {} // Not an exception, expected behavior...
-				}
-				break;
+				Building* building = findBuildingReference(coordinate);
+				if (building != nullptr)
+					if (building->entranceX == coordinate.first && building->entranceY == coordinate.second) 
+						if (building->stoneRequired > building->stoneStored + building->stoneOnTheWay)
+							objectFound = true;
 			}
+			break;
+		}
 
 		case ObjectType::edge:
 		{
@@ -389,4 +374,96 @@ void PathfindingObject::setNextNode()
 	}
 	else
 		unreachable = true;
+}
+
+Building* PathfindingObject::findBuildingReference(std::pair<int,int> coordinate) const
+{
+	Building* building;
+	
+	building = checkBuildingReference(coordinate);
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first + 1, coordinate.second));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first, coordinate.second + 1));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first - 1, coordinate.second));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first, coordinate.second - 1));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first + 1, coordinate.second + 1));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first + 1, coordinate.second - 1));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first - 1, coordinate.second + 1));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first - 1, coordinate.second - 1));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first + 2, coordinate.second));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first, coordinate.second + 2));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first - 2, coordinate.second));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first, coordinate.second - 2));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first + 2, coordinate.second + 2));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first + 2, coordinate.second - 2));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first - 2, coordinate.second + 2));
+	if (building != nullptr)
+		return building;
+
+	building = checkBuildingReference(std::pair<int,int>(coordinate.first - 2, coordinate.second - 2));
+	if (building != nullptr)
+		return building;
+	
+	return nullptr;
+}
+
+Building* PathfindingObject::checkBuildingReference(std::pair<int,int> coordinate) const
+{
+	if (coordinate.first >= 0 &&
+		coordinate.first <= maxX &&
+		coordinate.second >= 0 &&
+		coordinate.second <= maxY)
+		for (GameObject* object : grid->gridUnits[coordinate.second][coordinate.first].objects)
+			try
+			{
+				Building* building = dynamic_cast<Building*>(object);
+				if (building)
+					return building;
+			}
+			catch (const std::exception& e) {} // Not an exception. Expected behavior.
+	return nullptr;
 }

@@ -68,4 +68,7 @@ private:
 	void createNode(std::pair<int,int> coordinate);
 	void checkObjectFound(std::pair<int,int> coordinate);
 	void setNextNode();
+	
+	Building* findBuildingReference(std::pair<int,int> coordinate) const;
+	Building* checkBuildingReference(std::pair<int,int> coordinate) const;
 };
