@@ -40,6 +40,7 @@ public:
 	InstancedModel* instanced_model_lumberjack_hut;
 	InstancedModel* instanced_model_building_outline;
 	InstancedModel* instanced_model_wood; 
+	InstancedModel* instanced_model_grass;
 
 	glm::vec3 ambientLight;
 
@@ -69,6 +70,7 @@ public:
 		instanced_model_euroBeech = new InstancedModel(Path + "/../models/vegetation/euro_beech/euro_beech.dae");
 		instanced_model_euroBeech2 = new InstancedModel(Path + "/../models/vegetation/euro_beech/euro_beech2.dae");
 		instanced_model_oak = new InstancedModel(Path + "/../models/vegetation/oak/oak.dae");
+		instanced_model_grass = new InstancedModel(Path + "/../models/vegetation/grass/grass.dae");
 
 		/* resources */
 		instanced_model_wood = new InstancedModel(Path + "/../models/resources/wood/wood.dae");
@@ -214,6 +216,7 @@ private:
 		instanced_model_dwelling->Draw(*shader, renderBuffer->dwellingModels_growth1);
 		instanced_model_building_outline->Draw(*shader, renderBuffer->buildingOutlineModels);
 		instanced_model_wood->Draw(*shader, renderBuffer->woodModels);
+		instanced_model_grass->Draw(*shader, renderBuffer->grassModels);
 	}
 
 	void renderBoneAnimated(RenderBuffer* renderBuffer) const

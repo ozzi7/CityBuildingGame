@@ -11,6 +11,7 @@
 #include <lumberjack_hut.h>
 #include <dwelling.h>
 #include <worker.h>
+#include <grass.h>
 
 class RenderBuffer : public Buffer, public Visitor
 {
@@ -22,9 +23,11 @@ public:
 	void Visit(Oak*) override;
 	void Visit(Pine*) override;
 	void Visit(Toona*) override;
+	void Visit(Grass* obj) override;
 	void Visit(Lumberjack*) override;
 	void Visit(Terrain* obj) override;
 	void Visit(Tree* obj) override;
+	void Visit(RenderedObject* obj) override;
 	void Visit(Building* obj) override;
 	void Visit(LumberjackHut* obj) override;
 	void Visit(Dwelling* obj) override;
@@ -36,6 +39,7 @@ public:
 	std::vector<glm::mat4> euroBeech2Models;
 	std::vector<glm::mat4> toonaModels;
 	std::vector<glm::mat4> oakModels;
+	std::vector<glm::mat4> grassModels;
 	std::vector<glm::mat4> lumberjackModels;
 	std::vector<glm::mat4> lumberjackWoodModels;
 	std::vector<glm::mat4> lumberjackHutModels;

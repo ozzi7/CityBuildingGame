@@ -26,7 +26,10 @@ void RenderBuffer::Visit(Toona* obj)
 {
 	toonaModels.push_back(obj->model);
 }
-
+void RenderBuffer::Visit(Grass* obj)
+{
+	grassModels.push_back(obj->model);
+}
 void RenderBuffer::Visit(Lumberjack* obj)
 {
 	if (obj->visible)
@@ -93,6 +96,8 @@ void RenderBuffer::Visit(Terrain* obj)
 
 void RenderBuffer::Visit(Tree* obj) {}
 
+void RenderBuffer::Visit(RenderedObject* obj) {}
+
 void RenderBuffer::ClearData()
 {
 	pineModels.clear();
@@ -107,6 +112,7 @@ void RenderBuffer::ClearData()
 	dwellingModels_growth1.clear();
 	buildingOutlineModels.clear();
 	workerModels.clear();
+	grassModels.clear();
 
 	woodModels.clear();
 

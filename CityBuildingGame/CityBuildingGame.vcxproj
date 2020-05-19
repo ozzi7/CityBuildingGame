@@ -32,6 +32,8 @@
     <ClInclude Include="gameObjects\dwelling.h" />
     <ClInclude Include="gameObjects\euro_beech_2.h" />
     <ClInclude Include="gameObjects\game_object.h" />
+    <ClInclude Include="gameObjects\grass.h" />
+    <ClInclude Include="gameObjects\rendered_object.h" />
     <ClInclude Include="gameObjects\toona.h" />
     <ClInclude Include="gameObjects\lumberjack_hut.h" />
     <ClInclude Include="gameObjects\oak.h" />
@@ -67,7 +69,6 @@
     <ClInclude Include="terrain\map_generator.h" />
     <ClInclude Include="terrain\noise_gen.h" />
     <ClInclude Include="terrain\terrain.h" />
-    <ClInclude Include="terrain\tree_generator.h" />
     <ClInclude Include="utility\triple_buffer.h" />
     <ClInclude Include="visitor.h" />
     <ClInclude Include="worker_arrived_event.h" />
@@ -115,7 +116,6 @@
     <ClCompile Include="terrain\map_generator.cpp" />
     <ClCompile Include="terrain\noise_gen.cpp" />
     <ClCompile Include="terrain\terrain.cpp" />
-    <ClCompile Include="terrain\tree_generator.cpp" />
     <ClCompile Include="utility\buffer.cpp" />
     <ClCompile Include="worker_arrived_event.cpp" />
   </ItemGroup>

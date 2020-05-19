@@ -10,6 +10,7 @@ void MapGenerator::GenerateMap()
 {
 	generateTerrain();
 	generateTrees();
+	generateGrass();
 }
 
 void MapGenerator::generateTerrain() const
@@ -50,7 +51,7 @@ void MapGenerator::generateTrees()
 	std::uniform_real_distribution<> rotation(0, glm::two_pi<float>());
 
 	/* create trees using noise */
-	treeMap = std::vector<std::vector<float>>(grid->gridHeight, std::vector<float>(grid->gridWidth, 0));
+	std::vector<std::vector<float>> treeMap = std::vector<std::vector<float>>(grid->gridHeight, std::vector<float>(grid->gridWidth, 0));
 
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 		"Generating perlin noise for trees"));
@@ -163,6 +164,77 @@ void MapGenerator::generateTrees()
 			}
 			grid->gridUnits[i][j].occupied = true;
 			grid->gridUnits[i][j].hasTree = true;
+		}
+	}
+}
+
+void MapGenerator::generateGrass()
+{
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
+		"Creating grass..."));
+
+	std::mt19937 gen(rd());
+	std::chi_squared_distribution<> scale_dist(1.0f);
+	std::uniform_real_distribution<> position_offset(-0.5f, 0.5f);
+	std::uniform_real_distribution<> rotation(0, glm::two_pi<float>());
+
+	/* create grass using noise map*/
+	std::vector<std::vector<float>> grassMap = std::vector<std::vector<float>>(grid->gridHeight, std::vector<float>(grid->gridWidth, 0));
+
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
+		"Generating perlin noise for grass"));
+
+	noiseGen.GeneratePerlinNoise(grassMap, grid->gridHeight, grid->gridWidth, 0.0f, 10.0f, 6, PERSISTENCE_GRASS);
+
+	/*Add terrain factor to the grass map*/
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
+		"Combining terrain & grass noise to create grass distributions"));
+	for (int i = 0; i < grid->gridHeight; ++i)
+	{
+		for (int j = 0; j < grid->gridWidth; ++j)
+		{
+			grassMap[i][j] = grid->terrain->heightmap[i][j] * TERRAIN_WEIGHT_FACTOR + grassMap[i][j] * (1 -
+				TERRAIN_WEIGHT_FACTOR);
+		}
+	}
+	float minHeight = getHeightAtPercentage(grassMap, 0.0f);
+	float maxHeight = getHeightAtPercentage(grassMap, 100.0f);
+
+	float grass_mean = getHeightAtPercentage(grassMap, GRASS_GAUSSIAN_MEAN_PERCENTAGE);
+
+	float grass_var = 0.01f * GRASS_GAUSSIAN_VARIANCE_PERCENTAGE * (maxHeight - minHeight);
+
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
+		"Planting grass"));
+
+	for (int i = 0; i < grid->gridHeight; ++i)
+	{
+		for (int j = 0; j < grid->gridWidth; ++j)
+		{
+			float grass_prob = std::min(1.0f, GRASS_DENSITY * getGaussianPDFValue(grass_mean, grass_var, grassMap[i][j]));
+
+			std::bernoulli_distribution grass_distribution(grass_prob);
+			bool isGrass = grass_distribution(gen);
+
+			float scale = 1.0f - (float)scale_dist(gen);
+			while (scale < SMALL_GRASS_CUTOFF_PERCENTAGE * 0.01f)
+			{
+				scale = 1.0f - (float)scale_dist(gen);
+			}
+
+			if (isGrass)
+			{
+				for (int z = 0; z < 10; ++z)
+				{
+					float posX = j + 0.5f + (float)position_offset(gen);
+					float posY = i + 0.5f + (float)position_offset(gen);
+					grid->gridUnits[i][j].objects.push_back(
+						new Grass(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
+							glm::vec3(scale * GRASS_SCALE_FACTOR, scale * GRASS_SCALE_FACTOR,
+								scale * GRASS_SCALE_FACTOR),
+							glm::vec3(0.0f, 0.0f, rotation(gen))));
+				}
+			}
 		}
 	}
 }

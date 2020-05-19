@@ -12,7 +12,6 @@
     <ClCompile Include="terrain\map_generator.cpp" />
     <ClCompile Include="terrain\noise_gen.cpp" />
     <ClCompile Include="terrain\terrain.cpp" />
-    <ClCompile Include="terrain\tree_generator.cpp" />
     <ClCompile Include="utility\buffer.cpp" />
     <ClCompile Include="rendering\meshes\instanced_mesh.cpp" />
     <ClCompile Include="rendering\meshes\instanced_model.cpp" />
@@ -60,7 +59,6 @@
     <ClInclude Include="terrain\map_generator.h" />
     <ClInclude Include="terrain\noise_gen.h" />
     <ClInclude Include="terrain\terrain.h" />
-    <ClInclude Include="terrain\tree_generator.h" />
     <ClInclude Include="utility\triple_buffer.h" />
     <ClInclude Include="utility\buffer.h" />
     <ClInclude Include="rendering\meshes\instanced_mesh.h" />
@@ -107,6 +105,8 @@
     <ClInclude Include="pathfinding\pathfinding_resource.h" />
     <ClInclude Include="iniparser.hpp" />
     <ClInclude Include="events\bring_resource_event.h" />
+    <ClInclude Include="gameObjects\grass.h" />
+    <ClInclude Include="gameObjects\rendered_object.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />
