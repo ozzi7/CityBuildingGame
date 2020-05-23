@@ -7,6 +7,7 @@ class GatherResourceEvent;
 class ReturnHomeEvent;
 class WorkerArrivedEvent;
 class BringResourceEvent;
+class ResourceArrivedEvent;
 
 class GameEventVisitor
 {
@@ -18,4 +19,5 @@ public:
 	virtual void Visit(ReturnHomeEvent* aReturnHomeEvent) = 0;
 	virtual void Visit(BringResourceEvent* aBringResourceEvent) = 0;
 	virtual void Visit(WorkerArrivedEvent* aWorkerArrivedEvent) = 0;
+	virtual void Visit(ResourceArrivedEvent* aResourceArrivedEvent) = 0;
 };

@@ -17,7 +17,7 @@ Lumberjack:
 
 Sequence: 
 	Worker immigrating, idle
-	Îdle, getting resource (if not at dwelling), carrying resource to target, idle
+	Idle, getting resource (if not at dwelling), carrying resource to target, idle
 	idle -> going to workplace -> cast to lumberjack
 	
 	

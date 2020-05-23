@@ -1,6 +1,9 @@
 #pragma once
 #include <game_event_visitor.h>
 
+enum Resource { Wood, Stone };
+enum class BuildingType { LumberjackHutID, DwellingID };
+
 class GameEvent
 {
 public:

@@ -44,6 +44,7 @@
     <ClCompile Include="pathfinding\pathfinding_resource.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="events\bring_resource_event.cpp" />
+    <ClCompile Include="events\resource_arrived_event.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rendering\render_data.h" />
@@ -107,6 +108,7 @@
     <ClInclude Include="events\bring_resource_event.h" />
     <ClInclude Include="gameObjects\grass.h" />
     <ClInclude Include="gameObjects\rendered_object.h" />
+    <ClInclude Include="events\resource_arrived_event.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

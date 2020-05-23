@@ -444,21 +444,21 @@ void GameEventHandler::Visit(WorkerArrivedEvent* aWorkerArrivedEvent)
 	lumberjackHut->workersOnTheWay--;
 
 	// copy worker position to new lumby
-	Lumberjack* lumby = new Lumberjack(glm::vec3(lumberjackHut->entranceX, lumberjackHut->entranceY, 
-												 grid->GetHeight(lumberjackHut->entranceX, lumberjackHut->entranceY)),
-									   glm::vec3(0.6f, 0.6f, 0.6f),
-									   glm::vec3(0, 0, glm::pi<float>()));
+	Lumberjack* lumby = new Lumberjack(glm::vec3(lumberjackHut->entranceX, lumberjackHut->entranceY,
+		grid->GetHeight(lumberjackHut->entranceX, lumberjackHut->entranceY)),
+		glm::vec3(0.6f, 0.6f, 0.6f),
+		glm::vec3(0, 0, glm::pi<float>()));
 
 	lumby->SetLumberjackHut(lumberjackHut);
 	lumby->state = State::idle;
 	lumby->destination = lumberjackHut; // is this needed?
 	lumby->visible = false;
 
-	// evolve building if it has all the required resources
+	// if the last required worker arrives then let him become visible and start gathering wood
 	if (lumberjackHut->woodStored >= lumberjackHut->woodRequired &&
-		lumberjackHut->stoneStored >= lumberjackHut->stoneRequired)
+		lumberjackHut->stoneStored >= lumberjackHut->stoneRequired &&
+		lumberjackHut->workersPresent == lumberjackHut->workersRequired)
 	{
-		lumberjackHut->Evolve();
 		gameEventHandler->AddEvent(new GatherResourceEvent(Resource::Wood, lumby));
 		lumby->visible = true;
 	}
@@ -588,5 +588,40 @@ void GameEventHandler::Visit(BringResourceEvent* aBringResourceEvent)
 		worker->SetNewPath(pathCoordinates);
 		worker->destination = worker->resourceTargetBuilding;
 	}
+}
+void GameEventHandler::Visit(ResourceArrivedEvent* aResourceArrivedEvent)
+{
+	// but resources are counted up in gameobject not here, only the lumberjack is generated here...TODO !?
 
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "[EVENT] Resource arrived"));
+
+	LumberjackHut* lumberjackHut = nullptr;
+	try {
+		lumberjackHut = dynamic_cast<LumberjackHut*>(aResourceArrivedEvent->targetGameObject);
+	}
+	catch (const std::exception & e)  // This should not happen
+	{
+		return;
+	}
+
+	if (lumberjackHut->woodStored >= lumberjackHut->woodRequired &&
+		lumberjackHut->stoneStored >= lumberjackHut->stoneRequired &&
+		lumberjackHut->workersPresent == lumberjackHut->workersRequired)
+	{
+		// copy entrance pos
+		Lumberjack* lumby = new Lumberjack(glm::vec3(lumberjackHut->entranceX + 0.5f, lumberjackHut->entranceY + 0.5f,
+			grid->GetHeight(lumberjackHut->entranceX + 0.5f, lumberjackHut->entranceY + 0.5f)),
+			glm::vec3(0.6f, 0.6f, 0.6f),
+			glm::vec3(0, 0, glm::pi<float>()));
+
+		lumby->SetLumberjackHut(lumberjackHut);
+		lumby->state = State::idle;
+		lumby->destination = lumberjackHut; // is this needed?
+		lumby->visible = true;
+
+		// store reference to lumby
+		grid->gridUnits[lumby->posY][lumby->posX].movingObjects.push_back(lumby);
+		resources->AddLumberjack(lumby);
+		gameEventHandler->AddEvent(new GatherResourceEvent(Resource::Wood, lumby));
+	}
 }
