@@ -163,7 +163,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 			/* create worker.. */
 			Worker* worker = new Worker(glm::vec3(pathCoordinates.front().first + 0.5f, pathCoordinates.front().second + 0.5f, 
-												  grid->GetHeight(pathCoordinates.front().first, pathCoordinates.front().second)),
+												  grid->GetHeight(pathCoordinates.front().first + 0.5f, pathCoordinates.front().second + 0.5f)),
 			                            glm::vec3(0.6f, 0.6f, 0.6f), glm::vec3(0, 0, glm::pi<float>()));
 
 			worker->SetDwelling(dwelling);
@@ -440,8 +440,8 @@ void GameEventHandler::Visit(WorkerArrivedEvent* aWorkerArrivedEvent)
 	lumberjackHut->workersOnTheWay--;
 
 	// copy worker position to new lumby
-	Lumberjack* lumby = new Lumberjack(glm::vec3(lumberjackHut->entranceX, lumberjackHut->entranceY,
-		grid->GetHeight(lumberjackHut->entranceX, lumberjackHut->entranceY)),
+	Lumberjack* lumby = new Lumberjack(glm::vec3(lumberjackHut->entranceX+0.5f, lumberjackHut->entranceY + 0.5f,
+		grid->GetHeight(lumberjackHut->entranceX + 0.5f, lumberjackHut->entranceY + 0.5f)),
 		glm::vec3(0.6f, 0.6f, 0.6f),
 		glm::vec3(0, 0, glm::pi<float>()));
 
