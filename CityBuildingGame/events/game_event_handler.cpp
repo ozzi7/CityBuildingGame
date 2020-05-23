@@ -171,7 +171,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			worker->state = State::immigrating;
 
 			/* save building in the coordinate where the 3d object center is located in->good for rendering */
-			grid->gridUnits[dwelling->entranceY][dwelling->entranceX].objects.push_back(dwelling);
+			grid->gridUnits[dwelling->posY][dwelling->posX].objects.push_back(dwelling);
 			grid->gridUnits[pathCoordinates.back().second][pathCoordinates.back().first].movingObjects.push_back(worker);
 			resources->AddDwelling(dwelling);
 			resources->AddWorker(worker);
@@ -196,7 +196,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			lumberjackHut->CreateBuildingOutline();
 
 			// store reference to grid
-			grid->gridUnits[lumberjackHut->entranceY][lumberjackHut->entranceX].objects.push_back(lumberjackHut);
+			grid->gridUnits[lumberjackHut->posY][lumberjackHut->posX].objects.push_back(lumberjackHut);
 			resources->AddLumberjackHut(lumberjackHut);
 			resources->AddWorkerTask(lumberjackHut);
 
