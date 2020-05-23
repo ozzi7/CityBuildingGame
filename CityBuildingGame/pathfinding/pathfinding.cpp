@@ -21,6 +21,8 @@ Pathfinding::Pathfinding(Grid* aGrid, const std::pair<int,int> XYstart, const st
 
 void Pathfinding::CalculatePath()
 {
+	auto startTime = std::chrono::high_resolution_clock::now();
+	
 	while (!pathFound && !unreachable)
 	{
 		if (current->coordinate.first < maxX)
@@ -34,6 +36,15 @@ void Pathfinding::CalculatePath()
 
 		setNextNode();
 	}
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding from " + 
+																		 std::to_string(start->coordinate.first) + "|" + 
+																		 std::to_string(start->coordinate.second) + " to " +
+																		 std::to_string(destination->coordinate.first) + "|" +
+																		 std::to_string(destination->coordinate.second) +
+																		 " in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
 std::list<std::pair<int,int>> Pathfinding::GetPath()

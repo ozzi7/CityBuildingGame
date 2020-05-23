@@ -31,50 +31,122 @@ PathfindingObject::~PathfindingObject()
 
 void PathfindingObject::FindClosestTree()
 {
+	auto startTime = std::chrono::high_resolution_clock::now();
+	
 	objectType = ObjectType::tree;
 	calculatePath();
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding FindClosestTree from " +
+																		 std::to_string(start->coordinate.first) + "|" +
+																		 std::to_string(start->coordinate.second) + 
+																		 " in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
 void PathfindingObject::FindClosestEdge()
 {
+	auto startTime = std::chrono::high_resolution_clock::now();
+	
 	objectType = ObjectType::edge;
 	calculatePath();
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding FindClosestEdge from " +
+																		 std::to_string(start->coordinate.first) + "|" +
+																		 std::to_string(start->coordinate.second) + 
+																		 " in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
 void PathfindingObject::FindClosestIdleWorker()
 {
+	auto startTime = std::chrono::high_resolution_clock::now();
+	
 	objectType = ObjectType::idleWorker;
 	calculatePath();
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding FindClosestIdleWorker from " +
+																		 std::to_string(start->coordinate.first) + "|" +
+																		 std::to_string(start->coordinate.second) + 
+																		 " in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
 void PathfindingObject::FindClosestIdleBuilding()
 {
+	auto startTime = std::chrono::high_resolution_clock::now();
+	
 	objectType = ObjectType::idleBuilding;
 	calculatePath();
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding FindClosestIdleBuilding from " +
+																		 std::to_string(start->coordinate.first) + "|" +
+																		 std::to_string(start->coordinate.second) + 
+																		 " in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
 void PathfindingObject::FindClosestUnusedWood()
 {
+	auto startTime = std::chrono::high_resolution_clock::now();
+	
 	objectType = ObjectType::unusedWood;
 	calculatePath();
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding FindClosestUnusedWood from " +
+																		 std::to_string(start->coordinate.first) + "|" +
+																		 std::to_string(start->coordinate.second) + 
+																		 " in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
 void PathfindingObject::FindClosestUnusedStone()
 {
+	auto startTime = std::chrono::high_resolution_clock::now();
+	
 	objectType = ObjectType::unusedStone;
 	calculatePath();
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding FindClosestUnusedStone from " +
+																		 std::to_string(start->coordinate.first) + "|" +
+																		 std::to_string(start->coordinate.second) + 
+																		 " in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
 void PathfindingObject::FindClosestWoodRequired()
 {
+	auto startTime = std::chrono::high_resolution_clock::now();
+	
 	objectType = ObjectType::woodRequired;
 	calculatePath();
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding FindClosestWoodRequired from " +
+																		 std::to_string(start->coordinate.first) + "|" +
+																		 std::to_string(start->coordinate.second) + 
+																		 " in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
 void PathfindingObject::FindClosestStoneRequired()
 {
+	auto startTime = std::chrono::high_resolution_clock::now();
+	
 	objectType = ObjectType::stoneRequired;
 	calculatePath();
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding FindClosestStoneRequired from " +
+																		 std::to_string(start->coordinate.first) + "|" +
+																		 std::to_string(start->coordinate.second) + 
+																		 " in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
 std::list<std::pair<int,int>> PathfindingObject::GetPath()
@@ -112,7 +184,7 @@ GameObject* PathfindingObject::GetDestinationObject() const
 				break;
 
 			case ObjectType::idleWorker:
-				for (GameObject* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].movingObjects)
+				for (BoneAnimated* object : grid->gridUnits[destination->coordinate.second][destination->coordinate.first].movingObjects)
 				{
 					try
 					{
@@ -149,6 +221,7 @@ GameObject* PathfindingObject::GetDestinationObject() const
 
 void PathfindingObject::calculatePath()
 {
+	checkObjectFound(start->coordinate);
 	while (!objectFound && !unreachable)
 	{
 		if (current->coordinate.first < maxX && !objectFound)
@@ -211,7 +284,8 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::idleBuilding:
 		{
-			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree) // TODO: Use hasBuilding flag instead 
+			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree &&
+				grid->gridUnits[coordinate.second][coordinate.first].occupied) // TODO: Use hasBuilding flag instead 
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
@@ -224,7 +298,8 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::unusedWood:
 		{
-			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree) // TODO: Use hasBuilding flag instead 
+			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree &&
+				grid->gridUnits[coordinate.second][coordinate.first].occupied) // TODO: Use hasBuilding flag instead 
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
@@ -238,7 +313,8 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::unusedStone:
 		{
-			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree) // TODO: Use hasBuilding flag instead 
+			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree &&
+				grid->gridUnits[coordinate.second][coordinate.first].occupied) // TODO: Use hasBuilding flag instead 
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
@@ -251,7 +327,8 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::woodRequired:
 		{
-			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree) // TODO: Use hasBuilding flag instead 
+			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree &&
+				grid->gridUnits[coordinate.second][coordinate.first].occupied) // TODO: Use hasBuilding flag instead 
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
@@ -264,7 +341,8 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::stoneRequired:
 		{
-			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree) // TODO: Use hasBuilding flag instead 
+			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree &&
+				grid->gridUnits[coordinate.second][coordinate.first].occupied) // TODO: Use hasBuilding flag instead 
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)

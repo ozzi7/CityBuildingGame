@@ -241,7 +241,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				worker->destination = pathFindingRes->resourceBuilding;
 				worker->resourceTargetBuilding = pathFindingRes->targetBuilding;
 
-				grid->gridUnits[worker->posY][worker->posX].movingObjects.push_back(worker);
+				//grid->gridUnits[worker->posY][worker->posX].movingObjects.push_back(worker);
 				pathFindingRes->targetBuilding->woodOnTheWay++;
 			}
 			/* ... until here*/
@@ -323,7 +323,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				pathFindingRes->targetWorker->destination = pathFindingRes->resourceBuilding;
 				pathFindingRes->targetWorker->resourceTargetBuilding = building;
 
-				grid->gridUnits[pathFindingRes->targetWorker->posY][pathFindingRes->targetWorker->posX].movingObjects.push_back(pathFindingRes->targetWorker);
+				//grid->gridUnits[pathFindingRes->targetWorker->posY][pathFindingRes->targetWorker->posX].movingObjects.push_back(pathFindingRes->targetWorker);
 				building->woodOnTheWay++;
 
 				// add building back into workerTasks if number of required workers or resources is not yet reached
@@ -442,36 +442,25 @@ void GameEventHandler::Visit(WorkerArrivedEvent* aWorkerArrivedEvent)
 	}
 	lumberjackHut->workersPresent++;
 	lumberjackHut->workersOnTheWay--;
-	lumberjackHut->Evolve();
-
-	if (lumberjackHut->workersRequired == lumberjackHut->workersPresent + lumberjackHut->workersOnTheWay) {
-		// all workers arrived
-
-		Building* building = nullptr;
-		try {
-			building = dynamic_cast<Building*>(aWorkerArrivedEvent->gameObject);
-		}
-		catch (const std::exception & e)  // This should not happen
-		{
-			return;
-		}
-		resources->RemoveWorkerTask(building); // building has enough workers now (TODO: )
-	}
 
 	// copy worker position to new lumby
 	Lumberjack* lumby = new Lumberjack(glm::vec3(lumberjackHut->entranceX, lumberjackHut->entranceY, 
-		grid->GetHeight(lumberjackHut->entranceX, lumberjackHut->entranceY)),
-		glm::vec3(0.6f, 0.6f, 0.6f),
-		glm::vec3(0, 0, glm::pi<float>()));
+												 grid->GetHeight(lumberjackHut->entranceX, lumberjackHut->entranceY)),
+									   glm::vec3(0.6f, 0.6f, 0.6f),
+									   glm::vec3(0, 0, glm::pi<float>()));
 
 	lumby->SetLumberjackHut(lumberjackHut);
 	lumby->state = State::idle;
-	lumby->destination = lumberjackHut;
+	lumby->destination = lumberjackHut; // is this needed?
 	lumby->visible = false;
 
-	if (lumberjackHut->workersRequired == lumberjackHut->workersPresent + lumberjackHut->workersOnTheWay) { // last lumby starts working
-		lumby->visible = true;
+	// evolve building if it has all the required resources
+	if (lumberjackHut->woodStored >= lumberjackHut->woodRequired &&
+		lumberjackHut->stoneStored >= lumberjackHut->stoneRequired)
+	{
+		lumberjackHut->Evolve();
 		gameEventHandler->AddEvent(new GatherResourceEvent(Resource::Wood, lumby));
+		lumby->visible = true;
 	}
 
 	// store reference to lumby

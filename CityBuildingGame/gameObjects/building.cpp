@@ -124,6 +124,7 @@ void Building::CreateBuildingOutline()
 void Building::AddWoodBuildingMaterial()
 {
 	woodStored++;
+	woodOnTheWay--;
 
 	if (woodStored == woodRequired && stoneStored == stoneRequired)
 	{
@@ -133,6 +134,7 @@ void Building::AddWoodBuildingMaterial()
 void Building::AddStoneBuildingMaterial()
 {
 	stoneStored++;
+	stoneOnTheWay--;
 
 	if (woodStored == woodRequired && stoneStored == stoneRequired)
 	{

@@ -10,6 +10,8 @@ PathfindingResource::PathfindingResource(Grid* aGrid, const std::pair<int, int> 
 
 void PathfindingResource::FindResourceFromWorker()
 {
+	auto start = std::chrono::high_resolution_clock::now();
+	
 	PathfindingObject* pathFindingWood = new PathfindingObject(grid, startCoordinate);
 	pathFindingWood->FindClosestUnusedWood();
 
@@ -60,10 +62,16 @@ void PathfindingResource::FindResourceFromWorker()
 		targetBuilding = dynamic_cast<Building*>(destination);
 	}
 	catch (const std::exception& e) {} // Should not happen!
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - start;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "Executed Pathfinding FindResourceFromWorker in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
 void PathfindingResource::FindResourceFromBuilding()
 {
+	auto start = std::chrono::high_resolution_clock::now();
+	
 	PathfindingObject* pathFindingWood = new PathfindingObject(grid, startCoordinate);
 	pathFindingWood->FindClosestUnusedWood();
 
@@ -114,4 +122,8 @@ void PathfindingResource::FindResourceFromBuilding()
 		targetWorker = dynamic_cast<Worker*>(destination);
 	}
 	catch (const std::exception& e) {} // Should not happen!
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - start;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "Executed Pathfinding FindResourceFromBuilding in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
