@@ -227,7 +227,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(worker->posX, worker->posY),
 														   std::pair<int, int>(pathFindingRes->resourceBuilding->entranceX, 
 														                       pathFindingRes->resourceBuilding->entranceY)); // path from worker to resource
-
+				pathFinding->CalculatePath();
 				std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
 				std::vector<std::pair<int, int>> pathCoordinates {std::make_move_iterator(std::begin(pathCoordinatesList)),
 																  std::make_move_iterator(std::end(pathCoordinatesList))};
@@ -310,7 +310,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 														   std::pair<int, int>(pathFindingRes->targetWorker->posX, pathFindingRes->targetWorker->posY),
 														   std::pair<int, int>(pathFindingRes->resourceBuilding->entranceX,
 														                       pathFindingRes->resourceBuilding->entranceY)); // path from worker to resource
-
+				pathFinding->CalculatePath();
 				std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
 				std::vector<std::pair<int, int>> pathCoordinates{std::make_move_iterator(std::begin(pathCoordinatesList)),
 																 std::make_move_iterator(std::end(pathCoordinatesList))};
