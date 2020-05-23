@@ -320,8 +320,9 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				pathFindingRes->targetWorker->destination = pathFindingRes->resourceBuilding;
 				pathFindingRes->targetWorker->resourceTargetBuilding = building;
 
-				//grid->gridUnits[pathFindingRes->targetWorker->posY][pathFindingRes->targetWorker->posX].movingObjects.push_back(pathFindingRes->targetWorker);
 				building->woodOnTheWay++;
+
+				resources->RemoveIdleWorker(pathFindingRes->targetWorker);
 
 				// add building back into workerTasks if number of required workers or resources is not yet reached
 				if (building->workersPresent < building->workersRequired ||
