@@ -25,6 +25,7 @@ public:
 	SkinnedMesh* mesh_lumby_walk_w_wood;
 	SkinnedMesh* mesh_lumby_chopping;
 	SkinnedMesh* mesh_worker;
+	SkinnedMesh* mesh_wood_worker;
 	Shader* terrain_shader;
 	Shader* skinned_mesh_shader;
 	Shader* instanced_mesh_shader;
@@ -91,6 +92,10 @@ public:
 		mesh_worker = new SkinnedMesh();
 		mesh_worker->LoadMesh(Path + "/../models/people/worker/walking.dae");
 		mesh_worker->PrecalculateBoneTransforms();
+
+		mesh_wood_worker = new SkinnedMesh();
+		mesh_wood_worker->LoadMesh(Path + "/../models/people/worker/carrying_wood.dae");
+		mesh_wood_worker->PrecalculateBoneTransforms();
 
 		ambientLight = {0.3f, 0.3f, 0.3f};
 	}
@@ -255,6 +260,13 @@ private:
 
 			shader->setMat4("model", renderBuffer->workerModels[i]);
 			mesh_worker->Render(*shader);
+		}
+		for (int i = 0; i < renderBuffer->workerWoodModels.size(); ++i)
+		{
+			mesh_wood_worker->BindBoneTransform(renderBuffer->workerWoodAnimationSeconds[i], shader);
+
+			shader->setMat4("model", renderBuffer->workerWoodModels[i]);
+			mesh_wood_worker->Render(*shader);
 		}
 	}
 };

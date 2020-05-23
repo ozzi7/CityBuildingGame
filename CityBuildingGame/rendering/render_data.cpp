@@ -63,8 +63,15 @@ void RenderBuffer::Visit(Worker* obj)
 {
 	if (obj->visible)
 	{
-		workerModels.push_back(obj->model);
-		workerAnimationSeconds.push_back(obj->animationSecond);
+		if (obj->state == State::carryingWood) {
+			workerWoodModels.push_back(obj->model);
+			workerWoodAnimationSeconds.push_back(obj->animationSecond);
+		}
+		else
+		{ // not sure which states, but default worker model 
+			workerModels.push_back(obj->model);
+			workerAnimationSeconds.push_back(obj->animationSecond);
+		}
 	}
 }
 
@@ -122,6 +129,8 @@ void RenderBuffer::ClearData()
 	dwellingModels_growth1.clear();
 	buildingOutlineModels.clear();
 	workerModels.clear();
+	workerWoodModels.clear();
+
 	grassModels.clear();
 
 	woodModels.clear();
@@ -130,6 +139,7 @@ void RenderBuffer::ClearData()
 	lumberjackAnimationSeconds.clear();
 	lumberjackWoodAnimationSeconds.clear();
 	lumberjackChoppingAnimationSeconds.clear();
+	workerWoodAnimationSeconds.clear();
 
 	terrainVector.clear();
 }
