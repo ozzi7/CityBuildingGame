@@ -32,14 +32,14 @@ void Worker::GameStep()
 		resourceTargetBuilding->AddWoodBuildingMaterial();
 		state = State::idle;
 		resources->AddIdleWorker(this);
-		gameEventHandler->AddEvent(new ResourceArrivedEvent(Resource::Wood, destination));
+		gameEventHandler->AddEvent(new ResourceArrivedEvent(Resource::Wood, resourceTargetBuilding));
 	}
 	else if (hasArrived && state == State::carryingStone)
 	{
 		resourceTargetBuilding->AddStoneBuildingMaterial();
 		state = State::idle;
 		resources->AddIdleWorker(this);
-		gameEventHandler->AddEvent(new ResourceArrivedEvent(Resource::Stone, destination));
+		gameEventHandler->AddEvent(new ResourceArrivedEvent(Resource::Stone, resourceTargetBuilding));
 	}
 	else if (hasArrived && state == State::goingToWork)
 	{
