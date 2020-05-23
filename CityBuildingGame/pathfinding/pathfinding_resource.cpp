@@ -65,7 +65,7 @@ void PathfindingResource::FindResourceFromWorker()
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - start;
 	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "Executed Pathfinding FindResourceFromWorker in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding FindResourceFromWorker in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
 void PathfindingResource::FindResourceFromBuilding()
@@ -125,5 +125,5 @@ void PathfindingResource::FindResourceFromBuilding()
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - start;
 	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "Executed Pathfinding FindResourceFromBuilding in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding FindResourceFromBuilding in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
