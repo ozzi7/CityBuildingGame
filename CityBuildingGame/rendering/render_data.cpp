@@ -30,19 +30,29 @@ void RenderBuffer::Visit(Grass* obj)
 {
 	grassModels.push_back(obj->model);
 }
+
+/*	goingToWork : lumberjack has axe and walks to tree
+	goingToWorkplace: worker walks to lumberjackhut
+	gettingResource : worker walks to resource to pick it up
+
+	pending : waiting for game event to be processed
+
+*/
+// enum class State { idle, pending, immigrating, carryingWood, carryingStone, gettingWood, gettingStone, goingToWork, goingToWorkplace, working, walking };
+
 void RenderBuffer::Visit(Lumberjack* obj)
 {
 	if (obj->visible)
 	{
-		if (obj->state == State::goingToWork) {
+		if (obj->state == State::carryingWood) {
 			lumberjackWoodModels.push_back(obj->model);
 			lumberjackWoodAnimationSeconds.push_back(obj->animationSecond);
 		}
-		else if (obj->state == State::immigrating) {
+		else if (obj->state == State::goingToWork) {
 			lumberjackModels.push_back(obj->model);
 			lumberjackAnimationSeconds.push_back(obj->animationSecond);
 		}
-		else {
+		else if(obj->state == State::working){
 			lumberjackChoppingModels.push_back(obj->model);
 			lumberjackChoppingAnimationSeconds.push_back(obj->animationSecond);
 		}
