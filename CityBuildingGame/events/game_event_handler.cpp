@@ -473,7 +473,7 @@ void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 	
 	switch (aGatherResourceEvent->resource)
 	{
-		case Wood:
+		case Resource::Wood:
 		{
 			path->FindClosestTree();
 			std::list<std::pair<int,int>> pathCoordinatesList = path->GetPath();

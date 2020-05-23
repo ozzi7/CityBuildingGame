@@ -28,7 +28,7 @@ void Lumberjack::GameStep()
 
 			if (lumberjackHut->wood < lumberjackHut->woodCapacity) {
 				// find new tree if the hut can accept more wood...
-				gameEventHandler->AddEvent(new GatherResourceEvent(Wood, this));
+				gameEventHandler->AddEvent(new GatherResourceEvent(Resource::Wood, this));
 			}
 			else
 			{
