@@ -207,7 +207,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 void GameEventHandler::AssignWorkToIdleWorkers()
 {
-	int i = 0;
+	std::list<Building*> tempWorkerTasks;
 	/* 
 	 * If there are fewer idle workers (probably 1) than idle buildings:
 	 * find nearest idle building for (each) idle worker.
@@ -289,9 +289,6 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				delete pathFinding;
 			}
 			delete pathFindingRes;
-			i++;
-			if (i == 10) // TODO: find other way to prevent infinite loop 
-				return;
 			/* ... until here*/
 		}
 	}
@@ -381,7 +378,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 						building->woodStored + building->woodOnTheWay < building->woodRequired ||
 						building->stoneStored + building->stoneOnTheWay < building->stoneRequired)
 					{
-						resources->AddWorkerTask(building);
+						tempWorkerTasks.push_back(building);
 					}
 				}
 				// add building back into workerTasks, if it could not be assigned a task
@@ -395,10 +392,9 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				delete pathFinding;
 			}
 			delete pathFindingRes;
-			i++;
-			if (i == 10) // TODO: find other way to prevent infinite loop 
-				return;
 		}
+		for (Building* it : tempWorkerTasks)
+			resources->AddWorkerTask(it);
 	}
 }
 
