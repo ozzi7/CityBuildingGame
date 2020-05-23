@@ -34,6 +34,7 @@ public:
 	void Visit(Worker* obj) override;
 	void ClearData();
 
+	// dont forget to clear the vectors too!
 	std::vector<glm::mat4> pineModels;
 	std::vector<glm::mat4> euroBeechModels;
 	std::vector<glm::mat4> euroBeech2Models;
@@ -47,6 +48,7 @@ public:
 	std::vector<glm::mat4> dwellingModels_growth1;
 	std::vector<glm::mat4> buildingOutlineModels;
 	std::vector<glm::mat4> workerModels;
+	std::vector<glm::mat4> workerWoodModels;
 
 	std::vector<glm::mat4> woodModels;
 
@@ -54,6 +56,7 @@ public:
 	std::vector<float> lumberjackAnimationSeconds;
 	std::vector<float> lumberjackWoodAnimationSeconds;
 	std::vector<float> lumberjackChoppingAnimationSeconds;
+	std::vector<float> workerWoodAnimationSeconds;
 
 	std::vector<Terrain*> terrainVector;
 };
