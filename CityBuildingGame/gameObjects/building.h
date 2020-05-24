@@ -29,6 +29,7 @@ public:
 
 	void CreateBuildingOutline();
 	virtual void Evolve() = 0;
+	virtual void UpdateWoodModels() = 0;
 
 	// When dropping off wood
 	void AddWoodBuildingMaterial(unsigned int wood = 1);

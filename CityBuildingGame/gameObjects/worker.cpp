@@ -30,6 +30,7 @@ void Worker::GameStep()
 	}
 	else if (hasArrived && state == State::carryingWood) {
 		resourceTargetBuilding->AddWoodBuildingMaterial();
+		resourceTargetBuilding->UpdateWoodModels();
 		state = State::idle;
 		resources->AddIdleWorker(this);
 		gameEventHandler->AddEvent(new ResourceArrivedEvent(Resource::Wood, resourceTargetBuilding));

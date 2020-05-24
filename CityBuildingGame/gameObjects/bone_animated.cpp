@@ -37,8 +37,7 @@ void BoneAnimated::UpdatePosition(Grid* grid)
 			rotation.z = std::atan2f(translationY, translationX);
 			if (translationX < 0)
 				rotation.z += 2 * glm::pi<float>();
-			rotation.z = rotation.z - glm::half_pi<float
-			>(); // somehow roation direction is not from +x to +y but +x to -y..
+			rotation.z = rotation.z - glm::half_pi<float>(); // somehow roation direction is not from +x to +y but +x to -y..
 			//rotation = rotation + 3.1415;
 		}
 		else
