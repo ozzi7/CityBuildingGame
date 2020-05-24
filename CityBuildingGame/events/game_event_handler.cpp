@@ -566,6 +566,7 @@ void GameEventHandler::Visit(BringResourceEvent* aBringResourceEvent)
 				{
 					worker->visible = true;
 					building->woodStored--;
+					building->UpdateWoodModels()
 				}
 				else
 				{
