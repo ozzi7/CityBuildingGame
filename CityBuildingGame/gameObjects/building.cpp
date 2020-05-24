@@ -204,6 +204,31 @@ bool Building::RemoveWorker(unsigned int workers)
 	return false;
 }
 
+void Building::ConsumeAllBuildingMaterial()
+{
+	if (woodStored > woodRequired)
+	{
+		woodStored -= woodRequired;
+		woodRequired = 0;
+	}
+	else
+	{
+		woodRequired -= woodStored;
+		woodStored = 0;
+	}
+
+	if (stoneStored > stoneRequired)
+	{
+		stoneStored -= stoneRequired;
+		stoneRequired = 0;
+	}
+	else
+	{
+		stoneRequired -= stoneStored;
+		stoneStored = 0;
+	}
+}
+
 int Building::WoodBuildingMaterialRequired() const
 {
 	return (int)woodRequired - (int)woodStored - (int)woodOnTheWay;

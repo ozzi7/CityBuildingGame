@@ -57,6 +57,9 @@ public:
 	// When removing worker from building
 	bool RemoveWorker(unsigned int workers = 1);
 
+	// Uses all available building materials
+	void ConsumeAllBuildingMaterial();
+
 	// Wood still required after everything in transit has arrived
 	int WoodBuildingMaterialRequired() const;
 	// Stone still required after everything in transit has arrived
