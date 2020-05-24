@@ -5,10 +5,10 @@ Pathfinding::Pathfinding(Grid* aGrid, const std::pair<int,int> XYstart, const st
 {
 	grid = aGrid;
 
-	start = new Node();
 	destination = new Node();
-	start->coordinate = XYstart;
 	destination->coordinate = XYdestination;
+	start = new Node();
+	start->coordinate = XYstart;
 	start->distanceToStart = 0;
 	start->distanceToDestination = distanceToDestination(XYstart);
 	start->distanceTotal = start->distanceToStart + start->distanceToDestination;
@@ -36,7 +36,7 @@ void Pathfinding::CalculatePath()
 		if (current->coordinate.second > 0)
 			createNode(std::pair<int,int>(current->coordinate.first, current->coordinate.second - 1));
 
-		if (!pathFound)
+		if(!pathFound)
 			setNextNode();
 	}
 
