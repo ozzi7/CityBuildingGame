@@ -1,0 +1,17 @@
+Blender Ctrl A apply transformations to save it to object
+
+create objects:
+shift a
+
+Textures:
+In uv editor to uv unwrap, there load a picture in the menu.. use cycles render
+
+You can try using Smart UV project:
+
+Select your model and switch to edit mode (Tab)
+
+Select all (A)
+
+Press U> Smart UV Project.
+
+add material, BSDF surface, base color select png andpreview material by changing shading option
