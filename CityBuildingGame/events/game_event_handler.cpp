@@ -158,6 +158,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			dwelling->sizeY = std::get<1>(buildingSize);
 			dwelling->entranceX = fromX + 1;
 			dwelling->entranceY = fromY;
+			dwelling->AddWoodBuildingMaterialOnTheWay(2);
 
 			dwelling->CreateBuildingOutline();
 
