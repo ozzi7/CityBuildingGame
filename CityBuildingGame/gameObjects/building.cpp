@@ -236,8 +236,8 @@ int Building::UnusedWorkers() const
 
 bool Building::AllRequiredBuildingMaterialsOnSite() const
 {
-	if (woodRequired - woodStored <= 0 &&
-		stoneRequired - stoneStored <= 0)
+	if ((int)woodRequired - (int)woodStored <= 0 &&
+		(int)stoneRequired - (int)stoneStored <= 0)
 	{
 		return true;
 	}
@@ -256,7 +256,7 @@ bool Building::AllRequiredBuildingMaterialsOnTheWay() const
 
 bool Building::AllRequiredWorkersOnSite() const
 {
-	if (workersRequired - workersPresent <= 0)
+	if ((int)workersRequired - (int)workersPresent <= 0)
 		return true;
 	return false;
 }
