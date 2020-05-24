@@ -566,7 +566,14 @@ void GameEventHandler::Visit(BringResourceEvent* aBringResourceEvent)
 				{
 					worker->visible = true;
 					building->woodStored--;
-					building->UpdateWoodModels()
+
+					try {
+						Dwelling* dwelling = dynamic_cast<Dwelling*>(worker->destination);
+						if (dwelling)
+							dwelling->UpdateWoodModels(); // to update the 3d model shown next to dwelling.. TODO
+					}
+					catch (const std::exception & e) {} // Not an exception. Expected behavior...
+
 				}
 				else
 				{
