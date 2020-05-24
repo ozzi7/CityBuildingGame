@@ -230,6 +230,7 @@ int Building::UnusedStoneBuildingMaterial() const
 }
 
 int Building::UnusedWorkers() const
+
 {
 	return (int)workersPresent - (int)workersRequired;
 }

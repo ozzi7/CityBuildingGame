@@ -558,11 +558,10 @@ void GameEventHandler::Visit(BringResourceEvent* aBringResourceEvent)
 		{
 			case (0) :
 
-				if (building->UnusedWoodBuildingMaterial() > 0)
+				if (building->RemoveWoodBuildingMaterial())
 				{
 					worker->visible = true;
 					worker->state = State::carryingWood;
-					building->RemoveWoodBuildingMaterial();
 
 					try {
 						Dwelling* dwelling = dynamic_cast<Dwelling*>(worker->destination);
@@ -582,11 +581,10 @@ void GameEventHandler::Visit(BringResourceEvent* aBringResourceEvent)
 
 			case (1):
 
-				if (building->UnusedStoneBuildingMaterial() > 0)
+				if (building->RemoveStoneBuildingMaterial())
 				{
 					worker->visible = true;
 					worker->state = State::carryingStone;
-					building->RemoveStoneBuildingMaterial();
 				}
 				else
 				{
@@ -614,24 +612,27 @@ void GameEventHandler::Visit(ResourceArrivedEvent* aResourceArrivedEvent)
 	{
 		return;
 	}
-	
-	if (lumberjackHut->AllRequiredBuildingMaterialsOnSite() &&
-		lumberjackHut->AllRequiredWorkersOnSite())
+
+	if (lumberjackHut)
 	{
-		// copy entrance pos
-		Lumberjack* lumby = new Lumberjack(glm::vec3(lumberjackHut->entranceX + 0.5f, lumberjackHut->entranceY + 0.5f,
-			grid->GetHeight(lumberjackHut->entranceX + 0.5f, lumberjackHut->entranceY + 0.5f)),
-			glm::vec3(0.6f, 0.6f, 0.6f),
-			glm::vec3(0, 0, glm::pi<float>()));
+		if (lumberjackHut->AllRequiredBuildingMaterialsOnSite() &&
+			lumberjackHut->AllRequiredWorkersOnSite())
+		{
+			// copy entrance pos
+			Lumberjack* lumby = new Lumberjack(glm::vec3(lumberjackHut->entranceX + 0.5f, lumberjackHut->entranceY + 0.5f,
+				grid->GetHeight(lumberjackHut->entranceX + 0.5f, lumberjackHut->entranceY + 0.5f)),
+				glm::vec3(0.6f, 0.6f, 0.6f),
+				glm::vec3(0, 0, glm::pi<float>()));
 
-		lumby->SetLumberjackHut(lumberjackHut);
-		lumby->state = State::idle;
-		lumby->destination = lumberjackHut; // is this needed?
-		lumby->visible = true;
+			lumby->SetLumberjackHut(lumberjackHut);
+			lumby->state = State::idle;
+			lumby->destination = lumberjackHut; // is this needed?
+			lumby->visible = true;
 
-		// store reference to lumby
-		grid->gridUnits[lumby->posY][lumby->posX].movingObjects.push_back(lumby);
-		resources->AddLumberjack(lumby);
-		gameEventHandler->AddEvent(new GatherResourceEvent(Resource::Wood, lumby));
+			// store reference to lumby
+			grid->gridUnits[lumby->posY][lumby->posX].movingObjects.push_back(lumby);
+			resources->AddLumberjack(lumby);
+			gameEventHandler->AddEvent(new GatherResourceEvent(Resource::Wood, lumby));
+		}
 	}
 }
