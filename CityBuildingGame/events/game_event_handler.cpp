@@ -402,6 +402,16 @@ void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 {
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "[EVENT] Delete"));
 
+	Tree* tree = nullptr;
+	try {
+		tree = dynamic_cast<Tree*>(aDeleteEvent->gameObject);
+		if(tree)
+			grid->SetGridFree(aDeleteEvent->posX, aDeleteEvent->posX, aDeleteEvent->posY, aDeleteEvent->posY);
+	}
+	catch (const std::exception & e)  // This should happen
+	{
+	}
+
 	/* deletes reference to element */
 	for (auto it = grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX].movingObjects.begin(); it !=
 	     grid->gridUnits[aDeleteEvent->posY][aDeleteEvent->posX].movingObjects.end(); ++it)
