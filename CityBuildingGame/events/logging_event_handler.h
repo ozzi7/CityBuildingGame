@@ -11,7 +11,7 @@ class Grid;
 class LoggingEventHandler : public LoggingEventVisitor
 {
 public:
-	LoggingEventHandler::LoggingEventHandler(LoggingLevel fileLoggingLevel, LoggingLevel consoleLoggingLevel);
+	LoggingEventHandler::LoggingEventHandler();
 	void AddEvent(LoggingEvent*);
 	LoggingEvent* GetEvent();
 	bool ProcessEvent();

@@ -3,8 +3,54 @@
 #include <logging_event_handler.h>
 #include <grid.h>
 
-LoggingEventHandler::LoggingEventHandler(LoggingLevel aFileLoggingLevel, LoggingLevel aConsoleLoggingLevel)
+LoggingEventHandler::LoggingEventHandler()
 {
+	if (LOGGING_LEVEL_FILE == "critical") {
+		fileLoggingLevel = LoggingLevel::CRITICAL;
+	}
+	else if (LOGGING_LEVEL_FILE == "error") {
+		fileLoggingLevel = LoggingLevel::ERROR_L;
+	}
+	else if (LOGGING_LEVEL_FILE == "warning") {
+		fileLoggingLevel = LoggingLevel::WARNING;
+	}
+	else if (LOGGING_LEVEL_FILE == "info") {
+		fileLoggingLevel = LoggingLevel::INFO;
+	}
+	else if (LOGGING_LEVEL_FILE == "debug") {
+		fileLoggingLevel = LoggingLevel::DEBUG;
+	}
+	else if (LOGGING_LEVEL_FILE == "notset") {
+		fileLoggingLevel = LoggingLevel::NOTSET;
+	}
+	else
+	{
+		fileLoggingLevel = LoggingLevel::INFO;
+	}
+
+	if (LOGGING_LEVEL_CONSOLE == "critical") {
+		consoleLoggingLevel = LoggingLevel::CRITICAL;
+	}
+	else if (LOGGING_LEVEL_CONSOLE == "error") {
+		consoleLoggingLevel = LoggingLevel::ERROR_L;
+	}
+	else if (LOGGING_LEVEL_CONSOLE == "warning") {
+		consoleLoggingLevel = LoggingLevel::WARNING;
+	}
+	else if (LOGGING_LEVEL_CONSOLE == "info") {
+		consoleLoggingLevel = LoggingLevel::INFO;
+	}
+	else if (LOGGING_LEVEL_CONSOLE == "debug") {
+		consoleLoggingLevel = LoggingLevel::DEBUG;
+	}
+	else if (LOGGING_LEVEL_CONSOLE == "notset") {
+		consoleLoggingLevel = LoggingLevel::NOTSET;
+	}
+	else
+	{
+		consoleLoggingLevel = LoggingLevel::DEBUG;
+	}
+
 	time_t* rawtime = new time_t; // we'll get the time here by time() function.
 	time(rawtime); // Get time into rawtime
 	struct tm*
@@ -22,9 +68,6 @@ LoggingEventHandler::LoggingEventHandler(LoggingLevel aFileLoggingLevel, Logging
 		std::cout << "Could not create log file!" << std::endl;
 	else
 		std::cout << "Log file can be found at " << logfilePath << std::endl;
-
-	fileLoggingLevel = aFileLoggingLevel;
-	consoleLoggingLevel = aConsoleLoggingLevel;
 
 	logging_levels[0] = "CRITICAL";
 	logging_levels[1] = "ERROR";
