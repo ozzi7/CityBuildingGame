@@ -449,7 +449,7 @@ void GameEventHandler::Visit(WorkerArrivedEvent* aWorkerArrivedEvent)
 	lumberjackHut->AddWorker();
 
 	// copy worker position to new lumby
-	Lumberjack* lumby = new Lumberjack(glm::vec3(lumberjackHut->entranceX+0.5f, lumberjackHut->entranceY + 0.5f,
+	Lumberjack* lumby = new Lumberjack(glm::vec3(lumberjackHut->entranceX + 0.5f, lumberjackHut->entranceY + 0.5f,
 		grid->GetHeight(lumberjackHut->entranceX + 0.5f, lumberjackHut->entranceY + 0.5f)),
 		glm::vec3(0.6f, 0.6f, 0.6f),
 		glm::vec3(0, 0, glm::pi<float>()));
@@ -615,7 +615,6 @@ void GameEventHandler::Visit(ResourceArrivedEvent* aResourceArrivedEvent)
 		return;
 	}
 	
-
 	if (lumberjackHut->AllRequiredBuildingMaterialsOnSite() &&
 		lumberjackHut->AllRequiredWorkersOnSite())
 	{
