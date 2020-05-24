@@ -224,7 +224,7 @@ void MapGenerator::generateGrass()
 
 			if (isGrass)
 			{
-				for (int z = 0; z < 20; ++z)
+				for (int z = 0; z < 50; ++z)
 				{
 					float posX = j + 0.5f + (float)position_offset(gen);
 					float posY = i + 0.5f + (float)position_offset(gen);
