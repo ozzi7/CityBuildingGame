@@ -8,10 +8,7 @@ PathfindingObject::PathfindingObject(Grid* aGrid, const std::pair<int,int> XYsta
 	start = new NodeObject();
 	start->coordinate = XYstart;
 	start->distanceToStart = 0;
-
-	closed.push_front(start);
-
-	current = start;
+	visited[XYstart.first][XYstart.second] = true;
 }
 
 PathfindingObject::~PathfindingObject()
@@ -25,8 +22,6 @@ PathfindingObject::~PathfindingObject()
 		open.pop();
 		delete current;
 	}
-
-	delete destination;
 }
 
 void PathfindingObject::FindClosestTree()
@@ -149,16 +144,17 @@ void PathfindingObject::FindClosestStoneRequired()
 																		 " in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
-std::list<std::pair<int,int>> PathfindingObject::GetPath()
+std::list<std::pair<int,int>> PathfindingObject::GetPath() const
 {
 	std::list<std::pair<int,int>> path;
+	NodeObject* currentPath = current;
 	if (objectFound)
 	{
-		current = destination;
-		while (current->parent != nullptr)
+		path.push_front(currentPath->coordinate);
+		while (currentPath->parent != nullptr)
 		{
-			path.push_front(current->coordinate);
-			current = current->parent;
+			currentPath = currentPath->parent;
+			path.push_front(currentPath->coordinate);
 		}
 	}
 	return path;
@@ -221,10 +217,12 @@ GameObject* PathfindingObject::GetDestinationObject() const
 
 void PathfindingObject::calculatePath()
 {
+	open.push(start);
 	checkObjectFound(start->coordinate);
+	setNextNode();
 	while (!objectFound && !unreachable)
 	{
-		if (current->coordinate.first < maxX && !objectFound)
+		if (current->coordinate.first < maxX)
 			createNode(std::pair<int,int>(current->coordinate.first + 1, current->coordinate.second));
 		if (current->coordinate.second < maxY && !objectFound)
 			createNode(std::pair<int,int>(current->coordinate.first, current->coordinate.second + 1));
@@ -233,7 +231,8 @@ void PathfindingObject::calculatePath()
 		if (current->coordinate.second > 0 && !objectFound)
 			createNode(std::pair<int,int>(current->coordinate.first, current->coordinate.second - 1));
 
-		setNextNode();
+		if (!objectFound)
+			setNextNode();
 	}
 }
 
@@ -290,7 +289,7 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
 					if (building->entranceX == coordinate.first && building->entranceY == coordinate.second) 
-						if (building->workersPresent < building->workersRequired)
+						if (building->WorkersRequired() > 0)
 							objectFound = true;
 			}
 			break;
@@ -304,7 +303,7 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
 					if (building->entranceX == coordinate.first && building->entranceY == coordinate.second) 
-						if (building->woodStored - building->woodRequired > 0)
+						if (building->UnusedWoodBuildingMaterial() > 0)
 							objectFound = true;
 			}
 			break;
@@ -319,7 +318,7 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
 					if (building->entranceX == coordinate.first && building->entranceY == coordinate.second) 
-						if (building->stoneStored - building->stoneRequired > 0)
+						if (building->UnusedStoneBuildingMaterial() > 0)
 							objectFound = true;
 			}
 			break;
@@ -333,7 +332,7 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
 					if (building->entranceX == coordinate.first && building->entranceY == coordinate.second) 
-						if (building->woodRequired > building->woodStored + building->woodOnTheWay)
+						if (building->WoodBuildingMaterialRequired() > 0)
 							objectFound = true;
 			}
 			break;
@@ -347,7 +346,7 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
 					if (building->entranceX == coordinate.first && building->entranceY == coordinate.second) 
-						if (building->stoneRequired > building->stoneStored + building->stoneOnTheWay)
+						if (building->StoneBuildingMaterialRequired() > 0)
 							objectFound = true;
 			}
 			break;
@@ -368,9 +367,17 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 	
 	if (objectFound)
 	{
-		destination = new NodeObject();
-		destination->coordinate = coordinate;
-		destination->parent = current;
+		if (coordinate == start->coordinate)
+		{
+			destination = start;
+		}
+		else
+		{
+			destination = new NodeObject();
+			destination->coordinate = coordinate;
+			destination->parent = current;
+		}
+		current = destination;
 	}
 }
 

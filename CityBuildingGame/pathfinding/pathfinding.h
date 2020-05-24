@@ -55,7 +55,7 @@ public:
 	~Pathfinding();
 
 	void CalculatePath();
-	std::list<std::pair<int,int>> GetPath();
+	std::list<std::pair<int,int>> GetPath() const;
 
 private:
 	std::forward_list<Node*> closed; // maybe not needed, only for storing pointers for deleting

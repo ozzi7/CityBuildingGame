@@ -45,7 +45,7 @@ public:
 	void FindClosestWoodRequired();
 	void FindClosestStoneRequired();
 
-	std::list<std::pair<int,int>> GetPath();
+	std::list<std::pair<int,int>> GetPath() const;
 	GameObject* GetDestinationObject() const;
 private:
 	std::forward_list<NodeObject*> closed; // maybe not needed, only for storing pointers for deleting

@@ -21,7 +21,7 @@ void Worker::GameStep()
 	/* check if arrived at dwelling*/
 	if (hasArrived && state == State::immigrating && dwelling->evolutionStage == 0)
 	{
-		dwelling->woodStored = dwelling->woodStored + 2;
+		dwelling->AddWoodBuildingMaterial(2);
 		dwelling->Evolve();
 		soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::WorkerArrivedSound));
 		visible = false;

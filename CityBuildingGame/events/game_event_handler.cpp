@@ -221,7 +221,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 		{
 			/* bring resource to a building task... */
 			PathfindingResource* pathFindingRes = new PathfindingResource(grid, std::pair<int, int>(worker->posX, worker->posY));
-			pathFindingRes->FindResourceFromWorker(); // TODO: find closest resource
+			pathFindingRes->FindResourceFromWorker();
 
 			if (pathFindingRes->resourceBuilding != nullptr && pathFindingRes->targetBuilding != nullptr) {
 				Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(worker->posX, worker->posY),
@@ -241,8 +241,8 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				worker->destination = pathFindingRes->resourceBuilding;
 				worker->resourceTargetBuilding = pathFindingRes->targetBuilding;
 
-				//grid->gridUnits[worker->posY][worker->posX].movingObjects.push_back(worker);
-				pathFindingRes->targetBuilding->woodOnTheWay++;
+				pathFindingRes->resourceBuilding->ReserveWoodBuildingMaterial();
+				worker->resourceTargetBuilding->AddWoodBuildingMaterialOnTheWay();
 			}
 			/* ... until here*/
 
@@ -267,14 +267,14 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 					if (lumberjackHut)
 					{
 						worker->destination = lumberjackHut;
-						lumberjackHut->workersOnTheWay++;
+						lumberjackHut->AddWorkerOnTheWay();
 
 						worker->SetNewPath(pathCoordinates);
 						worker->state = State::goingToWork;
 						worker->visible = true;
 						worker->destination = lumberjackHut;
 
-						if (lumberjackHut->workersPresent + lumberjackHut->workersOnTheWay == lumberjackHut->workersRequired)
+						if (lumberjackHut->AllRequiredWorkersOnTheWay())
 							resources->RemoveWorkerTask(lumberjackHut);
 					}
 				}
@@ -300,7 +300,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 		{
 			/* bring resource to a building task... */
 			PathfindingResource* pathFindingRes = new PathfindingResource(grid, std::pair<int, int>(building->entranceX, building->entranceY));
-			pathFindingRes->FindResourceFromBuilding(); // TODO: find closest resource
+			pathFindingRes->FindResourceFromBuilding();
 
 			if (pathFindingRes->resourceBuilding != nullptr && pathFindingRes->targetWorker != nullptr) {
 				Pathfinding* pathFinding = new Pathfinding(grid, 
@@ -320,14 +320,14 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				pathFindingRes->targetWorker->destination = pathFindingRes->resourceBuilding;
 				pathFindingRes->targetWorker->resourceTargetBuilding = building;
 
-				building->woodOnTheWay++;
+				pathFindingRes->resourceBuilding->ReserveWoodBuildingMaterial();
+				building->AddWoodBuildingMaterialOnTheWay();
 
 				resources->RemoveIdleWorker(pathFindingRes->targetWorker);
 
 				// add building back into workerTasks if number of required workers or resources is not yet reached
-				if (building->workersPresent < building->workersRequired ||
-					building->woodStored + building->woodOnTheWay < building->woodRequired ||
-					building->stoneStored + building->stoneOnTheWay < building->stoneRequired)
+				if (!building->AllRequiredWorkersOnTheWay() ||
+					!building->AllRequiredBuildingMaterialsOnTheWay())
 				{
 					resources->AddWorkerTask(building);
 				}
@@ -364,7 +364,7 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 					if (lumberjackHut)
 					{
 						worker->destination = lumberjackHut;
-						lumberjackHut->workersOnTheWay++;
+						lumberjackHut->AddWorkerOnTheWay();
 
 						worker->SetNewPath(pathCoordinates);
 						worker->state = State::goingToWork;
@@ -375,9 +375,8 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 
 					}
 					// add building back into workerTasks if number of required workers or resources is not yet reached
-					if (building->workersPresent < building->workersRequired ||
-						building->woodStored + building->woodOnTheWay < building->woodRequired ||
-						building->stoneStored + building->stoneOnTheWay < building->stoneRequired)
+					if (!building->AllRequiredWorkersOnTheWay() ||
+						!building->AllRequiredBuildingMaterialsOnTheWay())
 					{
 						tempWorkerTasks.push_back(building);
 					}
@@ -447,8 +446,7 @@ void GameEventHandler::Visit(WorkerArrivedEvent* aWorkerArrivedEvent)
 	{
 		return;
 	}
-	lumberjackHut->workersPresent++;
-	lumberjackHut->workersOnTheWay--;
+	lumberjackHut->AddWorker();
 
 	// copy worker position to new lumby
 	Lumberjack* lumby = new Lumberjack(glm::vec3(lumberjackHut->entranceX+0.5f, lumberjackHut->entranceY + 0.5f,
@@ -462,9 +460,8 @@ void GameEventHandler::Visit(WorkerArrivedEvent* aWorkerArrivedEvent)
 	lumby->visible = false;
 
 	// if the last required worker arrives then let him become visible and start gathering wood
-	if (lumberjackHut->woodStored >= lumberjackHut->woodRequired &&
-		lumberjackHut->stoneStored >= lumberjackHut->stoneRequired &&
-		lumberjackHut->workersPresent == lumberjackHut->workersRequired)
+	if (lumberjackHut->AllRequiredWorkersOnSite() &&
+		lumberjackHut->AllRequiredBuildingMaterialsOnSite())
 	{
 		gameEventHandler->AddEvent(new GatherResourceEvent(Resource::Wood, lumby));
 		lumby->visible = true;
@@ -560,12 +557,12 @@ void GameEventHandler::Visit(BringResourceEvent* aBringResourceEvent)
 		switch (aBringResourceEvent->prevWorkerState)
 		{
 			case (0) :
-				worker->state = State::carryingWood;
 
-				if (building->woodStored - building->woodRequired > 0)
+				if (building->UnusedWoodBuildingMaterial() > 0)
 				{
 					worker->visible = true;
-					building->woodStored--;
+					worker->state = State::carryingWood;
+					building->RemoveWoodBuildingMaterial();
 
 					try {
 						Dwelling* dwelling = dynamic_cast<Dwelling*>(worker->destination);
@@ -584,16 +581,15 @@ void GameEventHandler::Visit(BringResourceEvent* aBringResourceEvent)
 				break;
 
 			case (1):
-				worker->state = State::carryingStone;
-				worker->visible = true;
 
-				if (building->stoneStored - building->stoneRequired > 0)
+				if (building->UnusedStoneBuildingMaterial() > 0)
 				{
-					building->stoneStored--;
+					worker->visible = true;
+					worker->state = State::carryingStone;
+					building->RemoveStoneBuildingMaterial();
 				}
 				else
 				{
-					worker->visible = true;
 					worker->state = State::idle;
 					resources->AddIdleWorker(worker);
 					return;
@@ -618,10 +614,10 @@ void GameEventHandler::Visit(ResourceArrivedEvent* aResourceArrivedEvent)
 	{
 		return;
 	}
+	
 
-	if (lumberjackHut->woodStored >= lumberjackHut->woodRequired &&
-		lumberjackHut->stoneStored >= lumberjackHut->stoneRequired &&
-		lumberjackHut->workersPresent == lumberjackHut->workersRequired)
+	if (lumberjackHut->AllRequiredBuildingMaterialsOnSite() &&
+		lumberjackHut->AllRequiredWorkersOnSite())
 	{
 		// copy entrance pos
 		Lumberjack* lumby = new Lumberjack(glm::vec3(lumberjackHut->entranceX + 0.5f, lumberjackHut->entranceY + 0.5f,

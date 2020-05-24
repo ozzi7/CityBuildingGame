@@ -14,14 +14,16 @@ Pathfinding::Pathfinding(Grid* aGrid, const std::pair<int,int> XYstart, const st
 	start->distanceTotal = start->distanceToStart + start->distanceToDestination;
 	start->destination = destination->coordinate;
 	visited[XYstart.first][XYstart.second] = true;
-	closed.push_front(start);
-
-	current = start;
 }
 
 void Pathfinding::CalculatePath()
 {
 	auto startTime = std::chrono::high_resolution_clock::now();
+
+	open.push(start);
+		if (start->coordinate == destination->coordinate)
+			pathFound = true;
+	setNextNode();
 	
 	while (!pathFound && !unreachable)
 	{
@@ -34,28 +36,32 @@ void Pathfinding::CalculatePath()
 		if (current->coordinate.second > 0)
 			createNode(std::pair<int,int>(current->coordinate.first, current->coordinate.second - 1));
 
-		setNextNode();
+		if (!pathFound)
+			setNextNode();
 	}
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
 	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding from " + 
-																		 std::to_string(start->coordinate.first) + "|" + 
-																		 std::to_string(start->coordinate.second) + " to " +
-																		 std::to_string(destination->coordinate.first) + "|" +
-																		 std::to_string(destination->coordinate.second) +
-																		 " in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
+																			 std::to_string(start->coordinate.first) + "|" + 
+																			 std::to_string(start->coordinate.second) + " to " +
+																			 std::to_string(destination->coordinate.first) + "|" +
+																			 std::to_string(destination->coordinate.second) + " in " +
+																			 std::to_string(elapsedTimeMicroseconds) + " microseconds; PathFound: " +
+																			 std::to_string(pathFound)));
 }
 
-std::list<std::pair<int,int>> Pathfinding::GetPath()
+std::list<std::pair<int,int>> Pathfinding::GetPath() const
 {
 	std::list<std::pair<int, int>> path;
+	Node* currentPath = current;
 	if (pathFound)
 	{
-		while (current->parent != nullptr)
+		path.push_front(currentPath->coordinate);
+		while (currentPath->parent != nullptr)
 		{
-			path.push_front(current->coordinate);
-			current = current->parent;
+			currentPath = currentPath->parent;
+			path.push_front(currentPath->coordinate);
 		}
 	}
 	return path;

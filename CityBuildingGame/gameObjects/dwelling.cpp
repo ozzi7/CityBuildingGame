@@ -30,7 +30,7 @@ void Dwelling::UpdateWoodModels()
 	const glm::vec3 rotationX = glm::vec3(1.0f, 0.0f, 0.0f); //glm::vec3(1.0f, 0.0f, 0.0f);
 	const glm::vec3 rotationY = glm::vec3(0.0f, 1.0f, 0.0f); //glm::vec3(0.0f, 1.0f, 0.0f);
 
-	for (int i = 0; i < std::min(2, woodStored); ++i)
+	for (int i = 0; i < woodStored; ++i)
 	{
 		glm::mat4 model = glm::mat4(1.0f);
 

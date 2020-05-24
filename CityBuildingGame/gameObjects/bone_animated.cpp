@@ -102,7 +102,7 @@ void BoneAnimated::SetNewPath(std::vector<std::pair<int,int>> aWayPoints)
 	wayPoints = aWayPoints;
 	proxyWPIdx = 0;
 
-	if (wayPoints.size() >= 2)
+	if (wayPoints.size() >= 1)
 	{
 		proxyObjectPos = glm::vec2(wayPoints[0].first + 0.5f, wayPoints[0].second + 0.5f);
 		proxyHasArrived = false;
