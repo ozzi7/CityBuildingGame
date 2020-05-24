@@ -34,7 +34,7 @@ void LumberjackHut::UpdateWoodModels()
 	const glm::vec3 rotationY = glm::vec3(0.0f, 1.0f, 0.0f); //glm::vec3(0.0f, 1.0f, 0.0f);
 
 	int wood = std::max(this->wood, (int)this->woodStored);
-	//float position_z = evolutionStage == 1 ? position.z + 0.075f : position.z;
+	//float position_z = evolutionStage == 0 ? position.z + 0.075f : position.z;
 
 	for (int i = 0; i < std::min(4, wood); ++i)
 	{

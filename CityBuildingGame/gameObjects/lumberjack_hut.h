@@ -11,7 +11,7 @@ public:
 
 	void Accept(Visitor& v) override;
 	void Evolve() override;
-	void UpdateWoodModels();
+	void UpdateWoodModels() override;
 
 	int wood = 0;
 	const int woodCapacity = 10;
