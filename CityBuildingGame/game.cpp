@@ -14,7 +14,7 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler)
 	inputHandler = aInputHandler;
 
 	grid = new Grid(MAP_HEIGHT, MAP_WIDTH);
-	loggingEventHandler = new LoggingEventHandler(LoggingLevel::INFO, LoggingLevel::DEBUG);
+	loggingEventHandler = new LoggingEventHandler();
 	gameEventHandler = new GameEventHandler(grid);
 	soundEventHandler = new SoundEventHandler(255);
 	resources = new Resources();
