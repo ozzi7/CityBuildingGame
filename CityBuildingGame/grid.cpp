@@ -126,9 +126,9 @@ void Grid::SetIsOccupied(int x, int y, bool value)
 }
 void Grid::SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value)
 {
-	for (int y = fromY; y <= toY + 1; ++y)
+	for (int y = fromY; y <= toY; ++y)
 	{
-		for (int x = fromX; x <= toX + 1; ++x)
+		for (int x = fromX; x <= toX; ++x)
 		{
 			gridUnits[y][x].occupied = value;
 		}
