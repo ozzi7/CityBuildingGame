@@ -2,8 +2,8 @@
 #pragma once
 #include <dwelling.h>
 
-Dwelling::Dwelling(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
-	: Building(aPosition, aScale, aRotation) {};
+Dwelling::Dwelling(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, float aFloorZ)
+	: Building(aPosition, aScale, aRotation, aFloorZ) {};
 
 void Dwelling::Accept(Visitor& v)
 {
@@ -34,7 +34,7 @@ void Dwelling::UpdateWoodModels()
 	{
 		glm::mat4 model = glm::mat4(1.0f);
 
-		model = translate(model, glm::vec3(toX + (i + 2) * 0.175f, posY + 0.45f, position.z + 0.075f));
+		model = translate(model, glm::vec3(toX + (i + 2) * 0.175f, posY + 0.45f, floorZ + 0.075f));
 
 		model = rotate(model, glm::half_pi<float>(), rotationZ);
 		model = rotate(model, rotation.x, rotationX); // TODO:

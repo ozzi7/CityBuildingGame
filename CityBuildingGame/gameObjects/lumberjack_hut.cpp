@@ -2,8 +2,8 @@
 #pragma once
 #include <lumberjack_hut.h>
 
-LumberjackHut::LumberjackHut(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
-	: Building(aPosition, aScale, aRotation) {
+LumberjackHut::LumberjackHut(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, float aFloorZ)
+	: Building(aPosition, aScale, aRotation, aFloorZ) {
 	workersRequired = 2;
 	woodRequired = 3;
 }
@@ -34,17 +34,14 @@ void LumberjackHut::UpdateWoodModels()
 	const glm::vec3 rotationY = glm::vec3(0.0f, 1.0f, 0.0f); //glm::vec3(0.0f, 1.0f, 0.0f);
 
 	int wood = std::max(this->wood, (int)this->woodStored);
-	//float position_z = evolutionStage == 0 ? position.z + 0.075f : position.z;
 
 	for (int i = 0; i < std::min(4, wood); ++i)
 	{
 		glm::mat4 model = glm::mat4(1.0f);
 
-		model = translate(model, glm::vec3(toX + (i-1) * 0.175f, posY + 0.45f, position.z + 0.075f));
+		model = translate(model, glm::vec3(toX + (i-1) * 0.175f, posY + 0.45f, floorZ + 0.071f));
 
 		model = rotate(model, glm::half_pi<float>(), rotationZ);
-		model = rotate(model, rotation.x, rotationX); // TODO:
-		model = rotate(model, rotation.y, rotationY);
 		model = glm::scale(model, scale);
 
 		woodModels.push_back(model);
@@ -53,11 +50,9 @@ void LumberjackHut::UpdateWoodModels()
 	{
 		glm::mat4 model = glm::mat4(1.0f);
 
-		model = translate(model, glm::vec3(toX + (i - 1) * 0.175f + 0.09f, posY + 0.45f, position.z + 0.071f*3));
+		model = translate(model, glm::vec3(toX + (i - 1) * 0.175f + 0.09f, posY + 0.45f, floorZ + 0.071f*3));
 
 		model = rotate(model, glm::half_pi<float>(), rotationZ);
-		model = rotate(model, rotation.x, rotationX); // TODO:
-		model = rotate(model, rotation.y, rotationY);
 		model = glm::scale(model, scale);
 
 		woodModels.push_back(model);
@@ -66,11 +61,9 @@ void LumberjackHut::UpdateWoodModels()
 	{
 		glm::mat4 model = glm::mat4(1.0f);
 
-		model = translate(model, glm::vec3(toX + (i - 1) * 0.175f + 0.09f*2, posY + 0.45f, position.z + 0.071f*5));
+		model = translate(model, glm::vec3(toX + (i - 1) * 0.175f + 0.09f*2, posY + 0.45f, floorZ + 0.071f*5));
 
 		model = rotate(model, glm::half_pi<float>(), rotationZ);
-		model = rotate(model, rotation.x, rotationX); // TODO:
-		model = rotate(model, rotation.y, rotationY);
 		model = glm::scale(model, scale);
 
 		woodModels.push_back(model);
@@ -79,11 +72,9 @@ void LumberjackHut::UpdateWoodModels()
 	{
 		glm::mat4 model = glm::mat4(1.0f);
 
-		model = translate(model, glm::vec3(toX + (i - 1) * 0.175f + 0.09f*3, posY + 0.45f, position.z + 0.071f*7));
+		model = translate(model, glm::vec3(toX + (i - 1) * 0.175f + 0.09f*3, posY + 0.45f, floorZ + 0.071f*7));
 
 		model = rotate(model, glm::half_pi<float>(), rotationZ);
-		model = rotate(model, rotation.x, rotationX); // TODO:
-		model = rotate(model, rotation.y, rotationY);
 		model = glm::scale(model, scale);
 
 		woodModels.push_back(model);

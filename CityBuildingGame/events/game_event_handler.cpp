@@ -44,7 +44,7 @@ bool GameEventHandler::ProcessEvent()
 
 void GameEventHandler::Visit(MoveEvent* aMoveEvent)
 {
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "[EVENT] Move"));
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::NOTSET, "[EVENT] Move"));
 
 	/* removes element found by reference */
 	BoneAnimated* toMove = nullptr;
@@ -147,7 +147,8 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			/* create building  */
 			Dwelling* dwelling = new Dwelling(modelCenter, // translate
 			                                  glm::vec3(0.014f, 0.008f, 0.014f), // rescale
-			                                  glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
+			                                  glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f),  // rotate
+												modelCenter.z);
 
 			/* save some stuff needed later.. TODO: dedicated building exit,check road etc (for other buildings)*/
 			dwelling->fromX = fromX;
@@ -183,7 +184,8 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			modelCenter.x = modelCenter.x - 0.45f;
 			LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
 			                                                 glm::vec3(0.012f, 0.006f, 0.012f), // rescale
-			                                                 glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f)); // rotate
+			                                                 glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f),  // rotate
+															modelCenter.z);
 
 			lumberjackHut->fromX = fromX;
 			lumberjackHut->fromY = fromY;

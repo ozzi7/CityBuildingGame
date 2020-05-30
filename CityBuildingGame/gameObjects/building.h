@@ -8,7 +8,7 @@
 class Building : public GameObject
 {
 public:
-	Building(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation);
+	Building::Building(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, float aFloorZ);
 
 	/* the building covers [fromX, toX] x [fromY, toY] */
 	int sizeX = 0;
@@ -22,6 +22,8 @@ public:
 	int entranceX = 0;
 	int entranceY = 0;
 	
+	float floorZ = 0.0f;
+
 	/* 0 when created, 1 when done constructing (used for 3d model selection) */
 	unsigned short evolutionStage = 0;
 	std::vector<glm::mat4> buildingOutlines;
@@ -99,5 +101,4 @@ protected:
 	unsigned int stoneRequired = 0;
 	unsigned int stoneOnTheWay = 0;
 	unsigned int stoneReserved = 0;
-
 };
