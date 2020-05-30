@@ -101,11 +101,11 @@ Note: includes the points, no out of bounds checking*/
 bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY) const
 {
 	float height = terrain->heightmap[fromY][fromX];
-	for (int i = fromY; i <= toY + 1; ++i)
+	for (int y = fromY; y <= toY + 1; ++y)
 	{
-		for (int j = fromX; j <= toX + 1; ++j)
+		for (int x = fromX; x <= toX + 1; ++x)
 		{
-			if (terrain->heightmap[i][j] != height)
+			if (terrain->heightmap[y][x] != height)
 			{
 				return false;
 			}
@@ -115,22 +115,22 @@ bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY) const
 }
 bool Grid::IsOccupied(int x, int y)
 {
-	return gridUnits[x][y].occupied;
+	return gridUnits[y][x].occupied;
 }
 void Grid::SetIsOccupied(int x, int y, bool value)
 {
-	gridUnits[x][y].occupied = value;
+	gridUnits[y][x].occupied = value;
 
 	if (buildingMode)
 		terrain->reloadTerrain = true;
 }
 void Grid::SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value)
 {
-	for (int i = fromX; i <= toX; ++i)
+	for (int y = fromY; y <= toY + 1; ++y)
 	{
-		for (int j = fromY; j <= toY; ++j)
+		for (int x = fromX; x <= toX + 1; ++x)
 		{
-			gridUnits[j][i].occupied = value;
+			gridUnits[y][x].occupied = value;
 		}
 	}
 	if (buildingMode)
@@ -156,11 +156,11 @@ bool Grid::IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
 }
 bool Grid::HasTree(int x, int y)
 {
-	return gridUnits[x][y].hasTree;
+	return gridUnits[y][x].hasTree;
 }
 void Grid::SetHasTree(int x, int y, bool value)
 {
-	gridUnits[x][y].hasTree = value;
+	gridUnits[y][x].hasTree = value;
 }
 bool Grid::HasBuilding(int x, int y)
 {
