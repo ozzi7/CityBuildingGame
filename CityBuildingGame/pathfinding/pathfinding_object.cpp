@@ -283,8 +283,7 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::idleBuilding:
 		{
-			if (!grid->HasTree(coordinate.first, coordinate.second) &&
-				grid->IsOccupied(coordinate.first, coordinate.second)) // TODO: Use hasBuilding flag instead 
+			if (grid->HasBuilding(coordinate.first, coordinate.second))
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
@@ -297,8 +296,7 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::unusedWood:
 		{
-			if (!grid->HasTree(coordinate.first, coordinate.second) &&
-				grid->IsOccupied(coordinate.first, coordinate.second)) // TODO: Use hasBuilding flag instead 
+			if (grid->HasBuilding(coordinate.first, coordinate.second))
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
@@ -312,8 +310,7 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::unusedStone:
 		{
-			if (!grid->HasTree(coordinate.first, coordinate.second) &&
-				grid->IsOccupied(coordinate.first, coordinate.second)) // TODO: Use hasBuilding flag instead 
+			if (grid->HasBuilding(coordinate.first, coordinate.second))
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
@@ -326,8 +323,7 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::woodRequired:
 		{
-			if (!grid->HasTree(coordinate.first, coordinate.second) &&
-				grid->IsOccupied(coordinate.first, coordinate.second)) // TODO: Use hasBuilding flag instead 
+			if (grid->HasBuilding(coordinate.first, coordinate.second))
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
@@ -340,8 +336,7 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::stoneRequired:
 		{
-			if (!grid->HasTree(coordinate.first, coordinate.second) &&
-				grid->IsOccupied(coordinate.first, coordinate.second)) // TODO: Use hasBuilding flag instead 
+			if (grid->HasBuilding(coordinate.first, coordinate.second))
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)

@@ -44,6 +44,8 @@ public:
 	bool IsOccupied(int x, int y);
 	void SetHasTree(int x, int y, bool value);
 	void SetIsOccupied(int x, int y, bool value);
+	bool HasBuilding(int x, int y);
+	bool HasBuilding(int fromX, int toX, int fromY, int toY);
 
 	// [y][x]
 	std::vector<std::vector<Unit>> gridUnits;

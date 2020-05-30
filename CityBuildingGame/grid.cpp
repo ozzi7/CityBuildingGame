@@ -162,6 +162,22 @@ void Grid::SetHasTree(int x, int y, bool value)
 {
 	gridUnits[x][y].hasTree = value;
 }
+bool Grid::HasBuilding(int x, int y)
+{
+	return !HasTree(x, y) && IsOccupied(x, y); // TODO:  add isBuildingFlag?
+}
+bool Grid::HasBuilding(int fromX, int toX, int fromY, int toY)
+{
+	for (int x = fromX; x <= toX; ++x)
+	{
+		for (int y = fromY; y <= toY; ++y)
+		{
+			if (!HasTree(x, y) && IsOccupied(x, y))
+				return true;
+		}
+	}
+	return false;
+}
 Grid::~Grid()
 {
 	delete terrain;
