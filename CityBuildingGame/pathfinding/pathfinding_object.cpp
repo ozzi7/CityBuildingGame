@@ -260,7 +260,7 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 	{
 		case ObjectType::tree:
 		{
-			if (grid->gridUnits[coordinate.second][coordinate.first].hasTree)
+			if (grid->HasTree(coordinate.first, coordinate.second))
 				objectFound = true;
 			break;
 		}
@@ -283,8 +283,8 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::idleBuilding:
 		{
-			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree &&
-				grid->gridUnits[coordinate.second][coordinate.first].occupied) // TODO: Use hasBuilding flag instead 
+			if (!grid->HasTree(coordinate.first, coordinate.second) &&
+				grid->IsOccupied(coordinate.first, coordinate.second)) // TODO: Use hasBuilding flag instead 
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
@@ -297,8 +297,8 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::unusedWood:
 		{
-			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree &&
-				grid->gridUnits[coordinate.second][coordinate.first].occupied) // TODO: Use hasBuilding flag instead 
+			if (!grid->HasTree(coordinate.first, coordinate.second) &&
+				grid->IsOccupied(coordinate.first, coordinate.second)) // TODO: Use hasBuilding flag instead 
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
@@ -312,8 +312,8 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::unusedStone:
 		{
-			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree &&
-				grid->gridUnits[coordinate.second][coordinate.first].occupied) // TODO: Use hasBuilding flag instead 
+			if (!grid->HasTree(coordinate.first, coordinate.second) &&
+				grid->IsOccupied(coordinate.first, coordinate.second)) // TODO: Use hasBuilding flag instead 
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
@@ -326,8 +326,8 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::woodRequired:
 		{
-			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree &&
-				grid->gridUnits[coordinate.second][coordinate.first].occupied) // TODO: Use hasBuilding flag instead 
+			if (!grid->HasTree(coordinate.first, coordinate.second) &&
+				grid->IsOccupied(coordinate.first, coordinate.second)) // TODO: Use hasBuilding flag instead 
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)
@@ -340,8 +340,8 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 
 		case ObjectType::stoneRequired:
 		{
-			if (!grid->gridUnits[coordinate.second][coordinate.first].hasTree &&
-				grid->gridUnits[coordinate.second][coordinate.first].occupied) // TODO: Use hasBuilding flag instead 
+			if (!grid->HasTree(coordinate.first, coordinate.second) &&
+				grid->IsOccupied(coordinate.first, coordinate.second)) // TODO: Use hasBuilding flag instead 
 			{
 				Building* building = findBuildingReference(coordinate);
 				if (building != nullptr)

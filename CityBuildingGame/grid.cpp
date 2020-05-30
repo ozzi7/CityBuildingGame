@@ -113,25 +113,21 @@ bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY) const
 	}
 	return true;
 }
-void Grid::SetGridOccupied(int fromX, int toX, int fromY, int toY)
+bool Grid::IsOccupied(int x, int y)
 {
-	for (int i = fromX; i <= toX; ++i)
-	{
-		for (int j = fromY; j <= toY; ++j)
-		{
-			gridUnits[j][i].occupied = true;
-		}
-	}
-	if (buildingMode)
-		terrain->reloadTerrain = true;
+	return gridUnits[x][y].occupied;
 }
-void Grid::SetGridFree(int fromX, int toX, int fromY, int toY)
+void Grid::SetIsOccupied(int x, int y, bool value)
+{
+	gridUnits[x][y].occupied = value;
+}
+void Grid::SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value)
 {
 	for (int i = fromX; i <= toX; ++i)
 	{
 		for (int j = fromY; j <= toY; ++j)
 		{
-			gridUnits[j][i].occupied = false;
+			gridUnits[j][i].occupied = value;
 		}
 	}
 	if (buildingMode)
@@ -154,8 +150,15 @@ bool Grid::IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
 		return false;
 	
 	return true;
-};
-
+}
+bool Grid::HasTree(int x, int y)
+{
+	return gridUnits[x][y].hasTree;
+}
+void Grid::SetHasTree(int x, int y, bool value)
+{
+	gridUnits[x][y].hasTree = value;
+}
 Grid::~Grid()
 {
 	delete terrain;

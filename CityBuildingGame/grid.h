@@ -23,6 +23,7 @@ public:
 	float averageHeight = 0;
 	std::list<GameObject*> objects;
 	std::list<BoneAnimated*> movingObjects; // TODO doesnt have to coincide with bone animated.. hmm
+
 	Unit();
 	~Unit();
 };
@@ -38,8 +39,11 @@ public:
 	bool IsAreaFlat(int fromX, int toX, int fromY, int toY) const;
 	bool IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const;
 	void UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
-	void SetGridOccupied(int fromX, int toX, int fromY, int toY);
-	void SetGridFree(int fromX, int toX, int fromY, int toY);
+	void SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value);
+	bool HasTree(int x, int y);
+	bool IsOccupied(int x, int y);
+	void SetHasTree(int x, int y, bool value);
+	void SetIsOccupied(int x, int y, bool value);
 
 	// [y][x]
 	std::vector<std::vector<Unit>> gridUnits;

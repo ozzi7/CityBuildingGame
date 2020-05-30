@@ -162,8 +162,8 @@ void MapGenerator::generateTrees()
 					                  scale * TREE_SCALE_FACTOR),
 					        glm::vec3(1.5707963f, 0, rotation(gen))));
 			}
-			grid->gridUnits[i][j].occupied = true;
-			grid->gridUnits[i][j].hasTree = true;
+			grid->SetIsOccupied(j,i, true);
+			grid->SetHasTree(j, i, true);
 		}
 	}
 }

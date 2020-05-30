@@ -120,7 +120,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	/* calculate 3d model position height*/
 	modelCenter.z = grid->GetHeight(modelCenter.x, modelCenter.y);
 
-	grid->SetGridOccupied(fromX, toX, fromY, toY);
+	grid->SetIsOccupied(fromX, toX, fromY, toY, true);
 
 	/* Create the building object etc.. */
 	switch (aCreateBuildingEvent->buildingType)
@@ -139,7 +139,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			/* if no path found do nothing..*/
 			if (pathCoordinates.empty())
 			{
-				grid->SetGridFree(fromX, toX, fromY, toY);
+				grid->SetIsOccupied(fromX, toX, fromY, toY, false);
 				loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::WARNING, "The worker can't walk to the dwelling (no path found)"));
 				return;
 			}
@@ -409,7 +409,7 @@ void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 	try {
 		tree = dynamic_cast<Tree*>(aDeleteEvent->gameObject);
 		if(tree)
-			grid->SetGridFree(aDeleteEvent->posX, aDeleteEvent->posX, aDeleteEvent->posY, aDeleteEvent->posY);
+			grid->SetIsOccupied(aDeleteEvent->posX, aDeleteEvent->posX, aDeleteEvent->posY, aDeleteEvent->posY, false);
 	}
 	catch (const std::exception & e)  // This should happen
 	{
@@ -493,7 +493,7 @@ void GameEventHandler::Visit(GatherResourceEvent* aGatherResourceEvent)
 			{
 				std::vector<std::pair<int,int>> pathCoordinates{std::make_move_iterator(std::begin(pathCoordinatesList)), 
 															    std::make_move_iterator(std::end(pathCoordinatesList))};
-				grid->gridUnits[path->GetDestinationObject()->posY][path->GetDestinationObject()->posX].hasTree = false;
+				grid->SetHasTree(path->GetDestinationObject()->posX, path->GetDestinationObject()->posY, false);
 				aGatherResourceEvent->person->SetNewPath(pathCoordinates);
 				aGatherResourceEvent->person->destination = path->GetDestinationObject();
 				aGatherResourceEvent->person->state = State::goingToWork;
