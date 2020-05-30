@@ -36,8 +36,7 @@ void Pathfinding::CalculatePath()
 		if (current->coordinate.second > 0)
 			createNode(std::pair<int,int>(current->coordinate.first, current->coordinate.second - 1));
 
-		if(!pathFound)
-			setNextNode();
+		setNextNode();
 	}
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
