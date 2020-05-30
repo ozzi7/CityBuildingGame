@@ -143,7 +143,8 @@ public:
 		terrain_shader->setInt("shadowMap", shadowMapID);
 		terrain_shader->setVec3("light.ambient", ambientLight);
 		terrain_shader->setVec3("light.diffuse", camera.GetDirectionalLight().Color);
-		terrain_shader->setVec3("light.direction", camera.GetDirectionalLight().Direction);
+		terrain_shader->setVec3("light.direction", normalize(-camera.GetDirectionalLight().Direction));
+		terrain_shader->setVec2("texelSizeShadowMap", 1.0f / (float)SHADOW_WIDTH, 1.0f /(float)SHADOW_HEIGHT);
 
 		skinned_mesh_shader->use();
 		skinned_mesh_shader->setMat4("projection", aProjection);
@@ -152,7 +153,8 @@ public:
 		skinned_mesh_shader->setInt("shadowMap", shadowMapID);
 		skinned_mesh_shader->setVec3("light.ambient", ambientLight);
 		skinned_mesh_shader->setVec3("light.diffuse", camera.GetDirectionalLight().Color);
-		skinned_mesh_shader->setVec3("light.direction", camera.GetDirectionalLight().Direction);
+		skinned_mesh_shader->setVec3("light.direction", normalize(-camera.GetDirectionalLight().Direction));
+		skinned_mesh_shader->setVec2("texelSizeShadowMap", 1.0f / (float)SHADOW_WIDTH, 1.0f /(float)SHADOW_HEIGHT);
 
 		instanced_mesh_shader->use();
 		instanced_mesh_shader->setMat4("projection", aProjection);
@@ -161,10 +163,11 @@ public:
 		instanced_mesh_shader->setInt("shadowMap", shadowMapID);
 		instanced_mesh_shader->setVec3("light.ambient", ambientLight);
 		instanced_mesh_shader->setVec3("light.diffuse", camera.GetDirectionalLight().Color);
-		instanced_mesh_shader->setVec3("light.direction", camera.GetDirectionalLight().Direction);
+		instanced_mesh_shader->setVec3("light.direction", normalize(-camera.GetDirectionalLight().Direction));
+		instanced_mesh_shader->setVec2("texelSizeShadowMap", 1.0f / (float)SHADOW_WIDTH, 1.0f /(float)SHADOW_HEIGHT);
 	}
 
-	void SetShadowMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix) const
+	void SetShadowMatrices(glm::mat4 aLightSpaceMatrix) const
 	{
 		shadow_shader->use();
 		shadow_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);

@@ -77,7 +77,7 @@ void Game::renderLoop()
 		glm::mat4 projection = camera->GetLightProjectionMatrix();
 		glm::mat4 view = camera->GetLightViewMatrix();
 		glm::mat4 lightSpaceMatrix = projection * view;
-		renderer->SetShadowMatrices(projection, view, lightSpaceMatrix);
+		renderer->SetShadowMatrices(lightSpaceMatrix);
 		renderer->CalculateShadow(renderBuffers->GetConsumerBuffer());
 
 		// Render pass
