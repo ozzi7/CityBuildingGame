@@ -11,13 +11,14 @@ Terrain::Terrain(int aGridHeight, int aGridWidth, Grid* aGrid)
 void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
 {
 	/* Check if terrain must be reloaded to GPU */
-	if (currUpperLeftX != (int)upperLeft.x || currUpperLeftY != (int)upperLeft.y ||
+	if (reloadTerrain || currUpperLeftX != (int)upperLeft.x || currUpperLeftY != (int)upperLeft.y ||
 		currLowerRightX != (int)lowerRight.x || currLowerRightY != (int)lowerRight.y)
 	{
 		currUpperLeftX = (int)upperLeft.x;
 		currUpperLeftY = (int)upperLeft.y;
 		currLowerRightX = (int)lowerRight.x;
 		currLowerRightY = (int)lowerRight.y;
+		reloadTerrain = false;
 		LoadVisibleGeometry(upperLeft, upperRight, lowerLeft, lowerRight);
 	}
 }
@@ -48,7 +49,7 @@ int Terrain::ReloadGPUData()
 {
 	renderDataMutex.lock();
 	int vertexCount = -1;
-	if (reloadGPUData)
+	if (reloadGPUData) // TODO: this is always true?
 	{
 		glBindVertexArray(VAO);
 
@@ -122,10 +123,10 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					float float_j = float(j);
 					float occupied;
 
-					if (grid->IsValidBuildingPosition(j,i,j,i))
-						occupied = 0.0f;
-					else
+					if (grid->buildingMode && !grid->IsValidBuildingPosition(j,i,j,i))
 						occupied = 1.0f;
+					else
+						occupied = 0.0f;
 
 					// x/y/z of first vertex
 					(*renderDataTemp)[index++] = float_j;
@@ -221,24 +222,14 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 	}
 loopExit:
 	renderDataMutex.lock();
-	if (currRenderData == 1)
-	{
-		currRenderData = 0;
-	}
-	else
-	{
-		currRenderData = 1;
-	}
+	currRenderData = !currRenderData;
 	renderDataVertexCount = index * 6 / 54;
 	reloadGPUData = true;
 	renderDataMutex.unlock();
 
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "LoadVisibleGeometry loop count: " + std::to_string(renderDataVertexCount)));
-	std::chrono::high_resolution_clock::duration elapsedTime = std::chrono::high_resolution_clock::now() - start;
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - start;
 	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "LoadVisibleGeometry time elapsed: " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
-	if (renderDataVertexCount > 0)
-		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Approximate CPU cycles per loop: " + std::to_string(elapsedTimeMicroseconds * 4000 / renderDataVertexCount)));
 }
 
 void Terrain::CreateGeometry()

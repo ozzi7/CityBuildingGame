@@ -3,7 +3,7 @@
 #include "game_event_handler.h"
 #include "sound_event_handler.h"
 
-void InputHandler::Keypress(int button, int action) const
+void InputHandler::Keypress(int button, int action)
 {
 	if (windowFocused)
 	{
@@ -19,34 +19,93 @@ void InputHandler::Keypress(int button, int action) const
 			Camera->Scroll(CameraMovement::Left, 0.05f);
 		if (button == GLFW_KEY_D || button == GLFW_KEY_RIGHT)
 			Camera->Scroll(CameraMovement::Right, 0.05f);
+
+		if (action == GLFW_PRESS) {
+			
+			if (button == GLFW_KEY_1) {
+				// Not in building mode yet
+				if (buildingSelection == -1)
+				{
+					Grid->buildingMode = true;
+					buildingSelection = 1;
+					Grid->terrain->reloadTerrain = true;
+				}
+				// In building mode of different building -> change to new 
+				else if (buildingSelection != 1)
+				{
+					buildingSelection = 1;
+				}
+				// in building mode of current building -> toggle off
+				else 
+				{
+					Grid->buildingMode = false;
+					buildingSelection = -1;
+					Grid->terrain->reloadTerrain = true;
+				}
+			}
+			
+			if (button == GLFW_KEY_2)
+			{
+				// Not in building mode yet
+				if (buildingSelection == -1)
+				{
+					Grid->buildingMode = true;
+					buildingSelection = 2;
+					Grid->terrain->reloadTerrain = true;
+				}
+				// In building mode of different building -> change to new 
+				else if (buildingSelection != 2)
+				{
+					buildingSelection = 2;
+				}
+				// in building mode of current building -> toggle off
+				else 
+				{
+					Grid->buildingMode = false;
+					buildingSelection = -1;
+					Grid->terrain->reloadTerrain = true;
+				}
+			}
+		}
 	}
 }
 
-void InputHandler::Mouseclick(int button, int action) const
+void InputHandler::Mouseclick(int button, int action)
 {
 	if (windowFocused)
 	{
-		if (!action == GLFW_PRESS)
-		{
+		if (!(action == GLFW_PRESS))
 			return;
-		}
-
-		soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::WorkerArrivedSound)); // TODO:
 
 		// Test Code
-		glm::vec3 cursor_position = Camera->CursorPositionOnGrid();
-		if (cursor_position.x >= 0 && cursor_position.y >= 0 && Grid->gridHeight > (int)cursor_position.y && Grid->
-			gridWidth > (int)cursor_position.x)
+		const glm::vec3 cursorPosition = Camera->CursorPositionOnGrid();
+		if (cursorPosition.x >= 0 && cursorPosition.y >= 0 && 
+			Grid->gridHeight > (int)cursorPosition.y && 
+			Grid->gridWidth > (int)cursorPosition.x)
 		{
-			if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+			if (button == GLFW_MOUSE_BUTTON_LEFT)
 			{
-				gameEventHandler->AddEvent(
-					new CreateBuildingEvent(BuildingType::LumberjackHutID, cursor_position.x, cursor_position.y));
+				switch (buildingSelection)
+				{
+					case 1:
+						gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::DwellingID, cursorPosition.x, cursorPosition.y));
+						break;
+
+					case 2:
+						gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::LumberjackHutID, cursorPosition.x, cursorPosition.y));
+					
+					default:
+						return;
+				}
+				soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::WorkerArrivedSound)); // TODO:
 			}
-			else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+			else if (button == GLFW_MOUSE_BUTTON_RIGHT)
 			{
-				gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::DwellingID, cursor_position.x, cursor_position.y));
+				Grid->buildingMode = false;
+				buildingSelection = -1;
+				Grid->terrain->reloadTerrain = true;
 			}
+
 		}
 	}
 }
@@ -70,13 +129,11 @@ void InputHandler::WindowFocus(int focused)
 
 		glfwGetWindowPos(Window, &left, &top);
 		glfwGetWindowSize(Window, &width, &height);
-		int right = left + width;
-		int bottom = top + height;
 
 		windowEdges.left = left;
 		windowEdges.top = top;
-		windowEdges.right = right;
-		windowEdges.bottom = bottom;
+		windowEdges.right = left + width;
+		windowEdges.bottom = top + height;
 
 		ClipCursor(&windowEdges);
 	}

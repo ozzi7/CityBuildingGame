@@ -55,5 +55,7 @@ public:
 	int gridHeight;
 	int gridWidth;
 
+	bool buildingMode = false;
+
 	Terrain* terrain;
 };

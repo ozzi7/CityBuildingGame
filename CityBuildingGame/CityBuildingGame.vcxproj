@@ -72,7 +72,7 @@
     <ClInclude Include="terrain\terrain.h" />
     <ClInclude Include="utility\triple_buffer.h" />
     <ClInclude Include="visitor.h" />
-    <ClInclude Include="worker_arrived_event.h" />
+    <ClInclude Include="events\worker_arrived_event.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
@@ -119,7 +119,7 @@
     <ClCompile Include="terrain\noise_gen.cpp" />
     <ClCompile Include="terrain\terrain.cpp" />
     <ClCompile Include="utility\buffer.cpp" />
-    <ClCompile Include="worker_arrived_event.cpp" />
+    <ClCompile Include="events\worker_arrived_event.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

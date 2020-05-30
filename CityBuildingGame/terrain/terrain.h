@@ -39,6 +39,9 @@ public:
 	Change this to allow further zoom out */
 	int maximumVisibleUnits = 600 * 500;
 
+	// Set this to force reload of terrain once (for example when going into building mode)
+	bool reloadTerrain = false;
+		
 private:
 	void LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	int ReloadGPUData();

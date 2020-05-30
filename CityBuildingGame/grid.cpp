@@ -122,6 +122,8 @@ void Grid::SetGridOccupied(int fromX, int toX, int fromY, int toY)
 			gridUnits[j][i].occupied = true;
 		}
 	}
+	if (buildingMode)
+		terrain->reloadTerrain = true;
 }
 void Grid::SetGridFree(int fromX, int toX, int fromY, int toY)
 {
@@ -132,6 +134,8 @@ void Grid::SetGridFree(int fromX, int toX, int fromY, int toY)
 			gridUnits[j][i].occupied = false;
 		}
 	}
+	if (buildingMode)
+		terrain->reloadTerrain = true;
 }
 bool Grid::IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
 {
