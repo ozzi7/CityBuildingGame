@@ -120,6 +120,9 @@ bool Grid::IsOccupied(int x, int y)
 void Grid::SetIsOccupied(int x, int y, bool value)
 {
 	gridUnits[x][y].occupied = value;
+
+	if (buildingMode)
+		terrain->reloadTerrain = true;
 }
 void Grid::SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value)
 {
