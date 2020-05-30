@@ -37,8 +37,6 @@ void Dwelling::UpdateWoodModels()
 		model = translate(model, glm::vec3(toX + (i + 2) * 0.175f, posY + 0.45f, floorZ + 0.075f));
 
 		model = rotate(model, glm::half_pi<float>(), rotationZ);
-		model = rotate(model, rotation.x, rotationX); // TODO:
-		model = rotate(model, rotation.y, rotationY);
 		model = glm::scale(model, scale);
 
 		woodModels.push_back(model);

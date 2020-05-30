@@ -111,7 +111,7 @@ void Camera::Zoom(float yOffset)
 
 void Camera::CalculateVisibleGrid()
 {
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "CalculateVisibleGrid called"));
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::NOTSET, "CalculateVisibleGrid called"));
 	const int xLookat = (int)(Position.x + LookAt.x);
 	const int yLookat = (int)(Position.y + LookAt.y);
 	

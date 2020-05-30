@@ -229,7 +229,7 @@ loopExit:
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - start;
 	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "LoadVisibleGeometry time elapsed: " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::NOTSET, "LoadVisibleGeometry time elapsed: " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
 void Terrain::CreateGeometry()
