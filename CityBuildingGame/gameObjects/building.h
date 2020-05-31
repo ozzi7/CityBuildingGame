@@ -38,7 +38,7 @@ public:
 	// When dropping off stone
 	void AddStoneBuildingMaterial(unsigned int stone = 1);
 	// When worker arrives
-	void AddWorker(unsigned int workers = 1);
+	virtual void AddWorker(unsigned int workers = 1);
 
 	// Reserve wood that will eventually arrive
 	void AddWoodBuildingMaterialOnTheWay(unsigned int wood = 1);

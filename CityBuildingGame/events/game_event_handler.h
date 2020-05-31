@@ -22,6 +22,7 @@ public:
 	bool ProcessEvent();
 
 	void AssignWorkToIdleWorkers();
+	void SetWorkerStateIdle(Worker* worker);
 
 	void Visit(MoveEvent* aMoveEvent) override;
 	void Visit(CreateBuildingEvent* aCreateBuildingEvent) override;

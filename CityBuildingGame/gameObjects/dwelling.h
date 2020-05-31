@@ -12,6 +12,12 @@ public:
 	void Evolve() override;
 	void UpdateWoodModels() override;
 
+	// When worker arrives
+	void AddWorker(unsigned int workers = 1) override;
+	
+	// Has capacity to store a worker
+	bool FreeWorkerCapacity() const;
+
 private:
 	int workersOnTheWay = 0;
 	int workersPresent = 0;

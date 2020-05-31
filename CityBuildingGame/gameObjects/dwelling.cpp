@@ -42,3 +42,16 @@ void Dwelling::UpdateWoodModels()
 		woodModels.push_back(model);
 	}
 }
+
+void Dwelling::AddWorker(unsigned int workers)
+{
+	workersPresent += workers;
+	workersOnTheWay -= workers;
+}
+
+bool Dwelling::FreeWorkerCapacity() const
+{
+	if (workerCapacity - workersPresent - workersOnTheWay > 0)
+		return true;
+	return false;
+}
