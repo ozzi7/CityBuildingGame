@@ -88,29 +88,29 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	/* Set correct 3d model center point */
 	int fromX, toX, fromY, toY = 0;
 
-	if (buildingSize.first % 2 == 0)
+	if (std::get<0>(buildingSize) % 2 == 0)
 	{
-		fromX = closestToClick.first - buildingSize.first / 2;
-		toX = closestToClick.first + buildingSize.first/ 2 - 1;
-		modelCenter.x = closestToClick.first;
+		fromX = std::get<0>(closestToClick) - std::get<0>(buildingSize) / 2;
+		toX = std::get<0>(closestToClick) + std::get<0>(buildingSize)/ 2 - 1;
+		modelCenter.x = std::get<0>(closestToClick);
 	}
 	else
 	{
-		fromX = int(aCreateBuildingEvent->posX) - buildingSize.first / 2;
-		toX = int(aCreateBuildingEvent->posX) + buildingSize.first / 2;
+		fromX = int(aCreateBuildingEvent->posX) - std::get<0>(buildingSize) / 2;
+		toX = int(aCreateBuildingEvent->posX) + std::get<0>(buildingSize) / 2;
 		modelCenter.x = int(aCreateBuildingEvent->posX) + 0.5f;
 	}
 
-	if (buildingSize.second % 2 == 0)
+	if (std::get<1>(buildingSize) % 2 == 0)
 	{
-		fromY = closestToClick.second - buildingSize.second / 2;
-		toY = closestToClick.second + buildingSize.second / 2 - 1;
-		modelCenter.y = closestToClick.second;
+		fromY = std::get<1>(closestToClick) - std::get<1>(buildingSize) / 2;
+		toY = std::get<1>(closestToClick) + std::get<1>(buildingSize) / 2 - 1;
+		modelCenter.y = std::get<1>(closestToClick);
 	}
 	else
 	{
-		fromY = int(aCreateBuildingEvent->posY) - buildingSize.second / 2;
-		toY = int(aCreateBuildingEvent->posY) + buildingSize.second / 2;
+		fromY = int(aCreateBuildingEvent->posY) - std::get<1>(buildingSize) / 2;
+		toY = int(aCreateBuildingEvent->posY) + std::get<1>(buildingSize) / 2;
 		modelCenter.y = int(aCreateBuildingEvent->posY) + 0.5f;
 	}
 

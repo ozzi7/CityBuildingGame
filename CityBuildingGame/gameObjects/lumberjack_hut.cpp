@@ -4,7 +4,7 @@
 
 LumberjackHut::LumberjackHut(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, float aFloorZ)
 	: Building(aPosition, aScale, aRotation, aFloorZ) {
-	workersRequired = 2;
+	workersRequired = 1;
 	woodRequired = 3;
 }
 
