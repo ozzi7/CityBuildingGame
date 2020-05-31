@@ -51,6 +51,7 @@ void Worker::GameStep()
 	else if (hasArrived && state == State::idle)
 	{
 		dwelling->AddWorker();
+		visible = false;
 	}
 	else
 	{
