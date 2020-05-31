@@ -226,7 +226,8 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 			PathfindingResource* pathFindingRes = new PathfindingResource(grid, std::pair<int, int>(worker->posX, worker->posY));
 			pathFindingRes->FindResourceFromWorker();
 
-			if (pathFindingRes->resourceBuilding != nullptr && pathFindingRes->targetBuilding != nullptr) {
+			if (pathFindingRes->resourceBuilding != nullptr && pathFindingRes->targetBuilding != nullptr) 
+			{
 				Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(worker->posX, worker->posY),
 														   std::pair<int, int>(pathFindingRes->resourceBuilding->entranceX, 
 														                       pathFindingRes->resourceBuilding->entranceY)); // path from worker to resource
@@ -277,7 +278,8 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 						worker->visible = true;
 						worker->destination = lumberjackHut;
 
-						if (lumberjackHut->AllRequiredWorkersOnTheWay())
+						// Remove from tasks when everything is on the way
+						if (lumberjackHut->AllRequiredWorkersOnTheWay() && lumberjackHut->AllRequiredBuildingMaterialsOnTheWay())
 							resources->RemoveWorkerTask(lumberjackHut);
 					}
 				}
@@ -302,43 +304,51 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 		while (Building* building = resources->GetWorkerTask())
 		{
 			/* bring resource to a building task... */
-			PathfindingResource* pathFindingRes = new PathfindingResource(grid, std::pair<int, int>(building->entranceX, building->entranceY));
-			pathFindingRes->FindResourceFromBuilding();
-
-			if (pathFindingRes->resourceBuilding != nullptr && pathFindingRes->targetWorker != nullptr) {
-				Pathfinding* pathFinding = new Pathfinding(grid, 
-														   std::pair<int, int>(pathFindingRes->targetWorker->posX, pathFindingRes->targetWorker->posY),
-														   std::pair<int, int>(pathFindingRes->resourceBuilding->entranceX,
-														                       pathFindingRes->resourceBuilding->entranceY)); // path from worker to resource
-				pathFinding->CalculatePath();
-				std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
-				std::vector<std::pair<int, int>> pathCoordinates{std::make_move_iterator(std::begin(pathCoordinatesList)),
-																 std::make_move_iterator(std::end(pathCoordinatesList))};
-
-				delete pathFinding;
-
-				pathFindingRes->targetWorker->SetNewPath(pathCoordinates);
-				pathFindingRes->targetWorker->state = State::gettingWood; // TODO wood or stone..?
-				pathFindingRes->targetWorker->visible = true;
-				pathFindingRes->targetWorker->destination = pathFindingRes->resourceBuilding;
-				pathFindingRes->targetWorker->resourceTargetBuilding = building;
-
-				pathFindingRes->resourceBuilding->ReserveWoodBuildingMaterial();
-				building->AddWoodBuildingMaterialOnTheWay();
-
-				resources->RemoveIdleWorker(pathFindingRes->targetWorker);
-
-				// add building back into workerTasks if number of required workers or resources is not yet reached
-				if (!building->AllRequiredWorkersOnTheWay() ||
-					!building->AllRequiredBuildingMaterialsOnTheWay())
+			if (!building->AllRequiredBuildingMaterialsOnTheWay()) 
+			{
+				PathfindingResource* pathFindingRes = new PathfindingResource(grid, std::pair<int, int>(building->entranceX, building->entranceY));
+				pathFindingRes->targetBuilding = building;
+				pathFindingRes->FindResourceFromBuilding();
+				
+				if (pathFindingRes->resourceBuilding != nullptr && pathFindingRes->targetWorker != nullptr) 
 				{
-					resources->AddWorkerTask(building);
+					Pathfinding* pathFinding = new Pathfinding(grid, 
+															   std::pair<int, int>(pathFindingRes->targetWorker->posX, pathFindingRes->targetWorker->posY),
+															   std::pair<int, int>(pathFindingRes->resourceBuilding->entranceX,
+															                       pathFindingRes->resourceBuilding->entranceY)); // path from worker to resource
+					pathFinding->CalculatePath();
+					std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
+					std::vector<std::pair<int, int>> pathCoordinates{std::make_move_iterator(std::begin(pathCoordinatesList)),
+																	 std::make_move_iterator(std::end(pathCoordinatesList))};
+
+					delete pathFinding;
+
+					pathFindingRes->targetWorker->SetNewPath(pathCoordinates);
+					pathFindingRes->targetWorker->state = State::gettingWood; // TODO wood or stone..?
+					pathFindingRes->targetWorker->visible = true;
+					pathFindingRes->targetWorker->destination = pathFindingRes->resourceBuilding;
+					pathFindingRes->targetWorker->resourceTargetBuilding = building;
+
+					pathFindingRes->resourceBuilding->ReserveWoodBuildingMaterial();
+					building->AddWoodBuildingMaterialOnTheWay();
+
+					resources->RemoveIdleWorker(pathFindingRes->targetWorker);
+
+					// add building back into workerTasks if number of required workers or resources is not yet reached
+					if (!building->AllRequiredWorkersOnTheWay() ||
+						!building->AllRequiredBuildingMaterialsOnTheWay())
+					{
+						resources->AddWorkerTask(building);
+					}
+					delete pathFindingRes;
+					continue;
 				}
+				delete pathFindingRes;
 			}
 			/* ... until here*/
 
 			/* all other cases (going to work etc)*/
-			else
+			if (!building->AllRequiredWorkersOnTheWay())
 			{
 				LumberjackHut* lumberjackHut = nullptr;
 				Worker* worker = nullptr;
@@ -348,8 +358,9 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				
 				if (!pathCoordinatesList.empty())
 				{
-					std::vector<std::pair<int,int>> pathCoordinates{std::make_move_iterator(std::end(pathCoordinatesList)), 
-																    std::make_move_iterator(std::begin(pathCoordinatesList))};
+					pathCoordinatesList.reverse();
+					std::vector<std::pair<int,int>> pathCoordinates{std::make_move_iterator(std::begin(pathCoordinatesList)), 
+																    std::make_move_iterator(std::end(pathCoordinatesList))};
 
 					try {
 						worker = dynamic_cast<Worker*>(pathFinding->GetDestinationObject());
@@ -381,20 +392,17 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 					if (!building->AllRequiredWorkersOnTheWay() ||
 						!building->AllRequiredBuildingMaterialsOnTheWay())
 					{
-						tempWorkerTasks.push_back(building);
+						resources->AddWorkerTask(building);
 					}
 				}
 				// add building back into workerTasks, if it could not be assigned a task
+				// to prevent infinite loop, add it to temporary list first
 				else 
 				{
-					resources->AddWorkerTask(building);
-					delete pathFinding;
-					delete pathFindingRes;
-					return;
+					tempWorkerTasks.push_back(building);
 				}
 				delete pathFinding;
 			}
-			delete pathFindingRes;
 		}
 		for (Building* it : tempWorkerTasks)
 			resources->AddWorkerTask(it);
