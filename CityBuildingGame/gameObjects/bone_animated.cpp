@@ -13,22 +13,22 @@ void BoneAnimated::UpdatePosition(Grid* grid)
 
 	if (!hasArrived)
 	{
-		distanceToProxy = distance(proxyObjectPos, glm::vec2(position.x, position.y));
+		distanceToProxy = distance(proxyPosition, glm::vec2(position.x, position.y));
 
 		if (distanceToProxy < targetDistanceToProxy && walkingSpeed > minSpeed)
 		{
-			walkingSpeed -= walkingSpeedMaxChange;
+			walkingSpeed -= maxAcceleration;
 		}
 		else if (distanceToProxy > targetDistanceToProxy&& walkingSpeed < maxSpeed)
 		{
-			walkingSpeed += walkingSpeedMaxChange;
+			walkingSpeed += maxAcceleration;
 		}
 
 		if (distanceToProxy > walkingSpeed)
 		{
 			// will not reach proxy yet
-			float translationX = walkingSpeed * normalize(proxyObjectPos - glm::vec2(position.x, position.y)).x;
-			float translationY = walkingSpeed * normalize(proxyObjectPos - glm::vec2(position.x, position.y)).y;
+			float translationX = walkingSpeed * normalize(proxyPosition - glm::vec2(position.x, position.y)).x;
+			float translationY = walkingSpeed * normalize(proxyPosition - glm::vec2(position.x, position.y)).y;
 
 			position = glm::vec3(position.x + translationX, position.y + translationY, grid->GetHeight(
 				                     position.x + translationX,
@@ -37,37 +37,39 @@ void BoneAnimated::UpdatePosition(Grid* grid)
 			rotation.z = std::atan2f(translationY, translationX);
 			if (translationX < 0)
 				rotation.z += 2 * glm::pi<float>();
-			rotation.z = rotation.z - glm::half_pi<float>(); // somehow roation direction is not from +x to +y but +x to -y..
-			//rotation = rotation + 3.1415;
+			rotation.z = rotation.z - glm::half_pi<float>(); // rotation direction is fromt +x to -y..
 		}
 		else
 		{
 			hasArrived = true;
 
-			position = glm::vec3(proxyObjectPos.x, proxyObjectPos.y,
-			                     grid->GetHeight(proxyObjectPos.x, proxyObjectPos.y));
+			position = glm::vec3(proxyPosition.x, proxyPosition.y,
+			                     grid->GetHeight(proxyPosition.x, proxyPosition.y));
 		}
 
 		recalculateModelMatix();
 		updateGridUnit();
 	}
 }
-
-void BoneAnimated::updateProxyPosition(float speed)
+void BoneAnimated::updateProxyPosition()
 {
-	if (speed < 0.0f)
-		speed = proxySpeed;
+	updateProxyPosition(walkingSpeed);
+}
+void BoneAnimated::updateProxyPosition(float aDistance)
+{
+	if (aDistance < 0.0f)
+		aDistance = walkingSpeed;
 
 	glm::vec2 translation = glm::vec2(0, 0);
 	if (proxyWPIdx + 1 < wayPoints.size())
 	{
 		// not at final WP yet..
-		float distanceToNextWP = distance(proxyObjectPos, glm::vec2(wayPoints[proxyWPIdx + 1].first + 0.5f, wayPoints[proxyWPIdx + 1].second + 0.5f));
+		float distanceToNextWP = distance(proxyPosition, glm::vec2(wayPoints[proxyWPIdx + 1].first + 0.5f, wayPoints[proxyWPIdx + 1].second + 0.5f));
 
-		if (distanceToNextWP > speed)
+		if (distanceToNextWP > aDistance)
 		{
 			// ..and will not arrive at a new WP this update
-			translation = speed * normalize(glm::vec2(wayPoints[proxyWPIdx + 1].first + 0.5f, wayPoints[proxyWPIdx + 1].second + 0.5f) - proxyObjectPos);
+			translation = aDistance * normalize(glm::vec2(wayPoints[proxyWPIdx + 1].first + 0.5f, wayPoints[proxyWPIdx + 1].second + 0.5f) - proxyPosition);
 		}
 		else
 		{
@@ -76,20 +78,20 @@ void BoneAnimated::updateProxyPosition(float speed)
 			{
 				// continue to next WP after the one we just arrived at..
 				translation = glm::vec2(wayPoints[proxyWPIdx + 1].first + 0.5f, wayPoints[proxyWPIdx + 1].second + 0.5f)
-				              - proxyObjectPos + (speed - distanceToNextWP) *
+				              - proxyPosition + (aDistance - distanceToNextWP) *
 							  normalize(glm::vec2(wayPoints[proxyWPIdx + 2].first + 0.5f, wayPoints[proxyWPIdx + 2].second + 0.5f) 
 										- glm::vec2(wayPoints[proxyWPIdx + 1].first + 0.5f, wayPoints[proxyWPIdx + 1].second + 0.5f));
 			}
 			else
 			{
 				// ..unless we arrived at final WP
-				translation = glm::vec2(wayPoints[proxyWPIdx + 1].first + 0.5f, wayPoints[proxyWPIdx + 1].second + 0.5f) - proxyObjectPos;
+				translation = glm::vec2(wayPoints[proxyWPIdx + 1].first + 0.5f, wayPoints[proxyWPIdx + 1].second + 0.5f) - proxyPosition;
 				proxyHasArrived = true;
 			}
 			proxyWPIdx++;
 		}
 
-		proxyObjectPos += translation;
+		proxyPosition += translation;
 	}
 	else
 		// arrived previously already
@@ -103,7 +105,7 @@ void BoneAnimated::SetNewPath(std::vector<std::pair<int,int>> aWayPoints)
 
 	if (wayPoints.size() >= 1)
 	{
-		proxyObjectPos = glm::vec2(wayPoints[0].first + 0.5f, wayPoints[0].second + 0.5f);
+		proxyPosition = glm::vec2(wayPoints[0].first + 0.5f, wayPoints[0].second + 0.5f);
 		proxyHasArrived = false;
 		updateProxyPosition(1.0f); // set initial proxy position
 		hasArrived = false;

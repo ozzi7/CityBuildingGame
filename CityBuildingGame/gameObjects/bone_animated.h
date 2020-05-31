@@ -33,24 +33,23 @@ public:
 
 protected:
 	bool hasArrived = true;
-
-	float walkingSpeed = 0.006f;
+	float walkingSpeed = 0.006f; // change this to increase walking speed
 
 private:
 
 	bool proxyHasArrived = true;
 
-	glm::vec2 proxyObjectPos = glm::vec2(0.0f, 0.0f);
+	glm::vec2 proxyPosition = glm::vec2(0.0f, 0.0f);
 	std::vector<std::pair<int,int>> wayPoints;
-	int proxyWPIdx = 0;
+	long long proxyWPIdx = 0;
 
-	float proxySpeed = 0.006f;
 	const float maxSpeed = 1.05f * walkingSpeed;
 	const float minSpeed = 0.7f * walkingSpeed;
-	float walkingSpeedMaxChange = walkingSpeed / 500.0f; // /100
+	float maxAcceleration = walkingSpeed / 500.0f; // /100
 	float distanceToProxy = 1.0f;
 	const float targetDistanceToProxy = 2.0f; // if higher the corners will be cut more, if lower then the speed up slow down is more visible
 
-	void updateProxyPosition(float speed = -1.0f);
+	void updateProxyPosition(float aDistance);
+	void updateProxyPosition();
 	void updateGridUnit();
 };

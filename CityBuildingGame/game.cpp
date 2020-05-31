@@ -97,7 +97,7 @@ void Game::renderLoop()
 
 void Game::gameLoop()
 {
-	const int TICKS_PER_SECOND = 100;
+	const int TICKS_PER_SECOND = 400; // TODO: change back
 	const int SKIP_TICKS = 1000000 / TICKS_PER_SECOND; // microseconds
 	unsigned long int loopCount = 0;
 
