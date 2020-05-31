@@ -27,8 +27,8 @@ void BoneAnimated::UpdatePosition(Grid* grid)
 		if (distanceToProxy > walkingSpeed)
 		{
 			// will not reach proxy yet
-			float translationX = walkingSpeed * normalize(proxyPosition - glm::vec2(position.x, position.y)).x;
-			float translationY = walkingSpeed * normalize(proxyPosition - glm::vec2(position.x, position.y)).y;
+			float translationX = walkingSpeed * glm::normalize(proxyPosition - glm::vec2(position.x, position.y)).x;
+			float translationY = walkingSpeed * glm::normalize(proxyPosition - glm::vec2(position.x, position.y)).y;
 
 			position = glm::vec3(position.x + translationX, position.y + translationY, grid->GetHeight(
 				                     position.x + translationX,
@@ -37,7 +37,7 @@ void BoneAnimated::UpdatePosition(Grid* grid)
 			rotation.z = std::atan2f(translationY, translationX);
 			if (translationX < 0)
 				rotation.z += 2 * glm::pi<float>();
-			rotation.z = rotation.z - glm::half_pi<float>(); // rotation direction is fromt +x to -y..
+			rotation.z = rotation.z - glm::half_pi<float>(); // rotation direction is from +x to -y..
 		}
 		else
 		{
