@@ -30,23 +30,24 @@ public:
 
 	GameObject* destination = nullptr;
 	State state = State::idle;
+	glm::vec2 proxyPosition = glm::vec2(0.0f, 0.0f); // TODO private
 
 protected:
 	bool hasArrived = true;
-	float walkingSpeed = 0.006f; // change this to increase walking speed
+	float walkingSpeed = 0.006f;
+	float proxySpeed = 0.006f; // change this to increase walking speed!
 
 private:
 
 	bool proxyHasArrived = true;
 
-	glm::vec2 proxyPosition = glm::vec2(0.0f, 0.0f);
 	std::vector<std::pair<int,int>> wayPoints;
 	long long proxyWPIdx = 0;
 
-	const float maxSpeed = 1.05f * walkingSpeed;
-	const float minSpeed = 0.7f * walkingSpeed;
-	float maxAcceleration = walkingSpeed / 500.0f; // /100
-	float distanceToProxy = 1.0f;
+	const float maxSpeed = 1.2f * proxySpeed;
+	const float minSpeed = 0.7f * proxySpeed; // has to be low enough not to catch up to the proxy
+	float maxAcceleration = proxySpeed / 500.0f; // /100
+	float distanceToProxy = 0.0f;
 	const float targetDistanceToProxy = 2.0f; // if higher the corners will be cut more, if lower then the speed up slow down is more visible
 
 	void updateProxyPosition(float aDistance);

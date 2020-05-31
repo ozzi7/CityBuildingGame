@@ -175,7 +175,7 @@ void MapGenerator::generateGrass()
 
 	std::mt19937 gen(rd());
 	std::chi_squared_distribution<> scale_dist(1.0f);
-	std::uniform_real_distribution<> position_offset(-0.5f, 0.5f);
+	std::uniform_real_distribution<> position_offset(-0.4999f, 0.4999f);
 	std::uniform_real_distribution<> rotation(0, glm::two_pi<float>());
 
 	/* create grass using noise map*/
