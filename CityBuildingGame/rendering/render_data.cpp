@@ -56,15 +56,15 @@ void RenderBuffer::Visit(Lumberjack* obj)
 			lumberjackChoppingModels.push_back(obj->model);
 			lumberjackChoppingAnimationSeconds.push_back(obj->animationSecond);
 		}
-		// TODO debug
-		glm::mat4 model = glm::mat4(1.0f);
-		model = translate(model, glm::vec3(obj->proxyPosition.x, obj->proxyPosition.y, obj->position.z));
-		model = rotate(model, obj->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = rotate(model, obj->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f)); // TODO:
-		model = rotate(model, obj->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, obj->scale);
-		lumberjackModels.push_back(model);
-		lumberjackAnimationSeconds.push_back(obj->animationSecond);
+		// TODO debug proxy object
+		//glm::mat4 model = glm::mat4(1.0f);
+		//model = translate(model, glm::vec3(obj->proxyPosition.x, obj->proxyPosition.y, obj->position.z));
+		//model = rotate(model, obj->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+		//model = rotate(model, obj->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f)); // TODO:
+		//model = rotate(model, obj->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, obj->scale);
+		//lumberjackModels.push_back(model);
+		//lumberjackAnimationSeconds.push_back(obj->animationSecond);
 	}
 }
 
@@ -81,15 +81,15 @@ void RenderBuffer::Visit(Worker* obj)
 			workerModels.push_back(obj->model);
 			workerAnimationSeconds.push_back(obj->animationSecond);
 		}
-		// TODO debug
-		glm::mat4 model = glm::mat4(1.0f);
-		model = translate(model, glm::vec3(obj->proxyPosition.x, obj->proxyPosition.y, obj->position.z));
-		model = rotate(model, obj->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = rotate(model, obj->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f)); // TODO:
-		model = rotate(model, obj->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, obj->scale);
-		workerModels.push_back(model);
-		workerAnimationSeconds.push_back(obj->animationSecond);
+		// TODO debug proxy object
+		//glm::mat4 model = glm::mat4(1.0f);
+		//model = translate(model, glm::vec3(obj->proxyPosition.x, obj->proxyPosition.y, obj->position.z));
+		//model = rotate(model, obj->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+		//model = rotate(model, obj->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f)); // TODO:
+		//model = rotate(model, obj->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, obj->scale);
+		//workerModels.push_back(model);
+		//workerAnimationSeconds.push_back(obj->animationSecond);
 	}
 }
 
