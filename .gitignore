@@ -311,3 +311,6 @@ x64/log/
 x64/models/juniper/juniper leaf.xcf
 CityBuildingGame/x64/Release/CityBuildingGame.vcxproj.FileListAbsolute.txt
 *.db
+.vs/ProjectSettings.json
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json

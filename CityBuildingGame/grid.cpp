@@ -113,7 +113,7 @@ bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY) const
 	}
 	return true;
 }
-bool Grid::IsOccupied(int x, int y)
+bool Grid::IsOccupied(int x, int y) const
 {
 	return gridUnits[y][x].occupied;
 }

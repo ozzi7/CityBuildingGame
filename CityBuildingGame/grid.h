@@ -40,12 +40,12 @@ public:
 	bool IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const;
 	void UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	void SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value);
-	bool HasTree(int x, int y);
-	bool IsOccupied(int x, int y);
+	bool HasTree(int x, int y) const;
+	bool IsOccupied(int x, int y) const;
 	void SetHasTree(int x, int y, bool value);
 	void SetIsOccupied(int x, int y, bool value);
-	bool HasBuilding(int x, int y);
-	bool HasBuilding(int fromX, int toX, int fromY, int toY);
+	bool HasBuilding(int x, int y) const;
+	bool HasBuilding(int fromX, int toX, int fromY, int toY) const;
 
 	// [y][x]
 	std::vector<std::vector<Unit>> gridUnits;
