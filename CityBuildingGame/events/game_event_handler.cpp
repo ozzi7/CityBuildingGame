@@ -175,7 +175,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 			/* save building in the coordinate where the 3d object center is located in->good for rendering */
 			grid->gridUnits[dwelling->posY][dwelling->posX].objects.push_back(dwelling);
-			grid->gridUnits[pathCoordinates.back().second][pathCoordinates.back().first].movingObjects.push_back(worker);
+			grid->gridUnits[pathCoordinates.front().second][pathCoordinates.front().first].movingObjects.push_back(worker);
 			resources->AddDwelling(dwelling);
 			resources->AddWorker(worker);
 			break;

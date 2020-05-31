@@ -60,7 +60,7 @@ const float EUROBEECH_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 const float GRASS_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 
 const float TREE_SCALE_FACTOR = 0.015f; // to resize all trees
-const float GRASS_SCALE_FACTOR = 0.1f;
+const float GRASS_SCALE_FACTOR = 0.5f;
 
 const float SMALL_TREE_CUTOFF_PERCENTAGE = 30.0f; // [0,100), removes midget trees
 const float SMALL_GRASS_CUTOFF_PERCENTAGE = 60.0f; // [0,100)

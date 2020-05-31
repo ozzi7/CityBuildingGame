@@ -75,7 +75,9 @@ void main()
 		discard;
 		
     vec3 ambient = light.ambient * texColor.rgb;
-	vec3 diffuse = light.diffuse * dot(Normal, light.direction) * texColor.rgb;   
-	vec3 result = diffuse * (1 - ShadowCalculation()) + ambient;
+	vec3 diffuse = light.diffuse * dot(Normal, light.direction) * texColor.rgb; 
+
+    vec3 result = diffuse * (1.0 - ShadowCalculation()) + ambient;
+
     FragColor = vec4(result, 1);
 }
