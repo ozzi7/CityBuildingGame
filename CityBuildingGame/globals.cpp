@@ -9,6 +9,8 @@
 unsigned int DEFAULT_SCREEN_WIDTH;
 unsigned int DEFAULT_SCREEN_HEIGHT;
 
+float BRIGHTNESS;
+
 bool SOUND_ENABLED;
 bool MUSIC_ENABLED;
 
@@ -35,6 +37,7 @@ void LoadFromConfigFile() {
 
 		DEFAULT_SCREEN_WIDTH = ft.GetSection("Graphics")->GetValue("DEFAULT_SCREEN_WIDTH", 1920).AsInt();
 		DEFAULT_SCREEN_HEIGHT = ft.GetSection("Graphics")->GetValue("DEFAULT_SCREEN_HEIGHT", 1080).AsInt();
+		BRIGHTNESS = (float)ft.GetSection("Graphics")->GetValue("BRIGHTNESS", 50).AsDouble();
 
 		SOUND_ENABLED = ft.GetSection("Sound")->GetValue("SOUND_ENABLED", true).AsBool();
 		MUSIC_ENABLED = ft.GetSection("Sound")->GetValue("MUSIC_ENABLED", false).AsBool();

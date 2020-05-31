@@ -43,8 +43,6 @@ public:
 	InstancedModel* instanced_model_wood; 
 	InstancedModel* instanced_model_grass;
 
-	glm::vec3 ambientLight;
-
 	unsigned int ShadowDepthMap;
 
 	Renderer(Camera& aCamera) : camera(aCamera)
@@ -96,8 +94,6 @@ public:
 		mesh_wood_worker = new SkinnedMesh();
 		mesh_wood_worker->LoadMesh(Path + "/../models/people/worker/carrying_wood.dae");
 		mesh_wood_worker->PrecalculateBoneTransforms();
-
-		ambientLight = {0.3f, 0.3f, 0.3f};
 	}
 
 	void InitShadowMap()
@@ -141,7 +137,7 @@ public:
 		terrain_shader->setMat4("model", glm::mat4(1.0f));
 		terrain_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
 		terrain_shader->setInt("shadowMap", shadowMapID);
-		terrain_shader->setVec3("light.ambient", ambientLight);
+		terrain_shader->setVec3("light.ambient", camera.AmbientLight);
 		terrain_shader->setVec3("light.diffuse", camera.GetDirectionalLight().Color);
 		terrain_shader->setVec3("light.direction", normalize(-camera.GetDirectionalLight().Direction));
 		terrain_shader->setVec2("texelSizeShadowMap", 1.0f / (float)SHADOW_WIDTH, 1.0f /(float)SHADOW_HEIGHT);
@@ -151,7 +147,7 @@ public:
 		skinned_mesh_shader->setMat4("view", aView);
 		skinned_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
 		skinned_mesh_shader->setInt("shadowMap", shadowMapID);
-		skinned_mesh_shader->setVec3("light.ambient", ambientLight);
+		skinned_mesh_shader->setVec3("light.ambient", camera.AmbientLight);
 		skinned_mesh_shader->setVec3("light.diffuse", camera.GetDirectionalLight().Color);
 		skinned_mesh_shader->setVec3("light.direction", normalize(-camera.GetDirectionalLight().Direction));
 		skinned_mesh_shader->setVec2("texelSizeShadowMap", 1.0f / (float)SHADOW_WIDTH, 1.0f /(float)SHADOW_HEIGHT);
@@ -161,7 +157,7 @@ public:
 		instanced_mesh_shader->setMat4("view", aView);
 		instanced_mesh_shader->setMat4("lightSpaceMatrix", aLightSpaceMatrix);
 		instanced_mesh_shader->setInt("shadowMap", shadowMapID);
-		instanced_mesh_shader->setVec3("light.ambient", ambientLight);
+		instanced_mesh_shader->setVec3("light.ambient", camera.AmbientLight);
 		instanced_mesh_shader->setVec3("light.diffuse", camera.GetDirectionalLight().Color);
 		instanced_mesh_shader->setVec3("light.direction", normalize(-camera.GetDirectionalLight().Direction));
 		instanced_mesh_shader->setVec2("texelSizeShadowMap", 1.0f / (float)SHADOW_WIDTH, 1.0f /(float)SHADOW_HEIGHT);

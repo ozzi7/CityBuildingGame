@@ -50,4 +50,7 @@ private:
 
 	void loggingLoop() const;
 	void soundLoop() const;
+
+	// Calculate lighting for renderer TODO: do this somewhere else
+	void lightingCalculation(unsigned long loopCount);
 };

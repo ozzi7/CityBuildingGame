@@ -42,6 +42,7 @@ public:
 	glm::vec3 Position;
 	float ZoomLevel = ZOOM_DEFAULT;
 	Grid* Grid{};
+	glm::vec3 AmbientLight;
 
 	LightSource GetDirectionalLight() const;
 

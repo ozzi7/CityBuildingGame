@@ -99,47 +99,17 @@ void Game::gameLoop()
 {
 	const int TICKS_PER_SECOND = 100;
 	const int SKIP_TICKS = 1000000 / TICKS_PER_SECOND; // microseconds
-	long int loopCount = 0;
-	float lightXOffset;
-	float lightYOffset;
-	glm::vec3 directionLightColor;
+	unsigned long int loopCount = 0;
 
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 	std::chrono::high_resolution_clock::time_point next_game_tick(start + std::chrono::microseconds(SKIP_TICKS));
-
-	camera->SetDirectionalLightColor(glm::vec3{1.0f, 1.0f, 1.0f});
-	camera->SetDirectionalLightPositionOffset(glm::vec3{-0.4f, -0.8f, 1.0f});
 
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
 		inputHandler->MouseScroll();
 
-		// Change light direction and color
-		float loopPercentage = (float)(loopCount % 150000) / 1500.0f;
-		if (loopPercentage < 50)
-		{
-			lightXOffset = lightXOffset = -2.0f + loopPercentage / 100.0f * 8.0f;
-			lightYOffset = lightXOffset - 0.5f;
-		}
-		else
-		{
-			lightXOffset = lightXOffset = -2.0f + (100.0f - loopPercentage) / 100.0f * 8.0f;
-			lightYOffset = lightXOffset - 0.5f;
-		}
-		camera->SetDirectionalLightPositionOffset(glm::vec3{lightXOffset, lightYOffset, 1.0f});
-		if (loopPercentage < 20)
-			directionLightColor = {1.0f ,1.0f * (loopPercentage + 20.0f) / 40.0f, 1.0f * (loopPercentage + 20.0f) / 40.0f};
-		else if (loopPercentage > 80)
-			directionLightColor = {1.0f ,1.0f * (100.0f - loopPercentage + 20.0f) / 40.0f, 1.0f * (100.0f -loopPercentage + 20.0f) / 40.0f};
-		else if (loopPercentage >= 50 && loopPercentage < 70)
-			directionLightColor = {1.0f ,1.0f * (loopPercentage -50.0f + 20) / 40.0f, 1.0f * (loopPercentage - 50.0f + 20.0f) / 40.0f};
-		else if (loopPercentage < 50 && loopPercentage > 30)
-			directionLightColor = {1.0f ,1.0f * (50.0f - loopPercentage + 20.0f) / 40.0f, 1.0f * (50.0f -loopPercentage + 20.0f) / 40.0f};
-		else
-			directionLightColor = {1.0f, 1.0f, 1.0f};
-		camera->SetDirectionalLightColor(directionLightColor);
-
+		lightingCalculation(loopCount);
 		
 		for (std::list<Worker*>::iterator it = resources->workers.begin(); 
 			it != resources->workers.end(); ++it)
@@ -215,4 +185,46 @@ void Game::loggingLoop() const
 		std::this_thread::
 			sleep_for(std::chrono::milliseconds(long(1.0 / 60.0 * 1000))); // blocking queue cant be terminated..
 	}
+}
+
+void Game::lightingCalculation(unsigned long loopCount)
+{
+	float lightXOffset;
+	float lightYOffset;
+	glm::vec3 directionLightColor;
+	glm::vec3 ambientLightColor = {1.0f, 1.0f, 1.0f};
+	
+	const float directionLightIntensity = pow(BRIGHTNESS * 0.01 + 0.5f, 3.0f) * 1.0f;
+	const float ambientLightIntensity = pow(BRIGHTNESS * 0.01 + 0.5f, 3.0f) * 0.4f;
+	const float loopPercentage = (float)(loopCount % 50000) / 500.0f;
+	
+	// Change directional light position
+	if (loopPercentage < 50)
+	{
+		lightXOffset = lightXOffset = -2.0f + loopPercentage / 100.0f * 8.0f;
+		lightYOffset = lightXOffset - 0.5f;
+	}
+	else
+	{
+		lightXOffset = lightXOffset = -2.0f + (100.0f - loopPercentage) / 100.0f * 8.0f;
+		lightYOffset = lightXOffset - 0.5f;
+	}
+
+	// Change directional light color
+	if (loopPercentage < 20)
+		directionLightColor = {directionLightIntensity, directionLightIntensity * (loopPercentage + 20.0f) / 40.0f, directionLightIntensity * (loopPercentage + 20.0f) / 40.0f};
+	else if (loopPercentage > 80)
+		directionLightColor = {directionLightIntensity, directionLightIntensity * (100.0f - loopPercentage + 20.0f) / 40.0f, directionLightIntensity * (100.0f - loopPercentage + 20.0f) / 40.0f};
+	else if (loopPercentage >= 50 && loopPercentage < 70)
+		directionLightColor = {directionLightIntensity, directionLightIntensity * (loopPercentage - 50.0f + 20.0f) / 40.0f, directionLightIntensity * (loopPercentage - 50.0f + 20.0f) / 40.0f};
+	else if (loopPercentage < 50 && loopPercentage > 30)
+		directionLightColor = {directionLightIntensity, directionLightIntensity * (50.0f - loopPercentage + 20.0f) / 40.0f, directionLightIntensity * (50.0f - loopPercentage + 20.0f) / 40.0f};
+	else
+		directionLightColor = {directionLightIntensity, directionLightIntensity, directionLightIntensity};
+
+	ambientLightColor = ambientLightColor * ambientLightIntensity;
+
+	camera->SetDirectionalLightPositionOffset(glm::vec3{lightXOffset, lightYOffset, 1.0f});
+	camera->SetDirectionalLightColor(directionLightColor);
+	camera->AmbientLight = ambientLightColor;
 }

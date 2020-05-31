@@ -20,6 +20,8 @@ const bool SHADOW_ENABLED = true; // TODO: not implemented yet
 const unsigned int SHADOW_WIDTH = 2048;
 const unsigned int SHADOW_HEIGHT = 2048;
 
+extern float BRIGHTNESS;  // [0 - 100]
+
 const bool CUSTOM_MIPMAPS = true;
 
 
