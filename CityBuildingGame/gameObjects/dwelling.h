@@ -19,5 +19,7 @@ public:
 	bool FreeWorkerCapacity() const;
 
 private:
-	int workerCapacity = 0;
+	int workersOnTheWay = 0;
+	int workersPresent = 0;
+	int workerCapacity = 1;
 };

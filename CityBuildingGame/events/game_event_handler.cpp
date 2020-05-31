@@ -44,7 +44,8 @@ bool GameEventHandler::ProcessEvent()
 
 void GameEventHandler::Visit(MoveEvent* aMoveEvent)
 {
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::NOTSET, "[EVENT] Move"));
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "[EVENT] Move (" + std::to_string(aMoveEvent->fromX) +
+	", " + std::to_string(aMoveEvent->fromY) + ") => (" + std::to_string(aMoveEvent->toX) + ", " + std::to_string(aMoveEvent->toY)+")"));
 
 	/* removes element found by reference */
 	BoneAnimated* toMove = nullptr;
