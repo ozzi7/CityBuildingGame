@@ -413,6 +413,34 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 	}
 }
 
+void GameEventHandler::SetWorkerStateIdle(Worker* worker)
+{
+	worker->state = State::idle;
+	resources->AddIdleWorker(worker);
+	
+	PathfindingObject* pathFinding = new PathfindingObject(grid, std::make_pair(worker->posX, worker->posY));
+	pathFinding->FindClosestIdleDwelling();
+	std::list<std::pair<int,int>> pathCoordinatesList = pathFinding->GetPath();
+	
+	if (!pathCoordinatesList.empty())
+	{
+		try {
+			Dwelling* dwelling = dynamic_cast<Dwelling*>(pathFinding->GetDestinationObject());
+		
+			std::vector<std::pair<int,int>> pathCoordinates{std::make_move_iterator(std::begin(pathCoordinatesList)), 
+														    std::make_move_iterator(std::end(pathCoordinatesList))};
+			worker->SetNewPath(pathCoordinates);
+			worker->SetDwelling(dwelling);
+			dwelling->AddWorkerOnTheWay();
+		}
+		catch(const std::exception& e)  // This should not happen
+		{
+			loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected dwelling from pathfinding is not a dwelling"));
+		}
+	}
+	delete pathFinding;
+}
+
 void GameEventHandler::Visit(DeleteEvent* aDeleteEvent)
 {
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "[EVENT] Delete"));
@@ -588,8 +616,7 @@ void GameEventHandler::Visit(BringResourceEvent* aBringResourceEvent)
 				}
 				else
 				{
-					worker->state = State::idle;
-					resources->AddIdleWorker(worker);
+					SetWorkerStateIdle(worker);
 					return;
 				}
 				break;
@@ -603,8 +630,7 @@ void GameEventHandler::Visit(BringResourceEvent* aBringResourceEvent)
 				}
 				else
 				{
-					worker->state = State::idle;
-					resources->AddIdleWorker(worker);
+					SetWorkerStateIdle(worker);
 					return;
 				}
 				break;

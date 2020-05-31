@@ -24,21 +24,18 @@ void Worker::GameStep()
 		dwelling->AddWoodBuildingMaterial(2);
 		soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::WorkerArrivedSound));
 		visible = false;
-		state = State::idle;
-		resources->AddIdleWorker(this);
+		gameEventHandler->SetWorkerStateIdle(this);
 	}
 	else if (hasArrived && state == State::carryingWood) {
 		resourceTargetBuilding->AddWoodBuildingMaterial();
 		resourceTargetBuilding->UpdateWoodModels();
-		state = State::idle;
-		resources->AddIdleWorker(this);
+		gameEventHandler->SetWorkerStateIdle(this);
 		gameEventHandler->AddEvent(new ResourceArrivedEvent(Resource::Wood, resourceTargetBuilding));
 	}
 	else if (hasArrived && state == State::carryingStone)
 	{
 		resourceTargetBuilding->AddStoneBuildingMaterial();
-		state = State::idle;
-		resources->AddIdleWorker(this);
+		gameEventHandler->SetWorkerStateIdle(this);
 		gameEventHandler->AddEvent(new ResourceArrivedEvent(Resource::Stone, resourceTargetBuilding));
 	}
 	else if (hasArrived && state == State::goingToWork)
@@ -50,6 +47,10 @@ void Worker::GameStep()
 	{
 		state = State::pending;
 		gameEventHandler->AddEvent(new BringResourceEvent(this, 0));
+	}
+	else if (hasArrived && state == State::idle)
+	{
+		dwelling->AddWorker();
 	}
 	else
 	{

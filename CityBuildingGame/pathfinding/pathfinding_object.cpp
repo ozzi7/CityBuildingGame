@@ -84,6 +84,21 @@ void PathfindingObject::FindClosestIdleBuilding()
 																		 " in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
 }
 
+void PathfindingObject::FindClosestIdleDwelling()
+{
+	auto startTime = std::chrono::high_resolution_clock::now();
+	
+	objectType = ObjectType::idleDwelling;
+	calculatePath();
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding FindClosestIdleDwelling from " +
+																		 std::to_string(start->coordinate.first) + "|" +
+																		 std::to_string(start->coordinate.second) + 
+																		 " in " + std::to_string(elapsedTimeMicroseconds) + " microseconds"));
+}
+
 void PathfindingObject::FindClosestUnusedWood()
 {
 	auto startTime = std::chrono::high_resolution_clock::now();
@@ -196,6 +211,9 @@ GameObject* PathfindingObject::GetDestinationObject() const
 			case ObjectType::idleBuilding:
 				return findBuildingReference(destination->coordinate);
 
+			case ObjectType::idleDwelling:
+				return findBuildingReference(destination->coordinate);
+
 			case ObjectType::unusedWood:
 				return findBuildingReference(destination->coordinate);
 
@@ -290,6 +308,26 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 					if (building->entranceX == coordinate.first && building->entranceY == coordinate.second) 
 						if (building->WorkersRequired() > 0)
 							objectFound = true;
+			}
+			break;
+		}
+
+		case ObjectType::idleDwelling:
+		{
+			if (grid->HasBuilding(coordinate.first, coordinate.second))
+			{
+				Building* building = findBuildingReference(coordinate);
+				if (building != nullptr)
+				{
+					if (building->entranceX == coordinate.first && building->entranceY == coordinate.second) 
+					try {
+						Dwelling* dwelling = dynamic_cast<Dwelling*>(building);
+							if (dwelling != nullptr)
+								if (dwelling->FreeWorkerCapacity())
+									objectFound = true;
+					}
+					catch (const std::exception& e) {} // Not an exception. Expected behavior.
+				}
 			}
 			break;
 		}

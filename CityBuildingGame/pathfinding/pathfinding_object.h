@@ -5,8 +5,9 @@
 
 #include <grid.h>
 #include <globals.h>
+#include "dwelling.h"
 
-enum class ObjectType { edge, tree, idleWorker, idleBuilding, unusedWood, unusedStone, woodRequired, stoneRequired };
+enum class ObjectType { edge, tree, idleWorker, idleBuilding, idleDwelling, unusedWood, unusedStone, woodRequired, stoneRequired };
 
 struct NodeObject
 {
@@ -40,6 +41,7 @@ public:
 	void FindClosestEdge();
 	void FindClosestIdleWorker();
 	void FindClosestIdleBuilding();
+	void FindClosestIdleDwelling();
 	void FindClosestUnusedWood();
 	void FindClosestUnusedStone();
 	void FindClosestWoodRequired();
