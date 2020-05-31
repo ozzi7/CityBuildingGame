@@ -117,7 +117,7 @@ bool Grid::IsOccupied(int x, int y) const
 {
 	return gridUnits[y][x].occupied;
 }
-void Grid::SetIsOccupied(int x, int y, bool value)
+void Grid::SetIsOccupied(int x, int y, bool value) 
 {
 	gridUnits[y][x].occupied = value;
 
@@ -154,7 +154,7 @@ bool Grid::IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
 	
 	return true;
 }
-bool Grid::HasTree(int x, int y)
+bool Grid::HasTree(int x, int y) const
 {
 	return gridUnits[y][x].hasTree;
 }
@@ -162,11 +162,11 @@ void Grid::SetHasTree(int x, int y, bool value)
 {
 	gridUnits[y][x].hasTree = value;
 }
-bool Grid::HasBuilding(int x, int y)
+bool Grid::HasBuilding(int x, int y) const
 {
 	return !HasTree(x, y) && IsOccupied(x, y); // TODO:  add isBuildingFlag?
 }
-bool Grid::HasBuilding(int fromX, int toX, int fromY, int toY)
+bool Grid::HasBuilding(int fromX, int toX, int fromY, int toY) const
 {
 	for (int x = fromX; x <= toX; ++x)
 	{

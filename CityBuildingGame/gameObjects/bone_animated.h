@@ -49,6 +49,7 @@ private:
 	const float minSpeed = 0.7f * walkingSpeed;
 	float walkingSpeedMaxChange = walkingSpeed / 500.0f; // /100
 	float distanceToProxy = 1.0f;
+	const float targetDistanceToProxy = 2.0f; // if higher the corners will be cut more, if lower then the speed up slow down is more visible
 
 	void updateProxyPosition(float speed = -1.0f);
 	void updateGridUnit();
