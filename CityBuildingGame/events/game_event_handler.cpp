@@ -169,7 +169,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 												  grid->GetHeight(pathCoordinates.front().first + 0.5f, pathCoordinates.front().second + 0.5f)),
 			                            glm::vec3(0.6f, 0.6f, 0.6f), glm::vec3(0, 0, glm::pi<float>()));
 
-			worker->SetDwelling(dwelling);
+			worker->dwelling = dwelling;
 			worker->SetNewPath(pathCoordinates);
 			worker->state = State::immigrating;
 
@@ -248,6 +248,16 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 
 				pathFindingRes->resourceBuilding->ReserveWoodBuildingMaterial();
 				worker->resourceTargetBuilding->AddWoodBuildingMaterialOnTheWay();
+				if (worker->goingHome)
+				{
+					if (worker->dwelling->RemoveWorkerOnTheWay());
+						loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerOnTheWay to be > 0"));
+				}
+				else
+				{
+					if (worker->dwelling->RemoveWorker());
+						loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerPresent to be > 0"));
+				}
 
 				// Remove from tasks when everything is on the way
 				if (pathFindingRes->targetBuilding->AllRequiredWorkersOnTheWay() && pathFindingRes->targetBuilding->AllRequiredBuildingMaterialsOnTheWay())
@@ -282,6 +292,16 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 						worker->state = State::goingToWork;
 						worker->visible = true;
 						worker->destination = lumberjackHut;
+						if (worker->goingHome)
+						{
+							if (worker->dwelling->RemoveWorkerOnTheWay());
+								loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerOnTheWay to be > 0"));
+						}
+						else
+						{
+							if (worker->dwelling->RemoveWorker());
+								loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerPresent to be > 0"));
+						}
 
 						// Remove from tasks when everything is on the way
 						if (lumberjackHut->AllRequiredWorkersOnTheWay() && lumberjackHut->AllRequiredBuildingMaterialsOnTheWay())
@@ -338,6 +358,17 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 					building->AddWoodBuildingMaterialOnTheWay();
 
 					resources->RemoveIdleWorker(pathFindingRes->targetWorker);
+					if (pathFindingRes->targetWorker->goingHome)
+					{
+						if (pathFindingRes->targetWorker->dwelling->RemoveWorkerOnTheWay());
+							loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerOnTheWay to be > 0"));
+					}
+					else
+					{
+						if (pathFindingRes->targetWorker->dwelling->RemoveWorker());
+							loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerPresent to be > 0"));
+					}
+
 
 					// add building back into workerTasks if number of required workers or resources is not yet reached
 					if (!building->AllRequiredWorkersOnTheWay() ||
@@ -391,6 +422,16 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 						worker->destination = lumberjackHut;
 
 						resources->RemoveIdleWorker(worker);
+						if (worker->goingHome)
+						{
+							if (worker->dwelling->RemoveWorkerOnTheWay());
+								loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerOnTheWay to be > 0"));
+						}
+						else
+						{
+							if (worker->dwelling->RemoveWorker());
+								loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerPresent to be > 0"));
+						}
 
 					}
 					// add building back into workerTasks if number of required workers or resources is not yet reached
@@ -431,7 +472,8 @@ void GameEventHandler::SetWorkerStateIdle(Worker* worker)
 			std::vector<std::pair<int,int>> pathCoordinates{std::make_move_iterator(std::begin(pathCoordinatesList)), 
 														    std::make_move_iterator(std::end(pathCoordinatesList))};
 			worker->SetNewPath(pathCoordinates);
-			worker->SetDwelling(dwelling);
+			worker->dwelling = dwelling;
+			worker->goingHome = true;
 			dwelling->AddWorkerOnTheWay();
 		}
 		catch(const std::exception& e)  // This should not happen

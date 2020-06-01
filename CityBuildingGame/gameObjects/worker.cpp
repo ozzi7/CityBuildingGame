@@ -11,11 +11,6 @@ void Worker::Accept(Visitor& v)
 	v.Visit(this);
 };
 
-void Worker::SetDwelling(Dwelling* aDwelling)
-{
-	dwelling = aDwelling;
-}
-
 void Worker::GameStep()
 {
 	/* check if arrived at dwelling*/
@@ -48,10 +43,11 @@ void Worker::GameStep()
 		state = State::pending;
 		gameEventHandler->AddEvent(new BringResourceEvent(this, 0));
 	}
-	else if (hasArrived && state == State::idle)
+	else if (hasArrived && goingHome)
 	{
 		dwelling->AddWorker();
 		visible = false;
+		goingHome = false;
 	}
 	else
 	{

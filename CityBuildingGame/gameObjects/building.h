@@ -59,6 +59,9 @@ public:
 	// When removing worker from building
 	bool RemoveWorker(unsigned int workers = 1);
 
+	// When removing a worker who is on the way to building
+	bool RemoveWorkerOnTheWay(unsigned int workers = 1);
+
 	// Uses all available building materials
 	void ConsumeAllBuildingMaterial();
 

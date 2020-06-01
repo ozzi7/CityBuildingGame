@@ -207,6 +207,16 @@ bool Building::RemoveWorker(unsigned int workers)
 	return false;
 }
 
+bool Building::RemoveWorkerOnTheWay(unsigned workers)
+{
+	if (workersOnTheWay >= workers)
+	{
+		workersOnTheWay -= workers;
+		return true;
+	}
+	return false;
+}
+
 void Building::ConsumeAllBuildingMaterial()
 {
 	if (woodStored > woodRequired)
