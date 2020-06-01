@@ -161,18 +161,18 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>$(SolutionDir)\external\SFML-2.4.2\lib;$(SolutionDir)\external\glew-2.1.0\lib\Release\x64;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\lib-vc2015;$(SolutionDir)\external\DevIL Windows SDK\lib\x64\Release;$(SolutionDir)\external\assimp-4.1.0\lib;$(SolutionDir)\external\OpenCV\x64\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\external\SFML-2.4.2\lib;$(SolutionDir)\external\glew-2.1.0\lib\Release\x64;$(SolutionDir)\external\glfw-3.3.2.bin.WIN64\lib-vc2019;$(SolutionDir)\external\DevIL Windows SDK\lib\x64\Release;$(SolutionDir)\external\assimp-4.1.0\lib;$(SolutionDir)\external\OpenCV\x64\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>$(SolutionDir)\external\SFML-2.4.2\lib;$(SolutionDir)\external\glew-2.1.0\lib\Release\x64;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\lib-vc2015;$(SolutionDir)\external\DevIL Windows SDK\lib\x64\Release;$(SolutionDir)\external\assimp-4.1.0\lib;$(SolutionDir)\external\OpenCV\x64\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\external\SFML-2.4.2\lib;$(SolutionDir)\external\glew-2.1.0\lib\Release\x64;$(SolutionDir)\external\glfw-3.3.2.bin.WIN64\lib-vc2019;$(SolutionDir)\external\DevIL Windows SDK\lib\x64\Release;$(SolutionDir)\external\assimp-4.1.0\lib;$(SolutionDir)\external\OpenCV\x64\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level2</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\events;$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\utility;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;$(SolutionDir)\CityBuildingGame\rendering\meshes;$(SolutionDir)\CityBuildingGame\pathfinding;$(SolutionDir)\external\OpenCV\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\events;$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\utility;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.3.2.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;$(SolutionDir)\CityBuildingGame\rendering\meshes;$(SolutionDir)\CityBuildingGame\pathfinding;$(SolutionDir)\external\OpenCV\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ShowIncludes>false</ShowIncludes>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
@@ -195,7 +195,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\events;$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\utility;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.2.1.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;$(SolutionDir)\CityBuildingGame\rendering\meshes;$(SolutionDir)\CityBuildingGame\pathfinding;$(SolutionDir)\external\OpenCV\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\CityBuildingGame\events;$(SolutionDir)\CityBuildingGame\shaders;$(SolutionDir)\CityBuildingGame\utility;$(SolutionDir)\CityBuildingGame\terrain;$(SolutionDir)\CityBuildingGame\gameObjects;$(SolutionDir)\CityBuildingGame\rendering;$(SolutionDir)\CityBuildingGame;$(SolutionDir)\external\SFML-2.4.2\include;$(SolutionDir)\external\DevIL Windows SDK\include;$(SolutionDir)\external\glfw-3.3.2.bin.WIN64\include;$(SolutionDir)\external\glm-0.9.8.5;$(SolutionDir)\external\glew-2.1.0\include;$(SolutionDir)\external\assimp-4.1.0\include;$(SolutionDir)\CityBuildingGame\rendering\meshes;$(SolutionDir)\CityBuildingGame\pathfinding;$(SolutionDir)\external\OpenCV\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
