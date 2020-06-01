@@ -211,6 +211,7 @@ private:
 		else
 			shader = instanced_mesh_shader;
 		shader->use();
+
 		instanced_model_pine->Draw(*shader, renderBuffer->pineModels);
 		instanced_model_oak->Draw(*shader, renderBuffer->oakModels);
 		instanced_model_euroBeech->Draw(*shader, renderBuffer->euroBeechModels);
