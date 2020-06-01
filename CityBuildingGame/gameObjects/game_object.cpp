@@ -5,8 +5,6 @@
 #include <sound_event_handler.h>
 #include <resources.h>
 
-/*TODO: problem with using pos.x for grid coordinate is that for buildings and larger objects it will be wrong
-f.ex 2x3 building -> which unit stores the building? */
 GameObject::GameObject(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation)
 {
 	position = aPosition;
