@@ -224,7 +224,7 @@ void MapGenerator::generateGrass()
 
 			if (isGrass)
 			{
-				for (int z = 0; z < 5; ++z)
+				for (int z = 0; z < 1; ++z)
 				{
 					float posX = j + 0.5f + (float)position_offset(gen);
 					float posY = i + 0.5f + (float)position_offset(gen);
@@ -293,9 +293,7 @@ float MapGenerator::getHeightAtPercentage(std::vector<std::vector<float>>& pHeig
 float MapGenerator::getHeightAtPercentageExact(std::vector<std::vector<float>>& pHeightmap, float percentage) const
 {
 	if (percentage == 0.0f)
-	{
 		return getMinValue(pHeightmap);
-	}
 	else if (percentage == 100.0f)
 		return getMaxValue(pHeightmap);
 

@@ -75,7 +75,7 @@ void main()
 		discard;
 		
     vec3 ambient = light.ambient * texColor.rgb;
-	vec3 diffuse = light.diffuse * dot(Normal, light.direction) * texColor.rgb; 
+	vec3 diffuse = light.diffuse * clamp(dot(Normal, light.direction),  0.0, 1.0) * texColor.rgb; 
 
     vec3 result = diffuse * (1.0 - ShadowCalculation()) + ambient;
 
