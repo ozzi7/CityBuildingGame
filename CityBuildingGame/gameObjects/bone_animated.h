@@ -40,6 +40,7 @@ private:
 
 	bool proxyHasArrived = true;
 	glm::vec2 proxyPosition = glm::vec2(0.0f, 0.0f); // TODO private
+
 	std::vector<std::pair<int,int>> wayPoints;
 	long long proxyWPIdx = 0;
 

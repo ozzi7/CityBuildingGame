@@ -293,9 +293,7 @@ float MapGenerator::getHeightAtPercentage(std::vector<std::vector<float>>& pHeig
 float MapGenerator::getHeightAtPercentageExact(std::vector<std::vector<float>>& pHeightmap, float percentage) const
 {
 	if (percentage == 0.0f)
-	{
 		return getMinValue(pHeightmap);
-	}
 	else if (percentage == 100.0f)
 		return getMaxValue(pHeightmap);
 
