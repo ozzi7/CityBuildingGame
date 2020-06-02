@@ -135,7 +135,10 @@ void Game::gameLoop()
 
 		//*Handle all object moving, deleting, creating, no locks needed because no other thread is currently doing anything..*/
 		while (gameEventHandler->ProcessEvent());
-		gameEventHandler->AssignWorkToIdleWorkers();
+		
+		// TODO: prevent slowdowns
+		if(loopCount % 100 == 0)
+			gameEventHandler->AssignWorkToIdleWorkers();
 
 		/* Extract data for the renderer*/
 		RenderBuffer* producerBuffer = renderBuffers->GetProducerBuffer();

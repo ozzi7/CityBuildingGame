@@ -281,12 +281,12 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 				worker->resourceTargetBuilding->AddWoodBuildingMaterialOnTheWay();
 				if (worker->goingHome)
 				{
-					if (worker->dwelling->RemoveWorkerOnTheWay());
+					if (!worker->dwelling->RemoveWorkerOnTheWay());
 						loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerOnTheWay to be > 0"));
 				}
 				else
 				{
-					if (worker->dwelling->RemoveWorker());
+					if (!worker->dwelling->RemoveWorker());
 						loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerPresent to be > 0"));
 				}
 
@@ -325,12 +325,12 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 						worker->destination = lumberjackHut;
 						if (worker->goingHome)
 						{
-							if (worker->dwelling->RemoveWorkerOnTheWay());
+							if (!worker->dwelling->RemoveWorkerOnTheWay());
 								loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerOnTheWay to be > 0"));
 						}
 						else
 						{
-							if (worker->dwelling->RemoveWorker());
+							if (!worker->dwelling->RemoveWorker());
 								loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerPresent to be > 0"));
 						}
 
@@ -391,12 +391,12 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 					resources->RemoveIdleWorker(pathFindingRes->targetWorker);
 					if (pathFindingRes->targetWorker->goingHome)
 					{
-						if (pathFindingRes->targetWorker->dwelling->RemoveWorkerOnTheWay());
+						if (!pathFindingRes->targetWorker->dwelling->RemoveWorkerOnTheWay());
 							loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerOnTheWay to be > 0"));
 					}
 					else
 					{
-						if (pathFindingRes->targetWorker->dwelling->RemoveWorker());
+						if (!pathFindingRes->targetWorker->dwelling->RemoveWorker());
 							loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerPresent to be > 0"));
 					}
 
@@ -455,12 +455,12 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 						resources->RemoveIdleWorker(worker);
 						if (worker->goingHome)
 						{
-							if (worker->dwelling->RemoveWorkerOnTheWay());
+							if (!worker->dwelling->RemoveWorkerOnTheWay());
 								loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerOnTheWay to be > 0"));
 						}
 						else
 						{
-							if (worker->dwelling->RemoveWorker());
+							if (!worker->dwelling->RemoveWorker());
 								loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, "Expected workerPresent to be > 0"));
 						}
 
