@@ -50,7 +50,7 @@ const float PINE_GAUSSIAN_MEAN_PERCENTAGE = 82.0f;		// [0 - 100]
 const float TOONA_GAUSSIAN_MEAN_PERCENTAGE = 57.0f;	// [0 - 100]
 const float OAK_GAUSSIAN_MEAN_PERCENTAGE = 37.0f;		// [0 - 100]
 const float EUROBEECH_GAUSSIAN_MEAN_PERCENTAGE = 72.0f;	// [0 - 100]
-const float GRASS_GAUSSIAN_MEAN_PERCENTAGE = 10.0f;	// [0 - 100]
+const float GRASS_GAUSSIAN_MEAN_PERCENTAGE = 0.0f;	// [0 - 100]
 
 // high variance => tree can grow at a larger spectrum of height around its mean
 const float PINE_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
@@ -63,13 +63,13 @@ const float TREE_SCALE_FACTOR = 0.015f; // to resize all trees
 const float GRASS_SCALE_FACTOR = 0.5f;
 
 const float SMALL_TREE_CUTOFF_PERCENTAGE = 30.0f; // [0,100), removes midget trees
-const float SMALL_GRASS_CUTOFF_PERCENTAGE = 20.0f; // [0,100)
+const float SMALL_GRASS_CUTOFF_PERCENTAGE = 60.0f; // [0,100)
 
 const float PINE_DENSITY = 0.15f;		//0.3 [0 - 1]
 const float TOONA_DENSITY = 0.15f;		//0.3 [0 - 1]
 const float OAK_DENSITY = 0.05f;		//0.15 [0 - 1]
 const float EUROBEECH_DENSITY = 0.15f;		//0.3 [0 - 1]
-const float GRASS_DENSITY = 0.5f;
+const float GRASS_DENSITY = 0.2f;
 
 /* terrain generation */
 const float HILL_HEIGHT = 15.0f;	// ~ 0 - 15
@@ -82,7 +82,7 @@ const float VALLEY_PERCENTAGE = 60.0f; //[0 - 100] flattens x percent of lowest 
 
 // if 0 => the tree noise map defines tree distribution, 1=> the terrain height defines tree distribution
 const float TERRAIN_WEIGHT_FACTOR = 0.7f; // [0,1]
-
+const float TERRAIN_WEIGHT_FACTOR_GRASS = 1.0f;
 
 /************************************************
  *  Game settings

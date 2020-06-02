@@ -125,7 +125,7 @@ void MapGenerator::generateTrees()
 					new Pine(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 					         glm::vec3(scale * TREE_SCALE_FACTOR, scale * TREE_SCALE_FACTOR,
 					                   scale * TREE_SCALE_FACTOR),
-					         glm::vec3(1.5707963f, 0, rotation(gen))));
+					         glm::vec3(glm::half_pi<float>(), 0, rotation(gen))));
 			}
 			else if (chosenTree <= 1 && isToona)
 			{
@@ -133,7 +133,7 @@ void MapGenerator::generateTrees()
 					new Toona(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 					            glm::vec3(scale * TREE_SCALE_FACTOR, scale * TREE_SCALE_FACTOR,
 					                      scale * TREE_SCALE_FACTOR),
-					            glm::vec3(1.5707963f, 0, rotation(gen))));
+					            glm::vec3(glm::half_pi<float>(), 0, rotation(gen))));
 			}
 			else if (chosenTree <= 2 && isEuroBeech)
 			{
@@ -144,14 +144,14 @@ void MapGenerator::generateTrees()
 						new EuroBeech(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 							glm::vec3(scale * TREE_SCALE_FACTOR, scale * TREE_SCALE_FACTOR,
 								scale * TREE_SCALE_FACTOR),
-							glm::vec3(1.5707963f, 0, rotation(gen))));
+							glm::vec3(glm::half_pi<float>(), 0, rotation(gen))));
 				}
 				else {
 					grid->gridUnits[i][j].objects.push_back(
 						new EuroBeech2(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 							glm::vec3(scale * TREE_SCALE_FACTOR, scale * TREE_SCALE_FACTOR,
 								scale * TREE_SCALE_FACTOR),
-							glm::vec3(1.5707963f, 0, rotation(gen))));
+							glm::vec3(glm::half_pi<float>(), 0, rotation(gen))));
 				}
 			}
 			else if (chosenTree <= 3 && isOak)
@@ -160,7 +160,7 @@ void MapGenerator::generateTrees()
 					new Oak(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 					        glm::vec3(scale * TREE_SCALE_FACTOR, scale * TREE_SCALE_FACTOR,
 					                  scale * TREE_SCALE_FACTOR),
-					        glm::vec3(1.5707963f, 0, rotation(gen))));
+					        glm::vec3(glm::half_pi<float>(), 0, rotation(gen))));
 			}
 			grid->SetIsOccupied(j, i, true);
 			grid->SetHasTree(j, i, true);
@@ -194,8 +194,8 @@ void MapGenerator::generateGrass()
 	{
 		for (int j = 0; j < grid->gridWidth; ++j)
 		{
-			grassMap[i][j] = grid->terrain->heightmap[i][j] * TERRAIN_WEIGHT_FACTOR + grassMap[i][j] * (1 -
-				TERRAIN_WEIGHT_FACTOR);
+			grassMap[i][j] = grid->terrain->heightmap[i][j] * TERRAIN_WEIGHT_FACTOR_GRASS + grassMap[i][j] * (1 -
+				TERRAIN_WEIGHT_FACTOR_GRASS);
 		}
 	}
 	float minHeight = getHeightAtPercentage(grassMap, 0.0f);
@@ -216,33 +216,35 @@ void MapGenerator::generateGrass()
 
 			std::bernoulli_distribution grass_distribution(grass_prob);
 
-			// get multiple samples per tile
-			for (int grassCount = 0; grassCount < 30; ++grassCount) // TODO: parameter max grass count
-			{
-				bool isGrass = grass_distribution(gen);
-
-				float scale = 2.0f*grass_prob; // TODO
-				while (scale < SMALL_GRASS_CUTOFF_PERCENTAGE * 0.01f)
+			// get multiple samples per tile, always at least 20 grass if 
+			if(grass_prob > 0.1f)
+				for (int grassCount = 0; grassCount < 30; ++grassCount) // TODO: parameter max grass count
 				{
-					scale = 1.0f - (float)scale_dist(gen);
+					if (grassCount <= 10 || grass_distribution(gen))
+					{
+						float scale = 1.0f - (float)scale_dist(gen); // TODO
+						while (scale < SMALL_GRASS_CUTOFF_PERCENTAGE * 0.01f)
+						{
+							scale = 1.0f - (float)scale_dist(gen);
+						}
+
+						float posX = j + 0.5f + (float)position_offset(gen);
+						float posY = i + 0.5f + (float)position_offset(gen);
+
+						// remove grass on the border of the map
+						if (posX >= grid->gridWidth - 0.4f || posX <= 0.4f || posY >= grid->gridHeight - 0.4f || posY <= 0.4f)
+							continue;
+
+						if (grid->HasTree(j, i))
+							continue;
+
+						grid->gridUnits[i][j].objects.push_back(
+							new Grass(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
+								glm::vec3(scale * GRASS_SCALE_FACTOR, scale * GRASS_SCALE_FACTOR,
+									scale * GRASS_SCALE_FACTOR),
+								glm::vec3(0.0f, y_rotation(gen), z_rotation(gen))));
+					}
 				}
-
-				if (isGrass)
-				{
-					float posX = j + 0.5f + (float)position_offset(gen);
-					float posY = i + 0.5f + (float)position_offset(gen);
-
-					// remove grass on the border of the map
-					if(posX >= grid->gridWidth-0.5f || posX <= 0.5f || posY >= grid->gridHeight- 0.5f || posY <= 0.5f)
-						continue;
-
-					grid->gridUnits[i][j].objects.push_back(
-						new Grass(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
-							glm::vec3(scale * GRASS_SCALE_FACTOR, scale * GRASS_SCALE_FACTOR,
-								scale * GRASS_SCALE_FACTOR),
-							glm::vec3(0.0f, y_rotation(gen), z_rotation(gen))));
-				}
-			}
 		}
 	}
 }

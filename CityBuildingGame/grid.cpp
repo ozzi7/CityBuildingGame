@@ -158,6 +158,18 @@ bool Grid::HasTree(int x, int y) const
 {
 	return gridUnits[y][x].hasTree;
 }
+bool Grid::HasTree(int fromX, int toX, int fromY, int toY) const
+{
+	for (int y = std::max(0, fromY); y <= std::min(gridHeight-1, toY); ++y)
+	{
+		for (int x = std::max(0, fromX); x <= std::min(gridWidth-1, toX); ++x)
+		{
+			if (gridUnits[y][x].hasTree)
+				return true;
+		}
+	}
+	return false;
+}
 void Grid::SetHasTree(int x, int y, bool value)
 {
 	gridUnits[y][x].hasTree = value;
@@ -168,9 +180,9 @@ bool Grid::HasBuilding(int x, int y) const
 }
 bool Grid::HasBuilding(int fromX, int toX, int fromY, int toY) const
 {
-	for (int x = fromX; x <= toX; ++x)
+	for (int y = fromY; y <= toY; ++y)
 	{
-		for (int y = fromY; y <= toY; ++y)
+		for (int x = fromX; x <= toX; ++x)
 		{
 			if (!HasTree(x, y) && IsOccupied(x, y))
 				return true;

@@ -41,6 +41,7 @@ public:
 	void UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	void SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value);
 	bool HasTree(int x, int y) const;
+	bool HasTree(int fromX, int toX, int fromY, int toY) const;
 	bool IsOccupied(int x, int y) const;
 	void SetHasTree(int x, int y, bool value);
 	void SetIsOccupied(int x, int y, bool value);
