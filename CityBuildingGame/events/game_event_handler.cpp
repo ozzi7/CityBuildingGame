@@ -151,6 +151,20 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			                                  glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f),  // rotate
 												modelCenter.z);
 
+			/* delete grass */
+			for (int x = fromX; x <= toX; ++x)
+			{
+				for (int y = fromY; y <= toY; ++y)
+				{
+					for (std::list<GameObject*>::iterator it = grid->gridUnits[y][x].objects.begin();
+						it != grid->gridUnits[y][x].objects.end(); ++it)
+					{
+						delete *it;
+					}
+					grid->gridUnits[y][x].objects.clear();
+				}
+			}
+
 			/* save some stuff needed later.. TODO: dedicated building exit,check road etc (for other buildings)*/
 			dwelling->fromX = fromX;
 			dwelling->fromY = fromY;
@@ -178,6 +192,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			grid->gridUnits[pathCoordinates.front().second][pathCoordinates.front().first].movingObjects.push_back(worker);
 			resources->AddDwelling(dwelling);
 			resources->AddWorker(worker);
+
 			break;
 		}
 		case BuildingType::LumberjackHutID:
@@ -198,6 +213,20 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			lumberjackHut->entranceY = fromY;
 
 			lumberjackHut->CreateBuildingOutline();
+
+			/* delete grass */
+			for (int x = fromX; x <= toX; ++x)
+			{
+				for (int y = fromY; y <= toY; ++y)
+				{
+					for (std::list<GameObject*>::iterator it = grid->gridUnits[y][x].objects.begin();
+						it != grid->gridUnits[y][x].objects.end(); ++it)
+					{
+						delete* it;
+					}
+					grid->gridUnits[y][x].objects.clear();
+				}
+			}
 
 			// store reference to grid
 			grid->gridUnits[lumberjackHut->posY][lumberjackHut->posX].objects.push_back(lumberjackHut);
