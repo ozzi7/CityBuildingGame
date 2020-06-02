@@ -69,7 +69,7 @@ const float PINE_DENSITY = 0.15f;		//0.3 [0 - 1]
 const float TOONA_DENSITY = 0.15f;		//0.3 [0 - 1]
 const float OAK_DENSITY = 0.05f;		//0.15 [0 - 1]
 const float EUROBEECH_DENSITY = 0.15f;		//0.3 [0 - 1]
-const float GRASS_DENSITY = 1.0f;
+const float GRASS_DENSITY = 0.5f;
 
 /* terrain generation */
 const float HILL_HEIGHT = 15.0f;	// ~ 0 - 15

@@ -176,7 +176,8 @@ void MapGenerator::generateGrass()
 	std::mt19937 gen(rd());
 	std::chi_squared_distribution<> scale_dist(1.0f);
 	std::uniform_real_distribution<> position_offset(-0.4999f, 0.4999f);
-	std::uniform_real_distribution<> rotation(0, glm::two_pi<float>());
+	std::uniform_real_distribution<> z_rotation(0, glm::two_pi<float>());
+	std::uniform_real_distribution<> y_rotation(0, glm::quarter_pi<float>()/4.0f);
 
 	/* create grass using noise map*/
 	std::vector<std::vector<float>> grassMap = std::vector<std::vector<float>>(grid->gridHeight, std::vector<float>(grid->gridWidth, 0));
@@ -214,17 +215,19 @@ void MapGenerator::generateGrass()
 			float grass_prob = std::min(1.0f, GRASS_DENSITY * getGaussianPDFValue(grass_mean, grass_var, grassMap[i][j]));
 
 			std::bernoulli_distribution grass_distribution(grass_prob);
-			bool isGrass = grass_distribution(gen);
 
-			float scale = 1.0f - (float)scale_dist(gen);
-			while (scale < SMALL_GRASS_CUTOFF_PERCENTAGE * 0.01f)
+			// get multiple samples per tile
+			for (int grassCount = 0; grassCount < 30; ++grassCount) // TODO: parameter max grass count
 			{
-				scale = 1.0f - (float)scale_dist(gen);
-			}
+				bool isGrass = grass_distribution(gen);
 
-			if (isGrass)
-			{
-				for (int z = 0; z < 15; ++z)
+				float scale = grass_prob; // TODO also the scale can be dependent on the count
+				while (scale < SMALL_GRASS_CUTOFF_PERCENTAGE * 0.01f)
+				{
+					scale = 1.0f - (float)scale_dist(gen);
+				}
+
+				if (isGrass)
 				{
 					float posX = j + 0.5f + (float)position_offset(gen);
 					float posY = i + 0.5f + (float)position_offset(gen);
@@ -232,7 +235,7 @@ void MapGenerator::generateGrass()
 						new Grass(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 							glm::vec3(scale * GRASS_SCALE_FACTOR, scale * GRASS_SCALE_FACTOR,
 								scale * GRASS_SCALE_FACTOR),
-							glm::vec3(0.0f, 0.0f, rotation(gen))));
+							glm::vec3(0.0f, y_rotation(gen), z_rotation(gen))));
 				}
 			}
 		}
