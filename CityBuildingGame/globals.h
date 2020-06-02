@@ -37,13 +37,13 @@ extern bool MUSIC_ENABLED;
  ***********************************************/
 //extern unsigned int MAP_WIDTH;
 //extern unsigned int MAP_HEIGHT;
-const unsigned int MAP_WIDTH = 100;
-const unsigned int MAP_HEIGHT = 100;
+const unsigned int MAP_WIDTH = 200;
+const unsigned int MAP_HEIGHT = 200;
 
 /* vegetation generation */
 // the higher the tree persistence the higher the frequency of trees => easier to find all types of resources nearby
 const float PERSISTENCE_TREES = 0.8f;
-const float PERSISTENCE_GRASS = 0.8f;
+const float PERSISTENCE_GRASS = 0.3f;
 
 // defines on which height the species grows the most in percentage of the terrain height
 const float PINE_GAUSSIAN_MEAN_PERCENTAGE = 82.0f;		// [0 - 100]
@@ -60,10 +60,10 @@ const float EUROBEECH_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 const float GRASS_GAUSSIAN_VARIANCE_PERCENTAGE = 5.0f;		// [0 - 100]
 
 const float TREE_SCALE_FACTOR = 0.015f; // to resize all trees
-const float GRASS_SCALE_FACTOR = 0.4f;
+const float GRASS_SCALE_FACTOR = 0.5f;
 
 const float SMALL_TREE_CUTOFF_PERCENTAGE = 30.0f; // [0,100), removes midget trees
-const float SMALL_GRASS_CUTOFF_PERCENTAGE = 60.0f; // [0,100)
+const float SMALL_GRASS_CUTOFF_PERCENTAGE = 20.0f; // [0,100)
 
 const float PINE_DENSITY = 0.15f;		//0.3 [0 - 1]
 const float TOONA_DENSITY = 0.15f;		//0.3 [0 - 1]
@@ -78,7 +78,7 @@ const float HILL_HEIGHT = 15.0f;	// ~ 0 - 15
 const float PERSISTENCE = 0.5f; // ~ 0.4 - 0.7
 
 const float PLATEAU_PERCENTAGE = 10.0f; // [0 - 100] flattens x percent tallest terrain
-const float VALLEY_PERCENTAGE = 50.0f; //[0 - 100] flattens x percent of lowest terrain
+const float VALLEY_PERCENTAGE = 60.0f; //[0 - 100] flattens x percent of lowest terrain
 
 // if 0 => the tree noise map defines tree distribution, 1=> the terrain height defines tree distribution
 const float TERRAIN_WEIGHT_FACTOR = 0.7f; // [0,1]

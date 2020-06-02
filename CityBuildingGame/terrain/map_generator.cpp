@@ -20,7 +20,7 @@ void MapGenerator::generateTerrain() const
 
 	NoiseGen noise_gen;
 	std::vector<std::vector<float>> heightmap = std::vector<std::vector<float>>(
-		grid->gridHeight + 1, std::vector<float>(grid->gridWidth + 1, 0));
+		(long long)grid->gridHeight + 1, std::vector<float>((long long)grid->gridWidth + 1, 0));
 
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 		"Generating perlin noise for terrain"));
@@ -221,7 +221,7 @@ void MapGenerator::generateGrass()
 			{
 				bool isGrass = grass_distribution(gen);
 
-				float scale = grass_prob; // TODO also the scale can be dependent on the count
+				float scale = 2.0f*grass_prob; // TODO
 				while (scale < SMALL_GRASS_CUTOFF_PERCENTAGE * 0.01f)
 				{
 					scale = 1.0f - (float)scale_dist(gen);
@@ -231,6 +231,11 @@ void MapGenerator::generateGrass()
 				{
 					float posX = j + 0.5f + (float)position_offset(gen);
 					float posY = i + 0.5f + (float)position_offset(gen);
+
+					// remove grass on the border of the map
+					if(posX >= grid->gridWidth-0.5f || posX <= 0.5f || posY >= grid->gridHeight- 0.5f || posY <= 0.5f)
+						continue;
+
 					grid->gridUnits[i][j].objects.push_back(
 						new Grass(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 							glm::vec3(scale * GRASS_SCALE_FACTOR, scale * GRASS_SCALE_FACTOR,
