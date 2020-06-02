@@ -4,8 +4,6 @@ A real-time strategy city building game.
 
 ## Introduction
 
-
-
 ## Requirements
 
 * Windows 10 x64
@@ -18,6 +16,8 @@ A real-time strategy city building game.
 * Unpack the files and run /bin/CityBuildingGame.exe 
 
 ### Build from Source
+
+* Use Visual Studio 2019
 
 ## Gameplay
 
