@@ -21,5 +21,5 @@ A real-time strategy city building game.
 
 ## Gameplay
 
-![Graph](media/screenshot1.png)
+![Graph](media/screenshot2.png)
 
