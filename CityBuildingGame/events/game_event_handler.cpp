@@ -192,6 +192,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			grid->gridUnits[pathCoordinates.front().second][pathCoordinates.front().first].movingObjects.push_back(worker);
 			resources->AddDwelling(dwelling);
 			resources->AddWorker(worker);
+			soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::WorkerArrivedSound));
 
 			break;
 		}
@@ -232,6 +233,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			grid->gridUnits[lumberjackHut->posY][lumberjackHut->posX].objects.push_back(lumberjackHut);
 			resources->AddLumberjackHut(lumberjackHut);
 			resources->AddWorkerTask(lumberjackHut);
+			soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::WorkerArrivedSound));
 
 			break;
 		}

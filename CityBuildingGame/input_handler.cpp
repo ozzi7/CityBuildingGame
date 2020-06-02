@@ -97,7 +97,6 @@ void InputHandler::Mouseclick(int button, int action)
 					default:
 						return;
 				}
-				soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::WorkerArrivedSound)); // TODO:
 			}
 			else if (button == GLFW_MOUSE_BUTTON_RIGHT)
 			{
