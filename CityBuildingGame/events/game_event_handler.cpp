@@ -120,9 +120,6 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		modelCenter.y = int(aCreateBuildingEvent->posY) + 0.5f;
 	}
 
-	if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
-		return;
-
 	/* calculate 3d model position height*/
 	modelCenter.z = grid->GetHeight(modelCenter.x, modelCenter.y);
 
@@ -131,6 +128,9 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	{
 		case BuildingType::DwellingID:
 		{
+			if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
+				return;
+
 			/* find path*/
 			PathfindingObject* path = new PathfindingObject(grid, std::pair<int,int>(fromX + 1, fromY));
 			path->FindClosestEdge();
@@ -188,6 +188,9 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		}
 		case BuildingType::LumberjackHutID:
 		{
+			if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
+				return;
+
 			modelCenter.x = modelCenter.x - 0.45f;
 			LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
 			                                                 glm::vec3(0.012f, 0.006f, 0.012f), // rescale
