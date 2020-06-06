@@ -52,6 +52,7 @@ public:
 	bool HasRoad(int x, int y) const;
 	bool HasRoadAccess(int x, int y) const;
 	void DeleteGrass(int fromX, int toX, int fromY, int toY);
+	std::pair<int, int> FindRoadAccess(int fromX, int toX, int fromY, int toY) const;
 
 	// [y][x]
 	std::vector<std::vector<Unit>> gridUnits;
