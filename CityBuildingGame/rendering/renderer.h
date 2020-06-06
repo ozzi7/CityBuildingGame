@@ -15,6 +15,7 @@
 #include "tree.h"
 #include "lumberjack.h"
 #include "triple_buffer.h"
+#include <grid.h>
 
 class Renderer
 {
@@ -59,9 +60,6 @@ public:
 		instanced_model_dwelling = new InstancedModel(Path + "/../models/buildings/dwelling/dwelling.dae");
 		instanced_model_lumberjack_hut = new InstancedModel(Path + "/../models/buildings/lumberjack_hut/lumberjack_hut.dae");
 		instanced_model_building_outline = new InstancedModel(Path + "/../models/buildings/building_outline/building_outline.dae");
-
-		/*model_path = Path + "/../models/buildings/lumberjack_hut/lumberjack_hut.dae";
-		instanced_model_dwelling = new InstancedModel(model_path);*/
 
 		/* vegetation */
 		instanced_model_pine = new InstancedModel(Path + "/../models/vegetation/pine/pine.dae");
@@ -187,6 +185,7 @@ public:
 	void Render(RenderBuffer* renderBuffer)
 	{
 		renderTerrain(renderBuffer);
+
 		renderInstancedObjects(renderBuffer);
 		renderBoneAnimated(renderBuffer);
 	}

@@ -222,14 +222,12 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		case BuildingType::PathID:
 		{
 			// only allow building roads connected to other roads or on the border of the map
-			if (grid->HasRoad(fromX - 1, fromY) || grid->HasRoad(fromX + 1, fromY)
-				|| grid->HasRoad(fromX, fromY - 1) || grid->HasRoad(fromX, fromY + 1) ||
+			if (grid->HasRoadAccess(fromX, fromY) ||
 				fromX == 0 || fromX == grid->gridWidth - 1 ||
 				fromY == 0 || fromY == grid->gridHeight - 1)
 			{
-				grid->gridUnits[modelCenter.y][modelCenter.x].hasRoad = true;
+				grid->SetHasRoad(modelCenter.x,modelCenter.y, true);
 				grid->terrain->reloadTerrain = true;
-				grid->SetIsOccupied(fromX, toX, fromY, toY, true);
 				grid->DeleteGrass(fromX, toX, fromY, toY);
 			}
 			break;
