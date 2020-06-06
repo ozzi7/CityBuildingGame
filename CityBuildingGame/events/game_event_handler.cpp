@@ -154,20 +154,6 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			                                  glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f),  // rotate
 												modelCenter.z);
 
-			/* delete grass */
-			for (int x = fromX; x <= toX; ++x)
-			{
-				for (int y = fromY; y <= toY; ++y)
-				{
-					for (std::list<GameObject*>::iterator it = grid->gridUnits[y][x].objects.begin();
-						it != grid->gridUnits[y][x].objects.end(); ++it)
-					{
-						delete *it;
-					}
-					grid->gridUnits[y][x].objects.clear();
-				}
-			}
-
 			/* save some stuff needed later.. TODO: dedicated building exit,check road etc (for other buildings)*/
 			dwelling->fromX = fromX;
 			dwelling->fromY = fromY;
@@ -180,6 +166,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			dwelling->AddWoodBuildingMaterialOnTheWay(2);
 
 			dwelling->CreateBuildingOutline();
+			grid->DeleteGrass(fromX, toX, fromY, toY);
 
 			/* create worker.. */
 			Worker* worker = new Worker(glm::vec3(pathCoordinates.front().first + 0.5f, pathCoordinates.front().second + 0.5f, 
@@ -219,20 +206,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			lumberjackHut->CreateBuildingOutline();
 
 			grid->SetIsOccupied(fromX, toX, fromY, toY, true);
-
-			/* delete grass */
-			for (int x = fromX; x <= toX; ++x)
-			{
-				for (int y = fromY; y <= toY; ++y)
-				{
-					for (std::list<GameObject*>::iterator it = grid->gridUnits[y][x].objects.begin();
-						it != grid->gridUnits[y][x].objects.end(); ++it)
-					{
-						delete* it;
-					}
-					grid->gridUnits[y][x].objects.clear();
-				}
-			}
+			grid->DeleteGrass(fromX, toX, fromY, toY);
 
 			// store reference to grid
 			grid->gridUnits[lumberjackHut->posY][lumberjackHut->posX].objects.push_back(lumberjackHut);
@@ -246,6 +220,8 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		{
 			grid->gridUnits[modelCenter.y][modelCenter.x].hasRoad = true;
 			grid->terrain->reloadTerrain = true;
+			grid->SetIsOccupied(fromX, toX, fromY, toY, true);
+			grid->DeleteGrass(fromX, toX, fromY, toY);
 			break;
 		}
 	}

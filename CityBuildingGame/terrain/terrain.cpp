@@ -123,7 +123,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					float float_j = float(j);
 					float texture_index;
 
-					if (grid->buildingMode && !grid->IsValidBuildingPosition(j,i,j,i))
+					if (grid->buildingMode && !grid->IsValidBuildingPosition(j,i,j,i) && !grid->HasRoad(j, i))
 						texture_index = 1.0f;
 					else
 					{

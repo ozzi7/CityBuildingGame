@@ -194,6 +194,22 @@ bool Grid::HasRoad(int x, int y) const
 {
 	return gridUnits[y][x].hasRoad;
 }
+void Grid::DeleteGrass(int fromX, int toX, int fromY, int toY)
+{
+	// TODO: deletes ALL objects not just grass
+	for (int x = fromX; x <= toX; ++x)
+	{
+		for (int y = fromY; y <= toY; ++y)
+		{
+			for (std::list<GameObject*>::iterator it = gridUnits[y][x].objects.begin();
+				it != gridUnits[y][x].objects.end(); ++it)
+			{
+				delete* it;
+			}
+			gridUnits[y][x].objects.clear();
+		}
+	}
+}
 Grid::~Grid()
 {
 	delete terrain;

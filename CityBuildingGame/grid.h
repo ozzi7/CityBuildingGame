@@ -49,6 +49,7 @@ public:
 	bool HasBuilding(int x, int y) const;
 	bool HasBuilding(int fromX, int toX, int fromY, int toY) const;
 	bool HasRoad(int x, int y) const;
+	void DeleteGrass(int fromX, int toX, int fromY, int toY);
 
 	// [y][x]
 	std::vector<std::vector<Unit>> gridUnits;
