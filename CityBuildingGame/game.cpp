@@ -76,7 +76,7 @@ void Game::renderLoop()
 		// Shadow pass
 		renderer->BindShadowMap();
 		glm::mat4 projection = camera->GetLightProjectionMatrix();
-		glm::mat4 view = camera->GetLightViewMatrix();
+		glm::mat4 view = camera->GetLightViewMatrix();;
 		glm::mat4 lightSpaceMatrix = projection * view;
 		renderer->SetShadowMatrices(lightSpaceMatrix);
 		renderer->CalculateShadow(renderBuffers->GetConsumerBuffer());
@@ -204,7 +204,7 @@ void Game::lightingCalculation(unsigned long loopCount)
 	
 	const float directionalLightIntensity = pow(BRIGHTNESS * 0.01 + 0.5f, 3.0f) * 0.9f;
 	const float ambientLightIntensity = pow(BRIGHTNESS * 0.01 + 0.5f, 3.0f) * 0.4f;
-	const float loopPercentage = (float)(loopCount % 50000) / 500.0f;
+	const float loopPercentage = (float)(loopCount % 5000) / 50.0f;
 	
 	// Change directional light position
 	if (loopPercentage < 50)
