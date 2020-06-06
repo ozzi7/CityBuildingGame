@@ -115,7 +115,15 @@ bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY) const
 }
 bool Grid::IsOccupied(int x, int y) const
 {
+	if (x < 0 || x > gridWidth || y < 0 || y > gridHeight)
+		return false;
 	return gridUnits[y][x].occupied;
+}
+bool Grid::IsRoad(int x, int y) const
+{
+	if (x < 0 || x > gridWidth || y < 0 || y > gridHeight)
+		return false;
+	return gridUnits[y][x].hasRoad;
 }
 void Grid::SetIsOccupied(int x, int y, bool value) 
 {
