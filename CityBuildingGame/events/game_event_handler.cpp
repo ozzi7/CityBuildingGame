@@ -222,9 +222,9 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		case BuildingType::PathID:
 		{
 			// only allow building roads connected to other roads or on the border of the map
-			if (grid->HasRoadAccess(fromX, fromY) ||
+			if ((grid->HasRoadAccess(fromX, fromY) ||
 				fromX == 0 || fromX == grid->gridWidth - 1 ||
-				fromY == 0 || fromY == grid->gridHeight - 1)
+				fromY == 0 || fromY == grid->gridHeight - 1) && !grid->IsOccupied(fromX, fromY))
 			{
 				grid->SetHasRoad(modelCenter.x,modelCenter.y, true);
 				grid->terrain->reloadTerrain = true;

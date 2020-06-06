@@ -146,7 +146,22 @@ void Game::gameLoop()
 
 		for (int i = 0; i < grid->nofVisibleUnits; i++)
 		{
-			if (!grid->buildingMode)
+			if (grid->buildingMode)
+			{
+				for (std::list<GameObject*>::iterator it = grid->visibleUnits[i]->objects.begin();
+					it != grid->visibleUnits[i]->objects.end(); ++it)
+				{
+					try {
+						Building * building = dynamic_cast<Building*>((*it));
+						if(building != nullptr)
+							building->Accept(*producerBuffer);
+					}
+					catch (const std::exception & e)  // This should happen
+					{
+					}
+				}
+			}
+			else
 			{
 				for (std::list<GameObject*>::iterator it = grid->visibleUnits[i]->objects.begin();
 					it != grid->visibleUnits[i]->objects.end(); ++it)
