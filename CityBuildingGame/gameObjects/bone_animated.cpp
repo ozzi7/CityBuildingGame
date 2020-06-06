@@ -66,13 +66,21 @@ void BoneAnimated::updateProxyPosition(float aDistance)
 			glm::vec2 nextWayPointPosition = glm::vec2(wayPoints[proxyWPIdx + 1].first + 0.5f, wayPoints[proxyWPIdx + 1].second + 0.5f);
 			float distanceToNextWP = distance(proxyPosition, nextWayPointPosition);
 			
-			translation = std::min(distanceToNextWP, aDistance) * normalize(nextWayPointPosition - proxyPosition);
-			proxyPosition += translation;
-			aDistance -= distanceToNextWP;
-
+			glm::vec2 normalized = normalize(nextWayPointPosition - proxyPosition);
+			if (glm::isnan(normalized.x) || glm::isnan(normalized.y))
+			{
+				// dont translate object but at least remove the distance (assume this is a normal value)
+				aDistance -= distanceToNextWP;
+			}
+			else
+			{
+				translation = std::min(distanceToNextWP, aDistance) * normalize(nextWayPointPosition - proxyPosition);
+				proxyPosition += translation;
+				aDistance -= distanceToNextWP;
+			}
 			if (aDistance >= 0.0f)
 			{
-				// arrived at new waypoint
+				// arrived at new waypoint if we need to push the object further than the next waypoint
 				proxyWPIdx++;
 
 				if (proxyWPIdx + 1 == wayPoints.size()) 
