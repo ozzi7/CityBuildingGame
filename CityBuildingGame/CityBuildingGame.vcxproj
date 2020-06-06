@@ -47,7 +47,7 @@
     <ClInclude Include="rendering\meshes\mipmap_generator.h" />
     <ClInclude Include="pathfinding\pathfinding.h" />
     <ClInclude Include="pathfinding\pathfinding_object.h" />
-    <ClInclude Include="rendering\render_data.h" />
+    <ClInclude Include="rendering\render_buffer.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="utility\buffer.h" />
     <ClInclude Include="camera.h" />
@@ -100,7 +100,7 @@
     <ClCompile Include="rendering\meshes\mipmap_generator.cpp" />
     <ClCompile Include="pathfinding\pathfinding.cpp" />
     <ClCompile Include="pathfinding\pathfinding_object.cpp" />
-    <ClCompile Include="rendering\render_data.cpp" />
+    <ClCompile Include="rendering\render_buffer.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="input_handler.cpp" />
     <ClCompile Include="rendering\meshes\instanced_mesh.cpp" />

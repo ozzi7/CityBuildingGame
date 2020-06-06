@@ -83,6 +83,11 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			buildingSize = std::make_pair(3, 3);
 			break;
 		}
+		case BuildingType::PathID:
+		{
+			buildingSize = std::make_pair(1, 1);
+			break;
+		}
 	}
 
 	/* Calculate correct occupied units and save in fromX, toX, fromY, toY inclusive */
@@ -115,19 +120,17 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		modelCenter.y = int(aCreateBuildingEvent->posY) + 0.5f;
 	}
 
-	if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
-		return;
-
 	/* calculate 3d model position height*/
 	modelCenter.z = grid->GetHeight(modelCenter.x, modelCenter.y);
-
-	grid->SetIsOccupied(fromX, toX, fromY, toY, true);
 
 	/* Create the building object etc.. */
 	switch (aCreateBuildingEvent->buildingType)
 	{
 		case BuildingType::DwellingID:
 		{
+			if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
+				return;
+
 			/* find path*/
 			PathfindingObject* path = new PathfindingObject(grid, std::pair<int,int>(fromX + 1, fromY));
 			path->FindClosestEdge();
@@ -140,30 +143,16 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			/* if no path found do nothing..*/
 			if (pathCoordinates.empty())
 			{
-				grid->SetIsOccupied(fromX, toX, fromY, toY, false);
 				loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::WARNING, "The worker can't walk to the dwelling (no path found)"));
 				return;
 			}
-			
+			grid->SetIsOccupied(fromX, toX, fromY, toY, true);
+
 			/* create building  */
 			Dwelling* dwelling = new Dwelling(modelCenter, // translate
 			                                  glm::vec3(0.014f, 0.008f, 0.014f), // rescale
 			                                  glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f),  // rotate
 												modelCenter.z);
-
-			/* delete grass */
-			for (int x = fromX; x <= toX; ++x)
-			{
-				for (int y = fromY; y <= toY; ++y)
-				{
-					for (std::list<GameObject*>::iterator it = grid->gridUnits[y][x].objects.begin();
-						it != grid->gridUnits[y][x].objects.end(); ++it)
-					{
-						delete *it;
-					}
-					grid->gridUnits[y][x].objects.clear();
-				}
-			}
 
 			/* save some stuff needed later.. TODO: dedicated building exit,check road etc (for other buildings)*/
 			dwelling->fromX = fromX;
@@ -177,6 +166,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			dwelling->AddWoodBuildingMaterialOnTheWay(2);
 
 			dwelling->CreateBuildingOutline();
+			grid->DeleteGrass(fromX, toX, fromY, toY);
 
 			/* create worker.. */
 			Worker* worker = new Worker(glm::vec3(pathCoordinates.front().first + 0.5f, pathCoordinates.front().second + 0.5f, 
@@ -198,6 +188,9 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		}
 		case BuildingType::LumberjackHutID:
 		{
+			if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
+				return;
+
 			modelCenter.x = modelCenter.x - 0.45f;
 			LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
 			                                                 glm::vec3(0.012f, 0.006f, 0.012f), // rescale
@@ -215,19 +208,8 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 			lumberjackHut->CreateBuildingOutline();
 
-			/* delete grass */
-			for (int x = fromX; x <= toX; ++x)
-			{
-				for (int y = fromY; y <= toY; ++y)
-				{
-					for (std::list<GameObject*>::iterator it = grid->gridUnits[y][x].objects.begin();
-						it != grid->gridUnits[y][x].objects.end(); ++it)
-					{
-						delete* it;
-					}
-					grid->gridUnits[y][x].objects.clear();
-				}
-			}
+			grid->SetIsOccupied(fromX, toX, fromY, toY, true);
+			grid->DeleteGrass(fromX, toX, fromY, toY);
 
 			// store reference to grid
 			grid->gridUnits[lumberjackHut->posY][lumberjackHut->posX].objects.push_back(lumberjackHut);
@@ -235,6 +217,21 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			resources->AddWorkerTask(lumberjackHut);
 			soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::WorkerArrivedSound));
 
+			break;
+		}
+		case BuildingType::PathID:
+		{
+			// only allow building roads connected to other roads or on the border of the map
+			if (grid->HasRoad(fromX - 1, fromY) || grid->HasRoad(fromX + 1, fromY)
+				|| grid->HasRoad(fromX, fromY - 1) || grid->HasRoad(fromX, fromY + 1) ||
+				fromX == 0 || fromX == grid->gridWidth - 1 ||
+				fromY == 0 || fromY == grid->gridHeight - 1)
+			{
+				grid->gridUnits[modelCenter.y][modelCenter.x].hasRoad = true;
+				grid->terrain->reloadTerrain = true;
+				grid->SetIsOccupied(fromX, toX, fromY, toY, true);
+				grid->DeleteGrass(fromX, toX, fromY, toY);
+			}
 			break;
 		}
 	}

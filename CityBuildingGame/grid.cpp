@@ -115,6 +115,8 @@ bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY) const
 }
 bool Grid::IsOccupied(int x, int y) const
 {
+	if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
+		return false;
 	return gridUnits[y][x].occupied;
 }
 void Grid::SetIsOccupied(int x, int y, bool value) 
@@ -190,16 +192,36 @@ bool Grid::HasBuilding(int fromX, int toX, int fromY, int toY) const
 	}
 	return false;
 }
+bool Grid::HasRoad(int x, int y) const
+{
+	if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
+		return false;
+
+	return gridUnits[y][x].hasRoad;
+}
+void Grid::DeleteGrass(int fromX, int toX, int fromY, int toY)
+{
+	// TODO: deletes ALL objects not just grass
+	for (int x = fromX; x <= toX; ++x)
+	{
+		for (int y = fromY; y <= toY; ++y)
+		{
+			for (std::list<GameObject*>::iterator it = gridUnits[y][x].objects.begin();
+				it != gridUnits[y][x].objects.end(); ++it)
+			{
+				delete* it;
+			}
+			gridUnits[y][x].objects.clear();
+		}
+	}
+}
 Grid::~Grid()
 {
 	delete terrain;
 }
 
 Unit::Unit()
-{
-	//objects = std::list<GameObject*>();
-	//movingObjects = std::list<BoneAnimated*>();
-}
+{}
 
 Unit::~Unit()
 {

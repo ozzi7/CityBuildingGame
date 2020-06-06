@@ -20,6 +20,7 @@ class Unit
 public:
 	bool occupied = false;
 	bool hasTree = false;
+	bool hasRoad = false;
 	float averageHeight = 0;
 	std::list<GameObject*> objects;
 	std::list<BoneAnimated*> movingObjects; // TODO doesnt have to coincide with bone animated.. hmm
@@ -43,10 +44,13 @@ public:
 	bool HasTree(int x, int y) const;
 	bool HasTree(int fromX, int toX, int fromY, int toY) const;
 	bool IsOccupied(int x, int y) const;
+	bool IsRoad(int x, int y) const;
 	void SetHasTree(int x, int y, bool value);
 	void SetIsOccupied(int x, int y, bool value);
 	bool HasBuilding(int x, int y) const;
 	bool HasBuilding(int fromX, int toX, int fromY, int toY) const;
+	bool HasRoad(int x, int y) const;
+	void DeleteGrass(int fromX, int toX, int fromY, int toY);
 
 	// [y][x]
 	std::vector<std::vector<Unit>> gridUnits;
