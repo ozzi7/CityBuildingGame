@@ -1,5 +1,7 @@
 #pragma once
 
+#define NOMINMAX
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -9,6 +11,7 @@
 #include <vector>
 #include <Windows.h>
 #include <iostream>
+#include <algorithm>
 
 #include "globals.h"
 #include "grid.h"

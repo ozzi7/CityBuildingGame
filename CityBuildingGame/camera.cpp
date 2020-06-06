@@ -257,12 +257,34 @@ void Camera::CalculateVisibleGrid()
 	// When all the way to top right, set bottomRightVisible to current x/y
 	bottomRightVisible = std::make_pair(x, y);
 
-	bottomLeftVisible.first++;
+	// Increase render range by 4 to prevent shadow bugs and prevent objects popping in and out of screen
+	topLeftVisible.first -= 4;
+	topRightVisible.second += 4;
+	bottomLeftVisible.second -= 4;
+	bottomRightVisible.first += 4;
+
+	// Move left edge left 1 extra row
+	topLeftVisible.first--;
+	topLeftVisible.second--;
+	bottomLeftVisible.first--;
 	bottomLeftVisible.second--;
 
+	// Move right edge left 1 extra row
+	topRightVisible.first++;
+	topRightVisible.second++;
+	bottomRightVisible.first++;
+	bottomRightVisible.second++;
+	
+	// Move bottom edge down 1 extra row
+	bottomLeftVisible.first++;
+	bottomLeftVisible.second--;
 	bottomRightVisible.first++;
 	bottomRightVisible.second--;
 
+	int topDifference = (topLeftVisible.first - topLeftVisible.second) - (topRightVisible.first - topRightVisible.second);
+	int bottomDifference = (bottomLeftVisible.first - bottomLeftVisible.second) - (bottomRightVisible.first - bottomRightVisible.second);
+	int leftDifference = (topLeftVisible.first + topLeftVisible.second) - (bottomLeftVisible.first + bottomLeftVisible.second);
+	int rightDifference = (topRightVisible.first + topRightVisible.second) - (bottomRightVisible.first + bottomRightVisible.second);
 
 	TopLeftVisible = topLeftVisible;
 	TopRightVisible = topRightVisible;
@@ -370,7 +392,7 @@ void Camera::CalculateLightProjectionMatrix()
 		lightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA, ZoomLevel * projectionIncreaseB, -1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
 		if (projectionIncreaseA < 0.05f) { break; } // This shouldn't happen, but just in case to prevent infinite loop
 	}
-	projectionIncreaseA *= 1.2f;
+	projectionIncreaseA *= 1.15f;
 	lightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA, ZoomLevel * projectionIncreaseB, -1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
 
 	while (CoordinateVisible(glm::vec3(TopRightVisible.first, TopRightVisible.second, heightTopRight), lightProjectionMatrix, GetLightViewMatrix()) &&
@@ -382,7 +404,7 @@ void Camera::CalculateLightProjectionMatrix()
 		lightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA, ZoomLevel * projectionIncreaseB, -1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
 		if (projectionIncreaseB < 0.05f) { break; } // This shouldn't happen, but just in case to prevent infinite loop
 	}
-	projectionIncreaseB *= 1.2f;
+	projectionIncreaseB *= 1.15f;
 	lightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA, ZoomLevel * projectionIncreaseB, -1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
 
 	while (CoordinateVisible(glm::vec3(TopRightVisible.first, TopRightVisible.second, heightTopRight), lightProjectionMatrix, GetLightViewMatrix()) &&
@@ -394,7 +416,7 @@ void Camera::CalculateLightProjectionMatrix()
 		lightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA, ZoomLevel * projectionIncreaseB, -1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
 		if (projectionIncreaseC < 0.05f) { break; } // This shouldn't happen, but just in case to prevent infinite loop
 	}
-	projectionIncreaseC *= 1.2f;
+	projectionIncreaseC *= 1.15f;
 	lightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA, ZoomLevel * projectionIncreaseB, -1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
 
 	while (CoordinateVisible(glm::vec3(TopRightVisible.first, TopRightVisible.second, heightTopRight), lightProjectionMatrix, GetLightViewMatrix()) &&
@@ -406,7 +428,17 @@ void Camera::CalculateLightProjectionMatrix()
 		lightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA, ZoomLevel * projectionIncreaseB, -1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
 		if (projectionIncreaseD < 0.05f) { break; } // This shouldn't happen, but just in case to prevent infinite loop
 	}
-	projectionIncreaseD *= 1.2f;
+	projectionIncreaseD *= 1.15f;
+
+	// If light angle is too flat, top of trees and building will not be in shadow projection matrix
+	if (projectionIncreaseA < std::max({projectionIncreaseB, projectionIncreaseC, projectionIncreaseD}) * 0.4f)
+		projectionIncreaseA = std::max({projectionIncreaseB, projectionIncreaseC, projectionIncreaseD}) * 0.4f;
+	if (projectionIncreaseB < std::max({projectionIncreaseA, projectionIncreaseC, projectionIncreaseD}) * 0.4f)
+		projectionIncreaseB = std::max({projectionIncreaseA, projectionIncreaseC, projectionIncreaseD}) * 0.4f;
+	if (projectionIncreaseC < std::max({projectionIncreaseA, projectionIncreaseB, projectionIncreaseD}) * 0.4f)
+		projectionIncreaseC = std::max({projectionIncreaseA, projectionIncreaseB, projectionIncreaseD}) * 0.4f;
+	if (projectionIncreaseD < std::max({projectionIncreaseA, projectionIncreaseB, projectionIncreaseC}) * 0.4f)
+		projectionIncreaseD = std::max({projectionIncreaseA, projectionIncreaseB, projectionIncreaseC}) * 0.4f;
 
 	LightProjectionMatrix = glm::ortho(-ZoomLevel * projectionIncreaseA, ZoomLevel * projectionIncreaseB, -1.0f * ZoomLevel * projectionIncreaseC,  ZoomLevel * projectionIncreaseD, -100.0f, 100.0f);
 }
