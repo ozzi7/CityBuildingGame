@@ -66,6 +66,28 @@ void InputHandler::Keypress(int button, int action)
 					Grid->terrain->reloadTerrain = true;
 				}
 			}
+			if (button == GLFW_KEY_3)
+			{
+				// Not in building mode yet
+				if (buildingSelection == -1)
+				{
+					Grid->buildingMode = true;
+					buildingSelection = 3;
+					Grid->terrain->reloadTerrain = true;
+				}
+				// In building mode of different building -> change to new 
+				else if (buildingSelection != 3)
+				{
+					buildingSelection = 3;
+				}
+				// in building mode of current building -> toggle off
+				else
+				{
+					Grid->buildingMode = false;
+					buildingSelection = -1;
+					Grid->terrain->reloadTerrain = true;
+				}
+			}
 		}
 	}
 }
@@ -94,6 +116,9 @@ void InputHandler::Mouseclick(int button, int action)
 					case 2:
 						gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::LumberjackHutID, cursorPosition.x, cursorPosition.y));
 					
+					case 3:
+						gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::PathID, cursorPosition.x, cursorPosition.y));
+
 					default:
 						return;
 				}

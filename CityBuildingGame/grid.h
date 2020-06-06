@@ -20,6 +20,7 @@ class Unit
 public:
 	bool occupied = false;
 	bool hasTree = false;
+	bool hasRoad = false;
 	float averageHeight = 0;
 	std::list<GameObject*> objects;
 	std::list<BoneAnimated*> movingObjects; // TODO doesnt have to coincide with bone animated.. hmm
@@ -47,6 +48,7 @@ public:
 	void SetIsOccupied(int x, int y, bool value);
 	bool HasBuilding(int x, int y) const;
 	bool HasBuilding(int fromX, int toX, int fromY, int toY) const;
+	bool HasRoad(int x, int y) const;
 
 	// [y][x]
 	std::vector<std::vector<Unit>> gridUnits;

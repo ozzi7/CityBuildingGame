@@ -190,6 +190,10 @@ bool Grid::HasBuilding(int fromX, int toX, int fromY, int toY) const
 	}
 	return false;
 }
+bool Grid::HasRoad(int x, int y) const
+{
+	return gridUnits[y][x].hasRoad;
+}
 Grid::~Grid()
 {
 	delete terrain;

@@ -49,6 +49,9 @@ void Terrain::Draw(Shader& shader)
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture_id_grass_red);
 
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, texture_id_dirt_path);
+
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
@@ -118,13 +121,17 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 				{
 					float float_i = float(i);
 					float float_j = float(j);
-					float occupied;
+					float texture_index;
 
 					if (grid->buildingMode && !grid->IsValidBuildingPosition(j,i,j,i))
-						occupied = 1.0f;
+						texture_index = 1.0f;
 					else
-						occupied = 0.0f;
-
+					{
+						if (grid->HasRoad(j, i))						
+							texture_index = 2.0f;
+						else
+							texture_index = 0.0f;
+					}
 					// x/y/z of first vertex
 					(*renderDataTemp)[index++] = float_j;
 					(*renderDataTemp)[index++] = float_i;
@@ -140,7 +147,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = 0.0f;
 
 					// 0 = normal texture, 1.0 = secondary texture, etc.
-					(*renderDataTemp)[index++] = occupied;
+					(*renderDataTemp)[index++] = texture_index;
 
 					
 					(*renderDataTemp)[index++] = float_j + 1;
@@ -154,7 +161,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = 1.0f;
 					(*renderDataTemp)[index++] = 0.0f;
 
-					(*renderDataTemp)[index++] = occupied;
+					(*renderDataTemp)[index++] = texture_index;
 
 					
 					(*renderDataTemp)[index++] = float_j;
@@ -168,7 +175,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = 0.0f;
 					(*renderDataTemp)[index++] = 1.0f;
 
-					(*renderDataTemp)[index++] = occupied;
+					(*renderDataTemp)[index++] = texture_index;
 					
 					
 					(*renderDataTemp)[index++] = float_j;
@@ -182,7 +189,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = 0.0f;
 					(*renderDataTemp)[index++] = 1.0f;
 
-					(*renderDataTemp)[index++] = occupied;
+					(*renderDataTemp)[index++] = texture_index;
 
 					
 					(*renderDataTemp)[index++] = float_j + 1;
@@ -196,7 +203,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = 1.0f;
 					(*renderDataTemp)[index++] = 0.0f;
 
-					(*renderDataTemp)[index++] = occupied;
+					(*renderDataTemp)[index++] = texture_index;
 
 					
 					(*renderDataTemp)[index++] = float_j + 1;
@@ -210,7 +217,7 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					(*renderDataTemp)[index++] = 1.0f;
 					(*renderDataTemp)[index++] = 1.0f;
 
-					(*renderDataTemp)[index++] = occupied;
+					(*renderDataTemp)[index++] = texture_index;
 				}
 			}
 			else
@@ -360,7 +367,7 @@ void Terrain::InitOpenGL()
 {
 	texture_id_grass = floor_tile.TextureFromFile(Path + "/../terrain/" + texture_grass.c_str());
 	texture_id_grass_red = floor_tile.TextureFromFile(Path + "/../terrain/" + texture_grass_red.c_str());
-	texture_dirt_path = floor_tile.TextureFromFile(Path + "/../terrain/" + texture_dirt_path.c_str());
+	texture_id_dirt_path = floor_tile.TextureFromFile(Path + "/../terrain/" + texture_dirt_path.c_str());
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);

@@ -83,6 +83,11 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			buildingSize = std::make_pair(3, 3);
 			break;
 		}
+		case BuildingType::PathID:
+		{
+			buildingSize = std::make_pair(1, 1);
+			break;
+		}
 	}
 
 	/* Calculate correct occupied units and save in fromX, toX, fromY, toY inclusive */
@@ -121,8 +126,6 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	/* calculate 3d model position height*/
 	modelCenter.z = grid->GetHeight(modelCenter.x, modelCenter.y);
 
-	grid->SetIsOccupied(fromX, toX, fromY, toY, true);
-
 	/* Create the building object etc.. */
 	switch (aCreateBuildingEvent->buildingType)
 	{
@@ -140,11 +143,11 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			/* if no path found do nothing..*/
 			if (pathCoordinates.empty())
 			{
-				grid->SetIsOccupied(fromX, toX, fromY, toY, false);
 				loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::WARNING, "The worker can't walk to the dwelling (no path found)"));
 				return;
 			}
-			
+			grid->SetIsOccupied(fromX, toX, fromY, toY, true);
+
 			/* create building  */
 			Dwelling* dwelling = new Dwelling(modelCenter, // translate
 			                                  glm::vec3(0.014f, 0.008f, 0.014f), // rescale
@@ -215,6 +218,8 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 
 			lumberjackHut->CreateBuildingOutline();
 
+			grid->SetIsOccupied(fromX, toX, fromY, toY, true);
+
 			/* delete grass */
 			for (int x = fromX; x <= toX; ++x)
 			{
@@ -235,6 +240,12 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			resources->AddWorkerTask(lumberjackHut);
 			soundEventHandler->AddEvent(new PlaySoundEvent(SoundType::WorkerArrivedSound));
 
+			break;
+		}
+		case BuildingType::PathID:
+		{
+			grid->gridUnits[modelCenter.y][modelCenter.x].hasRoad = true;
+			grid->terrain->reloadTerrain = true;
 			break;
 		}
 	}

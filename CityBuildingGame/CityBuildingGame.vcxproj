@@ -118,7 +118,6 @@
     <ClCompile Include="terrain\map_generator.cpp" />
     <ClCompile Include="terrain\noise_gen.cpp" />
     <ClCompile Include="terrain\terrain.cpp" />
-    <ClCompile Include="terrain_render_buffer.cpp" />
     <ClCompile Include="utility\buffer.cpp" />
     <ClCompile Include="events\worker_arrived_event.cpp" />
   </ItemGroup>

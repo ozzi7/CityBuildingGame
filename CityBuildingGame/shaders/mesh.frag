@@ -18,6 +18,7 @@ uniform sampler2D shadowMap;
 uniform vec2 texelSizeShadowMap;
 layout(binding = 0) uniform sampler2D Texture0;
 layout(binding = 1) uniform sampler2D Texture1;
+layout(binding = 2) uniform sampler2D Texture2;
 
 float ShadowCalculation()
 {
@@ -71,6 +72,8 @@ void main()
 	    texColor = texture(Texture0, TexCoords);
     if (AlternativeTexture == 1.0)
         texColor = texture(Texture1, TexCoords);
+    if (AlternativeTexture == 2.0)
+        texColor = texture(Texture2, TexCoords);
 	if (texColor.a < 0.5)
 		discard;
 		
