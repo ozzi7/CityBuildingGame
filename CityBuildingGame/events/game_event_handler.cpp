@@ -131,8 +131,16 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
 				return;
 
+			std::pair<int, int> entrance = grid->FindRoadAccess(fromX, toX, fromY, toY);
+
+			if (entrance.first == -1)
+			{
+				loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::WARNING, "Cannot find road to building"));
+				return;
+			}
+
 			/* find path*/
-			PathfindingObject* path = new PathfindingObject(grid, std::pair<int,int>(fromX + 1, fromY));
+			PathfindingObject* path = new PathfindingObject(grid, std::pair<int,int>(entrance.first, entrance.second));
 			path->FindClosestEdge();
 			std::list<std::pair<int,int>> pathCoordinatesList = path->GetPath();
 			pathCoordinatesList.reverse();
@@ -146,6 +154,8 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 				loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::WARNING, "The worker can't walk to the dwelling (no path found)"));
 				return;
 			}
+
+
 			grid->SetIsOccupied(fromX, toX, fromY, toY, true);
 
 			/* create building  */
@@ -161,8 +171,8 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			dwelling->toY = toY;
 			dwelling->sizeX = std::get<0>(buildingSize);
 			dwelling->sizeY = std::get<1>(buildingSize);
-			dwelling->entranceX = fromX + 1;
-			dwelling->entranceY = fromY;
+			dwelling->entranceX = entrance.first;
+			dwelling->entranceY = entrance.second;
 			dwelling->AddWoodBuildingMaterialOnTheWay(2);
 
 			dwelling->CreateBuildingOutline();
@@ -191,6 +201,14 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
 				return;
 
+			std::pair<int, int> entrance = grid->FindRoadAccess(fromX, toX, fromY, toY);
+
+			if (entrance.first == -1)
+			{
+				loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::WARNING, "Cannot find road to building"));
+				return;
+			}
+
 			modelCenter.x = modelCenter.x - 0.45f;
 			LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
 			                                                 glm::vec3(0.012f, 0.006f, 0.012f), // rescale
@@ -203,8 +221,8 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			lumberjackHut->toY = toY;
 			lumberjackHut->sizeX = std::get<0>(buildingSize);
 			lumberjackHut->sizeY = std::get<1>(buildingSize);
-			lumberjackHut->entranceX = fromX + 1;
-			lumberjackHut->entranceY = fromY;
+			lumberjackHut->entranceX = entrance.first;
+			lumberjackHut->entranceY = entrance.second;
 
 			lumberjackHut->CreateBuildingOutline();
 
