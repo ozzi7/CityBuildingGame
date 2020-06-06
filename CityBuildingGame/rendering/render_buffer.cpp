@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "render_data.h"
+#include "render_buffer.h"
 
 RenderBuffer::RenderBuffer() {};
 void RenderBuffer::Visit(GameObject* obj) {}

@@ -6,7 +6,7 @@ Note: For more than one consumer => Add additional lock in GetConsumerBuffer()*/
 #pragma once
 #include <vector>
 #include <mutex>
-#include <render_data.h>
+#include <render_buffer.h>
 
 /*
 

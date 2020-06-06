@@ -25,9 +25,21 @@ void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::ve
 
 void Terrain::Draw(Shader& shader)
 {
-	int vertexCount = ReloadGPUData();
+	// lock first to get exclusive access to the render data and vertex count
+	renderDataMutex.lock();
+	int vertexCount = renderDataVertexCount;
 
-	// render
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	if (reloadGPUData) // if this was set then we re-send the data to the GPU
+	{
+		ReloadGPUData();
+		reloadGPUData = false;
+	}
+
+	renderDataMutex.unlock();
+
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
@@ -37,58 +49,43 @@ void Terrain::Draw(Shader& shader)
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture_id_grass_red);
 
-	glBindVertexArray(VAO);
-
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
 	glBindVertexArray(0);
 }
 
-int Terrain::ReloadGPUData()
+void Terrain::ReloadGPUData()
 {
-	renderDataMutex.lock();
-	int vertexCount = -1;
-	if (reloadGPUData) // TODO: this is always true?
-	{
-		glBindVertexArray(VAO);
+	if (currRenderData)
+		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 9, &(*renderData1)[0],
+			            GL_STATIC_DRAW);
+	else
+		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 9, &(*renderData0)[0],
+			            GL_STATIC_DRAW);
 
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	// position attribute, 5th attribute can be 0 for tightly packed, its equal to 3*sizeof(float)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)nullptr);
+	glEnableVertexAttribArray(0);
 
-		if (currRenderData)
-			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 9, &(*renderData1)[0],
-			             GL_STATIC_DRAW);
-		else
-			glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * renderDataVertexCount * 9, &(*renderData0)[0],
-			             GL_STATIC_DRAW);
+	// position attribute, 5th attribute can be 0 for tightly packed, its equal to 3*sizeof(float)
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
-		vertexCount = renderDataVertexCount;
+	// texture coord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
-		// position attribute, 5th attribute can be 0 for tightly packed, its equal to 3*sizeof(float)
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)nullptr);
-		glEnableVertexAttribArray(0);
-
-		// position attribute, 5th attribute can be 0 for tightly packed, its equal to 3*sizeof(float)
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
-
-		// texture coord attribute
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
-		glEnableVertexAttribArray(2);
-
-		// alternative texture attribute
-		glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(8 * sizeof(float)));
-		glEnableVertexAttribArray(3);
-	}
-	renderDataMutex.unlock();
-	return vertexCount;
+	// alternative texture attribute
+	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(8 * sizeof(float)));
+	glEnableVertexAttribArray(3);
 }
 
 void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
 {
 	/* parameters: corners of visible grid on (x/y/z=0) plane */
 	/* Create geometry data for visible area */
-	//std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
 	std::vector<GLfloat>* renderDataTemp;
 	renderDataMutex.lock();
 	if (currRenderData)
@@ -361,9 +358,10 @@ void Terrain::Accept(Visitor& v)
 
 void Terrain::InitOpenGL()
 {
-	texture_id_grass = grass.TextureFromFile(Path + "/../terrain/" + texture_grass.c_str());
-	texture_id_grass_red = grass.TextureFromFile(Path + "/../terrain/" + texture_grass_red.c_str());
-	
+	texture_id_grass = floor_tile.TextureFromFile(Path + "/../terrain/" + texture_grass.c_str());
+	texture_id_grass_red = floor_tile.TextureFromFile(Path + "/../terrain/" + texture_grass_red.c_str());
+	texture_dirt_path = floor_tile.TextureFromFile(Path + "/../terrain/" + texture_dirt_path.c_str());
+
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 }

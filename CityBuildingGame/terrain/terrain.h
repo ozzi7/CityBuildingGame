@@ -44,16 +44,19 @@ public:
 		
 private:
 	void LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
-	int ReloadGPUData();
+	void ReloadGPUData();
 
 	Grid* grid;
-	Model grass;
+	Model floor_tile;
 	GLuint VBO{}, VAO{};
-	unsigned int secondary_texture;
-	unsigned int texture_id_grass{};
-	unsigned int texture_id_grass_red{};
+	unsigned int secondary_texture {};
+	unsigned int texture_id_grass {};
+	unsigned int texture_id_grass_red {};
+	unsigned int texture_id_dirt_path{};
+
 	std::string texture_grass = "grass.png";
 	std::string texture_grass_red = "grass_red.png";
+	std::string texture_dirt_path = "dirt_path.png";
 
 	int gridHeight;
 	int gridWidth;
@@ -69,10 +72,9 @@ private:
 	int currLowerRightY = 0;
 
 	std::mutex renderDataMutex;
-	bool reloadGPUData = false;
+	bool reloadGPUData = false; // if true then we need to copy new data to GPU memory in the next render loop
 	int currRenderData = 1;
 	int renderDataVertexCount = 0;
 	std::vector<GLfloat>* renderData0 = new std::vector<GLfloat>(maximumVisibleUnits * 54); /* Gets sent to GPU */
 	std::vector<GLfloat>* renderData1 = new std::vector<GLfloat>(maximumVisibleUnits * 54); /* .. */
-	std::vector<unsigned int> indices;
 };

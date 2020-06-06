@@ -27,7 +27,7 @@ public:
 	virtual void Visit(EuroBeech2* euroBeech) = 0;
 	virtual void Visit(Pine* pine) = 0;
 	virtual void Visit(Toona* toona) = 0;
-	virtual void Visit(Grass* grass) = 0;
+	virtual void Visit(Grass* floor_tile) = 0;
 
 	virtual void Visit(Lumberjack* lumberjack) = 0;
 	virtual void Visit(Worker* worker) = 0;

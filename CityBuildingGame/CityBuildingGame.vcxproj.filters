@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="game.cpp" />
-    <ClCompile Include="rendering\render_data.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="input_handler.cpp" />
     <ClCompile Include="main.cpp" />
@@ -45,9 +44,10 @@
     <ClCompile Include="events\bring_resource_event.cpp" />
     <ClCompile Include="events\resource_arrived_event.cpp" />
     <ClCompile Include="events\worker_arrived_event.cpp" />
+    <ClCompile Include="terrain_render_buffer.cpp" />
+    <ClCompile Include="rendering\render_buffer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="rendering\render_data.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="globals.h" />
@@ -109,6 +109,7 @@
     <ClInclude Include="gameObjects\rendered_object.h" />
     <ClInclude Include="events\resource_arrived_event.h" />
     <ClInclude Include="events\worker_arrived_event.h" />
+    <ClInclude Include="rendering\render_buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />
