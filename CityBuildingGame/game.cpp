@@ -75,16 +75,16 @@ void Game::renderLoop()
 	{
 		// Shadow pass
 		renderer->BindShadowMap();
-		glm::mat4 projection = camera->GetProjectionMatrix();
-		glm::mat4 view = camera->GetViewMatrix();
+		glm::mat4 projection = camera->GetLightProjectionMatrix();
+		glm::mat4 view = camera->GetLightViewMatrix();;
 		glm::mat4 lightSpaceMatrix = projection * view;
 		renderer->SetShadowMatrices(lightSpaceMatrix);
 		renderer->CalculateShadow(renderBuffers->GetConsumerBuffer());
 
 		// Render pass
 		renderer->UnbindShadowMap();
-		projection = camera->GetLightProjectionMatrix();
-		view = camera->GetLightViewMatrix();
+		projection = camera->GetProjectionMatrix();
+		view = camera->GetViewMatrix();
 		renderer->SetMatrices(projection, view, lightSpaceMatrix, renderer->ShadowDepthMap);
 		renderer->Render(renderBuffers->GetConsumerBuffer());
 		
