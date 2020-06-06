@@ -72,13 +72,13 @@ const float EUROBEECH_DENSITY = 0.15f;		//0.3 [0 - 1]
 const float GRASS_DENSITY = 0.2f;
 
 /* terrain generation */
-const float HILL_HEIGHT = 0.0f;	// ~ 0 - 15
+const float HILL_HEIGHT = 15.0f;	// ~ 0 - 15
 
 // high persistence => high frequency details have a greater effect
 const float PERSISTENCE = 0.5f; // ~ 0.4 - 0.7
 
-const float PLATEAU_PERCENTAGE = 0.0f; // [0 - 100] flattens x percent tallest terrain
-const float VALLEY_PERCENTAGE = 0.0f; //[0 - 100] flattens x percent of lowest terrain
+const float PLATEAU_PERCENTAGE = 10.0f; // [0 - 100] flattens x percent tallest terrain
+const float VALLEY_PERCENTAGE = 60.0f; //[0 - 100] flattens x percent of lowest terrain
 
 // if 0 => the tree noise map defines tree distribution, 1=> the terrain height defines tree distribution
 const float TERRAIN_WEIGHT_FACTOR = 0.7f; // [0,1]

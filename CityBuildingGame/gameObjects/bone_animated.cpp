@@ -57,7 +57,6 @@ void BoneAnimated::updateProxyPosition()
 }
 void BoneAnimated::updateProxyPosition(float aDistance)
 {
-	// proxy objects also moves on diagonals but only between neighbor squares
 	while (aDistance > 0.0f && !proxyHasArrived)
 	{
 		glm::vec2 translation = glm::vec2(0, 0);

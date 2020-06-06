@@ -115,10 +115,11 @@ void InputHandler::Mouseclick(int button, int action)
 
 					case 2:
 						gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::LumberjackHutID, cursorPosition.x, cursorPosition.y));
-					
+						break;
+
 					case 3:
 						gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::PathID, cursorPosition.x, cursorPosition.y));
-
+						break;
 					default:
 						return;
 				}
