@@ -96,10 +96,12 @@ float Grid::GetHeight(float posX, float posY) const
 	return (1 - offsetX) * m + (1 - offsetY) * n + terrain->heightmap[i + 1][j + 1];
 }
 /* Check if area is flat within a rectangle of the grid
-Input for a 2x2 building is (0,1, 0,1) but accesses heightmap (0,2, 0,2)
-Note: includes the points, no out of bounds checking*/
+Input for a 2x2 building is (0,1, 0,1) but accesses heightmap (0,2, 0,2)*/
 bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY) const
 {
+	if (fromX < 0 || toX >= gridWidth || fromY < 0 || toY >= gridHeight) // assumes toX > fromX etc.
+		return false;
+
 	float height = terrain->heightmap[fromY][fromX];
 	for (int y = fromY; y <= toY + 1; ++y)
 	{
@@ -138,6 +140,11 @@ void Grid::SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value)
 	if (buildingMode)
 		terrain->reloadTerrain = true;
 }
+void Grid::SetHasRoad(int x, int y, bool value)
+{
+	gridUnits[y][x].hasRoad = value;
+}
+
 bool Grid::IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
 {
 	/* Check if the building is outside of the grid */
@@ -147,7 +154,7 @@ bool Grid::IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
 	/* Check if the grid is not occupied */
 	for (int i = fromX; i <= toX; ++i)
 		for (int j = fromY; j <= toY; ++j)
-			if (gridUnits[j][i].occupied)
+			if (gridUnits[j][i].occupied || HasRoad(i, j))
 				return false;
 
 	/* Check if the floor is flat */
@@ -158,6 +165,9 @@ bool Grid::IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
 }
 bool Grid::HasTree(int x, int y) const
 {
+	if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
+		return false;
+
 	return gridUnits[y][x].hasTree;
 }
 bool Grid::HasTree(int fromX, int toX, int fromY, int toY) const
@@ -198,6 +208,17 @@ bool Grid::HasRoad(int x, int y) const
 		return false;
 
 	return gridUnits[y][x].hasRoad;
+}
+/*
+Returns true if any of the 4 surrounding tiles is a road
+*/
+bool Grid::HasRoadAccess(int x, int y) const
+{
+	if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
+		return false;
+
+	return HasRoad(x - 1, y) || HasRoad(x + 1, y)
+		|| HasRoad(x, y - 1) || HasRoad(x, y + 1);
 }
 void Grid::DeleteGrass(int fromX, int toX, int fromY, int toY)
 {
