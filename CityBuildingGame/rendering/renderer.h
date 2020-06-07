@@ -193,7 +193,7 @@ public:
 private:
 	bool shadowPass = false;
 	unsigned int shadowDepthMapFBO;
-	long long reloadGPUDataCounter;
+	long long reloadGPUDataCounter = -1;
 
 	void renderTerrain(RenderBuffer* renderBuffer) const
 	{
