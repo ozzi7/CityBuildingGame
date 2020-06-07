@@ -105,6 +105,7 @@ void Game::gameLoop()
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 	std::chrono::high_resolution_clock::time_point next_game_tick(start + std::chrono::microseconds(SKIP_TICKS));
 
+	long long reloadGPUDataCounter = 0;
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
@@ -129,10 +130,11 @@ void Game::gameLoop()
 									   camera->GridTopRightVisible(),
 									   camera->GridBottomLeftVisible(),
 									   camera->GridBottomRightVisible());
-		grid->UpdateVisibleList(camera->GridTopLeftVisible(),
-								camera->GridTopRightVisible(),
-								camera->GridBottomLeftVisible(),
-		                        camera->GridBottomRightVisible());
+		if (grid->UpdateVisibleList(camera->GridTopLeftVisible(),
+			camera->GridTopRightVisible(),
+			camera->GridBottomLeftVisible(),
+			camera->GridBottomRightVisible()))
+			reloadGPUDataCounter++;
 
 		//*Handle all object moving, deleting, creating, no locks needed because no other thread is currently doing anything..*/
 		while (gameEventHandler->ProcessEvent());
@@ -177,6 +179,8 @@ void Game::gameLoop()
 		}
 		
 		grid->terrain->Accept(*producerBuffer); // TODO
+		(*producerBuffer).reloadGPUDataCounter = reloadGPUDataCounter;
+
 		renderBuffers->ExchangeProducerBuffer();
 
 		loopCount++;

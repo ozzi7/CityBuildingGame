@@ -29,7 +29,7 @@ void Grid::Init()
 	visibleUnits = std::vector<Unit*>(maximumVisibleUnits);
 }
 
-void Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
+bool Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
 {
 	/* Check if we need to recalculate visible grid */
 	if (currUpperLeftX != (int)upperLeft.x || currUpperLeftY != (int)upperLeft.y ||
@@ -68,10 +68,12 @@ void Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec
 					}
 				}
 				else
-					return;
+					return true;
 			}
 		}
+		return true;
 	}
+	return false;
 }
 /* Return height of any point on the grid
 Note: No out of bounds checking*/
@@ -236,7 +238,7 @@ void Grid::DeleteGrass(int fromX, int toX, int fromY, int toY)
 		}
 	}
 }
-// returns -1,-1 for not found TODO check
+// returns -1,-1 for not found
 std::pair<int, int> Grid::FindRoadAccess(int fromX, int toX, int fromY, int toY) const
 {
 	// top row

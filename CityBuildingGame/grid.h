@@ -39,7 +39,7 @@ public:
 	float GetHeight(float posX, float posY) const;
 	bool IsAreaFlat(int fromX, int toX, int fromY, int toY) const;
 	bool IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const;
-	void UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
+	bool UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	void SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value);
 	void SetHasRoad(int x, int y, bool value);
 	bool HasTree(int x, int y) const;

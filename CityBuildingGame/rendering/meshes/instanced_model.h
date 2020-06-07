@@ -25,6 +25,7 @@ public:
 	InstancedModel(const std::string& path);
 
 	void InstancedModel::Draw(Shader& shader, std::vector<glm::mat4>& models);
+	void InstancedModel::DrawOnly(Shader& shader, std::vector<glm::mat4>& models);
 
 private:
 	std::vector<InstancedMesh> meshes;

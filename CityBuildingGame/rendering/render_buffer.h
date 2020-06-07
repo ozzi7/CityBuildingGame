@@ -34,6 +34,9 @@ public:
 	void Visit(Worker* obj) override;
 	void ClearData();
 
+	// is counted up every time the gameloop decides that static data has to be reloaded, boolean flag isnt enough if the render loop skips frames
+	long long reloadGPUDataCounter = -1;
+
 	// dont forget to clear the vectors too!
 	std::vector<glm::mat4> pineModels;
 	std::vector<glm::mat4> euroBeechModels;

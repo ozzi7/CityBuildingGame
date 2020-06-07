@@ -41,7 +41,8 @@ public:
 
 	// Set this to force reload of terrain once (for example when going into building mode)
 	bool reloadTerrain = false;
-		
+	bool reloadGPUData = false; // if true then we need to copy new data to GPU memory in the next render loop
+
 private:
 	void LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	void ReloadGPUData();
@@ -72,7 +73,6 @@ private:
 	int currLowerRightY = 0;
 
 	std::mutex renderDataMutex;
-	bool reloadGPUData = false; // if true then we need to copy new data to GPU memory in the next render loop
 	int currRenderData = 1;
 	int renderDataVertexCount = 0;
 	std::vector<GLfloat>* renderData0 = new std::vector<GLfloat>(maximumVisibleUnits * 54); /* Gets sent to GPU */

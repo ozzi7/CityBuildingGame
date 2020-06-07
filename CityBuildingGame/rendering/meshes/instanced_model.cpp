@@ -24,3 +24,11 @@ void InstancedModel::Draw(Shader& shader, std::vector<glm::mat4>& models)
 		meshes[i].Draw((int)models.size());
 	}
 }
+void InstancedModel::DrawOnly(Shader& shader, std::vector<glm::mat4>& models)
+{
+	for (unsigned int i = 0; i < meshes.size(); i++)
+	{
+		meshes[i].BindOnly(shader);
+		meshes[i].Draw((int)models.size());
+	}
+}

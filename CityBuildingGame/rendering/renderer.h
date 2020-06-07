@@ -193,6 +193,7 @@ public:
 private:
 	bool shadowPass = false;
 	unsigned int shadowDepthMapFBO;
+	long long reloadGPUDataCounter;
 
 	void renderTerrain(RenderBuffer* renderBuffer) const
 	{
@@ -202,7 +203,7 @@ private:
 		}
 	}
 
-	void renderInstancedObjects(RenderBuffer* renderBuffer) const
+	void renderInstancedObjects(RenderBuffer* renderBuffer)
 	{
 		Shader* shader;
 		if (shadowPass)
@@ -211,16 +212,31 @@ private:
 			shader = instanced_mesh_shader;
 		shader->use();
 
-		instanced_model_pine->Draw(*shader, renderBuffer->pineModels);
-		instanced_model_oak->Draw(*shader, renderBuffer->oakModels);
-		instanced_model_euroBeech->Draw(*shader, renderBuffer->euroBeechModels);
-		instanced_model_euroBeech2->Draw(*shader, renderBuffer->euroBeech2Models);
-		instanced_model_toona->Draw(*shader, renderBuffer->toonaModels);
+		if (renderBuffer->reloadGPUDataCounter != reloadGPUDataCounter)
+		{
+			instanced_model_pine->Draw(*shader, renderBuffer->pineModels);
+			instanced_model_oak->Draw(*shader, renderBuffer->oakModels);
+			instanced_model_euroBeech->Draw(*shader, renderBuffer->euroBeechModels);
+			instanced_model_euroBeech2->Draw(*shader, renderBuffer->euroBeech2Models);
+			instanced_model_toona->Draw(*shader, renderBuffer->toonaModels);
+			instanced_model_grass->Draw(*shader, renderBuffer->grassModels);
+		}
+		else
+		{
+			// this data is only binded but not sent to gpu again, we only resend it when the visible units changed (scrolled)
+			instanced_model_pine->DrawOnly(*shader, renderBuffer->pineModels);
+			instanced_model_oak->DrawOnly(*shader, renderBuffer->oakModels);
+			instanced_model_euroBeech->DrawOnly(*shader, renderBuffer->euroBeechModels);
+			instanced_model_euroBeech2->DrawOnly(*shader, renderBuffer->euroBeech2Models);
+			instanced_model_toona->DrawOnly(*shader, renderBuffer->toonaModels);
+			instanced_model_grass->DrawOnly(*shader, renderBuffer->grassModels);
+		}
 		instanced_model_lumberjack_hut->Draw(*shader, renderBuffer->lumberjackHutModels);
 		instanced_model_dwelling->Draw(*shader, renderBuffer->dwellingModels_growth1);
 		instanced_model_building_outline->Draw(*shader, renderBuffer->buildingOutlineModels);
 		instanced_model_wood->Draw(*shader, renderBuffer->woodModels);
-		instanced_model_grass->Draw(*shader, renderBuffer->grassModels);
+
+		reloadGPUDataCounter = renderBuffer->reloadGPUDataCounter;
 	}
 
 	void renderBoneAnimated(RenderBuffer* renderBuffer) const

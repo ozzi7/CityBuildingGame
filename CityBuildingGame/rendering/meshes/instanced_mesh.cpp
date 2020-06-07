@@ -56,3 +56,12 @@ void InstancedMesh::Bind(Shader& shader, std::vector<glm::mat4>& models)
 	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * models.size(), models.data(), GL_STATIC_DRAW);
 }
+void InstancedMesh::BindOnly(Shader& shader) // dont copy the data to GPU again if it did not change
+{
+	Mesh::Bind(shader);
+
+	glBindVertexArray(VAO);
+
+	// bind per instance data
+	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+}

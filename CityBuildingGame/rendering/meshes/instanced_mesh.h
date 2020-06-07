@@ -8,6 +8,7 @@ public:
 
 	// Bind instanced
 	void Bind(Shader& shader, std::vector<glm::mat4>& models);
+	void BindOnly(Shader& shader);
 
 	// Render instanced
 	void Draw(int instances) const;
