@@ -120,7 +120,8 @@ void RenderBuffer::Visit(Dwelling* obj)
 		dwellingModels_growth1.push_back(obj->model);
 		break;
 	}
-	woodModels.insert(woodModels.end(), obj->woodModels.begin(), obj->woodModels.end());
+	//woodModels.insert(woodModels.end(), obj->woodModels.begin(), obj->woodModels.end());
+	woodPlankModels.insert(woodPlankModels.end(), obj->woodPlankModels.begin(), obj->woodPlankModels.end());
 }
 
 void RenderBuffer::Visit(Building* obj) {}
@@ -153,6 +154,7 @@ void RenderBuffer::ClearData()
 	grassModels.clear();
 
 	woodModels.clear();
+	woodPlankModels.clear();
 
 	workerAnimationSeconds.clear();
 	lumberjackAnimationSeconds.clear();
