@@ -20,7 +20,6 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler)
 	resources = new Resources();
 
 	renderBuffers = new TripleBuffer<RenderBuffer>();
-	//terrainRenderBuffer = new TripleBuffer<TerrainRenderBuffer>();
 
 	camera = new Camera(glm::vec3(50.0f + MAP_HEIGHT * 0.5f, -50.0f + MAP_WIDTH * 0.5f, 50.0f), window);
 
