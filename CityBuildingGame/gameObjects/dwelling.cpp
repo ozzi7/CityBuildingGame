@@ -23,7 +23,8 @@ void Dwelling::Evolve()
 
 void Dwelling::UpdateWoodModels()
 {
-	woodModels.clear();
+	//woodModels.clear();
+	woodPlankModels.clear();
 
 	glm::vec3 scale = glm::vec3(0.22f, 0.2f, 0.2f); //glm::vec3(0.012f, 0.006f, 0.012f);
 	const glm::vec3 rotationZ = glm::vec3(0.0f, 0.0f, 1.0f); //glm::vec3(0.0f, 0.0f, 1.0f);
@@ -39,7 +40,8 @@ void Dwelling::UpdateWoodModels()
 		model = rotate(model, glm::half_pi<float>(), rotationZ);
 		model = glm::scale(model, scale);
 
-		woodModels.push_back(model);
+		//woodModels.push_back(model);
+		woodPlankModels.push_back(model);
 	}
 }
 

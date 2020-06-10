@@ -28,6 +28,7 @@ public:
 	unsigned short evolutionStage = 0;
 	std::vector<glm::mat4> buildingOutlines;
 	std::vector<glm::mat4> woodModels;
+	std::vector<glm::mat4> woodPlankModels;
 
 	void CreateBuildingOutline();
 	virtual void Evolve() = 0;

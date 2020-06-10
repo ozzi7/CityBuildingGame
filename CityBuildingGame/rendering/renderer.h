@@ -41,7 +41,8 @@ public:
 	InstancedModel* instanced_model_dwelling;
 	InstancedModel* instanced_model_lumberjack_hut;
 	InstancedModel* instanced_model_building_outline;
-	InstancedModel* instanced_model_wood; 
+	InstancedModel* instanced_model_wood;
+	InstancedModel* instanced_model_wood_plank; 
 	InstancedModel* instanced_model_grass;
 
 	unsigned int ShadowDepthMap;
@@ -71,6 +72,7 @@ public:
 
 		/* resources */
 		instanced_model_wood = new InstancedModel(Path + "/../models/resources/wood/wood.dae");
+		instanced_model_wood_plank = new InstancedModel(Path + "/../models/resources/wood_plank/wood_plank.dae");
 
 		/* lumberjack init*/
 		mesh_lumby_walk_w_axe = new SkinnedMesh();
@@ -236,6 +238,7 @@ private:
 		instanced_model_dwelling->Draw(*shader, renderBuffer->dwellingModels_growth1);
 		instanced_model_building_outline->Draw(*shader, renderBuffer->buildingOutlineModels);
 		instanced_model_wood->Draw(*shader, renderBuffer->woodModels);
+		instanced_model_wood_plank->Draw(*shader, renderBuffer->woodPlankModels);
 
 		reloadGPUDataCounter = renderBuffer->reloadGPUDataCounter;
 	}

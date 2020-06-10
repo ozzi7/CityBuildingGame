@@ -54,6 +54,7 @@ public:
 	std::vector<glm::mat4> workerWoodModels;
 
 	std::vector<glm::mat4> woodModels;
+	std::vector<glm::mat4> woodPlankModels;
 
 	std::vector<float> workerAnimationSeconds;
 	std::vector<float> lumberjackAnimationSeconds;

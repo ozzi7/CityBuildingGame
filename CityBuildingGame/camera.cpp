@@ -284,11 +284,6 @@ void Camera::CalculateVisibleGrid()
 	bottomRightVisible.first++;
 	bottomRightVisible.second--;
 
-	int topDifference = (topLeftVisible.first - topLeftVisible.second) - (topRightVisible.first - topRightVisible.second);
-	int bottomDifference = (bottomLeftVisible.first - bottomLeftVisible.second) - (bottomRightVisible.first - bottomRightVisible.second);
-	int leftDifference = (topLeftVisible.first + topLeftVisible.second) - (bottomLeftVisible.first + bottomLeftVisible.second);
-	int rightDifference = (topRightVisible.first + topRightVisible.second) - (bottomRightVisible.first + bottomRightVisible.second);
-
 	TopLeftVisible = topLeftVisible;
 	TopRightVisible = topRightVisible;
 	BottomLeftVisible = bottomLeftVisible;
