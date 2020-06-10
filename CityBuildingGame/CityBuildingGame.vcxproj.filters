@@ -44,8 +44,8 @@
     <ClCompile Include="events\bring_resource_event.cpp" />
     <ClCompile Include="events\resource_arrived_event.cpp" />
     <ClCompile Include="events\worker_arrived_event.cpp" />
-    <ClCompile Include="terrain_render_buffer.cpp" />
     <ClCompile Include="rendering\render_buffer.cpp" />
+    <ClCompile Include="events\create_building_preview_event.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
@@ -110,6 +110,7 @@
     <ClInclude Include="events\resource_arrived_event.h" />
     <ClInclude Include="events\worker_arrived_event.h" />
     <ClInclude Include="rendering\render_buffer.h" />
+    <ClInclude Include="events\create_building_preview_event.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

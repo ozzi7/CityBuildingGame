@@ -76,8 +76,11 @@ public:
 	// Bottom right position on Grid that is visible by camera
 	glm::vec2 GridBottomRightVisible() const;
 
-	// Current cursor position on Grid
-	glm::vec3 CursorPositionOnGrid() const;
+	// Get calculated current cursor position on Grid
+	glm::vec3 Camera::GetCursorPositionOnGrid() const;
+
+	// Calculate current cursor position on Grid
+	void CalculateCursorPositionOnGrid();
 
 	// Calculates edges of visible grid, call this before getting grid visible coordinates
 	void CalculateVisibleGrid();
@@ -99,6 +102,7 @@ private:
 	glm::mat4 LightProjectionMatrix;
 	GLFWwindow* Window{};
 	std::pair<int, int> TopLeftVisible, TopRightVisible, BottomLeftVisible, BottomRightVisible;
+	glm::vec3 CursorPositionOnGrid;
 
 	// Gets exact game coordinate from a screen coordinate, can only be called from openGL thread
 	glm::vec3 PixelTo3DCoordinate(const glm::vec2 pixelCoordinates) const;

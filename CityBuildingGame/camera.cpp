@@ -70,8 +70,11 @@ glm::vec2 Camera::GridBottomRightVisible() const
 {
 	return glm::vec2(BottomRightVisible.first, BottomRightVisible.second);
 }
-
-glm::vec3 Camera::CursorPositionOnGrid() const
+glm::vec3 Camera::GetCursorPositionOnGrid() const
+{
+	return CursorPositionOnGrid;
+}
+void Camera::CalculateCursorPositionOnGrid()
 {
 	double windowX, windowY;
 	glm::vec2 window;
@@ -80,7 +83,7 @@ glm::vec3 Camera::CursorPositionOnGrid() const
 	window.x = (float)windowX;
 	window.y = (float)windowY;
 
-	return PixelTo3DCoordinate(window);
+	CursorPositionOnGrid = PixelTo3DCoordinate(window);
 }
 
 void Camera::Scroll(CameraMovement direction, float yOffset)

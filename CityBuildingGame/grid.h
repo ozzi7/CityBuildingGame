@@ -68,6 +68,8 @@ public:
 	int gridHeight;
 	int gridWidth;
 
+	std::list<GameObject*> previewObjects;
+
 	bool buildingMode = false;
 
 	Terrain* terrain;

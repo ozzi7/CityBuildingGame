@@ -64,7 +64,7 @@ void GameEventHandler::Visit(MoveEvent* aMoveEvent)
 
 void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 {
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, "[EVENT] Create building"));
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::NOTSET, "[EVENT] Create building"));
 
 	std::pair<int, int> closestToClick = std::make_pair(round(aCreateBuildingEvent->posX),
 	                                                      round(aCreateBuildingEvent->posY));
@@ -762,5 +762,164 @@ void GameEventHandler::Visit(ResourceArrivedEvent* aResourceArrivedEvent)
 			resources->AddLumberjack(lumby);
 			gameEventHandler->AddEvent(new GatherResourceEvent(Resource::Wood, lumby));
 		}
+	}
+}
+void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewEvent)
+{
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "[EVENT] Create building preview"));
+
+	grid->previewObjects.clear();
+
+	std::pair<int, int> closestToClick = std::make_pair(round(aCreateBuildingPreviewEvent->posX),
+		round(aCreateBuildingPreviewEvent->posY));
+	std::pair<int, int> buildingSize;
+
+	glm::vec3 modelCenter = glm::vec3(-1.0f, -1.0f, -1.0f);
+	switch (aCreateBuildingPreviewEvent->buildingType)
+	{
+		case BuildingType::DwellingID:
+		{
+			buildingSize = std::make_pair(3, 3);
+			break;
+		}
+		case BuildingType::LumberjackHutID:
+		{
+			buildingSize = std::make_pair(3, 3);
+			break;
+		}
+		case BuildingType::PathID:
+		{
+			buildingSize = std::make_pair(1, 1);
+			break;
+		}
+	}
+
+	/* Calculate correct occupied units and save in fromX, toX, fromY, toY inclusive */
+	/* Set correct 3d model center point */
+	int fromX, toX, fromY, toY = 0;
+
+	if (buildingSize.first % 2 == 0)
+	{
+		fromX = closestToClick.first - buildingSize.first / 2;
+		toX = closestToClick.first + buildingSize.first / 2 - 1;
+		modelCenter.x = closestToClick.first;
+	}
+	else
+	{
+		fromX = int(aCreateBuildingPreviewEvent->posX) - buildingSize.first / 2;
+		toX = int(aCreateBuildingPreviewEvent->posX) + buildingSize.first / 2;
+		modelCenter.x = int(aCreateBuildingPreviewEvent->posX) + 0.5f;
+	}
+
+	if (buildingSize.second % 2 == 0)
+	{
+		fromY = closestToClick.second - buildingSize.second / 2;
+		toY = closestToClick.second + buildingSize.second / 2 - 1;
+		modelCenter.y = closestToClick.second;
+	}
+	else
+	{
+		fromY = int(aCreateBuildingPreviewEvent->posY) - buildingSize.second / 2;
+		toY = int(aCreateBuildingPreviewEvent->posY) + buildingSize.second / 2;
+		modelCenter.y = int(aCreateBuildingPreviewEvent->posY) + 0.5f;
+	}
+
+	/* calculate 3d model position height*/
+	modelCenter.z = grid->GetHeight(modelCenter.x, modelCenter.y);
+
+	/* Create the building object etc.. */
+	switch (aCreateBuildingPreviewEvent->buildingType)
+	{
+	case BuildingType::DwellingID:
+	{
+		/*if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
+			return; // TODO: show red building ?!
+			*/
+
+		//std::pair<int, int> entrance = grid->FindRoadAccess(fromX, toX, fromY, toY);
+
+		//if (entrance.first == -1)
+		//{
+		//	// TODO: show red building ?!
+		//	return;
+		//}
+
+		/* find path*/
+		//PathfindingObject* path = new PathfindingObject(grid, std::pair<int, int>(entrance.first, entrance.second));
+		//path->FindClosestEdge();
+		//std::list<std::pair<int, int>> pathCoordinatesList = path->GetPath();
+		//pathCoordinatesList.reverse();
+		//std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
+		//												 std::make_move_iterator(std::end(pathCoordinatesList)) };
+		//delete path;
+
+		///* if no path found do nothing..*/
+		//if (pathCoordinates.empty())
+		//{
+		//	// TODO: show red building ?!
+		//	return;
+		//}
+
+		/* create building  */
+		Dwelling* dwelling = new Dwelling(modelCenter, // translate
+			glm::vec3(0.014f, 0.008f, 0.014f), // rescale
+			glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f),  // rotate
+			modelCenter.z);
+		dwelling->fromX = fromX;
+		dwelling->fromY = fromY;
+		dwelling->toX = toX;
+		dwelling->toY = toY;
+		dwelling->sizeX = std::get<0>(buildingSize);
+		dwelling->sizeY = std::get<1>(buildingSize);
+		dwelling->Evolve();
+
+		grid->previewObjects.push_back(dwelling);
+
+		break;
+	}
+	case BuildingType::LumberjackHutID:
+	{
+		/*if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
+			return;
+
+		std::pair<int, int> entrance = grid->FindRoadAccess(fromX, toX, fromY, toY);
+
+		if (entrance.first == -1)
+		{
+			loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::WARNING, "Cannot find road to building"));
+			return;
+		}*/
+
+		modelCenter.x = modelCenter.x - 0.45f;
+		LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
+			glm::vec3(0.012f, 0.006f, 0.012f), // rescale
+			glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f),  // rotate
+			modelCenter.z);
+
+		lumberjackHut->fromX = fromX;
+		lumberjackHut->fromY = fromY;
+		lumberjackHut->toX = toX;
+		lumberjackHut->toY = toY;
+		lumberjackHut->sizeX = std::get<0>(buildingSize);
+		lumberjackHut->sizeY = std::get<1>(buildingSize);
+
+		lumberjackHut->Evolve();
+
+		grid->previewObjects.push_back(lumberjackHut);
+
+		break;
+	}
+	case BuildingType::PathID:
+	{
+		// only allow building roads connected to other roads or on the border of the map
+		//if ((grid->HasRoadAccess(fromX, fromY) ||
+		//	fromX == 0 || fromX == grid->gridWidth - 1 ||
+		//	fromY == 0 || fromY == grid->gridHeight - 1) && !grid->IsOccupied(fromX, fromY))
+		//{
+			/*grid->SetHasRoad(modelCenter.x, modelCenter.y, true);
+			grid->terrain->reloadTerrain = true;*/
+		//}
+		break;
+	}
 	}
 }

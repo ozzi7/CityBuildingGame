@@ -184,6 +184,7 @@ public:
 
 	void Render(RenderBuffer* renderBuffer)
 	{
+		camera.CalculateCursorPositionOnGrid(); // TODO: where does it belong
 		renderTerrain(renderBuffer);
 
 		renderInstancedObjects(renderBuffer);

@@ -16,7 +16,8 @@ public:
 	Camera* Camera;
 	Grid* Grid;
 
+	int buildingSelection = -1; // -1 = not in building mode
+
 private:
 	bool windowFocused = true;
-	int buildingSelection = -1; // -1 = not in building mode
 };

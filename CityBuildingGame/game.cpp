@@ -125,6 +125,20 @@ void Game::gameLoop()
 			(*it)->GameStep();
 		}
 
+		// TODO: temp code, show building previews
+		if (inputHandler->buildingSelection == -1)
+			grid->previewObjects.clear();
+
+		if (inputHandler->buildingSelection == 1)
+			gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::DwellingID, camera->GetCursorPositionOnGrid().x,
+				camera->GetCursorPositionOnGrid().y));
+		if (inputHandler->buildingSelection == 2)
+			gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::LumberjackHutID, camera->GetCursorPositionOnGrid().x,
+				camera->GetCursorPositionOnGrid().y));
+		if (inputHandler->buildingSelection == 3)
+			gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::PathID, camera->GetCursorPositionOnGrid().x,
+				camera->GetCursorPositionOnGrid().y));
+
 		grid->terrain->SetRenderWindow(camera->GridTopLeftVisible(),
 									   camera->GridTopRightVisible(),
 									   camera->GridBottomLeftVisible(),
@@ -139,8 +153,10 @@ void Game::gameLoop()
 		while (gameEventHandler->ProcessEvent());
 		
 		// TODO: prevent slowdowns
-		if(loopCount % 100 == 0)
+		if (loopCount % 100 == 0)
+		{
 			gameEventHandler->AssignWorkToIdleWorkers();
+		}
 
 		/* Extract data for the renderer*/
 		RenderBuffer* producerBuffer = renderBuffers->GetProducerBuffer();
@@ -176,8 +192,16 @@ void Game::gameLoop()
 				(*it)->Accept(*producerBuffer);
 			}
 		}
-		
+
+		// add the preview models to be rendered
+		for (std::list<GameObject*>::iterator it = grid->previewObjects.begin();
+			it != grid->previewObjects.end(); ++it)
+		{
+			(*it)->Accept(*producerBuffer);
+		}
+
 		grid->terrain->Accept(*producerBuffer); // TODO
+
 		(*producerBuffer).reloadGPUDataCounter = reloadGPUDataCounter;
 
 		renderBuffers->ExchangeProducerBuffer();

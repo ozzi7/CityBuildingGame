@@ -9,6 +9,7 @@
 #include <worker_arrived_event.h>
 #include <bring_resource_event.h>
 #include <resource_arrived_event.h>
+#include <create_building_preview_event.h>
 #include <tuple>
 
 class Grid;
@@ -31,7 +32,8 @@ public:
 	void Visit(ReturnHomeEvent* aReturnHomeEvent) override;
 	void Visit(BringResourceEvent* aBringResourceEvent) override;
 	void Visit(WorkerArrivedEvent* aWorkerArrivedEvent) override;
-	void Visit(ResourceArrivedEvent* aResourceArrivedEvent) override;
+	void Visit(ResourceArrivedEvent* aCreateBuildingPreviewEvent) override;
+	void Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewEvent) override;
 
 	Grid* grid;
 

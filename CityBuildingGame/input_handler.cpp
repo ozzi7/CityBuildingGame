@@ -100,7 +100,7 @@ void InputHandler::Mouseclick(int button, int action)
 			return;
 
 		// Test Code
-		const glm::vec3 cursorPosition = Camera->CursorPositionOnGrid();
+		const glm::vec3 cursorPosition = Camera->GetCursorPositionOnGrid();
 		if (cursorPosition.x >= 0 && cursorPosition.y >= 0 && 
 			Grid->gridHeight > (int)cursorPosition.y && 
 			Grid->gridWidth > (int)cursorPosition.x)

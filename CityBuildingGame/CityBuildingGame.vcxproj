@@ -15,6 +15,7 @@
     <ClInclude Include="events\bring_resource_event.h" />
     <ClInclude Include="events\concurrentqueue.h" />
     <ClInclude Include="events\create_building_event.h" />
+    <ClInclude Include="events\create_building_preview_event.h" />
     <ClInclude Include="events\delete_event.h" />
     <ClInclude Include="events\game_event_handler.h" />
     <ClInclude Include="events\game_event.h" />
@@ -78,6 +79,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="events\bring_resource_event.cpp" />
     <ClCompile Include="events\create_building_event.cpp" />
+    <ClCompile Include="events\create_building_preview_event.cpp" />
     <ClCompile Include="events\delete_event.cpp" />
     <ClCompile Include="events\game_event_handler.cpp" />
     <ClCompile Include="events\logging_event_handler.cpp" />
