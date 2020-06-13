@@ -146,7 +146,7 @@ void Grid::SetHasRoad(int x, int y, bool value)
 {
 	gridUnits[y][x].hasRoad = value;
 }
-void Grid::SetHasRoad(std::vector<std::pair<int,int>>& road, bool value)
+void Grid::SetHasRoad(std::vector<std::pair<int,int>> road, bool value)
 {
 	for (std::pair<int, int> roadPiece : road)
 	{
@@ -163,9 +163,9 @@ bool Grid::IsValidPosition(glm::vec3 position) const
 		gridHeight > (int)position.y &&
 		gridWidth > (int)position.x;
 }
-void Grid::SetHasPreviewRoad(int x, int y, bool value)
+void Grid::SetHasRoadPreview(int x, int y, bool value)
 {
-	gridUnits[y][x].hasPreviewRoad = value;
+	gridUnits[y][x].hasRoadPreview = value;
 }
 
 bool Grid::IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
@@ -232,18 +232,18 @@ bool Grid::HasRoad(int x, int y) const
 
 	return gridUnits[y][x].hasRoad;
 }
-bool Grid::HasPreviewRoad(int x, int y) const
+bool Grid::HasRoadPreview(int x, int y) const
 {
 	if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
 		return false;
 
-	return gridUnits[y][x].hasPreviewRoad;
+	return gridUnits[y][x].hasRoadPreview;
 }
-void Grid::ClearPreviewRoad()
+void Grid::ClearRoadPreview()
 {
 	for (std::pair<int, int> entry : roadCoordinates)
 	{
-		SetHasPreviewRoad(entry.first, entry.second, false);
+		SetHasRoadPreview(entry.first, entry.second, false);
 	}
 }
 /*
@@ -269,6 +269,21 @@ bool Grid::HasRoadAccess(std::vector<std::pair<int, int>> road) const
 	}
 	return false;
 }
+/*
+Returns true if any part of the road is on the border of the map
+*/
+bool Grid::IsAtEdgeOfMap(std::vector<std::pair<int, int>> road) const
+{
+	for (std::pair<int, int> roadPiece : road)
+	{
+		if ((roadPiece.first == 0 || roadPiece.first == gridWidth - 1 ||
+			roadPiece.second == 0 || roadPiece.second == gridHeight - 1) 
+			&& !IsOccupied(roadPiece.first, roadPiece.second))
+			return true;
+	}
+	return false;
+}
+
 void Grid::DeleteGrass(int fromX, int toX, int fromY, int toY)
 {
 	// TODO: deletes ALL objects not just grass
@@ -283,6 +298,13 @@ void Grid::DeleteGrass(int fromX, int toX, int fromY, int toY)
 			}
 			gridUnits[y][x].objects.clear();
 		}
+	}
+}
+void Grid::DeleteGrass(std::vector<std::pair<int, int>> road)
+{
+	for (std::pair<int, int> roadPiece : road)
+	{
+		DeleteGrass(roadPiece.first, roadPiece.second, roadPiece.first, roadPiece.second);
 	}
 }
 // returns -1,-1 for not found

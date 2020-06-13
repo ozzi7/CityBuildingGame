@@ -258,17 +258,15 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 																std::make_move_iterator(std::end(pathCoordinatesList)) };
 			delete pathFinding;
 
-			if ((grid->HasRoadAccess(pathCoordinates) ||
-				fromX == 0 || fromX == grid->gridWidth - 1 ||
-				fromY == 0 || fromY == grid->gridHeight - 1) && !grid->IsOccupied(fromX, fromY))
-			{
-				grid->ClearPreviewRoad();
-				grid->roadCoordinates.clear();
+			grid->ClearRoadPreview();
+			grid->roadCoordinates.clear();
 
+			if (grid->HasRoadAccess(pathCoordinates) || grid->IsAtEdgeOfMap(pathCoordinates))
+			{
 				grid->SetHasRoad(pathCoordinates, true);
-				grid->terrain->reloadTerrain = true;
-				grid->DeleteGrass(fromX, toX, fromY, toY);
+				grid->DeleteGrass(pathCoordinates);
 			}
+			grid->terrain->reloadTerrain = true;
 			break;
 		}
 	}
@@ -948,13 +946,15 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 														  std::make_move_iterator(std::end(pathCoordinatesList)) };
 
 		delete pathFinding;
-		grid->ClearPreviewRoad();
-		grid->roadCoordinates = std::vector<std::pair<int,int>>(pathCoordinates.begin(), pathCoordinates.end());
+		grid->ClearRoadPreview();
+
 		if (!pathCoordinates.empty())
 		{
+			grid->roadCoordinates = std::vector<std::pair<int, int>>(pathCoordinates.begin(), pathCoordinates.end());
+
 			for (std::pair<int, int> entry : pathCoordinates)
 			{
-				grid->SetHasPreviewRoad(entry.first, entry.second, true);
+				grid->SetHasRoadPreview(entry.first, entry.second, true);
 			}
 		}
 		break;

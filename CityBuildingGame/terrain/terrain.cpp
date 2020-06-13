@@ -125,11 +125,11 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 
 					if (grid->buildingMode)
 					{
-						if (!grid->IsValidBuildingPosition(j, i, j, i) && !grid->HasRoad(j, i) && !grid->HasPreviewRoad(j, i))
+						if (!grid->IsValidBuildingPosition(j, i, j, i) && !grid->HasRoad(j, i) && !grid->HasRoadPreview(j, i))
 						{
 							texture_index = (float)Texture::RedGrass;
 						}
-						else if(grid->HasRoad(j, i) || grid->HasPreviewRoad(j, i))
+						else if(grid->HasRoad(j, i) || grid->HasRoadPreview(j, i))
 						{
 							texture_index = (float)Texture::Road;
 						}
