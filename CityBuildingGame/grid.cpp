@@ -153,6 +153,16 @@ void Grid::SetHasRoad(std::vector<std::pair<int,int>>& road, bool value)
 		SetHasRoad(roadPiece.first, roadPiece.second, value);
 	}
 }
+/// <summary>
+/// Checks if the x/y coordinates of a vector are inside the grid (after casting to int)
+/// </summary>
+/// <param name="position">a vector with x/y/z coordinates as floats or int</param>
+bool Grid::IsValidPosition(glm::vec3 position) const
+{
+	return position.x >= 0 && position.y >= 0 &&
+		gridHeight > (int)position.y &&
+		gridWidth > (int)position.x;
+}
 void Grid::SetHasPreviewRoad(int x, int y, bool value)
 {
 	gridUnits[y][x].hasPreviewRoad = value;
@@ -246,6 +256,18 @@ bool Grid::HasRoadAccess(int x, int y) const
 
 	return HasRoad(x - 1, y) || HasRoad(x + 1, y)
 		|| HasRoad(x, y - 1) || HasRoad(x, y + 1);
+}
+/*
+Returns true if any of the 4 surrounding tiles is a road anywhere along the road
+*/
+bool Grid::HasRoadAccess(std::vector<std::pair<int, int>> road) const
+{
+	for (std::pair<int,int> roadPiece : road)
+	{
+		if (HasRoadAccess(roadPiece.first, roadPiece.second))
+			return true;
+	}
+	return false;
 }
 void Grid::DeleteGrass(int fromX, int toX, int fromY, int toY)
 {

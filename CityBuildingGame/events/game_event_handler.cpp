@@ -249,18 +249,19 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		case BuildingType::PathID:
 		{
 			// only allow building roads connected to other roads or on the border of the map
-			if ((grid->HasRoadAccess(fromX, fromY) ||
+
+			Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(closestToClick.first, closestToClick.second),
+				std::pair<int, int>(closestToClickEnd.first, closestToClickEnd.second));
+			pathFinding->CalculatePath();
+			std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
+			std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
+																std::make_move_iterator(std::end(pathCoordinatesList)) };
+			delete pathFinding;
+
+			if ((grid->HasRoadAccess(pathCoordinates) ||
 				fromX == 0 || fromX == grid->gridWidth - 1 ||
 				fromY == 0 || fromY == grid->gridHeight - 1) && !grid->IsOccupied(fromX, fromY))
 			{
-				Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(closestToClick.first, closestToClick.second),
-					std::pair<int, int>(closestToClickEnd.first, closestToClickEnd.second));
-				pathFinding->CalculatePath();
-				std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
-				std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
-																  std::make_move_iterator(std::end(pathCoordinatesList)) };
-
-				delete pathFinding;
 				grid->ClearPreviewRoad();
 				grid->roadCoordinates.clear();
 
@@ -939,14 +940,6 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 	}
 	case BuildingType::PathID:
 	{
-		// only allow building roads connected to other roads or on the border of the map
-		//if ((grid->HasRoadAccess(fromX, fromY) ||
-		//	fromX == 0 || fromX == grid->gridWidth - 1 ||
-		//	fromY == 0 || fromY == grid->gridHeight - 1) && !grid->IsOccupied(fromX, fromY))
-		//{
-			/*grid->SetHasRoad(modelCenter.x, modelCenter.y, true);
-			grid->terrain->reloadTerrain = true;*/
-		//}
 		Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(closestToClick.first, closestToClick.second),
 			std::pair<int, int>(closestToClickEnd.first, closestToClickEnd.second));
 		pathFinding->CalculatePath();

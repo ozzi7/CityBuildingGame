@@ -102,9 +102,7 @@ void InputHandler::Mouseclick(int button, int action)
 		// Test Code
 		const glm::vec3 cursorPosition = Camera->GetCursorPositionOnGrid();
 
-		if (cursorPosition.x >= 0 && cursorPosition.y >= 0 && 
-			Grid->gridHeight > (int)cursorPosition.y && 
-			Grid->gridWidth > (int)cursorPosition.x)
+		if (Grid->IsValidPosition(cursorPosition))
 		{
 			if (button == GLFW_MOUSE_BUTTON_LEFT)
 			{
@@ -149,9 +147,7 @@ void InputHandler::CreateBuildingPreviews()
 {
 	const glm::vec3 cursorPosition = Camera->GetCursorPositionOnGrid();
 
-	if (cursorPosition.x >= 0 && cursorPosition.y >= 0 &&
-		Grid->gridHeight > (int)cursorPosition.y &&
-		Grid->gridWidth > (int)cursorPosition.x)
+	if (Grid->IsValidPosition(cursorPosition))
 	{
 		// TODO: temp code, show building previews
 		if (buildingSelection == -1)
