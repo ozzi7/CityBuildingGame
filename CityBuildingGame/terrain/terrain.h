@@ -77,4 +77,6 @@ private:
 	int renderDataVertexCount = 0;
 	std::vector<GLfloat>* renderData0 = new std::vector<GLfloat>(maximumVisibleUnits * 54); /* Gets sent to GPU */
 	std::vector<GLfloat>* renderData1 = new std::vector<GLfloat>(maximumVisibleUnits * 54); /* .. */
+
+	enum class Texture { Grass, RedGrass, Road};
 };

@@ -109,6 +109,7 @@ void Game::gameLoop()
 	{
 		glfwPollEvents();
 		inputHandler->MouseScroll();
+		inputHandler->CreateBuildingPreviews();
 
 		lightingCalculation(loopCount);
 		
@@ -125,19 +126,6 @@ void Game::gameLoop()
 			(*it)->GameStep();
 		}
 
-		// TODO: temp code, show building previews
-		if (inputHandler->buildingSelection == -1)
-			grid->previewObjects.clear();
-
-		if (inputHandler->buildingSelection == 1)
-			gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::DwellingID, camera->GetCursorPositionOnGrid().x,
-				camera->GetCursorPositionOnGrid().y));
-		if (inputHandler->buildingSelection == 2)
-			gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::LumberjackHutID, camera->GetCursorPositionOnGrid().x,
-				camera->GetCursorPositionOnGrid().y));
-		if (inputHandler->buildingSelection == 3)
-			gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::PathID, camera->GetCursorPositionOnGrid().x,
-				camera->GetCursorPositionOnGrid().y));
 
 		grid->terrain->SetRenderWindow(camera->GridTopLeftVisible(),
 									   camera->GridTopRightVisible(),

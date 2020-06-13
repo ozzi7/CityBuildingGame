@@ -128,7 +128,6 @@ public:
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glViewport(0, 0, ScreenWidth, ScreenHeight);
 	}
-
 	void SetMatrices(glm::mat4 aProjection, glm::mat4 aView, glm::mat4 aLightSpaceMatrix, unsigned int shadowMapID) const
 	{
 		terrain_shader->use();
@@ -162,7 +161,6 @@ public:
 		instanced_mesh_shader->setVec3("light.direction", normalize(-camera.GetDirectionalLight().Direction));
 		instanced_mesh_shader->setVec2("texelSizeShadowMap", 1.0f / (float)SHADOW_WIDTH, 1.0f /(float)SHADOW_HEIGHT);
 	}
-
 	void SetShadowMatrices(glm::mat4 aLightSpaceMatrix) const
 	{
 		shadow_shader->use();

@@ -64,10 +64,19 @@ void GameEventHandler::Visit(MoveEvent* aMoveEvent)
 
 void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 {
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::NOTSET, "[EVENT] Create building"));
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "[EVENT] Create building"));
 
 	std::pair<int, int> closestToClick = std::make_pair(round(aCreateBuildingEvent->posX),
 	                                                      round(aCreateBuildingEvent->posY));
+
+	closestToClick.first = max(0, std::min(grid->gridWidth - 1, closestToClick.first));
+	closestToClick.second = max(0, std::min(grid->gridHeight - 1, closestToClick.second));
+
+	std::pair<int, int> closestToClickEnd = std::make_pair(round(aCreateBuildingEvent->posXEnd),
+		round(aCreateBuildingEvent->posYEnd));
+	closestToClickEnd.first = max(0, std::min(grid->gridWidth - 1, closestToClickEnd.first));
+	closestToClickEnd.second = max(0, std::min(grid->gridHeight - 1, closestToClickEnd.second));
+
 	std::pair<int, int> buildingSize;
 
 	glm::vec3 modelCenter = glm::vec3(-1.0f, -1.0f, -1.0f);
@@ -244,7 +253,18 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 				fromX == 0 || fromX == grid->gridWidth - 1 ||
 				fromY == 0 || fromY == grid->gridHeight - 1) && !grid->IsOccupied(fromX, fromY))
 			{
-				grid->SetHasRoad(modelCenter.x,modelCenter.y, true);
+				Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(closestToClick.first, closestToClick.second),
+					std::pair<int, int>(closestToClickEnd.first, closestToClickEnd.second));
+				pathFinding->CalculatePath();
+				std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
+				std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
+																  std::make_move_iterator(std::end(pathCoordinatesList)) };
+
+				delete pathFinding;
+				grid->ClearPreviewRoad();
+				grid->roadCoordinates.clear();
+
+				grid->SetHasRoad(pathCoordinates, true);
 				grid->terrain->reloadTerrain = true;
 				grid->DeleteGrass(fromX, toX, fromY, toY);
 			}
@@ -766,12 +786,20 @@ void GameEventHandler::Visit(ResourceArrivedEvent* aResourceArrivedEvent)
 }
 void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewEvent)
 {
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "[EVENT] Create building preview"));
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::NOTSET, "[EVENT] Create building preview"));
 
 	grid->previewObjects.clear();
 
 	std::pair<int, int> closestToClick = std::make_pair(round(aCreateBuildingPreviewEvent->posX),
 		round(aCreateBuildingPreviewEvent->posY));
+	closestToClick.first = max(0, std::min(grid->gridWidth-1, closestToClick.first));
+	closestToClick.second = max(0, std::min(grid->gridHeight-1, closestToClick.second));
+
+	std::pair<int, int> closestToClickEnd = std::make_pair(round(aCreateBuildingPreviewEvent->posXEnd),
+		round(aCreateBuildingPreviewEvent->posYEnd));
+	closestToClickEnd.first = max(0, std::min(grid->gridWidth-1, closestToClickEnd.first));
+	closestToClickEnd.second = max(0, std::min(grid->gridHeight-1, closestToClickEnd.second));
+
 	std::pair<int, int> buildingSize;
 
 	glm::vec3 modelCenter = glm::vec3(-1.0f, -1.0f, -1.0f);
@@ -919,7 +947,25 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 			/*grid->SetHasRoad(modelCenter.x, modelCenter.y, true);
 			grid->terrain->reloadTerrain = true;*/
 		//}
+		Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(closestToClick.first, closestToClick.second),
+			std::pair<int, int>(closestToClickEnd.first, closestToClickEnd.second));
+		pathFinding->CalculatePath();
+		std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
+		std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
+														  std::make_move_iterator(std::end(pathCoordinatesList)) };
+
+		delete pathFinding;
+		grid->ClearPreviewRoad();
+		grid->roadCoordinates = std::vector<std::pair<int,int>>(pathCoordinates.begin(), pathCoordinates.end());
+		if (!pathCoordinates.empty())
+		{
+			for (std::pair<int, int> entry : pathCoordinates)
+			{
+				grid->SetHasPreviewRoad(entry.first, entry.second, true);
+			}
+		}
 		break;
 	}
 	}
+	grid->terrain->reloadTerrain = true;
 }

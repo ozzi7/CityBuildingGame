@@ -101,6 +101,7 @@ void InputHandler::Mouseclick(int button, int action)
 
 		// Test Code
 		const glm::vec3 cursorPosition = Camera->GetCursorPositionOnGrid();
+
 		if (cursorPosition.x >= 0 && cursorPosition.y >= 0 && 
 			Grid->gridHeight > (int)cursorPosition.y && 
 			Grid->gridWidth > (int)cursorPosition.x)
@@ -118,7 +119,17 @@ void InputHandler::Mouseclick(int button, int action)
 						break;
 
 					case 3:
-						gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::PathID, cursorPosition.x, cursorPosition.y));
+						if (firstKeyPressed)
+						{
+							firstKeyPressed = false;
+							gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::PathID, firstKeyPressPosition.x,
+								firstKeyPressPosition.y, cursorPosition.x, cursorPosition.y));
+						}
+						else
+						{
+							firstKeyPressed = true;
+							firstKeyPressPosition = cursorPosition;
+						}
 						break;
 					default:
 						return;
@@ -134,7 +145,30 @@ void InputHandler::Mouseclick(int button, int action)
 		}
 	}
 }
+void InputHandler::CreateBuildingPreviews()
+{
+	const glm::vec3 cursorPosition = Camera->GetCursorPositionOnGrid();
 
+	if (cursorPosition.x >= 0 && cursorPosition.y >= 0 &&
+		Grid->gridHeight > (int)cursorPosition.y &&
+		Grid->gridWidth > (int)cursorPosition.x)
+	{
+		// TODO: temp code, show building previews
+		if (buildingSelection == -1)
+			Grid->previewObjects.clear();
+
+		if (buildingSelection == 1)
+			gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::DwellingID, cursorPosition.x,
+				cursorPosition.y));
+		if (buildingSelection == 2)
+			gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::LumberjackHutID, cursorPosition.x,
+				cursorPosition.y));
+		if (buildingSelection == 3)
+			if (firstKeyPressed)
+				gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::PathID, firstKeyPressPosition.x, 
+					firstKeyPressPosition.y, cursorPosition.x, cursorPosition.y));
+	}
+}
 void InputHandler::Mousewheel(float yOffset) const
 {
 	if (windowFocused)

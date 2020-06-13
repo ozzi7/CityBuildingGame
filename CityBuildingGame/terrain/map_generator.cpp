@@ -5,14 +5,12 @@ MapGenerator::MapGenerator(Grid* aGrid)
 {
 	grid = aGrid;
 }
-
 void MapGenerator::GenerateMap()
 {
 	generateTerrain();
 	generateTrees();
 	generateGrass();
 }
-
 void MapGenerator::generateTerrain() const
 {
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
@@ -288,7 +286,7 @@ float MapGenerator::getHeightAtPercentage(std::vector<std::vector<float>>& pHeig
 		for (int j = 0; j < maxNofSamples; j++)
 		{
 			auto random_integer = uni(rng);
-			zValues.push_back(pHeightmap[random_integer% pHeightmap.size()][random_integer / pHeightmap[0].size()]);
+			zValues.push_back(pHeightmap[random_integer / pHeightmap[0].size()][random_integer % pHeightmap[0].size()]);
 		}
 	}
 	else 

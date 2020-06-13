@@ -146,6 +146,17 @@ void Grid::SetHasRoad(int x, int y, bool value)
 {
 	gridUnits[y][x].hasRoad = value;
 }
+void Grid::SetHasRoad(std::vector<std::pair<int,int>>& road, bool value)
+{
+	for (std::pair<int, int> roadPiece : road)
+	{
+		SetHasRoad(roadPiece.first, roadPiece.second, value);
+	}
+}
+void Grid::SetHasPreviewRoad(int x, int y, bool value)
+{
+	gridUnits[y][x].hasPreviewRoad = value;
+}
 
 bool Grid::IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
 {
@@ -210,6 +221,20 @@ bool Grid::HasRoad(int x, int y) const
 		return false;
 
 	return gridUnits[y][x].hasRoad;
+}
+bool Grid::HasPreviewRoad(int x, int y) const
+{
+	if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
+		return false;
+
+	return gridUnits[y][x].hasPreviewRoad;
+}
+void Grid::ClearPreviewRoad()
+{
+	for (std::pair<int, int> entry : roadCoordinates)
+	{
+		SetHasPreviewRoad(entry.first, entry.second, false);
+	}
 }
 /*
 Returns true if any of the 4 surrounding tiles is a road

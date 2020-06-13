@@ -21,6 +21,7 @@ public:
 	bool occupied = false;
 	bool hasTree = false;
 	bool hasRoad = false;
+	bool hasPreviewRoad = false;
 	float averageHeight = 0;
 	std::list<GameObject*> objects;
 	std::list<BoneAnimated*> movingObjects; // TODO doesnt have to coincide with bone animated.. hmm
@@ -42,6 +43,9 @@ public:
 	bool UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 	void SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value);
 	void SetHasRoad(int x, int y, bool value);
+	void SetHasRoad(std::vector<std::pair<int, int>>& road, bool value);
+	void SetHasPreviewRoad(int x, int y, bool value);
+	void ClearPreviewRoad();
 	bool HasTree(int x, int y) const;
 	bool HasTree(int fromX, int toX, int fromY, int toY) const;
 	bool IsOccupied(int x, int y) const;
@@ -50,6 +54,7 @@ public:
 	bool HasBuilding(int x, int y) const;
 	bool HasBuilding(int fromX, int toX, int fromY, int toY) const;
 	bool HasRoad(int x, int y) const;
+	bool HasPreviewRoad(int x, int y) const;
 	bool HasRoadAccess(int x, int y) const;
 	void DeleteGrass(int fromX, int toX, int fromY, int toY);
 	std::pair<int, int> FindRoadAccess(int fromX, int toX, int fromY, int toY) const;
@@ -68,8 +73,8 @@ public:
 	int gridHeight;
 	int gridWidth;
 
-	std::list<GameObject*> previewObjects;
-
+	std::list<GameObject*> previewObjects = std::list<GameObject *>();
+	std::vector<std::pair<int, int>> roadCoordinates = std::vector<std::pair<int,int>>();
 	bool buildingMode = false;
 
 	Terrain* terrain;

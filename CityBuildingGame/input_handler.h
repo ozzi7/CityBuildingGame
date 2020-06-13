@@ -11,13 +11,18 @@ public:
 	void Mousewheel(float yOffset) const;
 	void WindowFocus(int focused);
 	void MouseScroll() const;
+	void CreateBuildingPreviews();
 
 	GLFWwindow* Window;
 	Camera* Camera;
 	Grid* Grid;
 
-	int buildingSelection = -1; // -1 = not in building mode
 
 private:
 	bool windowFocused = true;
+	int buildingSelection = -1; // -1 = not in building mode
+	
+	// for multi click events like building roads
+	bool firstKeyPressed = false;
+	glm::vec3 firstKeyPressPosition;
 };

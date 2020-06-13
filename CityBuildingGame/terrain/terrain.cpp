@@ -123,14 +123,27 @@ void Terrain::LoadVisibleGeometry(glm::vec2 upperLeft, glm::vec2 upperRight, glm
 					float float_j = float(j);
 					float texture_index;
 
-					if (grid->buildingMode && !grid->IsValidBuildingPosition(j,i,j,i) && !grid->HasRoad(j, i))
-						texture_index = 1.0f;
+					if (grid->buildingMode)
+					{
+						if (!grid->IsValidBuildingPosition(j, i, j, i) && !grid->HasRoad(j, i) && !grid->HasPreviewRoad(j, i))
+						{
+							texture_index = (float)Texture::RedGrass;
+						}
+						else if(grid->HasRoad(j, i) || grid->HasPreviewRoad(j, i))
+						{
+							texture_index = (float)Texture::Road;
+						}
+						else
+						{
+							texture_index = (float)Texture::Grass;
+						}
+					}
 					else
 					{
-						if (grid->HasRoad(j, i))						
-							texture_index = 2.0f;
+						if (grid->HasRoad(j, i))
+							texture_index = (float)Texture::Road;
 						else
-							texture_index = 0.0f;
+							texture_index = (float)Texture::Grass;
 					}
 					// x/y/z of first vertex
 					(*renderDataTemp)[index++] = float_j;
