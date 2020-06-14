@@ -153,6 +153,7 @@ bool Grid::IsValidPosition(glm::vec3 position) const
 void Grid::SetHasRoadPreview(int x, int y, bool value)
 {
 	gridUnits[y][x].hasRoadPreview = value;
+	terrain->reloadTerrain = true;
 }
 
 bool Grid::IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const
@@ -222,17 +223,18 @@ bool Grid::HasRoadPreview(int x, int y) const
 }
 void Grid::ClearRoadPreview()
 {
-	for (const std::pair<int, int> entry : roadCoordinates)
-	{
-		SetHasRoadPreview(entry.first, entry.second, false);
-	}
+	for (const std::pair<int, int> roadPiece : roadCoordinates)
+		gridUnits[roadPiece.second][roadPiece.first].hasRoadPreview = false;
+	
 	roadCoordinates.clear();
+	terrain->reloadTerrain = true;
 }
 void Grid::SetHasRoadPreview(std::vector<std::pair<int, int>> road, bool value)
 {
 	roadCoordinates = std::vector<std::pair<int, int>>(road.begin(), road.end());
-	for (const std::pair<int, int> entry : roadCoordinates)
-		SetHasRoadPreview(entry.first, entry.second, value);
+	for (const std::pair<int, int> roadPiece : roadCoordinates)
+		gridUnits[roadPiece.second][roadPiece.first].hasRoadPreview = value;
+	terrain->reloadTerrain = true;
 }
 /*
 Returns true if any of the 4 surrounding tiles is a road
