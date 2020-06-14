@@ -98,22 +98,27 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			break;
 		}
 	}
-
 	/* Calculate correct occupied units and save in fromX, toX, fromY, toY inclusive */
 	/* Set correct 3d model center point */
 	int fromX, toX, fromY, toY = 0;
-
+	int targetFromX, targetToX, targetFromY, targetToY = 0;
 	if (buildingSize.first % 2 == 0)
 	{
 		fromX = closestToClick.first - buildingSize.first / 2;
-		toX = closestToClick.first + buildingSize.first/ 2 - 1;
+		toX = closestToClick.first + buildingSize.first / 2 - 1;
 		modelCenter.x = closestToClick.first;
+
+		targetFromX = closestToClickEnd.first - buildingSize.first / 2;
+		targetToX = closestToClickEnd.first + buildingSize.first / 2 - 1;
 	}
 	else
 	{
 		fromX = int(aCreateBuildingEvent->posX) - buildingSize.first / 2;
 		toX = int(aCreateBuildingEvent->posX) + buildingSize.first / 2;
 		modelCenter.x = int(aCreateBuildingEvent->posX) + 0.5f;
+
+		targetFromX = int(aCreateBuildingEvent->posXEnd) - buildingSize.first / 2;
+		targetToX = int(aCreateBuildingEvent->posXEnd) + buildingSize.first / 2;
 	}
 
 	if (buildingSize.second % 2 == 0)
@@ -121,12 +126,18 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		fromY = closestToClick.second - buildingSize.second / 2;
 		toY = closestToClick.second + buildingSize.second / 2 - 1;
 		modelCenter.y = closestToClick.second;
+
+		targetFromY = closestToClickEnd.second - buildingSize.second / 2;
+		targetToY = closestToClickEnd.second + buildingSize.second / 2 - 1;
 	}
 	else
 	{
 		fromY = int(aCreateBuildingEvent->posY) - buildingSize.second / 2;
 		toY = int(aCreateBuildingEvent->posY) + buildingSize.second / 2;
 		modelCenter.y = int(aCreateBuildingEvent->posY) + 0.5f;
+
+		targetFromY = int(aCreateBuildingEvent->posYEnd) - buildingSize.second / 2;
+		targetToY = int(aCreateBuildingEvent->posYEnd) + buildingSize.second / 2;
 	}
 
 	/* calculate 3d model position height*/
@@ -250,8 +261,8 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		{
 			// only allow building roads connected to other roads or on the border of the map
 
-			Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(closestToClick.first, closestToClick.second),
-				std::pair<int, int>(closestToClickEnd.first, closestToClickEnd.second));
+			Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(fromX, fromY),
+				std::pair<int, int>(targetFromX, targetFromY));
 			pathFinding->CalculatePath();
 			std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
 			std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
@@ -820,22 +831,28 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 			break;
 		}
 	}
-
+	
 	/* Calculate correct occupied units and save in fromX, toX, fromY, toY inclusive */
 	/* Set correct 3d model center point */
 	int fromX, toX, fromY, toY = 0;
-
+	int targetFromX, targetToX, targetFromY, targetToY = 0;
 	if (buildingSize.first % 2 == 0)
 	{
 		fromX = closestToClick.first - buildingSize.first / 2;
 		toX = closestToClick.first + buildingSize.first / 2 - 1;
 		modelCenter.x = closestToClick.first;
+
+		targetFromX = closestToClickEnd.first - buildingSize.first / 2;
+		targetToX = closestToClickEnd.first + buildingSize.first / 2 - 1;
 	}
 	else
 	{
 		fromX = int(aCreateBuildingPreviewEvent->posX) - buildingSize.first / 2;
 		toX = int(aCreateBuildingPreviewEvent->posX) + buildingSize.first / 2;
 		modelCenter.x = int(aCreateBuildingPreviewEvent->posX) + 0.5f;
+
+		targetFromX = int(aCreateBuildingPreviewEvent->posXEnd) - buildingSize.first / 2;
+		targetToX = int(aCreateBuildingPreviewEvent->posXEnd) + buildingSize.first / 2;
 	}
 
 	if (buildingSize.second % 2 == 0)
@@ -843,12 +860,18 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 		fromY = closestToClick.second - buildingSize.second / 2;
 		toY = closestToClick.second + buildingSize.second / 2 - 1;
 		modelCenter.y = closestToClick.second;
+
+		targetFromY = closestToClickEnd.second - buildingSize.second / 2;
+		targetToY = closestToClickEnd.second + buildingSize.second / 2 - 1;
 	}
 	else
 	{
 		fromY = int(aCreateBuildingPreviewEvent->posY) - buildingSize.second / 2;
 		toY = int(aCreateBuildingPreviewEvent->posY) + buildingSize.second / 2;
 		modelCenter.y = int(aCreateBuildingPreviewEvent->posY) + 0.5f;
+
+		targetFromY = int(aCreateBuildingPreviewEvent->posYEnd) - buildingSize.second / 2;
+		targetToY = int(aCreateBuildingPreviewEvent->posYEnd) + buildingSize.second / 2;
 	}
 
 	/* calculate 3d model position height*/
@@ -938,8 +961,8 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 	}
 	case BuildingType::PathID:
 	{
-		Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(closestToClick.first, closestToClick.second),
-			std::pair<int, int>(closestToClickEnd.first, closestToClickEnd.second));
+		Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(fromX, fromY),
+			std::pair<int, int>(targetFromX, targetFromY));
 		pathFinding->CalculatePath();
 		std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
 		std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),

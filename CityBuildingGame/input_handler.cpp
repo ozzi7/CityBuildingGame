@@ -145,12 +145,13 @@ void InputHandler::Mouseclick(int button, int action)
 				Grid->reloadGrid = true;
 				buildingSelection = -1;
 				Grid->terrain->reloadTerrain = true;
+				firstKeyPressed = false;
 			}
 
 		}
 	}
 }
-void InputHandler::CreateBuildingPreviews()
+void InputHandler::CreateBuildingPreviews() const
 {
 	const glm::vec3 cursorPosition = Camera->GetCursorPositionOnGrid();
 
@@ -167,9 +168,14 @@ void InputHandler::CreateBuildingPreviews()
 			gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::LumberjackHutID, cursorPosition.x,
 				cursorPosition.y));
 		if (buildingSelection == 3)
-			if (firstKeyPressed)
-				gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::PathID, firstKeyPressPosition.x, 
+			if (firstKeyPressed) {
+				gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::PathID, firstKeyPressPosition.x,
 					firstKeyPressPosition.y, cursorPosition.x, cursorPosition.y));
+			}
+			else {
+				gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::PathID, firstKeyPressPosition.x,
+					firstKeyPressPosition.y));
+			}
 	}
 }
 void InputHandler::Mousewheel(float yOffset) const

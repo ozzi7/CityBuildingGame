@@ -44,14 +44,14 @@ bool Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec
 		currLowerRightX = (int)lowerRight.x;
 		currLowerRightY = (int)lowerRight.y;
 
-		int fromX = std::min(std::min((int)upperLeft.x, int(lowerLeft.x)),
-		                     std::min((int)upperRight.x, int(lowerRight.x)));
-		int endX = std::max(std::max((int)upperLeft.x, int(lowerLeft.x)),
-		                    std::max((int)upperRight.x, int(lowerRight.x)));
-		int fromY = std::min(std::min((int)upperLeft.y, int(lowerLeft.y)),
-		                     std::min((int)upperRight.y, int(lowerRight.y)));
-		int endY = std::max(std::max((int)upperLeft.y, int(lowerLeft.y)),
-		                    std::max((int)upperRight.y, int(lowerRight.y)));
+		const int fromX = std::min(std::min((int)upperLeft.x, int(lowerLeft.x)),
+		                           std::min((int)upperRight.x, int(lowerRight.x)));
+		const int endX = std::max(std::max((int)upperLeft.x, int(lowerLeft.x)),
+		                          std::max((int)upperRight.x, int(lowerRight.x)));
+		const int fromY = std::min(std::min((int)upperLeft.y, int(lowerLeft.y)),
+		                           std::min((int)upperRight.y, int(lowerRight.y)));
+		const int endY = std::max(std::max((int)upperLeft.y, int(lowerLeft.y)),
+		                          std::max((int)upperRight.y, int(lowerRight.y)));
 
 		nofVisibleUnits = 0;
 		for (int i = std::max(0, fromY + 1); i <= std::min(gridHeight - 1, endY); ++i)
@@ -85,20 +85,20 @@ float Grid::GetHeight(float posX, float posY) const
 {
 	// top left i+1 j, bottom right i, j+1
 	// bottom left i, j top right i+1, j+1
-	int i = (int)posY;
-	int j = (int)posX;
-	float offsetX = fmod(posX, 1.0f);
-	float offsetY = fmod(posY, 1.0f);
+	const int i = (int)posY;
+	const int j = (int)posX;
+	const float offsetX = fmod(posX, 1.0f);
+	const float offsetY = fmod(posY, 1.0f);
 
 	if (offsetX + offsetY <= 1.0f)
 	{
 		// left triangle
-		float m = terrain->heightmap[i][j + 1] - terrain->heightmap[i][j];
-		float n = terrain->heightmap[i + 1][j] - terrain->heightmap[i][j];
+		const float m = terrain->heightmap[i][j + 1] - terrain->heightmap[i][j];
+		const float n = terrain->heightmap[i + 1][j] - terrain->heightmap[i][j];
 		return offsetX * m + offsetY * n + terrain->heightmap[i][j];
 	}
-	float m = terrain->heightmap[i + 1][j] - terrain->heightmap[i + 1][j + 1];
-	float n = terrain->heightmap[i][j + 1] - terrain->heightmap[i + 1][j + 1];
+	const float m = terrain->heightmap[i + 1][j] - terrain->heightmap[i + 1][j + 1];
+	const float n = terrain->heightmap[i][j + 1] - terrain->heightmap[i + 1][j + 1];
 	return (1 - offsetX) * m + (1 - offsetY) * n + terrain->heightmap[i + 1][j + 1];
 }
 /* Check if area is flat within a rectangle of the grid
@@ -108,7 +108,7 @@ bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY) const
 	if (fromX < 0 || toX >= gridWidth || fromY < 0 || toY >= gridHeight) // assumes toX > fromX etc.
 		return false;
 
-	float height = terrain->heightmap[fromY][fromX];
+	const float height = terrain->heightmap[fromY][fromX];
 	for (int y = fromY; y <= toY + 1; ++y)
 	{
 		for (int x = fromX; x <= toX + 1; ++x)
@@ -150,9 +150,9 @@ void Grid::SetHasRoad(int x, int y, bool value)
 {
 	gridUnits[y][x].hasRoad = value;
 }
-void Grid::SetHasRoad(std::vector<std::pair<int,int>> road, bool value)
+void Grid::SetHasRoad(const std::vector<std::pair<int,int>>& road, bool value)
 {
-	for (std::pair<int, int> roadPiece : road)
+	for (const std::pair<int, int> roadPiece : road)
 	{
 		SetHasRoad(roadPiece.first, roadPiece.second, value);
 	}
@@ -245,7 +245,7 @@ bool Grid::HasRoadPreview(int x, int y) const
 }
 void Grid::ClearRoadPreview()
 {
-	for (std::pair<int, int> entry : roadCoordinates)
+	for (const std::pair<int, int> entry : roadCoordinates)
 	{
 		SetHasRoadPreview(entry.first, entry.second, false);
 	}
@@ -254,7 +254,7 @@ void Grid::ClearRoadPreview()
 void Grid::SetHasRoadPreview(std::vector<std::pair<int, int>> road, bool value)
 {
 	roadCoordinates = std::vector<std::pair<int, int>>(road.begin(), road.end());
-	for (std::pair<int, int> entry : roadCoordinates)
+	for (const std::pair<int, int> entry : roadCoordinates)
 	{
 		SetHasRoadPreview(entry.first, entry.second, value);
 	}
@@ -273,9 +273,9 @@ bool Grid::HasRoadAccess(int x, int y) const
 /*
 Returns true if any of the 4 surrounding tiles is a road anywhere along the road
 */
-bool Grid::HasRoadAccess(std::vector<std::pair<int, int>> road) const
+bool Grid::HasRoadAccess(const std::vector<std::pair<int, int>>& road) const
 {
-	for (std::pair<int,int> roadPiece : road)
+	for (const std::pair<int,int> roadPiece : road)
 	{
 		if (HasRoadAccess(roadPiece.first, roadPiece.second))
 			return true;
@@ -285,9 +285,9 @@ bool Grid::HasRoadAccess(std::vector<std::pair<int, int>> road) const
 /*
 Returns true if any part of the road is on the border of the map
 */
-bool Grid::IsAtEdgeOfMap(std::vector<std::pair<int, int>> road) const
+bool Grid::IsAtEdgeOfMap(const std::vector<std::pair<int, int>>& road) const
 {
-	for (std::pair<int, int> roadPiece : road)
+	for (const std::pair<int, int> roadPiece : road)
 	{
 		if ((roadPiece.first == 0 || roadPiece.first == gridWidth - 1 ||
 			roadPiece.second == 0 || roadPiece.second == gridHeight - 1) 
@@ -304,23 +304,22 @@ void Grid::DeleteGrass(int fromX, int fromY, int toX, int toY)
 	{
 		for (int y = fromY; y <= toY; ++y)
 		{
-			for (std::list<GameObject*>::iterator it = gridUnits[y][x].objects.begin();
-				it != gridUnits[y][x].objects.end(); ++it)
+			for (auto& object : gridUnits[y][x].objects)
 			{
-				delete* it;
+				delete object;
 			}
 			gridUnits[y][x].objects.clear();
 		}
 	}
 }
-void Grid::DeleteGrass(std::vector<std::pair<int, int>> road)
+void Grid::DeleteGrass(const std::vector<std::pair<int, int>>& road)
 {
-	for (std::pair<int, int> roadPiece : road)
+	for (const std::pair<int, int> roadPiece : road)
 	{
 		DeleteGrass(roadPiece.first, roadPiece.second, roadPiece.first, roadPiece.second);
 	}
 }
-// returns -1,-1 for not found
+// returns -1,-1 if not found
 std::pair<int, int> Grid::FindRoadAccess(int fromX, int toX, int fromY, int toY) const
 {
 	// top row

@@ -11,7 +11,7 @@ public:
 	void Mousewheel(float yOffset) const;
 	void WindowFocus(int focused);
 	void MouseScroll() const;
-	void CreateBuildingPreviews();
+	void CreateBuildingPreviews() const;
 
 	GLFWwindow* Window;
 	Camera* Camera;
