@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.83.0 commit date:2020-06-03, commit time:14:38, hash:211b6c29f771</authoring_tool>
     </contributor>
-    <created>2020-06-07T23:23:56</created>
-    <modified>2020-06-07T23:23:56</modified>
+    <created>2020-06-13T16:04:00</created>
+    <modified>2020-06-13T16:04:00</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -35,7 +35,7 @@
     <light id="Area-light" name="Area">
       <technique_common>
         <point>
-          <color sid="color">200 200 200</color>
+          <color sid="color">300 300 300</color>
           <constant_attenuation>1</constant_attenuation>
           <linear_attenuation>0</linear_attenuation>
           <quadratic_attenuation>10e-5</quadratic_attenuation>
@@ -53,7 +53,7 @@
           <shadow_r sid="blender_shadow_r" type="float">0</shadow_r>
           <shadow_g sid="blender_shadow_g" type="float">0</shadow_g>
           <shadow_b sid="blender_shadow_b" type="float">0</shadow_b>
-          <energy sid="blender_energy" type="float">200</energy>
+          <energy sid="blender_energy" type="float">300</energy>
           <dist sid="blender_dist" type="float">100</dist>
           <spotsize sid="spotsize" type="float">45</spotsize>
           <spotblend sid="spotblend" type="float">0.15</spotblend>
@@ -88,6 +88,16 @@
             <source>_K-wood_fine_3-diffuse_jpg-surface</source>
           </sampler2D>
         </newparam>
+        <newparam sid="_K-wood_fine_3-specular_jpg-surface">
+          <surface type="2D">
+            <init_from>_K-wood_fine_3-specular_jpg</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="_K-wood_fine_3-specular_jpg-sampler">
+          <sampler2D>
+            <source>_K-wood_fine_3-specular_jpg-surface</source>
+          </sampler2D>
+        </newparam>
         <technique sid="common">
           <lambert>
             <emission>
@@ -96,6 +106,9 @@
             <diffuse>
               <texture texture="_K-wood_fine_3-diffuse_jpg-sampler" texcoord="UVMap"/>
             </diffuse>
+            <specular>
+              <texture texture="_K-wood_fine_3-specular_jpg-sampler" texcoord="UVMap"/>
+            </specular>
             <index_of_refraction>
               <float sid="ior">1.45</float>
             </index_of_refraction>
@@ -107,6 +120,9 @@
   <library_images>
     <image id="_K-wood_fine_3-diffuse_jpg" name="_K-wood_fine_3-diffuse_jpg">
       <init_from>1K-wood_fine_3-diffuse.jpg</init_from>
+    </image>
+    <image id="_K-wood_fine_3-specular_jpg" name="_K-wood_fine_3-specular_jpg">
+      <init_from>1K-wood_fine_3-specular.jpg</init_from>
     </image>
   </library_images>
   <library_materials>
@@ -138,7 +154,7 @@
           </technique_common>
         </source>
         <source id="Cube-mesh-map-0">
-          <float_array id="Cube-mesh-map-0-array" count="72">0.8021368 1 0.4010684 0 0.8021365 0 0.8680915 1 0.9340456 0 0.9340458 1 0.9340458 0.2048876 1 0 1 0.2048876 0 0 0.4010684 1 3.24423e-7 1 0.9340458 0.4097754 1 0.2048876 1 0.4097754 0.8021371 1 0.8680911 0 0.8680914 1 0.8021368 1 0.4010687 1 0.4010684 0 0.8680915 1 0.8680914 0 0.9340456 0 0.9340458 0.2048876 0.9340457 0 1 0 0 0 0.401068 0 0.4010684 1 0.9340458 0.4097754 0.9340457 0.2048876 1 0.2048876 0.8021371 1 0.8021368 0 0.8680911 0</float_array>
+          <float_array id="Cube-mesh-map-0-array" count="72">0.7642764 0.9999998 0.3821382 0 0.764276 0 0.8428512 1 0.9214254 0 0.9214255 1 0.3808972 0.2813748 0.001404464 0.2028003 0.3808972 0.2028003 0 0 0.3821382 0.9999998 3.83838e-7 0.9999998 0.765612 0.2804304 0.3822655 0.2018561 0.765612 0.2018561 0.7642768 1 0.8428507 0 0.8428511 1 0.7642764 0.9999998 0.3821386 0.9999998 0.3821382 0 0.8428512 1 0.8428511 0 0.9214254 0 0.3808972 0.2813748 0.001404464 0.2813748 0.001404464 0.2028003 0 0 0.3821378 0 0.3821382 0.9999998 0.765612 0.2804304 0.3822655 0.2804304 0.3822655 0.2018561 0.7642768 1 0.7642764 0 0.8428507 0</float_array>
           <technique_common>
             <accessor source="#Cube-mesh-map-0-array" count="36" stride="2">
               <param name="S" type="float"/>
@@ -161,7 +177,7 @@
   <library_visual_scenes>
     <visual_scene id="Scene" name="Scene">
       <node id="Area" name="Area" type="NODE">
-        <matrix sid="transform">0.7874365 -1.26443e-8 0.2220128 1.961343 0.1293773 0.664861 -0.458876 -4.289159 -0.1804196 0.4767658 0.6399133 4.723388 0 0 0 1</matrix>
+        <matrix sid="transform">0.7874365 -1.26443e-8 0.2220128 1.961343 0.1293773 0.664861 -0.458876 -4.289159 -0.1804196 0.4767658 0.6399133 5.821665 0 0 0 1</matrix>
         <instance_light url="#Area-light"/>
       </node>
       <node id="Camera" name="Camera" type="NODE">

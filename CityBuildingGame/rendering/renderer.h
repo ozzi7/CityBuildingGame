@@ -139,6 +139,7 @@ public:
 		terrain_shader->setVec3("light.ambient", camera.AmbientLight);
 		terrain_shader->setVec3("light.diffuse", camera.GetDirectionalLight().Color);
 		terrain_shader->setVec3("light.direction", normalize(-camera.GetDirectionalLight().Direction));
+		terrain_shader->setVec3("cameraPosition", camera.Position);
 		terrain_shader->setVec2("texelSizeShadowMap", 1.0f / (float)SHADOW_WIDTH, 1.0f /(float)SHADOW_HEIGHT);
 
 		skinned_mesh_shader->use();
@@ -149,6 +150,7 @@ public:
 		skinned_mesh_shader->setVec3("light.ambient", camera.AmbientLight);
 		skinned_mesh_shader->setVec3("light.diffuse", camera.GetDirectionalLight().Color);
 		skinned_mesh_shader->setVec3("light.direction", normalize(-camera.GetDirectionalLight().Direction));
+		skinned_mesh_shader->setVec3("cameraPosition", camera.Position);
 		skinned_mesh_shader->setVec2("texelSizeShadowMap", 1.0f / (float)SHADOW_WIDTH, 1.0f /(float)SHADOW_HEIGHT);
 
 		instanced_mesh_shader->use();
@@ -159,6 +161,7 @@ public:
 		instanced_mesh_shader->setVec3("light.ambient", camera.AmbientLight);
 		instanced_mesh_shader->setVec3("light.diffuse", camera.GetDirectionalLight().Color);
 		instanced_mesh_shader->setVec3("light.direction", normalize(-camera.GetDirectionalLight().Direction));
+		instanced_mesh_shader->setVec3("cameraPosition", camera.Position);
 		instanced_mesh_shader->setVec2("texelSizeShadowMap", 1.0f / (float)SHADOW_WIDTH, 1.0f /(float)SHADOW_HEIGHT);
 	}
 	void SetShadowMatrices(glm::mat4 aLightSpaceMatrix) const
