@@ -23,6 +23,6 @@ private:
 	int buildingSelection = -1; // -1 = not in building mode
 	
 	// for multi click events like building roads
-	bool firstKeyPressed = false;
+	bool isLeftMouseClickDown = false;
 	glm::vec3 firstKeyPressPosition;
 };

@@ -117,6 +117,7 @@ void Game::gameLoop()
 			worker->UpdatePosition(grid);
 			worker->GameStep();
 		}
+		
 		for (Lumberjack* lumberjack : resources->lumberjacks)
 		{
 			lumberjack->UpdatePosition(grid);

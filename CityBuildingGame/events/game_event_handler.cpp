@@ -882,33 +882,16 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 	{
 	case BuildingType::DwellingID:
 	{
-		/*if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
-			return; // TODO: show red building ?!
-			*/
+		if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
+			return;
+		
 
-		//std::pair<int, int> entrance = grid->FindRoadAccess(fromX, toX, fromY, toY);
+		std::pair<int, int> entrance = grid->FindRoadAccess(fromX, toX, fromY, toY);
 
-		//if (entrance.first == -1)
-		//{
-		//	// TODO: show red building ?!
-		//	return;
-		//}
-
-		/* find path*/
-		//PathfindingObject* path = new PathfindingObject(grid, std::pair<int, int>(entrance.first, entrance.second));
-		//path->FindClosestEdge();
-		//std::list<std::pair<int, int>> pathCoordinatesList = path->GetPath();
-		//pathCoordinatesList.reverse();
-		//std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
-		//												 std::make_move_iterator(std::end(pathCoordinatesList)) };
-		//delete path;
-
-		///* if no path found do nothing..*/
-		//if (pathCoordinates.empty())
-		//{
-		//	// TODO: show red building ?!
-		//	return;
-		//}
+		if (entrance.first == -1)
+		{
+			return;
+		}
 
 		/* create building  */
 		Dwelling* dwelling = new Dwelling(modelCenter, // translate
@@ -929,16 +912,15 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 	}
 	case BuildingType::LumberjackHutID:
 	{
-		/*if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
+		if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
 			return;
 
 		std::pair<int, int> entrance = grid->FindRoadAccess(fromX, toX, fromY, toY);
 
 		if (entrance.first == -1)
 		{
-			loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::WARNING, "Cannot find road to building"));
 			return;
-		}*/
+		}
 
 		modelCenter.x = modelCenter.x - 0.45f;
 		LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
