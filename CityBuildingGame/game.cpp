@@ -182,8 +182,6 @@ void Game::gameLoop()
 			}
 		}
 
-		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, std::to_string(buildingModeChanges)));
-
 		// add the preview models to be rendered
 		for (std::list<GameObject*>::iterator it = grid->previewObjects.begin();
 			it != grid->previewObjects.end(); ++it)

@@ -45,7 +45,7 @@ public:
 	InstancedModel* instanced_model_wood_plank; 
 	InstancedModel* instanced_model_grass;
 
-	unsigned int ShadowDepthMap;
+	unsigned int ShadowDepthMap = 0;
 
 	Renderer(Camera& aCamera) : camera(aCamera)
 	{
@@ -59,8 +59,10 @@ public:
 
 		/* buildings */
 		instanced_model_dwelling = new InstancedModel(Path + "/../models/buildings/dwelling/dwelling.dae");
-		instanced_model_lumberjack_hut = new InstancedModel(Path + "/../models/buildings/lumberjack_hut/lumberjack_hut.dae");
-		instanced_model_building_outline = new InstancedModel(Path + "/../models/buildings/building_outline/building_outline.dae");
+		instanced_model_lumberjack_hut = new InstancedModel(
+			Path + "/../models/buildings/lumberjack_hut/lumberjack_hut.dae");
+		instanced_model_building_outline = new InstancedModel(
+			Path + "/../models/buildings/building_outline/building_outline.dae");
 
 		/* vegetation */
 		instanced_model_pine = new InstancedModel(Path + "/../models/vegetation/pine/pine.dae");
@@ -196,12 +198,12 @@ public:
 
 private:
 	bool shadowPass = false;
-	unsigned int shadowDepthMapFBO;
+	unsigned int shadowDepthMapFBO = 0;
 	long long reloadGPUDataCounter = -1;
 
 	void renderTerrain(RenderBuffer* renderBuffer) const
 	{
-		if (renderBuffer->terrainVector.size() != 0) {
+		if (!renderBuffer->terrainVector.empty()) {
 			terrain_shader->use();
 			renderBuffer->terrainVector[0]->Draw(*terrain_shader);
 		}
