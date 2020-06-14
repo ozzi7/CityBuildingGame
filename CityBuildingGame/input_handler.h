@@ -20,7 +20,8 @@ public:
 
 private:
 	bool windowFocused = true;
-	int buildingSelection = -1; // -1 = not in building mode
+	enum class BuildingSelection { Notset, Road, Dwelling, LumberjackHut };
+	BuildingSelection buildingSelection = BuildingSelection::Notset; // -1 = not in building mode
 	
 	// for multi click events like building roads
 	bool isLeftMouseClickDown = false;

@@ -880,84 +880,88 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 	/* Create the building object etc.. */
 	switch (aCreateBuildingPreviewEvent->buildingType)
 	{
-	case BuildingType::DwellingID:
-	{
-		if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
-			return;
-		
-
-		std::pair<int, int> entrance = grid->FindRoadAccess(fromX, toX, fromY, toY);
-
-		if (entrance.first == -1)
+		case BuildingType::DwellingID:
 		{
-			return;
+			if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
+				return;
+			
+
+			std::pair<int, int> entrance = grid->FindRoadAccess(fromX, toX, fromY, toY);
+
+			if (entrance.first == -1)
+			{
+				return;
+			}
+
+			/* create building  */
+			Dwelling* dwelling = new Dwelling(modelCenter, // translate
+				glm::vec3(0.014f, 0.008f, 0.014f), // rescale
+				glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f),  // rotate
+				modelCenter.z);
+			dwelling->fromX = fromX;
+			dwelling->fromY = fromY;
+			dwelling->toX = toX;
+			dwelling->toY = toY;
+			dwelling->sizeX = std::get<0>(buildingSize);
+			dwelling->sizeY = std::get<1>(buildingSize);
+			dwelling->Evolve();
+
+			grid->previewObjects.push_back(dwelling);
+
+			break;
 		}
-
-		/* create building  */
-		Dwelling* dwelling = new Dwelling(modelCenter, // translate
-			glm::vec3(0.014f, 0.008f, 0.014f), // rescale
-			glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f),  // rotate
-			modelCenter.z);
-		dwelling->fromX = fromX;
-		dwelling->fromY = fromY;
-		dwelling->toX = toX;
-		dwelling->toY = toY;
-		dwelling->sizeX = std::get<0>(buildingSize);
-		dwelling->sizeY = std::get<1>(buildingSize);
-		dwelling->Evolve();
-
-		grid->previewObjects.push_back(dwelling);
-
-		break;
-	}
-	case BuildingType::LumberjackHutID:
-	{
-		if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
-			return;
-
-		std::pair<int, int> entrance = grid->FindRoadAccess(fromX, toX, fromY, toY);
-
-		if (entrance.first == -1)
+		case BuildingType::LumberjackHutID:
 		{
-			return;
+			if (!grid->IsValidBuildingPosition(fromX, fromY, toX, toY))
+				return;
+
+			std::pair<int, int> entrance = grid->FindRoadAccess(fromX, toX, fromY, toY);
+
+			if (entrance.first == -1)
+			{
+				return;
+			}
+
+			modelCenter.x = modelCenter.x - 0.45f;
+			LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
+				glm::vec3(0.012f, 0.006f, 0.012f), // rescale
+				glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f),  // rotate
+				modelCenter.z);
+
+			lumberjackHut->fromX = fromX;
+			lumberjackHut->fromY = fromY;
+			lumberjackHut->toX = toX;
+			lumberjackHut->toY = toY;
+			lumberjackHut->sizeX = std::get<0>(buildingSize);
+			lumberjackHut->sizeY = std::get<1>(buildingSize);
+
+			lumberjackHut->Evolve();
+
+			grid->previewObjects.push_back(lumberjackHut);
+
+			break;
 		}
-
-		modelCenter.x = modelCenter.x - 0.45f;
-		LumberjackHut* lumberjackHut = new LumberjackHut(modelCenter, // translate
-			glm::vec3(0.012f, 0.006f, 0.012f), // rescale
-			glm::vec3(glm::half_pi<float>(), 0.0f, 0.0f),  // rotate
-			modelCenter.z);
-
-		lumberjackHut->fromX = fromX;
-		lumberjackHut->fromY = fromY;
-		lumberjackHut->toX = toX;
-		lumberjackHut->toY = toY;
-		lumberjackHut->sizeX = std::get<0>(buildingSize);
-		lumberjackHut->sizeY = std::get<1>(buildingSize);
-
-		lumberjackHut->Evolve();
-
-		grid->previewObjects.push_back(lumberjackHut);
-
-		break;
-	}
-	case BuildingType::PathID:
-	{
-		Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(fromX, fromY),
-			std::pair<int, int>(targetFromX, targetFromY));
-		pathFinding->CalculatePath();
-		std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
-		std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
-														  std::make_move_iterator(std::end(pathCoordinatesList)) };
-
-		delete pathFinding;
-
-		if (!pathCoordinates.empty())
+		case BuildingType::PathID:
 		{
-			grid->SetHasRoadPreview(pathCoordinates, true);
+			if (targetFromX != fromX || targetFromY != fromY) {
+				Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(fromX, fromY),
+					std::pair<int, int>(targetFromX, targetFromY));
+				pathFinding->CalculatePath();
+				std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
+				std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
+																  std::make_move_iterator(std::end(pathCoordinatesList)) };
+
+				delete pathFinding;
+
+				if (!pathCoordinates.empty())
+				{
+					grid->SetHasRoadPreview(pathCoordinates, true);
+				}
+			}
+			else
+				grid->SetHasRoadPreview(fromX, fromY, true);
+			break;
 		}
-		break;
-	}
 	}
 	grid->terrain->reloadTerrain = true;
 }

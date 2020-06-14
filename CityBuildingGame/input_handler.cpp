@@ -21,78 +21,43 @@ void InputHandler::Keypress(int button, int action)
 			Camera->Scroll(CameraMovement::Right, 0.05f);
 
 		if (action == GLFW_PRESS) {
-			
-			if (button == GLFW_KEY_1) {
-				// Not in building mode yet
-				if (buildingSelection == -1)
-				{
-					Grid->buildingMode = true;
-					buildingSelection = 1;
-					Grid->terrain->reloadTerrain = true;
-					Grid->reloadGrid = true;
-				}
-				// In building mode of different building -> change to new 
-				else if (buildingSelection != 1)
-				{
-					buildingSelection = 1;
-				}
-				// in building mode of current building -> toggle off
-				else 
-				{
-					Grid->buildingMode = false;
-					buildingSelection = -1;
-					Grid->terrain->reloadTerrain = true;
-					Grid->reloadGrid = true;
-				}
+
+			BuildingSelection targetSelection = BuildingSelection::Notset;
+
+			switch (button) { // assign keys here
+				case GLFW_KEY_1:
+					targetSelection = BuildingSelection::Road;
+					break;
+				case GLFW_KEY_2:
+					targetSelection = BuildingSelection::Dwelling;
+					break;
+				case GLFW_KEY_3:
+					targetSelection = BuildingSelection::LumberjackHut;
+					break;
+				default:
+					return;
 			}
-			
-			if (button == GLFW_KEY_2)
+
+			// Not in building mode yet
+			if (buildingSelection == BuildingSelection::Notset)
 			{
-				// Not in building mode yet
-				if (buildingSelection == -1)
-				{
-					Grid->buildingMode = true;
-					buildingSelection = 2;
-					Grid->terrain->reloadTerrain = true;
-					Grid->reloadGrid = true;
-				}
-				// In building mode of different building -> change to new 
-				else if (buildingSelection != 2)
-				{
-					buildingSelection = 2;
-				}
-				// in building mode of current building -> toggle off
-				else 
-				{
-					Grid->buildingMode = false;
-					buildingSelection = -1;
-					Grid->terrain->reloadTerrain = true;
-					Grid->reloadGrid = true;
-				}
+				Grid->buildingMode = true;
+				buildingSelection = targetSelection;
+				Grid->terrain->reloadTerrain = true;
+				Grid->reloadGrid = true;
 			}
-			if (button == GLFW_KEY_3)
+			// In building mode of different building -> change to new 
+			else if (buildingSelection != targetSelection)
 			{
-				// Not in building mode yet
-				if (buildingSelection == -1)
-				{
-					Grid->buildingMode = true;
-					buildingSelection = 3;
-					Grid->terrain->reloadTerrain = true;
-					Grid->reloadGrid = true;
-				}
-				// In building mode of different building -> change to new 
-				else if (buildingSelection != 3)
-				{
-					buildingSelection = 3;
-				}
-				// in building mode of current building -> toggle off
-				else
-				{
-					Grid->buildingMode = false;
-					buildingSelection = -1;
-					Grid->terrain->reloadTerrain = true;
-					Grid->reloadGrid = true;
-				}
+				buildingSelection = targetSelection;
+			}
+			// in building mode of current building -> toggle off
+			else 
+			{
+				Grid->buildingMode = false;
+				buildingSelection = BuildingSelection::Notset;
+				Grid->terrain->reloadTerrain = true;
+				Grid->reloadGrid = true;
 			}
 		}
 	}
@@ -114,16 +79,18 @@ void InputHandler::Mouseclick(int button, int action)
 					isLeftMouseClickDown = true;
 					switch (buildingSelection)
 					{
-					case 3:
-						firstKeyPressPosition = cursorPosition;
-						break;
+						case BuildingSelection::Road:
+							firstKeyPressPosition = cursorPosition;
+							break;
+						default:
+							break;
 					}
 				}
 				else if (button == GLFW_MOUSE_BUTTON_RIGHT)
 				{
 					Grid->buildingMode = false;
 					Grid->reloadGrid = true;
-					buildingSelection = -1;
+					buildingSelection = BuildingSelection::Notset;
 					Grid->terrain->reloadTerrain = true;
 					isLeftMouseClickDown = false;
 				}
@@ -138,17 +105,18 @@ void InputHandler::Mouseclick(int button, int action)
 			{
 				switch (buildingSelection)
 				{
-				case 1:
-					gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::DwellingID, cursorPosition.x, cursorPosition.y));
-					break;
-
-				case 2:
-					gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::LumberjackHutID, cursorPosition.x, cursorPosition.y));
-					break;
-				case 3:
-					gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::PathID, firstKeyPressPosition.x,
-						firstKeyPressPosition.y, cursorPosition.x, cursorPosition.y));
-					break;
+					case BuildingSelection::Dwelling:
+						gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::DwellingID, cursorPosition.x, cursorPosition.y));
+						break;
+					case BuildingSelection::LumberjackHut:
+						gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::LumberjackHutID, cursorPosition.x, cursorPosition.y));
+						break;
+					case BuildingSelection::Road:
+						gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::PathID, firstKeyPressPosition.x,
+							firstKeyPressPosition.y, cursorPosition.x, cursorPosition.y));
+						break;
+					default:
+						break;
 				}
 			}
 		}
@@ -160,25 +128,25 @@ void InputHandler::CreateBuildingPreviews() const
 
 	if (Grid->IsValidPosition(cursorPosition))
 	{
-		// TODO: temp code, show building previews
-		if (buildingSelection == -1)
+		if (buildingSelection == BuildingSelection::Notset)
+		{
 			Grid->previewObjects.clear();
-
-		if (buildingSelection == 1)
+			Grid->ClearRoadPreview();
+		}
+		if (buildingSelection == BuildingSelection::Dwelling)
 			gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::DwellingID, cursorPosition.x,
 				cursorPosition.y));
-		if (buildingSelection == 2)
+		if (buildingSelection == BuildingSelection::LumberjackHut)
 			gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::LumberjackHutID, cursorPosition.x,
 				cursorPosition.y));
-		if (buildingSelection == 3)
-			if (isLeftMouseClickDown) {
+		if (buildingSelection == BuildingSelection::Road)
+			if (!isLeftMouseClickDown) 
 				gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::PathID, firstKeyPressPosition.x,
-					firstKeyPressPosition.y, cursorPosition.x, cursorPosition.y));
-			}
-			else {
-				gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::PathID, firstKeyPressPosition.x,
+				                                                          firstKeyPressPosition.y, firstKeyPressPosition.x,
 					firstKeyPressPosition.y));
-			}
+			else 
+				gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::PathID, firstKeyPressPosition.x,
+				                                                          firstKeyPressPosition.y, cursorPosition.x, cursorPosition.y));
 	}
 }
 void InputHandler::Mousewheel(float yOffset) const
