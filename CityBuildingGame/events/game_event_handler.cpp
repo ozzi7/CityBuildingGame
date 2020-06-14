@@ -244,24 +244,39 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 		}
 		case BuildingType::PathID:
 		{
-			// only allow building roads connected to other roads or on the border of the map
-
-			Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(fromX, fromY),
-				std::pair<int, int>(targetFromX, targetFromY));
-			pathFinding->CalculatePath();
-			std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
-			std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
-																std::make_move_iterator(std::end(pathCoordinatesList)) };
-			delete pathFinding;
-
 			grid->ClearRoadPreview();
 
-			if (grid->HasRoadAccess(pathCoordinates) || grid->IsAtEdgeOfMap(pathCoordinates))
+			// only allow building roads connected to other roads or on the border of the map
+			if ((targetFromX != fromX || targetFromY != fromY))
 			{
-				grid->SetHasRoad(pathCoordinates, true);
-				grid->DeleteGrass(pathCoordinates);
+				// we have a path from a to b here
+				if (!grid->IsOccupied(targetFromX, targetFromY) && !grid->IsOccupied(fromX, fromY))
+				{
+					// the endpoints are not occupied
+					Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(fromX, fromY),
+						std::pair<int, int>(targetFromX, targetFromY));
+					pathFinding->CalculatePath();
+					std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
+					std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
+																		std::make_move_iterator(std::end(pathCoordinatesList)) };
+					delete pathFinding;
+
+					if (!pathCoordinates.empty() && (grid->HasRoadAccess(pathCoordinates) || grid->IsAtEdgeOfMap(pathCoordinates)))
+					{ // there is a path with access from outside the map
+						grid->SetHasRoad(pathCoordinates, true);
+						grid->DeleteGrass(pathCoordinates);
+					}
+				}
+				break;
 			}
-			grid->terrain->reloadTerrain = true;
+			else if (!grid->IsOccupied(targetFromX, targetFromY))
+			{ // in this case we have clicked on a single tile
+				if (grid->HasRoadAccess(fromX, fromY) || grid->IsAtEdgeOfMap(fromX, fromY))
+				{
+					grid->SetHasRoad(fromX, fromY, true);
+					grid->DeleteGrass(fromX, fromY, fromX, fromY);
+				}
+			}
 			break;
 		}
 	}
@@ -914,24 +929,31 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 		case BuildingType::PathID:
 		{
 			// check if the path has different start & endpoint and then check if endpoint is not occupied (pathfinding allows it)
-			if (targetFromX != fromX || targetFromY != fromY && !grid->IsOccupied(targetFromX, targetFromY)) {
-				
-				Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(fromX, fromY),
-					std::pair<int, int>(targetFromX, targetFromY));
-				pathFinding->CalculatePath();
-				std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
-				std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
-																  std::make_move_iterator(std::end(pathCoordinatesList)) };
-
-				delete pathFinding;
-
-				if (!pathCoordinates.empty())
+			if (targetFromX != fromX || targetFromY != fromY) {
+				// we have a path from a to b here
+				if (!grid->IsOccupied(targetFromX, targetFromY) && !grid->IsOccupied(fromX, fromY))
 				{
-					grid->SetHasRoadPreview(pathCoordinates, true);
+					Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(fromX, fromY),
+						std::pair<int, int>(targetFromX, targetFromY));
+					pathFinding->CalculatePath();
+					std::list<std::pair<int, int>> pathCoordinatesList = pathFinding->GetPath();
+					std::vector<std::pair<int, int>> pathCoordinates{ std::make_move_iterator(std::begin(pathCoordinatesList)),
+																	  std::make_move_iterator(std::end(pathCoordinatesList)) };
+
+					delete pathFinding;
+
+					if (!pathCoordinates.empty() && (grid->HasRoadAccess(pathCoordinates) || grid->IsAtEdgeOfMap(pathCoordinates)))
+					{ // there is a path with access from outside the map
+						grid->SetHasRoadPreview(pathCoordinates, true);
+					}
 				}
 			}
-			else
-				grid->SetHasRoadPreview(fromX, fromY, true);
+			else if (!grid->IsOccupied(fromX, fromX))
+				// in this case we have clicked on a single tile
+				if (grid->HasRoadAccess(fromX, fromY) || grid->IsAtEdgeOfMap(fromX, fromY))
+				{
+					grid->SetHasRoadPreview(fromX, fromY, true);
+				}
 			break;
 		}
 	}

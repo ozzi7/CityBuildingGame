@@ -134,11 +134,13 @@ void Grid::SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value)
 void Grid::SetHasRoad(int x, int y, bool value)
 {
 	gridUnits[y][x].hasRoad = value;
+	terrain->reloadTerrain = true;
 }
 void Grid::SetHasRoad(const std::vector<std::pair<int,int>>& road, bool value)
 {
 	for (const std::pair<int, int> roadPiece : road)
-		SetHasRoad(roadPiece.first, roadPiece.second, value);
+		gridUnits[roadPiece.second][roadPiece.first].hasRoad = value;
+	terrain->reloadTerrain = true;
 }
 /// <summary>
 /// Checks if the x/y coordinates of a vector are inside the grid (after casting to int)
@@ -173,6 +175,7 @@ std::pair<int, int> Grid::GetClosestValidPosition(std::pair<float, float> coordi
 }
 void Grid::SetHasRoadPreview(int x, int y, bool value)
 {
+	ClearRoadPreview();
 	gridUnits[y][x].hasRoadPreview = value;
 	terrain->reloadTerrain = true;
 }
@@ -252,6 +255,8 @@ void Grid::ClearRoadPreview()
 }
 void Grid::SetHasRoadPreview(std::vector<std::pair<int, int>> road, bool value)
 {
+	ClearRoadPreview();
+	
 	roadCoordinates = std::vector<std::pair<int, int>>(road.begin(), road.end());
 	for (const std::pair<int, int> roadPiece : roadCoordinates)
 		gridUnits[roadPiece.second][roadPiece.first].hasRoadPreview = value;
@@ -286,15 +291,18 @@ bool Grid::IsAtEdgeOfMap(const std::vector<std::pair<int, int>>& road) const
 {
 	for (const std::pair<int, int> roadPiece : road)
 		if ((roadPiece.first == 0 || roadPiece.first == gridWidth - 1 ||
-			 roadPiece.second == 0 || roadPiece.second == gridHeight - 1) 
-			&& !IsOccupied(roadPiece.first, roadPiece.second))
+			 roadPiece.second == 0 || roadPiece.second == gridHeight - 1))
 		{
 			return true;
 		}
 	
 	return false;
 }
-
+bool Grid::IsAtEdgeOfMap(int x, int y) const
+{
+	return ((x == 0 || x == gridWidth - 1 ||
+		y == 0 || y == gridHeight - 1));
+}
 void Grid::DeleteGrass(int fromX, int fromY, int toX, int toY)
 {
 	// TODO: deletes ALL objects not just grass
@@ -311,6 +319,7 @@ void Grid::DeleteGrass(const std::vector<std::pair<int, int>>& road)
 {
 	for (const std::pair<int, int> roadPiece : road)
 		DeleteGrass(roadPiece.first, roadPiece.second, roadPiece.first, roadPiece.second);
+	reloadGrid = true;
 }
 // returns -1,-1 if not found
 std::pair<int, int> Grid::FindRoadAccess(int fromX, int toX, int fromY, int toY) const

@@ -65,6 +65,7 @@ public:
 	bool IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const;
 	bool IsValidPosition(glm::vec3 position) const;
 	bool IsAtEdgeOfMap(const std::vector<std::pair<int, int>>& road) const;
+	bool IsAtEdgeOfMap(int x, int y) const;
 
 	std::pair<int, int> GetClosestValidPosition(std::pair<int, int> coordinates) const;
 	std::pair<int, int> GetClosestValidPosition(std::pair<float, float> coordinates) const;
