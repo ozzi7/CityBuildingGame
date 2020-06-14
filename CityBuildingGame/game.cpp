@@ -107,23 +107,20 @@ void Game::gameLoop()
 	long long reloadGPUDataCounter = 0;
 	while (!glfwWindowShouldClose(window))
 	{
-		//glfwPollEvents();
 		inputHandler->MouseScroll();
 		inputHandler->CreateBuildingPreviews();
 
 		lightingCalculation(loopCount);
 		
-		for (std::list<Worker*>::iterator it = resources->workers.begin(); 
-			it != resources->workers.end(); ++it)
+		for (auto& worker : resources->workers)
 		{
-			(*it)->UpdatePosition(grid);
-			(*it)->GameStep();
+			worker->UpdatePosition(grid);
+			worker->GameStep();
 		}
-		for (std::list<Lumberjack*>::iterator it = resources->lumberjacks.begin();
-			it != resources->lumberjacks.end(); ++it)
+		for (auto& lumberjack : resources->lumberjacks)
 		{
-			(*it)->UpdatePosition(grid);
-			(*it)->GameStep();
+			lumberjack->UpdatePosition(grid);
+			lumberjack->GameStep();
 		}
 
 
@@ -154,11 +151,10 @@ void Game::gameLoop()
 			}
 			if (grid->buildingMode)
 			{
-				for (std::list<GameObject*>::iterator it = grid->visibleUnits[i]->objects.begin();
-					it != grid->visibleUnits[i]->objects.end(); ++it)
+				for (auto& object : grid->visibleUnits[i]->objects)
 				{
 					try {
-						Building * building = dynamic_cast<Building*>((*it));
+						Building * building = dynamic_cast<Building*>(object);
 						if(building != nullptr)
 							building->Accept(*producerBuffer);
 					}
@@ -169,24 +165,21 @@ void Game::gameLoop()
 			}
 			else
 			{
-				for (std::list<GameObject*>::iterator it = grid->visibleUnits[i]->objects.begin();
-					it != grid->visibleUnits[i]->objects.end(); ++it)
+				for (auto& object : grid->visibleUnits[i]->objects)
 				{
-					(*it)->Accept(*producerBuffer);
+					object->Accept(*producerBuffer);
 				}
 			}
-			for (std::list<BoneAnimated*>::iterator it = grid->visibleUnits[i]->movingObjects.begin();
-				it != grid->visibleUnits[i]->movingObjects.end(); ++it)
+			for (auto& movingObject : grid->visibleUnits[i]->movingObjects)
 			{
-				(*it)->Accept(*producerBuffer);
+				movingObject->Accept(*producerBuffer);
 			}
 		}
 
 		// add the preview models to be rendered
-		for (std::list<GameObject*>::iterator it = grid->previewObjects.begin();
-			it != grid->previewObjects.end(); ++it)
+		for (auto& previewObject : grid->previewObjects)
 		{
-			(*it)->Accept(*producerBuffer);
+			previewObject->Accept(*producerBuffer);
 		}
 
 		grid->terrain->Accept(*producerBuffer); // TODO

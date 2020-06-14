@@ -102,52 +102,55 @@ void InputHandler::Mouseclick(int button, int action)
 {
 	if (windowFocused)
 	{
-		if (!(action == GLFW_PRESS))
-			return;
-
-		// Test Code
-		const glm::vec3 cursorPosition = Camera->GetCursorPositionOnGrid();
-
-		if (Grid->IsValidPosition(cursorPosition))
+		if (action == GLFW_PRESS)
 		{
-			if (button == GLFW_MOUSE_BUTTON_LEFT)
+			// Test Code
+			const glm::vec3 cursorPosition = Camera->GetCursorPositionOnGrid();
+
+			if (Grid->IsValidPosition(cursorPosition))
+			{
+				if (button == GLFW_MOUSE_BUTTON_LEFT)
+				{
+					isLeftMouseClickDown = true;
+					switch (buildingSelection)
+					{
+					case 3:
+						firstKeyPressPosition = cursorPosition;
+						break;
+					}
+				}
+				else if (button == GLFW_MOUSE_BUTTON_RIGHT)
+				{
+					Grid->buildingMode = false;
+					Grid->reloadGrid = true;
+					buildingSelection = -1;
+					Grid->terrain->reloadTerrain = true;
+					isLeftMouseClickDown = false;
+				}
+			}
+		}
+		else if (action == GLFW_RELEASE && isLeftMouseClickDown)
+		{
+			const glm::vec3 cursorPosition = Camera->GetCursorPositionOnGrid();
+			isLeftMouseClickDown = false;
+			
+			if (Grid->IsValidPosition(cursorPosition))
 			{
 				switch (buildingSelection)
 				{
-					case 1:
-						gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::DwellingID, cursorPosition.x, cursorPosition.y));
-						break;
+				case 1:
+					gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::DwellingID, cursorPosition.x, cursorPosition.y));
+					break;
 
-					case 2:
-						gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::LumberjackHutID, cursorPosition.x, cursorPosition.y));
-						break;
-
-					case 3:
-						if (firstKeyPressed)
-						{
-							firstKeyPressed = false;
-							gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::PathID, firstKeyPressPosition.x,
-								firstKeyPressPosition.y, cursorPosition.x, cursorPosition.y));
-						}
-						else
-						{
-							firstKeyPressed = true;
-							firstKeyPressPosition = cursorPosition;
-						}
-						break;
-					default:
-						return;
+				case 2:
+					gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::LumberjackHutID, cursorPosition.x, cursorPosition.y));
+					break;
+				case 3:
+					gameEventHandler->AddEvent(new CreateBuildingEvent(BuildingType::PathID, firstKeyPressPosition.x,
+						firstKeyPressPosition.y, cursorPosition.x, cursorPosition.y));
+					break;
 				}
 			}
-			else if (button == GLFW_MOUSE_BUTTON_RIGHT)
-			{
-				Grid->buildingMode = false;
-				Grid->reloadGrid = true;
-				buildingSelection = -1;
-				Grid->terrain->reloadTerrain = true;
-				firstKeyPressed = false;
-			}
-
 		}
 	}
 }
@@ -168,7 +171,7 @@ void InputHandler::CreateBuildingPreviews() const
 			gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::LumberjackHutID, cursorPosition.x,
 				cursorPosition.y));
 		if (buildingSelection == 3)
-			if (firstKeyPressed) {
+			if (isLeftMouseClickDown) {
 				gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::PathID, firstKeyPressPosition.x,
 					firstKeyPressPosition.y, cursorPosition.x, cursorPosition.y));
 			}
