@@ -141,14 +141,8 @@ void Game::gameLoop()
 
 		/* Extract data for the renderer*/
 		RenderBuffer* producerBuffer = renderBuffers->GetProducerBuffer();
-		int buildingModeChanges = 0;
-		bool oldBuildingMode = grid->buildingMode;
 		for (int i = 0; i < grid->nofVisibleUnits; i++)
 		{
-			if (grid->buildingMode != oldBuildingMode) {
-				buildingModeChanges++;
-				oldBuildingMode = grid->buildingMode;
-			}
 			if (grid->buildingMode)
 			{
 				for (auto& object : grid->visibleUnits[i]->objects)
