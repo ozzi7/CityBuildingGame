@@ -245,6 +245,15 @@ void Grid::ClearRoadPreview()
 	{
 		SetHasRoadPreview(entry.first, entry.second, false);
 	}
+	roadCoordinates.clear();
+}
+void Grid::SetHasRoadPreview(std::vector<std::pair<int, int>> road, bool value)
+{
+	roadCoordinates = std::vector<std::pair<int, int>>(road.begin(), road.end());
+	for (std::pair<int, int> entry : roadCoordinates)
+	{
+		SetHasRoadPreview(entry.first, entry.second, value);
+	}
 }
 /*
 Returns true if any of the 4 surrounding tiles is a road
@@ -284,7 +293,7 @@ bool Grid::IsAtEdgeOfMap(std::vector<std::pair<int, int>> road) const
 	return false;
 }
 
-void Grid::DeleteGrass(int fromX, int toX, int fromY, int toY)
+void Grid::DeleteGrass(int fromX, int fromY, int toX, int toY)
 {
 	// TODO: deletes ALL objects not just grass
 	for (int x = fromX; x <= toX; ++x)

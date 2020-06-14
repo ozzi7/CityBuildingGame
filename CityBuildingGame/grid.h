@@ -47,6 +47,7 @@ public:
 	bool IsValidPosition(glm::vec3 position) const;
 	void SetHasRoadPreview(int x, int y, bool value);
 	void ClearRoadPreview();
+	void SetHasRoadPreview(std::vector<std::pair<int, int>> road, bool value);
 	bool HasTree(int x, int y) const;
 	bool HasTree(int fromX, int toX, int fromY, int toY) const;
 	bool IsOccupied(int x, int y) const;
@@ -59,7 +60,7 @@ public:
 	bool HasRoadAccess(int x, int y) const;
 	bool HasRoadAccess(std::vector<std::pair<int, int>> road) const;
 	bool IsAtEdgeOfMap(std::vector<std::pair<int, int>> road) const;
-	void DeleteGrass(int fromX, int toX, int fromY, int toY);
+	void DeleteGrass(int fromX, int fromY, int toX, int toY);
 	void DeleteGrass(std::vector<std::pair<int, int>> road);
 
 	std::pair<int, int> FindRoadAccess(int fromX, int toX, int fromY, int toY) const;

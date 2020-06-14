@@ -185,7 +185,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			dwelling->AddWoodBuildingMaterialOnTheWay(2);
 
 			dwelling->CreateBuildingOutline();
-			grid->DeleteGrass(fromX, toX, fromY, toY);
+			grid->DeleteGrass(fromX, fromY, toX, toY);
 
 			/* create worker.. */
 			Worker* worker = new Worker(glm::vec3(pathCoordinates.front().first + 0.5f, pathCoordinates.front().second + 0.5f, 
@@ -236,7 +236,7 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			lumberjackHut->CreateBuildingOutline();
 
 			grid->SetIsOccupied(fromX, toX, fromY, toY, true);
-			grid->DeleteGrass(fromX, toX, fromY, toY);
+			grid->DeleteGrass(fromX, fromY, toX, toY);
 
 			// store reference to grid
 			grid->gridUnits[lumberjackHut->posY][lumberjackHut->posX].objects.push_back(lumberjackHut);
@@ -259,7 +259,6 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 			delete pathFinding;
 
 			grid->ClearRoadPreview();
-			grid->roadCoordinates.clear();
 
 			if (grid->HasRoadAccess(pathCoordinates) || grid->IsAtEdgeOfMap(pathCoordinates))
 			{
@@ -788,6 +787,7 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::NOTSET, "[EVENT] Create building preview"));
 
 	grid->previewObjects.clear();
+	grid->ClearRoadPreview();
 
 	std::pair<int, int> closestToClick = std::make_pair(round(aCreateBuildingPreviewEvent->posX),
 		round(aCreateBuildingPreviewEvent->posY));
@@ -946,16 +946,10 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 														  std::make_move_iterator(std::end(pathCoordinatesList)) };
 
 		delete pathFinding;
-		grid->ClearRoadPreview();
 
 		if (!pathCoordinates.empty())
 		{
-			grid->roadCoordinates = std::vector<std::pair<int, int>>(pathCoordinates.begin(), pathCoordinates.end());
-
-			for (std::pair<int, int> entry : pathCoordinates)
-			{
-				grid->SetHasRoadPreview(entry.first, entry.second, true);
-			}
+			grid->SetHasRoadPreview(pathCoordinates, true);
 		}
 		break;
 	}
