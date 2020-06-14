@@ -11,9 +11,6 @@ public:
 
 	BuildingType buildingType;
 
-	float posX = -1;
-	float posY = -1;
-
-	float posXEnd = -1;
-	float posYEnd = -1;
+	std::pair<int,int> StartPosition = std::make_pair(-1, -1);
+	std::pair<int, int> EndPosition = std::make_pair(-1, -1);
 };

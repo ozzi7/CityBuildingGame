@@ -66,38 +66,23 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 {
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "[EVENT] Create building"));
 
-	std::pair<int, int> closestToClick = std::make_pair(round(aCreateBuildingEvent->posX),
-	                                                      round(aCreateBuildingEvent->posY));
-
-	closestToClick.first = max(0, std::min(grid->gridWidth - 1, closestToClick.first));
-	closestToClick.second = max(0, std::min(grid->gridHeight - 1, closestToClick.second));
-
-	std::pair<int, int> closestToClickEnd = std::make_pair(round(aCreateBuildingEvent->posXEnd),
-		round(aCreateBuildingEvent->posYEnd));
-	closestToClickEnd.first = max(0, std::min(grid->gridWidth - 1, closestToClickEnd.first));
-	closestToClickEnd.second = max(0, std::min(grid->gridHeight - 1, closestToClickEnd.second));
+	std::pair<int, int> closestToClick = grid->GetClosestValidPosition(aCreateBuildingEvent->StartPosition);
+	std::pair<int, int> closestToClickEnd = grid->GetClosestValidPosition(aCreateBuildingEvent->EndPosition);
 
 	std::pair<int, int> buildingSize;
 
 	glm::vec3 modelCenter = glm::vec3(-1.0f, -1.0f, -1.0f);
 	switch (aCreateBuildingEvent->buildingType)
 	{
-		case BuildingType::DwellingID:
-		{
-			buildingSize = std::make_pair(3, 3);
-			break;
-		}
-		case BuildingType::LumberjackHutID:
-		{
-			buildingSize = std::make_pair(3, 3);
-			break;
-		}
-		case BuildingType::PathID:
-		{
-			buildingSize = std::make_pair(1, 1);
-			break;
-		}
+	case BuildingType::DwellingID:
+	case BuildingType::LumberjackHutID:
+		buildingSize = std::make_pair(3, 3);
+		break;
+	case BuildingType::PathID:
+		buildingSize = std::make_pair(1, 1);
+		break;
 	}
+
 	/* Calculate correct occupied units and save in fromX, toX, fromY, toY inclusive */
 	/* Set correct 3d model center point */
 	int fromX, toX, fromY, toY = 0;
@@ -113,12 +98,12 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	}
 	else
 	{
-		fromX = int(aCreateBuildingEvent->posX) - buildingSize.first / 2;
-		toX = int(aCreateBuildingEvent->posX) + buildingSize.first / 2;
-		modelCenter.x = int(aCreateBuildingEvent->posX) + 0.5f;
+		fromX = int(aCreateBuildingEvent->StartPosition.first) - buildingSize.first / 2;
+		toX = int(aCreateBuildingEvent->StartPosition.first) + buildingSize.first / 2;
+		modelCenter.x = int(aCreateBuildingEvent->StartPosition.first) + 0.5f;
 
-		targetFromX = int(aCreateBuildingEvent->posXEnd) - buildingSize.first / 2;
-		targetToX = int(aCreateBuildingEvent->posXEnd) + buildingSize.first / 2;
+		targetFromX = int(aCreateBuildingEvent->EndPosition.first) - buildingSize.first / 2;
+		targetToX = int(aCreateBuildingEvent->EndPosition.first) + buildingSize.first / 2;
 	}
 
 	if (buildingSize.second % 2 == 0)
@@ -132,12 +117,12 @@ void GameEventHandler::Visit(CreateBuildingEvent* aCreateBuildingEvent)
 	}
 	else
 	{
-		fromY = int(aCreateBuildingEvent->posY) - buildingSize.second / 2;
-		toY = int(aCreateBuildingEvent->posY) + buildingSize.second / 2;
-		modelCenter.y = int(aCreateBuildingEvent->posY) + 0.5f;
+		fromY = int(aCreateBuildingEvent->StartPosition.second) - buildingSize.second / 2;
+		toY = int(aCreateBuildingEvent->StartPosition.second) + buildingSize.second / 2;
+		modelCenter.y = int(aCreateBuildingEvent->StartPosition.second) + 0.5f;
 
-		targetFromY = int(aCreateBuildingEvent->posYEnd) - buildingSize.second / 2;
-		targetToY = int(aCreateBuildingEvent->posYEnd) + buildingSize.second / 2;
+		targetFromY = int(aCreateBuildingEvent->EndPosition.second) - buildingSize.second / 2;
+		targetToY = int(aCreateBuildingEvent->EndPosition.second) + buildingSize.second / 2;
 	}
 
 	/* calculate 3d model position height*/
@@ -800,36 +785,21 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 	grid->previewObjects.clear();
 	grid->ClearRoadPreview();
 
-	std::pair<int, int> closestToClick = std::make_pair(round(aCreateBuildingPreviewEvent->posX),
-		round(aCreateBuildingPreviewEvent->posY));
-	closestToClick.first = max(0, std::min(grid->gridWidth-1, closestToClick.first));
-	closestToClick.second = max(0, std::min(grid->gridHeight-1, closestToClick.second));
-
-	std::pair<int, int> closestToClickEnd = std::make_pair(round(aCreateBuildingPreviewEvent->posXEnd),
-		round(aCreateBuildingPreviewEvent->posYEnd));
-	closestToClickEnd.first = max(0, std::min(grid->gridWidth-1, closestToClickEnd.first));
-	closestToClickEnd.second = max(0, std::min(grid->gridHeight-1, closestToClickEnd.second));
+	std::pair<int, int> closestToClick = grid->GetClosestValidPosition(aCreateBuildingPreviewEvent->StartPosition);
+	std::pair<int, int> closestToClickEnd = grid->GetClosestValidPosition(aCreateBuildingPreviewEvent->EndPosition);
 
 	std::pair<int, int> buildingSize;
 
 	glm::vec3 modelCenter = glm::vec3(-1.0f, -1.0f, -1.0f);
 	switch (aCreateBuildingPreviewEvent->buildingType)
 	{
-		case BuildingType::DwellingID:
-		{
-			buildingSize = std::make_pair(3, 3);
-			break;
-		}
+		case BuildingType::DwellingID:			
 		case BuildingType::LumberjackHutID:
-		{
 			buildingSize = std::make_pair(3, 3);
 			break;
-		}
 		case BuildingType::PathID:
-		{
 			buildingSize = std::make_pair(1, 1);
-			break;
-		}
+			break;	
 	}
 	
 	/* Calculate correct occupied units and save in fromX, toX, fromY, toY inclusive */
@@ -847,12 +817,12 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 	}
 	else
 	{
-		fromX = int(aCreateBuildingPreviewEvent->posX) - buildingSize.first / 2;
-		toX = int(aCreateBuildingPreviewEvent->posX) + buildingSize.first / 2;
-		modelCenter.x = int(aCreateBuildingPreviewEvent->posX) + 0.5f;
+		fromX = int(aCreateBuildingPreviewEvent->StartPosition.first) - buildingSize.first / 2;
+		toX = int(aCreateBuildingPreviewEvent->StartPosition.first) + buildingSize.first / 2;
+		modelCenter.x = int(aCreateBuildingPreviewEvent->StartPosition.first) + 0.5f;
 
-		targetFromX = int(aCreateBuildingPreviewEvent->posXEnd) - buildingSize.first / 2;
-		targetToX = int(aCreateBuildingPreviewEvent->posXEnd) + buildingSize.first / 2;
+		targetFromX = int(aCreateBuildingPreviewEvent->EndPosition.first) - buildingSize.first / 2;
+		targetToX = int(aCreateBuildingPreviewEvent->EndPosition.first) + buildingSize.first / 2;
 	}
 
 	if (buildingSize.second % 2 == 0)
@@ -866,12 +836,12 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 	}
 	else
 	{
-		fromY = int(aCreateBuildingPreviewEvent->posY) - buildingSize.second / 2;
-		toY = int(aCreateBuildingPreviewEvent->posY) + buildingSize.second / 2;
-		modelCenter.y = int(aCreateBuildingPreviewEvent->posY) + 0.5f;
+		fromY = int(aCreateBuildingPreviewEvent->StartPosition.second) - buildingSize.second / 2;
+		toY = int(aCreateBuildingPreviewEvent->StartPosition.second) + buildingSize.second / 2;
+		modelCenter.y = int(aCreateBuildingPreviewEvent->StartPosition.second) + 0.5f;
 
-		targetFromY = int(aCreateBuildingPreviewEvent->posYEnd) - buildingSize.second / 2;
-		targetToY = int(aCreateBuildingPreviewEvent->posYEnd) + buildingSize.second / 2;
+		targetFromY = int(aCreateBuildingPreviewEvent->EndPosition.second) - buildingSize.second / 2;
+		targetToY = int(aCreateBuildingPreviewEvent->EndPosition.second) + buildingSize.second / 2;
 	}
 
 	/* calculate 3d model position height*/
@@ -963,5 +933,4 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 			break;
 		}
 	}
-	grid->terrain->reloadTerrain = true;
 }

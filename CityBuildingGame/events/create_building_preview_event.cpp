@@ -4,16 +4,15 @@
 
 CreateBuildingPreviewEvent::CreateBuildingPreviewEvent(BuildingType aBuildingType, float aPosX, float aPosY)
 {
-	posX = aPosX;
-	posY = aPosY;
+	StartPosition = std::make_pair(aPosX, aPosY);
+
 	buildingType = aBuildingType;
 };
 CreateBuildingPreviewEvent::CreateBuildingPreviewEvent(BuildingType aBuildingType, float aPosXStart, float aPosYStart, float aPosXEnd, float aPosYEnd)
 {
-	posX = aPosXStart;
-	posY = aPosYStart;
-	posXEnd = aPosXEnd;
-	posYEnd = aPosYEnd;
+	StartPosition = std::make_pair(aPosXStart, aPosYStart);
+	EndPosition = std::make_pair(aPosXEnd, aPosYEnd);
+
 	buildingType = aBuildingType;
 };
 void CreateBuildingPreviewEvent::Accept(GameEventVisitor* eventVisitor)

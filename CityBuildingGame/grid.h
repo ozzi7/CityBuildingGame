@@ -66,6 +66,9 @@ public:
 	bool IsValidPosition(glm::vec3 position) const;
 	bool IsAtEdgeOfMap(const std::vector<std::pair<int, int>>& road) const;
 
+	std::pair<int, int> GetClosestValidPosition(std::pair<int, int> coordinates) const;
+	std::pair<int, int> GetClosestValidPosition(std::pair<float, float> coordinates) const;
+
 	void ClearRoadPreview();
 
 	void DeleteGrass(int fromX, int fromY, int toX, int toY);

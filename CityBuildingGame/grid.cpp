@@ -150,6 +150,27 @@ bool Grid::IsValidPosition(glm::vec3 position) const
 		gridHeight > (int)position.y &&
 		gridWidth > (int)position.x;
 }
+/// <summary>
+/// Returns the closest valid coordinate
+/// </summary>
+/// <param name="coordinates">pair of x/y coordinates</param>
+/// <returns></returns>
+std::pair<int,int> Grid::GetClosestValidPosition(std::pair<int,int> coordinates) const
+{
+	return std::make_pair(std::max(0, std::min(gridWidth - 1, coordinates.first)),
+		std::max(0, std::min(gridHeight - 1, coordinates.second)));
+}
+/// <summary>
+/// Returns the closest valid coordinate
+/// </summary>
+/// <param name="coordinates">pair of x/y coordinates</param>
+/// <returns></returns>
+std::pair<int, int> Grid::GetClosestValidPosition(std::pair<float, float> coordinates) const
+{
+	std::pair<int, int> closestIntCoords = std::make_pair(round(coordinates.first), round(coordinates.second));
+	return std::make_pair(std::max(0, std::min(gridWidth - 1, closestIntCoords.first)),
+		std::max(0, std::min(gridHeight - 1, closestIntCoords.second)));
+}
 void Grid::SetHasRoadPreview(int x, int y, bool value)
 {
 	gridUnits[y][x].hasRoadPreview = value;
