@@ -144,14 +144,8 @@ void Game::gameLoop()
 
 		/* Extract data for the renderer*/
 		RenderBuffer* producerBuffer = renderBuffers->GetProducerBuffer();
-		int buildingModeChanges = 0;
-		bool oldBuildingMode = grid->buildingMode;
 		for (int i = 0; i < grid->nofVisibleUnits; i++)
 		{
-			if (grid->buildingMode != oldBuildingMode) {
-				buildingModeChanges++;
-				oldBuildingMode = grid->buildingMode;
-			}
 			if (grid->buildingMode)
 			{
 				for (std::list<GameObject*>::iterator it = grid->visibleUnits[i]->objects.begin();
@@ -181,8 +175,6 @@ void Game::gameLoop()
 				(*it)->Accept(*producerBuffer);
 			}
 		}
-
-		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::ERROR_L, std::to_string(buildingModeChanges)));
 
 		// add the preview models to be rendered
 		for (std::list<GameObject*>::iterator it = grid->previewObjects.begin();
