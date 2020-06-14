@@ -913,7 +913,9 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 		}
 		case BuildingType::PathID:
 		{
-			if (targetFromX != fromX || targetFromY != fromY) {
+			// check if the path has different start & endpoint and then check if endpoint is not occupied (pathfinding allows it)
+			if (targetFromX != fromX || targetFromY != fromY && !grid->IsOccupied(targetFromX, targetFromY)) {
+				
 				Pathfinding* pathFinding = new Pathfinding(grid, std::pair<int, int>(fromX, fromY),
 					std::pair<int, int>(targetFromX, targetFromY));
 				pathFinding->CalculatePath();
