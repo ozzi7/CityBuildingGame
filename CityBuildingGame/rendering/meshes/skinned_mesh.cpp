@@ -67,9 +67,8 @@ SkinnedMesh::SkinnedMesh()
 {
 	m_VAO = 0;
 	for (unsigned int i = 0; i < NUM_VBs; ++i)
-	{
 		m_Buffers[i] = 0;
-	}
+	
 	m_NumBones = 0;
 	m_pScene = nullptr;
 }

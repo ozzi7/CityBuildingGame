@@ -33,10 +33,10 @@ void Model::init(const std::string& path)
 
 void Model::Draw(Shader& shader)
 {
-	for (unsigned int i = 0; i < meshes.size(); i++)
+	for (Mesh mesh : meshes)
 	{
-		meshes[i].Bind(shader);
-		meshes[i].Draw();
+		mesh.Bind(shader);
+		mesh.Draw();
 	}
 }
 // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
@@ -153,16 +153,14 @@ std::vector<Texture> Model::loadMaterialTextures(const aiMaterial* mat, aiTextur
 		mat->GetTexture(type, i, &str);
 		// check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
 		bool skip = false;
-		for (unsigned int j = 0; j < textures_loaded.size(); j++)
-		{
-			if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
+		for (Texture j : textures_loaded)
+			if (std::strcmp(j.path.data(), str.C_Str()) == 0)
 			{
-				textures.push_back(textures_loaded[j]);
-				skip =
-					true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
+				textures.push_back(j);
+				skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
 				break;
 			}
-		}
+		
 		if (!skip)
 		{   // if texture hasn't been loaded already, load it
 			Texture texture;
@@ -170,8 +168,7 @@ std::vector<Texture> Model::loadMaterialTextures(const aiMaterial* mat, aiTextur
 			texture.type = typeName;
 			texture.path = str.C_Str();
 			textures.push_back(texture);
-			textures_loaded.
-				push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
+			textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
 		}
 	}
 	return textures;
