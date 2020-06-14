@@ -39,7 +39,7 @@ public:
 	Change this to allow further zoom out */
 	int maximumVisibleUnits = 600 * 500;
 
-	// Set this to force reload of terrain once (for example when going into building mode)
+	// Set this to force reload of terrain once (for example when going into building mode) // TODO: this for texture changes only and could be made more efficient
 	bool reloadTerrain = false;
 
 private:

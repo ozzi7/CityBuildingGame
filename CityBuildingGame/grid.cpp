@@ -34,9 +34,11 @@ bool Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec
 	terrain->SetRenderWindow(upperLeft, upperRight, lowerLeft, lowerRight);
 
 	/* Check if we need to recalculate visible grid */
-	if (currUpperLeftX != (int)upperLeft.x || currUpperLeftY != (int)upperLeft.y ||
+	if (reloadGrid || currUpperLeftX != (int)upperLeft.x || currUpperLeftY != (int)upperLeft.y ||
 		currLowerRightX != (int)lowerRight.x || currLowerRightY != (int)lowerRight.y)
 	{
+		reloadGrid = false;
+
 		currUpperLeftX = (int)upperLeft.x;
 		currUpperLeftY = (int)upperLeft.y;
 		currLowerRightX = (int)lowerRight.x;
@@ -75,11 +77,7 @@ bool Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec
 		}
 		return true;
 	}
-	else
-	{
-		return false;
-	}
-	return true;
+	return false;
 }
 /* Return height of any point on the grid
 Note: No out of bounds checking*/

@@ -29,6 +29,7 @@ void InputHandler::Keypress(int button, int action)
 					Grid->buildingMode = true;
 					buildingSelection = 1;
 					Grid->terrain->reloadTerrain = true;
+					Grid->reloadGrid = true;
 				}
 				// In building mode of different building -> change to new 
 				else if (buildingSelection != 1)
@@ -41,6 +42,7 @@ void InputHandler::Keypress(int button, int action)
 					Grid->buildingMode = false;
 					buildingSelection = -1;
 					Grid->terrain->reloadTerrain = true;
+					Grid->reloadGrid = true;
 				}
 			}
 			
@@ -52,6 +54,7 @@ void InputHandler::Keypress(int button, int action)
 					Grid->buildingMode = true;
 					buildingSelection = 2;
 					Grid->terrain->reloadTerrain = true;
+					Grid->reloadGrid = true;
 				}
 				// In building mode of different building -> change to new 
 				else if (buildingSelection != 2)
@@ -64,6 +67,7 @@ void InputHandler::Keypress(int button, int action)
 					Grid->buildingMode = false;
 					buildingSelection = -1;
 					Grid->terrain->reloadTerrain = true;
+					Grid->reloadGrid = true;
 				}
 			}
 			if (button == GLFW_KEY_3)
@@ -74,6 +78,7 @@ void InputHandler::Keypress(int button, int action)
 					Grid->buildingMode = true;
 					buildingSelection = 3;
 					Grid->terrain->reloadTerrain = true;
+					Grid->reloadGrid = true;
 				}
 				// In building mode of different building -> change to new 
 				else if (buildingSelection != 3)
@@ -86,6 +91,7 @@ void InputHandler::Keypress(int button, int action)
 					Grid->buildingMode = false;
 					buildingSelection = -1;
 					Grid->terrain->reloadTerrain = true;
+					Grid->reloadGrid = true;
 				}
 			}
 		}
@@ -136,6 +142,7 @@ void InputHandler::Mouseclick(int button, int action)
 			else if (button == GLFW_MOUSE_BUTTON_RIGHT)
 			{
 				Grid->buildingMode = false;
+				Grid->reloadGrid = true;
 				buildingSelection = -1;
 				Grid->terrain->reloadTerrain = true;
 			}
