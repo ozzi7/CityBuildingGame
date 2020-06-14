@@ -28,9 +28,11 @@ void Grid::Init()
 	/*Initialize the vectors used for determining what to render*/
 	visibleUnits = std::vector<Unit*>(maximumVisibleUnits);
 }
-
+/* returns true if the visible units changed */
 bool Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight)
 {
+	terrain->SetRenderWindow(upperLeft, upperRight, lowerLeft, lowerRight);
+
 	/* Check if we need to recalculate visible grid */
 	if (currUpperLeftX != (int)upperLeft.x || currUpperLeftY != (int)upperLeft.y ||
 		currLowerRightX != (int)lowerRight.x || currLowerRightY != (int)lowerRight.y)
@@ -73,7 +75,11 @@ bool Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec
 		}
 		return true;
 	}
-	return false;
+	else
+	{
+		return false;
+	}
+	return true;
 }
 /* Return height of any point on the grid
 Note: No out of bounds checking*/

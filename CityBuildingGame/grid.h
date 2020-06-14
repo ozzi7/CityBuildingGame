@@ -23,6 +23,7 @@ public:
 	bool hasRoad = false;
 	bool hasRoadPreview = false;
 	float averageHeight = 0;
+
 	std::list<GameObject*> objects;
 	std::list<BoneAnimated*> movingObjects; // TODO doesnt have to coincide with bone animated.. hmm
 
@@ -37,29 +38,36 @@ public:
 	~Grid();
 
 	void Init();
-	float GetHeight(float posX, float posY) const;
-	bool IsAreaFlat(int fromX, int toX, int fromY, int toY) const;
-	bool IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const;
+
 	bool UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
+
+	float GetHeight(float posX, float posY) const;
+
 	void SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value);
 	void SetHasRoad(int x, int y, bool value);
 	void SetHasRoad(std::vector<std::pair<int, int>> road, bool value);
-	bool IsValidPosition(glm::vec3 position) const;
-	void SetHasRoadPreview(int x, int y, bool value);
-	void ClearRoadPreview();
 	void SetHasRoadPreview(std::vector<std::pair<int, int>> road, bool value);
-	bool HasTree(int x, int y) const;
-	bool HasTree(int fromX, int toX, int fromY, int toY) const;
-	bool IsOccupied(int x, int y) const;
 	void SetHasTree(int x, int y, bool value);
 	void SetIsOccupied(int x, int y, bool value);
+	void SetHasRoadPreview(int x, int y, bool value);
+
+	bool HasTree(int x, int y) const;
+	bool HasTree(int fromX, int toX, int fromY, int toY) const;
 	bool HasBuilding(int x, int y) const;
 	bool HasBuilding(int fromX, int toX, int fromY, int toY) const;
 	bool HasRoad(int x, int y) const;
 	bool HasRoadPreview(int x, int y) const;
 	bool HasRoadAccess(int x, int y) const;
 	bool HasRoadAccess(std::vector<std::pair<int, int>> road) const;
+	
+	bool IsOccupied(int x, int y) const;
+	bool IsAreaFlat(int fromX, int toX, int fromY, int toY) const;
+	bool IsValidBuildingPosition(int fromX, int fromY, int toX, int toY) const;
+	bool IsValidPosition(glm::vec3 position) const;
 	bool IsAtEdgeOfMap(std::vector<std::pair<int, int>> road) const;
+
+	void ClearRoadPreview();
+
 	void DeleteGrass(int fromX, int fromY, int toX, int toY);
 	void DeleteGrass(std::vector<std::pair<int, int>> road);
 
@@ -67,6 +75,9 @@ public:
 
 	// [y][x]
 	std::vector<std::vector<Unit>> gridUnits;
+
+	// Set this to force reload of the visible area once
+	bool reloadGrid = false;
 
 	std::vector<Unit*> visibleUnits;
 	int nofVisibleUnits = 0;

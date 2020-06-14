@@ -18,8 +18,9 @@ void Terrain::SetRenderWindow(glm::vec2 upperLeft, glm::vec2 upperRight, glm::ve
 		currUpperLeftY = (int)upperLeft.y;
 		currLowerRightX = (int)lowerRight.x;
 		currLowerRightY = (int)lowerRight.y;
-		reloadTerrain = false;
 		LoadVisibleGeometry(upperLeft, upperRight, lowerLeft, lowerRight);
+
+		reloadTerrain = false;
 	}
 }
 
