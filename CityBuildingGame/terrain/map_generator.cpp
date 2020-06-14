@@ -253,20 +253,15 @@ void MapGenerator::flattenMap(std::vector<std::vector<float>>& pHeightmap) const
 	float thresholdPlateau = getHeightAtPercentage(pHeightmap, 100 - PLATEAU_PERCENTAGE);
 
 	/* cut off */
-	for (int i = 0; i < pHeightmap.size(); i++)
-	{
-		for (int j = 0; j < pHeightmap[i].size(); j++)
+	for (std::vector<float>& i : pHeightmap)
+		for (float& j : i)
 		{
-			if (pHeightmap[i][j] < thresholdValley)
-			{
-				pHeightmap[i][j] = thresholdValley;
-			}
-			else if (pHeightmap[i][j] > thresholdPlateau)
-			{
-				pHeightmap[i][j] = thresholdPlateau;
-			}
+			if (j < thresholdValley)
+				j = thresholdValley;
+			
+			else if (j > thresholdPlateau)
+				j = thresholdPlateau;
 		}
-	}
 }
 /*  
 	Returns the height threshold where <percentage> of the map is lower
@@ -290,9 +285,7 @@ float MapGenerator::getHeightAtPercentage(std::vector<std::vector<float>>& pHeig
 		}
 	}
 	else 
-	{
 		return getHeightAtPercentageExact(pHeightmap, percentage);
-	}
 
 	std::sort(zValues.begin(), zValues.end());
 	return zValues[(int)(0.01 * percentage * (zValues.size() - 1))];
@@ -306,13 +299,9 @@ float MapGenerator::getHeightAtPercentageExact(std::vector<std::vector<float>>& 
 		return getMaxValue(pHeightmap);
 
 	std::vector<float> zValues;
-	for (int i = 0; i < pHeightmap.size(); i++)
-	{
-		for (int j = 0; j < pHeightmap[i].size(); j++)
-		{
-			zValues.push_back(pHeightmap[i][j]);
-		}
-	}
+	for (const std::vector<float>& i : pHeightmap)
+		for (float j : i)
+			zValues.push_back(j);
 
 	std::sort(zValues.begin(), zValues.end());
 	return zValues[(int)(0.01 * percentage * (zValues.size() - 1))];
@@ -321,28 +310,22 @@ float MapGenerator::getHeightAtPercentageExact(std::vector<std::vector<float>>& 
 float MapGenerator::getMaxValue(std::vector<std::vector<float>>& pHeightmap) const
 {
 	float maxValue = -FLT_MAX;
-	for (int i = 0; i < pHeightmap.size(); i++)
-	{
-		for (int j = 0; j < pHeightmap[i].size(); j++)
-		{
-			if (pHeightmap[i][j] >= maxValue)
-				maxValue = pHeightmap[i][j];
-		}
-	}
+	for (std::vector<float>& i : pHeightmap)
+		for (float j : i)
+			if (j >= maxValue)
+				maxValue = j;
+	
 	return maxValue;
 }
 // TODO: cache this or better yet save it when the map is generated (and flattened etc)
 float MapGenerator::getMinValue(std::vector<std::vector<float>>& pHeightmap) const
 {
 	float minValue = FLT_MAX;
-	for (int i = 0; i < pHeightmap.size(); i++)
-	{
-		for (int j = 0; j < pHeightmap[i].size(); j++)
-		{
-			if (pHeightmap[i][j] <= minValue)
-				minValue = pHeightmap[i][j];
-		}
-	}
+	for (std::vector<float>& i : pHeightmap)
+		for (float j : i)
+			if (j <= minValue)
+				minValue = j;
+	
 	return minValue;
 }
 float MapGenerator::getGaussianPDFValue(float mean, float var, float x)

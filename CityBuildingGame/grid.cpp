@@ -18,12 +18,8 @@ void Grid::Init()
 
 	/* calculate height of each grid unit */
 	for (int i = 0; i < terrain->heightmap.size() - 1; ++i)
-	{
 		for (int j = 0; j < terrain->heightmap[i].size() - 1; ++j)
-		{
 			gridUnits[i][j].averageHeight = (terrain->heightmap[i + 1][j] + terrain->heightmap[i][j + 1]) / 2.0f;
-		}
-	}
 
 	/*Initialize the vectors used for determining what to render*/
 	visibleUnits = std::vector<Unit*>(maximumVisibleUnits);
@@ -55,9 +51,7 @@ bool Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec
 
 		nofVisibleUnits = 0;
 		for (int i = std::max(0, fromY + 1); i <= std::min(gridHeight - 1, endY); ++i)
-		{
 			for (int j = std::max(0, fromX + 1); j <= std::min(gridWidth - 1, endX); ++j)
-			{
 				if (nofVisibleUnits < maximumVisibleUnits)
 				{
 					/* Check if the point is inside the rectangle*/
@@ -73,8 +67,7 @@ bool Grid::UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec
 				}
 				else
 					return true;
-			}
-		}
+		
 		return true;
 	}
 	return false;
@@ -110,15 +103,10 @@ bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY) const
 
 	const float height = terrain->heightmap[fromY][fromX];
 	for (int y = fromY; y <= toY + 1; ++y)
-	{
 		for (int x = fromX; x <= toX + 1; ++x)
-		{
 			if (terrain->heightmap[y][x] != height)
-			{
 				return false;
-			}
-		}
-	}
+	
 	return true;
 }
 bool Grid::IsOccupied(int x, int y) const
@@ -137,12 +125,9 @@ void Grid::SetIsOccupied(int x, int y, bool value)
 void Grid::SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value)
 {
 	for (int y = fromY; y <= toY; ++y)
-	{
 		for (int x = fromX; x <= toX; ++x)
-		{
 			gridUnits[y][x].occupied = value;
-		}
-	}
+	
 	if (buildingMode)
 		terrain->reloadTerrain = true;
 }
@@ -153,9 +138,7 @@ void Grid::SetHasRoad(int x, int y, bool value)
 void Grid::SetHasRoad(const std::vector<std::pair<int,int>>& road, bool value)
 {
 	for (const std::pair<int, int> roadPiece : road)
-	{
 		SetHasRoad(roadPiece.first, roadPiece.second, value);
-	}
 }
 /// <summary>
 /// Checks if the x/y coordinates of a vector are inside the grid (after casting to int)
@@ -200,13 +183,10 @@ bool Grid::HasTree(int x, int y) const
 bool Grid::HasTree(int fromX, int toX, int fromY, int toY) const
 {
 	for (int y = std::max(0, fromY); y <= std::min(gridHeight-1, toY); ++y)
-	{
 		for (int x = std::max(0, fromX); x <= std::min(gridWidth-1, toX); ++x)
-		{
 			if (gridUnits[y][x].hasTree)
 				return true;
-		}
-	}
+	
 	return false;
 }
 void Grid::SetHasTree(int x, int y, bool value)
@@ -220,13 +200,10 @@ bool Grid::HasBuilding(int x, int y) const
 bool Grid::HasBuilding(int fromX, int toX, int fromY, int toY) const
 {
 	for (int y = fromY; y <= toY; ++y)
-	{
 		for (int x = fromX; x <= toX; ++x)
-		{
 			if (!HasTree(x, y) && IsOccupied(x, y))
 				return true;
-		}
-	}
+	
 	return false;
 }
 bool Grid::HasRoad(int x, int y) const
@@ -255,9 +232,7 @@ void Grid::SetHasRoadPreview(std::vector<std::pair<int, int>> road, bool value)
 {
 	roadCoordinates = std::vector<std::pair<int, int>>(road.begin(), road.end());
 	for (const std::pair<int, int> entry : roadCoordinates)
-	{
 		SetHasRoadPreview(entry.first, entry.second, value);
-	}
 }
 /*
 Returns true if any of the 4 surrounding tiles is a road
@@ -276,10 +251,9 @@ Returns true if any of the 4 surrounding tiles is a road anywhere along the road
 bool Grid::HasRoadAccess(const std::vector<std::pair<int, int>>& road) const
 {
 	for (const std::pair<int,int> roadPiece : road)
-	{
 		if (HasRoadAccess(roadPiece.first, roadPiece.second))
 			return true;
-	}
+	
 	return false;
 }
 /*
@@ -288,12 +262,13 @@ Returns true if any part of the road is on the border of the map
 bool Grid::IsAtEdgeOfMap(const std::vector<std::pair<int, int>>& road) const
 {
 	for (const std::pair<int, int> roadPiece : road)
-	{
 		if ((roadPiece.first == 0 || roadPiece.first == gridWidth - 1 ||
-			roadPiece.second == 0 || roadPiece.second == gridHeight - 1) 
+			 roadPiece.second == 0 || roadPiece.second == gridHeight - 1) 
 			&& !IsOccupied(roadPiece.first, roadPiece.second))
+		{
 			return true;
-	}
+		}
+	
 	return false;
 }
 
@@ -301,63 +276,46 @@ void Grid::DeleteGrass(int fromX, int fromY, int toX, int toY)
 {
 	// TODO: deletes ALL objects not just grass
 	for (int x = fromX; x <= toX; ++x)
-	{
 		for (int y = fromY; y <= toY; ++y)
 		{
 			for (auto& object : gridUnits[y][x].objects)
-			{
 				delete object;
-			}
+			
 			gridUnits[y][x].objects.clear();
 		}
-	}
 }
 void Grid::DeleteGrass(const std::vector<std::pair<int, int>>& road)
 {
 	for (const std::pair<int, int> roadPiece : road)
-	{
 		DeleteGrass(roadPiece.first, roadPiece.second, roadPiece.first, roadPiece.second);
-	}
 }
 // returns -1,-1 if not found
 std::pair<int, int> Grid::FindRoadAccess(int fromX, int toX, int fromY, int toY) const
 {
 	// top row
 	if (toY + 1 >= 0 && toY + 1 <= gridHeight - 1)
-	{
 		for (int x = std::max(0, fromX); x <= std::min(gridWidth - 1, toX); ++x)
-		{
 			if (HasRoad(x, toY + 1))
 				return std::make_pair(x, toY);
-		}
-	}
+	
 	// bottom row
 	if (fromY - 1 >= 0 && fromY - 1 <= gridHeight - 1)
-	{
 		for (int x = std::max(0, fromX); x <= std::min(gridWidth - 1, toX); ++x)
-		{
 			if (HasRoad(x, fromY -1))
 				return std::make_pair(x, fromY);
-		}
-	}
+	
 	// left column
 	if (toX + 1 >= 0 && toX + 1 <= gridWidth - 1)
-	{
 		for (int y = std::max(0, fromY); y <= std::min(gridWidth - 1, toY); ++y)
-		{
 			if (HasRoad(toX + 1, y))
 				return std::make_pair(toX, y);
-		}
-	}
+	
 	// right column
 	if (fromX - 1 >= 0 && fromX - 1 <= gridWidth - 1)
-	{
 		for (int y = std::max(0, fromY); y <= std::min(gridWidth - 1, toY); ++y)
-		{
 			if (HasRoad(fromX - 1, y))
 				return std::make_pair(fromX, y);
-		}
-	}
+	
 
 	return std::make_pair(-1,-1); // ??
 }
@@ -371,8 +329,8 @@ Unit::Unit()
 
 Unit::~Unit()
 {
-	for (auto it = objects.begin(); it != objects.end(); ++it)
-		delete *it;
-	for (auto it = movingObjects.begin(); it != movingObjects.end(); ++it)
-		delete *it;
+	for (GameObject* object : objects)
+		delete object;
+	for (BoneAnimated* movingObject : movingObjects)
+		delete movingObject;
 }

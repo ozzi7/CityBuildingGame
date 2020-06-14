@@ -18,17 +18,17 @@ void InstancedModel::addMesh(std::vector<Vertex> vertices, std::vector<unsigned 
 
 void InstancedModel::Draw(Shader& shader, std::vector<glm::mat4>& models)
 {
-	for (unsigned int i = 0; i < meshes.size(); i++)
+	for (InstancedMesh mesh : meshes)
 	{
-		meshes[i].Bind(shader, models);
-		meshes[i].Draw((int)models.size());
+		mesh.Bind(shader, models);
+		mesh.Draw((int)models.size());
 	}
 }
 void InstancedModel::DrawOnly(Shader& shader, std::vector<glm::mat4>& models)
 {
-	for (unsigned int i = 0; i < meshes.size(); i++)
+	for (InstancedMesh mesh : meshes)
 	{
-		meshes[i].BindOnly(shader);
-		meshes[i].Draw((int)models.size());
+		mesh.BindOnly(shader);
+		mesh.Draw((int)models.size());
 	}
 }

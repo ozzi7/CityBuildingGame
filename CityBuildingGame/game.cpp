@@ -112,12 +112,13 @@ void Game::gameLoop()
 
 		lightingCalculation(loopCount);
 		
-		for (auto& worker : resources->workers)
+		for (Worker* worker : resources->workers)
 		{
 			worker->UpdatePosition(grid);
 			worker->GameStep();
 		}
-		for (auto& lumberjack : resources->lumberjacks)
+		
+		for (Lumberjack* lumberjack : resources->lumberjacks)
 		{
 			lumberjack->UpdatePosition(grid);
 			lumberjack->GameStep();
@@ -135,17 +136,14 @@ void Game::gameLoop()
 		
 		// TODO: prevent slowdowns
 		if (loopCount % 100 == 0)
-		{
 			gameEventHandler->AssignWorkToIdleWorkers();
-		}
 
 		/* Extract data for the renderer*/
 		RenderBuffer* producerBuffer = renderBuffers->GetProducerBuffer();
 		for (int i = 0; i < grid->nofVisibleUnits; i++)
 		{
 			if (grid->buildingMode)
-			{
-				for (auto& object : grid->visibleUnits[i]->objects)
+				for (GameObject* object : grid->visibleUnits[i]->objects)
 				{
 					try {
 						Building * building = dynamic_cast<Building*>(object);
@@ -156,25 +154,17 @@ void Game::gameLoop()
 					{
 					}
 				}
-			}
 			else
-			{
-				for (auto& object : grid->visibleUnits[i]->objects)
-				{
+				for (GameObject* object : grid->visibleUnits[i]->objects)
 					object->Accept(*producerBuffer);
-				}
-			}
-			for (auto& movingObject : grid->visibleUnits[i]->movingObjects)
-			{
+			
+			for (BoneAnimated* movingObject : grid->visibleUnits[i]->movingObjects)
 				movingObject->Accept(*producerBuffer);
-			}
 		}
 
 		// add the preview models to be rendered
-		for (auto& previewObject : grid->previewObjects)
-		{
+		for (GameObject* previewObject : grid->previewObjects)
 			previewObject->Accept(*producerBuffer);
-		}
 
 		grid->terrain->Accept(*producerBuffer); // TODO
 

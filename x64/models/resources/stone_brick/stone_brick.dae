@@ -5,21 +5,31 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.83.0 commit date:2020-06-03, commit time:14:38, hash:211b6c29f771</authoring_tool>
     </contributor>
-    <created>2020-06-14T19:35:05</created>
-    <modified>2020-06-14T19:35:05</modified>
+    <created>2020-06-14T21:05:04</created>
+    <modified>2020-06-14T21:05:04</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
   <library_effects>
     <effect id="Material-effect">
       <profile_COMMON>
+        <newparam sid="Diffuse_backed-surface">
+          <surface type="2D">
+            <init_from>Diffuse_backed</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="Diffuse_backed-sampler">
+          <sampler2D>
+            <source>Diffuse_backed-surface</source>
+          </sampler2D>
+        </newparam>
         <technique sid="common">
           <lambert>
             <emission>
               <color sid="emission">0 0 0 1</color>
             </emission>
             <diffuse>
-              <color sid="diffuse">0.8 0.8 0.8 1</color>
+              <texture texture="Diffuse_backed-sampler" texcoord="UVMap"/>
             </diffuse>
             <index_of_refraction>
               <float sid="ior">1.45</float>
@@ -29,7 +39,11 @@
       </profile_COMMON>
     </effect>
   </library_effects>
-  <library_images/>
+  <library_images>
+    <image id="Diffuse_backed" name="Diffuse_backed">
+      <init_from>Diffuse_backed.png</init_from>
+    </image>
+  </library_images>
   <library_materials>
     <material id="Material-material" name="Material">
       <instance_effect url="#Material-effect"/>
@@ -39,7 +53,7 @@
     <geometry id="Cube-mesh" name="Cube">
       <mesh>
         <source id="Cube-mesh-positions">
-          <float_array id="Cube-mesh-positions-array" count="24">1 1 1 1 1 -1 1 -1 1 1 -1 -1 -1 1 1 -1 1 -1 -1 -1 1 -1 -1 -1</float_array>
+          <float_array id="Cube-mesh-positions-array" count="24">0.874785 0.3794076 0.154969 0.874785 0.3794076 -0.154969 0.874785 -0.3794076 0.154969 0.874785 -0.3794076 -0.154969 -0.874785 0.3794076 0.154969 -0.874785 0.3794076 -0.154969 -0.874785 -0.3794076 0.154969 -0.874785 -0.3794076 -0.154969</float_array>
           <technique_common>
             <accessor source="#Cube-mesh-positions-array" count="8" stride="3">
               <param name="X" type="float"/>
@@ -82,7 +96,7 @@
   <library_visual_scenes>
     <visual_scene id="Scene" name="Scene">
       <node id="Stone" name="Stone" type="NODE">
-        <matrix sid="transform">0.874785 0 0 0 0 0.3794076 0 0 0 0 0.1549691 0 0 0 0 1</matrix>
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
         <instance_geometry url="#Cube-mesh" name="Stone">
           <bind_material>
             <technique_common>
