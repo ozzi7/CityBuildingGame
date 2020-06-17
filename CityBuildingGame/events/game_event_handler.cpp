@@ -948,7 +948,7 @@ void GameEventHandler::Visit(CreateBuildingPreviewEvent* aCreateBuildingPreviewE
 					}
 				}
 			}
-			else if (!grid->IsOccupied(fromX, fromX))
+			else if (!grid->IsOccupied(fromX, fromY))
 				// in this case we have clicked on a single tile
 				if (grid->HasRoadAccess(fromX, fromY) || grid->IsAtEdgeOfMap(fromX, fromY))
 				{

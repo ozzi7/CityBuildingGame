@@ -141,9 +141,8 @@ void InputHandler::CreateBuildingPreviews() const
 				cursorPosition.y));
 		if (buildingSelection == BuildingSelection::Road)
 			if (!isLeftMouseClickDown) 
-				gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::PathID, firstKeyPressPosition.x,
-				                                                          firstKeyPressPosition.y, firstKeyPressPosition.x,
-					firstKeyPressPosition.y));
+				gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::PathID, cursorPosition.x,
+					cursorPosition.y, cursorPosition.x, cursorPosition.y));
 			else 
 				gameEventHandler->AddEvent(new CreateBuildingPreviewEvent(BuildingType::PathID, firstKeyPressPosition.x,
 				                                                          firstKeyPressPosition.y, cursorPosition.x, cursorPosition.y));

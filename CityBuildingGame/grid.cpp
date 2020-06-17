@@ -176,6 +176,8 @@ std::pair<int, int> Grid::GetClosestValidPosition(std::pair<float, float> coordi
 void Grid::SetHasRoadPreview(int x, int y, bool value)
 {
 	ClearRoadPreview();
+
+	roadCoordinates.push_back(std::make_pair(x, y));
 	gridUnits[y][x].hasRoadPreview = value;
 	terrain->reloadTerrain = true;
 }
