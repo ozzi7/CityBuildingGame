@@ -327,26 +327,26 @@ void Grid::DeleteGrass(const std::vector<std::pair<int, int>>& road)
 std::pair<int, int> Grid::FindRoadAccess(int fromX, int toX, int fromY, int toY) const
 {
 	// top row
-	if (toY + 1 >= 0 && toY + 1 <= gridHeight - 1)
+	if (toY + 1 > 0 && toY + 1 < gridHeight)
 		for (int x = std::max(0, fromX); x <= std::min(gridWidth - 1, toX); ++x)
 			if (HasRoad(x, toY + 1))
 				return std::make_pair(x, toY);
 	
 	// bottom row
-	if (fromY - 1 >= 0 && fromY - 1 <= gridHeight - 1)
+	if (fromY - 1 >= 0 && fromY - 1 < gridHeight)
 		for (int x = std::max(0, fromX); x <= std::min(gridWidth - 1, toX); ++x)
 			if (HasRoad(x, fromY -1))
 				return std::make_pair(x, fromY);
 	
 	// left column
-	if (toX + 1 >= 0 && toX + 1 <= gridWidth - 1)
-		for (int y = std::max(0, fromY); y <= std::min(gridWidth - 1, toY); ++y)
+	if (toX + 1 >= 0 && toX + 1 < gridWidth)
+		for (int y = std::max(0, fromY); y <= std::min(gridHeight - 1, toY); ++y)
 			if (HasRoad(toX + 1, y))
 				return std::make_pair(toX, y);
 	
 	// right column
-	if (fromX - 1 >= 0 && fromX - 1 <= gridWidth - 1)
-		for (int y = std::max(0, fromY); y <= std::min(gridWidth - 1, toY); ++y)
+	if (fromX - 1 >= 0 && fromX - 1 < gridWidth)
+		for (int y = std::max(0, fromY); y <= std::min(gridHeight - 1, toY); ++y)
 			if (HasRoad(fromX - 1, y))
 				return std::make_pair(fromX, y);
 	
