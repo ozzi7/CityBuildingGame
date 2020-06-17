@@ -21,7 +21,7 @@ Game::Game(GLFWwindow* aWindow, InputHandler* aInputHandler)
 
 	renderBuffers = new TripleBuffer<RenderBuffer>();
 
-	camera = new Camera(glm::vec3(50.0f + MAP_HEIGHT * 0.5f, -50.0f + MAP_WIDTH * 0.5f, 50.0f), window);
+	camera = new Camera(glm::vec3(50.0f + MAP_WIDTH * 0.5f, -50.0f + MAP_HEIGHT * 0.5f, 50.0f), window);
 
 	inputHandler->Camera = camera;
 	inputHandler->Window = window;
