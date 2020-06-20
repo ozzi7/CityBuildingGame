@@ -9,7 +9,7 @@ Pathfinding::Pathfinding(Grid* aGrid, const std::pair<int,int> XYstart, const st
 	destination->coordinate = XYdestination;
 	start = new Node();
 	start->coordinate = XYstart;
-	start->distanceToStart = 0;
+	start->distanceToStart = 0.0f;
 	start->distanceToDestination = distanceToDestination(XYstart);
 	start->distanceTotal = start->distanceToStart + start->distanceToDestination;
 	start->destination = destination->coordinate;
@@ -21,8 +21,8 @@ void Pathfinding::CalculatePath()
 	auto startTime = std::chrono::high_resolution_clock::now();
 
 	open.push(start);
-		if (start->coordinate == destination->coordinate)
-			pathFound = true;
+	if (start->coordinate == destination->coordinate)
+		pathFound = true;
 	setNextNode();
 	
 	while (!pathFound && !unreachable)
@@ -42,20 +42,22 @@ void Pathfinding::CalculatePath()
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
 	long elapsedTimeMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Executed Pathfinding from " + 
-																			 std::to_string(start->coordinate.first) + "|" + 
-																			 std::to_string(start->coordinate.second) + " to " +
-																			 std::to_string(destination->coordinate.first) + "|" +
-																			 std::to_string(destination->coordinate.second) + " in " +
-																			 std::to_string(elapsedTimeMicroseconds) + " microseconds; PathFound: " +
-																			 std::to_string(pathFound)));
+													std::to_string(start->coordinate.first) + "|" + 
+													std::to_string(start->coordinate.second) + " to " +
+													std::to_string(destination->coordinate.first) + "|" +
+													std::to_string(destination->coordinate.second) + " in " +
+													std::to_string(elapsedTimeMicroseconds) + " microseconds; PathFound: " +
+													std::to_string(pathFound)));
+	/*for (auto coordinate : GetPath())
+		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, "Final path: " + std::to_string(coordinate.first) + "|" + std::to_string(coordinate.second)));*/
 }
 
 std::list<std::pair<int,int>> Pathfinding::GetPath() const
 {
 	std::list<std::pair<int, int>> path;
-	Node* currentPath = current;
 	if (pathFound)
 	{
+		Node* currentPath = current;
 		path.push_front(currentPath->coordinate);
 		while (currentPath->parent != nullptr)
 		{
@@ -75,55 +77,68 @@ void Pathfinding::createNode(const std::pair<int,int> coordinate)
 		{
 			Node* node = new Node();
 			node->coordinate = coordinate;
-			node->distanceToStart = current->distanceToStart + 1;
+			node->distanceToStart = current->distanceToStart + (grid->GetWalkingCost(current->coordinate.first, current->coordinate.second) * 0.5f + 
+																grid->GetWalkingCost(coordinate.first, coordinate.second) * 0.5f);
 			node->distanceToDestination = distanceToDestination(coordinate);
 			node->distanceTotal = node->distanceToStart + node->distanceToDestination;
 			node->parent = current;
 			node->destination = destination->coordinate;
-			//adjustParentNode(node); TODO
-			//std::cout << "Inserting " << coordinate.first << '|' << coordinate.second << '\n';
+			//loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::DEBUG, std::to_string(coordinate.first) + "|" + std::to_string(coordinate.second)));
 			open.push(node);
+			visitedNodes.insert({generateID(coordinate), node});
 
 			if (coordinate == destination->coordinate)
+			{
+				current = node;
 				pathFound = true;
+			}
 		}
 		visited[coordinate.first][coordinate.second] = true;
 	}
+	else
+		adjustParentNode(coordinate);
 }
 
-int Pathfinding::distanceToDestination(const std::pair<int,int> coordinate) const
+float Pathfinding::distanceToDestination(const std::pair<int,int> coordinate) const
 {
-	return
-		std::abs(coordinate.first - destination->coordinate.first) +
-		std::abs(coordinate.second - destination->coordinate.second);
+	return (float)(std::abs(coordinate.first - destination->coordinate.first) +
+				   std::abs(coordinate.second - destination->coordinate.second)) * (1.0f / 1.5f); // 1.5f -> has to be fastest possible walking speed
 }
 
 void Pathfinding::setNextNode()
 {
-	if (!open.empty())
+	if (!pathFound)
 	{
-		current = open.top();
-		open.pop();
-		closed.push_front(current);
+		if (!open.empty())
+		{
+			current = open.top();
+			open.pop();
+			closed.push_front(current);
+		}
+		else
+			unreachable = true;
 	}
-	else
-		unreachable = true;
 }
 
-void Pathfinding::adjustParentNode(Node* node)
+void Pathfinding::adjustParentNode(std::pair<int,int> coordinate)
 {
-	if (node->parent->parent != nullptr && node->parent->parent->parent != nullptr)
+	if (visitedNodes.find(generateID(coordinate)) != visitedNodes.end())
 	{
-		if (!(node->parent->parent->parent->coordinate.first + 1 > node->coordinate.first ||
-			node->parent->parent->parent->coordinate.first - 1 < node->coordinate.first ||
-			node->parent->parent->parent->coordinate.second + 1 > node->coordinate.second ||
-			node->parent->parent->parent->coordinate.second - 1 < node->coordinate.second))
-		{
-			node->parent = node->parent->parent->parent;
-			node->distanceToStart = node->parent->distanceToStart + 1;
-			node->distanceTotal = node->distanceToStart + node->distanceToDestination;
-		}
+		Node* node = visitedNodes.at(generateID(coordinate));
+
+		if (node->parent != nullptr)
+			// No need to check the node already has current as parent
+			if (node->parent != current)
+				// Change parent of current node to neighbor node, if neighbor is closer to start than current parent
+				if (node->parent->distanceToStart > current->distanceToStart)
+					node->parent = current;
+
 	}
+}
+
+std::string Pathfinding::generateID(std::pair<int, int> coordinate) const
+{
+	return std::to_string(coordinate.first) + "/" + std::to_string(coordinate.second);
 }
 
 Pathfinding::~Pathfinding()

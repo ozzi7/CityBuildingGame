@@ -24,6 +24,9 @@ public:
 	bool hasRoadPreview = false;
 	float averageHeight = 0;
 
+	// lower value = faster walking (1 / walking speed)
+	float walkingCost = 1;
+
 	std::list<GameObject*> objects;
 	std::list<BoneAnimated*> movingObjects; // TODO doesnt have to coincide with bone animated.. hmm
 
@@ -42,6 +45,7 @@ public:
 	bool UpdateVisibleList(glm::vec2 upperLeft, glm::vec2 upperRight, glm::vec2 lowerLeft, glm::vec2 lowerRight);
 
 	float GetHeight(float posX, float posY) const;
+	float GetWalkingCost(int x, int y) const;
 
 	void SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value);
 	void SetHasRoad(int x, int y, bool value);

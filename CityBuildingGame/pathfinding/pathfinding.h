@@ -13,9 +13,9 @@
 struct Node
 {
 	std::pair<int,int> coordinate;
-	int distanceToStart = 0;
-	int distanceToDestination = 0;
-	int distanceTotal = 0;
+	float distanceToStart = 0.0f;
+	float distanceToDestination = 0.0f;
+	float distanceTotal = 0.0f;
 	Node* parent{};
 	std::pair<int,int> destination;
 };
@@ -28,6 +28,7 @@ struct NodeCompare
 			return true;
 		if (node1->distanceTotal < node2->distanceTotal)
 			return false;
+
 
 		int xDistance1 = std::abs(node1->coordinate.first - node1->destination.first);
 		int yDistance1 = std::abs(node1->coordinate.second - node1->destination.second);
@@ -59,6 +60,7 @@ public:
 
 private:
 	std::forward_list<Node*> closed; // maybe not needed, only for storing pointers for deleting
+	std::unordered_map<std::string, Node*> visitedNodes; // use generateID() as key
 	std::priority_queue<Node*, std::deque<Node*>, NodeCompare> open;
 	bool visited[MAP_WIDTH][MAP_HEIGHT]{false};
 
@@ -74,7 +76,8 @@ private:
 	const int maxY = (int)(MAP_HEIGHT - 1);
 
 	void createNode(std::pair<int,int> coordinate);
-	int distanceToDestination(std::pair<int,int> coordinate) const;
+	float distanceToDestination(std::pair<int,int> coordinate) const;
 	void setNextNode();
-	void adjustParentNode(Node* node);
+	void adjustParentNode(std::pair<int,int> coordinate);
+	std::string generateID(std::pair<int,int> coordinate) const;
 };
