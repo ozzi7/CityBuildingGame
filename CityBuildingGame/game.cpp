@@ -112,13 +112,13 @@ void Game::gameLoop()
 
 		lightingCalculation(loopCount);
 		
-		for (Worker* worker : resources->workers)
+		for (Worker* worker : resources->Workers)
 		{
 			worker->UpdatePosition(grid);
 			worker->GameStep();
 		}
 		
-		for (Lumberjack* lumberjack : resources->lumberjacks)
+		for (Lumberjack* lumberjack : resources->Lumberjacks)
 		{
 			lumberjack->UpdatePosition(grid);
 			lumberjack->GameStep();

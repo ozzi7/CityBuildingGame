@@ -146,7 +146,7 @@ void Grid::SetHasRoad(int x, int y, bool value)
 }
 void Grid::SetHasRoad(const std::vector<std::pair<int,int>>& road, bool value)
 {
-	for (const std::pair<int, int> roadPiece : road) {
+	for (const std::pair<int, int> &roadPiece : road)
 		gridUnits[roadPiece.second][roadPiece.first].hasRoad = value;
 		if (value)
 			gridUnits[roadPiece.second][roadPiece.first].walkingCost = 1.0f / 1.5f;
@@ -182,7 +182,7 @@ std::pair<int,int> Grid::GetClosestValidPosition(std::pair<int,int> coordinates)
 /// <returns></returns>
 std::pair<int, int> Grid::GetClosestValidPosition(std::pair<float, float> coordinates) const
 {
-	std::pair<int, int> closestIntCoords = std::make_pair(round(coordinates.first), round(coordinates.second));
+	const std::pair<int, int> closestIntCoords = std::make_pair(round(coordinates.first), round(coordinates.second));
 	return std::make_pair(std::max(0, std::min(gridWidth - 1, closestIntCoords.first)),
 		std::max(0, std::min(gridHeight - 1, closestIntCoords.second)));
 }
@@ -190,7 +190,7 @@ void Grid::SetHasRoadPreview(int x, int y, bool value)
 {
 	ClearRoadPreview();
 
-	roadCoordinates.push_back(std::make_pair(x, y));
+	roadCoordinates.emplace_back(std::make_pair(x, y));
 	gridUnits[y][x].hasRoadPreview = value;
 	terrain->reloadTerrain = true;
 }
@@ -262,7 +262,7 @@ bool Grid::HasRoadPreview(int x, int y) const
 }
 void Grid::ClearRoadPreview()
 {
-	for (const std::pair<int, int> roadPiece : roadCoordinates)
+	for (const std::pair<int, int> & roadPiece : roadCoordinates)
 		gridUnits[roadPiece.second][roadPiece.first].hasRoadPreview = false;
 	
 	roadCoordinates.clear();
@@ -273,7 +273,7 @@ void Grid::SetHasRoadPreview(std::vector<std::pair<int, int>> road, bool value)
 	ClearRoadPreview();
 	
 	roadCoordinates = std::vector<std::pair<int, int>>(road.begin(), road.end());
-	for (const std::pair<int, int> roadPiece : roadCoordinates)
+	for (const std::pair<int, int> & roadPiece : roadCoordinates)
 		gridUnits[roadPiece.second][roadPiece.first].hasRoadPreview = value;
 	terrain->reloadTerrain = true;
 }
@@ -293,7 +293,7 @@ Returns true if any of the 4 surrounding tiles is a road anywhere along the road
 */
 bool Grid::HasRoadAccess(const std::vector<std::pair<int, int>>& road) const
 {
-	for (const std::pair<int,int> roadPiece : road)
+	for (const std::pair<int,int> & roadPiece : road)
 		if (HasRoadAccess(roadPiece.first, roadPiece.second))
 			return true;
 	
@@ -304,7 +304,7 @@ Returns true if any part of the road is on the border of the map
 */
 bool Grid::IsAtEdgeOfMap(const std::vector<std::pair<int, int>>& road) const
 {
-	for (const std::pair<int, int> roadPiece : road)
+	for (const std::pair<int, int> & roadPiece : road)
 		if ((roadPiece.first == 0 || roadPiece.first == gridWidth - 1 ||
 			 roadPiece.second == 0 || roadPiece.second == gridHeight - 1))
 		{
@@ -332,7 +332,7 @@ void Grid::DeleteGrass(int fromX, int fromY, int toX, int toY)
 }
 void Grid::DeleteGrass(const std::vector<std::pair<int, int>>& road)
 {
-	for (const std::pair<int, int> roadPiece : road)
+	for (const std::pair<int, int> & roadPiece : road)
 		DeleteGrass(roadPiece.first, roadPiece.second, roadPiece.first, roadPiece.second);
 	reloadGrid = true;
 }
