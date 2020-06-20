@@ -94,6 +94,10 @@ float Grid::GetHeight(float posX, float posY) const
 	const float n = terrain->heightmap[i][j + 1] - terrain->heightmap[i + 1][j + 1];
 	return (1 - offsetX) * m + (1 - offsetY) * n + terrain->heightmap[i + 1][j + 1];
 }
+float Grid::GetWalkingCost(int x, int y) const
+{
+	return gridUnits[y][x].walkingCost;
+}
 /* Check if area is flat within a rectangle of the grid
 Input for a 2x2 building is (0,1, 0,1) but accesses heightmap (0,2, 0,2)*/
 bool Grid::IsAreaFlat(int fromX, int toX, int fromY, int toY) const
@@ -134,12 +138,22 @@ void Grid::SetIsOccupied(int fromX, int toX, int fromY, int toY, bool value)
 void Grid::SetHasRoad(int x, int y, bool value)
 {
 	gridUnits[y][x].hasRoad = value;
+	if (value)
+		gridUnits[y][x].walkingCost = 1.0f / 1.5f;
+	else
+		gridUnits[y][x].walkingCost = 1.0f;
 	terrain->reloadTerrain = true;
 }
 void Grid::SetHasRoad(const std::vector<std::pair<int,int>>& road, bool value)
 {
 	for (const std::pair<int, int> &roadPiece : road)
+	{
 		gridUnits[roadPiece.second][roadPiece.first].hasRoad = value;
+		if (value)
+			gridUnits[roadPiece.second][roadPiece.first].walkingCost = 1.0f / 1.5f;
+		else
+			gridUnits[roadPiece.second][roadPiece.first].walkingCost = 1.0f;
+	}
 	terrain->reloadTerrain = true;
 }
 /// <summary>
