@@ -3,8 +3,8 @@
 
 #include "resources.h"
 
-Resources::Resources() {}
-Resources::~Resources() {}
+Resources::Resources() = default;
+Resources::~Resources() = default;
 
 void Resources::AddLumberjackHut(LumberjackHut* lumberjackHut)
 {
@@ -101,7 +101,7 @@ void Resources::RemoveObject(GameObject* gameObject)
 Worker* Resources::GetIdleWorker()
 {
 	Worker* last = nullptr;
-	if (idleWorkers.size() != 0)
+	if (!idleWorkers.empty())
 	{
 		last = idleWorkers.back();
 		idleWorkers.pop_back();
@@ -112,7 +112,7 @@ Worker* Resources::GetIdleWorker()
 Building* Resources::GetWorkerTask()
 {
 	Building* last = nullptr;
-	if (workerTasks.size() != 0)
+	if (!workerTasks.empty())
 	{
 		last = workerTasks.back();
 		workerTasks.pop_back();
