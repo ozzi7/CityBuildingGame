@@ -13,6 +13,7 @@
 #include <cmath>
 #include <pathfinding.h>
 #include <pathfinding_object.h>
+#include "bitmap_image.hpp"
 
 class MapGenerator
 {
@@ -20,7 +21,8 @@ public:
 	MapGenerator(Grid* aGrid);
 
 	void GenerateMap();
-
+	void SaveToFile();
+	
 private:
 	Grid* grid;
 

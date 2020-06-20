@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bitmap_image.hpp" />
     <ClInclude Include="events\blockingconcurrentqueue.h" />
     <ClInclude Include="events\bring_resource_event.h" />
     <ClInclude Include="events\concurrentqueue.h" />
