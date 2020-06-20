@@ -8,40 +8,40 @@ Resources::~Resources() = default;
 
 void Resources::AddLumberjackHut(LumberjackHut* lumberjackHut)
 {
-	lumberjackHuts.push_back(lumberjackHut);
+	LumberjackHuts.push_back(lumberjackHut);
 };
 void Resources::AddDwelling(Dwelling* dwelling)
 {
-	dwellings.push_back(dwelling);
+	Dwellings.push_back(dwelling);
 };
 void Resources::AddLumberjack(Lumberjack* lumberjack)
 {
-	lumberjacks.push_back(lumberjack);
+	Lumberjacks.push_back(lumberjack);
 };
 void Resources::AddWorker(Worker* worker)
 {
-	workers.push_back(worker);
+	Workers.push_back(worker);
 };
 // not implicitly called on add worker
 void Resources::AddIdleWorker(Worker* idleWorker)
 {
-	idleWorkers.push_back(idleWorker);
+	IdleWorkers.push_back(idleWorker);
 };
 // not implicitly called on addbuilding
 void Resources::AddWorkerTask(Building* workplace)
 {
-	workerTasks.push_back(workplace);
+	WorkerTasks.push_back(workplace);
 }
 
 // not implicitly called on RemoveObject
 void Resources::RemoveIdleWorker(Worker* idleWorker)
 {
 	long pointer = (long)(void*)idleWorker;
-	for (std::list<Worker*>::iterator it = idleWorkers.begin();it != idleWorkers.end(); ++it)
+	for (std::list<Worker*>::iterator it = IdleWorkers.begin();it != IdleWorkers.end(); ++it)
 	{
 		if (pointer == (long)(void*)(*it))
 		{
-			it = idleWorkers.erase(it);
+			it = IdleWorkers.erase(it);
 			return;
 		}
 	}
@@ -51,11 +51,11 @@ void Resources::RemoveIdleWorker(Worker* idleWorker)
 void Resources::RemoveWorkerTask(Building* workplace)
 {
 	long pointer = (long)(void*)workplace;
-	for (std::list<Building*>::iterator it = workerTasks.begin();it != workerTasks.end(); ++it)
+	for (std::list<Building*>::iterator it = WorkerTasks.begin();it != WorkerTasks.end(); ++it)
 	{
 		if (pointer == (long)(void*)(*it))
 		{
-			it = workerTasks.erase(it);
+			it = WorkerTasks.erase(it);
 			return;
 		}
 	}
@@ -64,35 +64,35 @@ void Resources::RemoveWorkerTask(Building* workplace)
 void Resources::RemoveObject(GameObject* gameObject)
 {
 	long pointer = (long)(void*)gameObject;
-	for (std::list<Lumberjack*>::iterator it = lumberjacks.begin();it != lumberjacks.end(); ++it)
+	for (std::list<Lumberjack*>::iterator it = Lumberjacks.begin();it != Lumberjacks.end(); ++it)
 	{
 		if (pointer == (long)(void*)(*it))
 		{
-			it = lumberjacks.erase(it);
+			it = Lumberjacks.erase(it);
 			return;
 		}
 	}
-	for (std::list<Worker*>::iterator it = workers.begin(); it != workers.end(); ++it)
+	for (std::list<Worker*>::iterator it = Workers.begin(); it != Workers.end(); ++it)
 	{
 		if (pointer == (long)(void*)(*it))
 		{
-			it = workers.erase(it);
+			it = Workers.erase(it);
 			return;
 		}
 	}
-	for (std::list<LumberjackHut*>::iterator it = lumberjackHuts.begin(); it != lumberjackHuts.end(); ++it)
+	for (std::list<LumberjackHut*>::iterator it = LumberjackHuts.begin(); it != LumberjackHuts.end(); ++it)
 	{
 		if (pointer == (long)(void*)(*it))
 		{
-			it = lumberjackHuts.erase(it);
+			it = LumberjackHuts.erase(it);
 			return;
 		}
 	}
-	for (std::list<Dwelling*>::iterator it = dwellings.begin(); it != dwellings.end(); ++it)
+	for (std::list<Dwelling*>::iterator it = Dwellings.begin(); it != Dwellings.end(); ++it)
 	{
 		if (pointer == (long)(void*)(*it))
 		{
-			it = dwellings.erase(it);
+			it = Dwellings.erase(it);
 			return;
 		}
 	}
@@ -101,10 +101,10 @@ void Resources::RemoveObject(GameObject* gameObject)
 Worker* Resources::GetIdleWorker()
 {
 	Worker* last = nullptr;
-	if (!idleWorkers.empty())
+	if (!IdleWorkers.empty())
 	{
-		last = idleWorkers.back();
-		idleWorkers.pop_back();
+		last = IdleWorkers.back();
+		IdleWorkers.pop_back();
 	}
 	return last;
 };
@@ -112,10 +112,10 @@ Worker* Resources::GetIdleWorker()
 Building* Resources::GetWorkerTask()
 {
 	Building* last = nullptr;
-	if (!workerTasks.empty())
+	if (!WorkerTasks.empty())
 	{
-		last = workerTasks.back();
-		workerTasks.pop_back();
+		last = WorkerTasks.back();
+		WorkerTasks.pop_back();
 	}
 	return last;
 };
@@ -125,7 +125,7 @@ std::vector<Worker*> Resources::GetIdleWorkers(int nofWorkersNeeded)
 {
 	std::vector<Worker*> workers = std::vector<Worker*>();
 
-	if (idleWorkers.size() >= nofWorkersNeeded)
+	if (IdleWorkers.size() >= nofWorkersNeeded)
 	{
 		for (int i = 0; i < nofWorkersNeeded; ++i)
 			workers.push_back(GetIdleWorker());

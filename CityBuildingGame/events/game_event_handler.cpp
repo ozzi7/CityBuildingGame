@@ -291,8 +291,8 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 	 * If there are fewer idle buildings (probably 1) than workers:
 	 * find nearest idle worker for (each) idle building.
 	 */
-	if (!resources->idleWorkers.empty() && !resources->workerTasks.empty() &&
-		resources->idleWorkers.size() <= resources->workerTasks.size())
+	if (!resources->IdleWorkers.empty() && !resources->WorkerTasks.empty() &&
+		resources->IdleWorkers.size() <= resources->WorkerTasks.size())
 	{
 		while (Worker* worker = resources->GetIdleWorker())
 		{
@@ -396,8 +396,8 @@ void GameEventHandler::AssignWorkToIdleWorkers()
 		}
 	}
 	
-	else if (!resources->idleWorkers.empty() && !resources->workerTasks.empty() &&
-			 resources->idleWorkers.size() > resources->workerTasks.size())
+	else if (!resources->IdleWorkers.empty() && !resources->WorkerTasks.empty() &&
+			 resources->IdleWorkers.size() > resources->WorkerTasks.size())
 	{
 		while (Building* building = resources->GetWorkerTask())
 		{

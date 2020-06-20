@@ -29,11 +29,11 @@ public:
 	Building* GetWorkerTask();
 	std::vector<Worker*> GetIdleWorkers(int nofWorkersNeeded);
 
-	std::list<Worker*> idleWorkers = std::list<Worker*>();
-	std::list<Building*> workerTasks = std::list<Building*>();
+	std::list<Worker*> IdleWorkers = std::list<Worker*>();
+	std::list<Building*> WorkerTasks = std::list<Building*>();
 
-	std::list<Lumberjack*> lumberjacks = std::list<Lumberjack*>();
-	std::list<Worker*> workers = std::list<Worker*>();
-	std::list<Dwelling*> dwellings = std::list<Dwelling*>();
-	std::list<LumberjackHut*> lumberjackHuts = std::list<LumberjackHut*>();
+	std::list<Lumberjack*> Lumberjacks = std::list<Lumberjack*>();
+	std::list<Worker*> Workers = std::list<Worker*>();
+	std::list<Dwelling*> Dwellings = std::list<Dwelling*>();
+	std::list<LumberjackHut*> LumberjackHuts = std::list<LumberjackHut*>();
 };
