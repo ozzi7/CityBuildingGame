@@ -137,7 +137,7 @@ void MapGenerator::generateTrees()
 			{
 				float which_model_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
-				if (which_model_rand < 0.5f) {
+				if (which_model_rand < 0.9f) {
 					grid->gridUnits[i][j].objects.push_back(
 						new EuroBeech(glm::vec3(posX, posY, grid->GetHeight(posX, posY)),
 							glm::vec3(scale * TREE_SCALE_FACTOR, scale * TREE_SCALE_FACTOR,
@@ -196,12 +196,12 @@ void MapGenerator::generateGrass()
 				TERRAIN_WEIGHT_FACTOR_GRASS);
 		}
 	}
-	float minHeight = getHeightAtPercentage(grassMap, 0.0f);
-	float maxHeight = getHeightAtPercentage(grassMap, 100.0f);
+	const float minHeight = getHeightAtPercentage(grassMap, 0.0f);
+	const float maxHeight = getHeightAtPercentage(grassMap, 100.0f);
 
-	float grass_mean = getHeightAtPercentage(grassMap, GRASS_GAUSSIAN_MEAN_PERCENTAGE);
+	const float grass_mean = getHeightAtPercentage(grassMap, GRASS_GAUSSIAN_MEAN_PERCENTAGE);
 
-	float grass_var = 0.01f * GRASS_GAUSSIAN_VARIANCE_PERCENTAGE * (maxHeight - minHeight);
+	const float grass_var = 0.01f * GRASS_GAUSSIAN_VARIANCE_PERCENTAGE * (maxHeight - minHeight);
 
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 		"Planting grass"));
@@ -249,8 +249,8 @@ void MapGenerator::generateGrass()
 
 void MapGenerator::flattenMap(std::vector<std::vector<float>>& pHeightmap) const
 {
-	float thresholdValley = getHeightAtPercentage(pHeightmap, VALLEY_PERCENTAGE);
-	float thresholdPlateau = getHeightAtPercentage(pHeightmap, 100 - PLATEAU_PERCENTAGE);
+	const float thresholdValley = getHeightAtPercentage(pHeightmap, VALLEY_PERCENTAGE);
+	const float thresholdPlateau = getHeightAtPercentage(pHeightmap, 100 - PLATEAU_PERCENTAGE);
 
 	/* cut off */
 	for (std::vector<float>& i : pHeightmap)
@@ -307,7 +307,7 @@ float MapGenerator::getHeightAtPercentageExact(std::vector<std::vector<float>>& 
 	return zValues[(int)(0.01 * percentage * (zValues.size() - 1))];
 }
 // TODO: cache this or better yet save it when the map is generated (and flattened etc)
-float MapGenerator::getMaxValue(std::vector<std::vector<float>>& pHeightmap) const
+float MapGenerator::getMaxValue(std::vector<std::vector<float>>& pHeightmap)
 {
 	float maxValue = -FLT_MAX;
 	for (std::vector<float>& i : pHeightmap)
@@ -318,7 +318,7 @@ float MapGenerator::getMaxValue(std::vector<std::vector<float>>& pHeightmap) con
 	return maxValue;
 }
 // TODO: cache this or better yet save it when the map is generated (and flattened etc)
-float MapGenerator::getMinValue(std::vector<std::vector<float>>& pHeightmap) const
+float MapGenerator::getMinValue(std::vector<std::vector<float>>& pHeightmap)
 {
 	float minValue = FLT_MAX;
 	for (std::vector<float>& i : pHeightmap)
