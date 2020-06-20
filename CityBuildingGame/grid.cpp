@@ -147,6 +147,7 @@ void Grid::SetHasRoad(int x, int y, bool value)
 void Grid::SetHasRoad(const std::vector<std::pair<int,int>>& road, bool value)
 {
 	for (const std::pair<int, int> &roadPiece : road)
+	{
 		gridUnits[roadPiece.second][roadPiece.first].hasRoad = value;
 		if (value)
 			gridUnits[roadPiece.second][roadPiece.first].walkingCost = 1.0f / 1.5f;
