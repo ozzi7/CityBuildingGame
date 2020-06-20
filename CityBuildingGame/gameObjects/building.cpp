@@ -4,7 +4,7 @@
 #include <grid.h>
 
 Building::Building(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRotation, float aFloorZ)
-	: GameObject(aPosition, aScale, aRotation) 
+	: GameObject(aPosition, aScale, aRotation)
 {
 	floorZ = aFloorZ;
 };
@@ -13,111 +13,89 @@ void Building::CreateBuildingOutline()
 {
 	glm::vec3 scale = glm::vec3(0.0003f, 0.0003f, 0.0003f);
 	const glm::vec3 rotationZ = glm::vec3(0.0f, 0.0f, 1.0f);
-	const glm::vec3 rotationX = glm::vec3(0.0f, 0.0f, 1.0f);
+	const glm::vec3 rotationX = glm::vec3(1.0f, 0.0f, 0.0f);
 	const glm::vec3 rotationY = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	constexpr float twoPi = glm::two_pi<float>();
 	const float maxRotation = 0.1f;
 	const float chanceForMoreRot = 0.04f;
-	float moreRot = 0.5;
-	float chance;
+	const float moreRot = 0.25;
+	const float maxRandomNr = static_cast <float>(RAND_MAX);
 
+	// top and bottom row
 	for (int i = fromX; i <= toX; ++i)
 	{
-		// bottom right line where y = 0
-		model = glm::mat4(1.0f);
-		model = translate(model, glm::vec3(i + 0.25f, fromY + 0.25f, floorZ));
-		model = rotate(model, rotation.z + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / twoPi)), rotationZ);
-		chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-		model = rotate(model, rotation.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationX);
-		chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-		model = rotate(model, rotation.y + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationY);
-		model = glm::scale(model, scale);
+		for (int j = 0; j < 4; ++j)
+		{
+			model = glm::mat4(1.0f);
+			if (j == 0)
+			{
+				// bottom right line where y = 0, 1/4 position
+				model = translate(model, glm::vec3(i + 0.25f, fromY + 0.25f, floorZ));
+			}
+			else if (j == 1)
+			{
+				// same but this is the 3/4 position
+				model = translate(model, glm::vec3(i + 0.75f, fromY + 0.25f, floorZ));
+			}
+			else if (j == 2)
+			{
+				// top line where y = max
+				model = translate(model, glm::vec3(i + 0.25f, toY + 0.75f, floorZ));
+			}
+			else if (j == 3)
+			{
+				model = translate(model, glm::vec3(i + 0.75f, toY + 0.75f, floorZ));
+			}
 
-		buildingOutlines.push_back(model);
+			model = rotate(model, rand() / (maxRandomNr / twoPi), rotationZ);
+			model = rotate(model, rand() / (maxRandomNr / (rand() / maxRandomNr <= chanceForMoreRot ? moreRot : maxRotation)), rotationX);
+			model = rotate(model, rand() / (maxRandomNr / (rand() / maxRandomNr <= chanceForMoreRot ? moreRot : maxRotation)), rotationY);
+			model = glm::scale(model, scale);
 
-		model = glm::mat4(1.0f);
-		model = translate(model, glm::vec3(i + 0.75f, fromY + 0.25f, floorZ));
-		model = rotate(model, rotation.z + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / twoPi)), rotationZ);
-		chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-		model = rotate(model, rotation.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationX);
-		chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-		model = rotate(model, rotation.y + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationY);
-		model = glm::scale(model, scale);
-
-		buildingOutlines.push_back(model);
-
-		// top line where y = max
-		model = glm::mat4(1.0f);
-		model = translate(model, glm::vec3(i + 0.25f, toY + 0.75f, floorZ));
-		model = rotate(model, rotation.z + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / twoPi)), rotationZ);
-		chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-		model = rotate(model, rotation.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationX);
-		chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-		model = rotate(model, rotation.y + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationY);
-		model = glm::scale(model, scale);
-
-		buildingOutlines.push_back(model);
-
-		model = glm::mat4(1.0f);
-		model = translate(model, glm::vec3(i + 0.75f, toY + 0.75f, floorZ));
-		model = rotate(model, rotation.z + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / twoPi)), rotationZ);
-		chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-		model = rotate(model, rotation.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationX);
-		chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-		model = rotate(model, rotation.y + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationY);
-		model = glm::scale(model, scale);
-
-		buildingOutlines.push_back(model);
+			buildingOutlines.push_back(model);
+		}
 	}
 
-	// left line where x = 0
+	// left and right row
 	for (int i = fromY; i <= toY; ++i)
 	{
-		if (i != fromY)
+		if (i != fromY) // we created the two bottom corners already
 		{
 			model = glm::mat4(1.0f);
 			model = translate(model, glm::vec3(fromX + 0.25f, i + 0.25f, floorZ));
-			model = rotate(model, rotation.z + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / twoPi)), rotationZ);
-			chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-			model = rotate(model, rotation.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationX);
-			chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-			model = rotate(model, rotation.y + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationY);
+			model = rotate(model, rand() / (maxRandomNr / twoPi), rotationZ);
+			model = rotate(model, rand() / (maxRandomNr / (rand() / maxRandomNr <= chanceForMoreRot ? moreRot : maxRotation)), rotationX);
+			model = rotate(model, rotation.y + rand() / (maxRandomNr / (rand() / maxRandomNr <= chanceForMoreRot ? moreRot : maxRotation)), rotationY);
 			model = glm::scale(model, scale);
 
 			buildingOutlines.push_back(model);
 
 			model = glm::mat4(1.0f);
 			model = translate(model, glm::vec3(toX + 0.75f, i + 0.25f, floorZ));
-			model = rotate(model, rotation.z + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / twoPi)), rotationZ);
-			chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-			model = rotate(model, rotation.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationX);
-			chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-			model = rotate(model, rotation.y + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationY);
+			model = rotate(model, rand() / (maxRandomNr / twoPi), rotationZ);
+			model = rotate(model, rand() / (maxRandomNr / (rand() / maxRandomNr <= chanceForMoreRot ? moreRot : maxRotation)), rotationX);
+			model = rotate(model, rotation.y + rand() / (maxRandomNr / (rand() / maxRandomNr <= chanceForMoreRot ? moreRot : maxRotation)), rotationY);
 			model = glm::scale(model, scale);
 
 			buildingOutlines.push_back(model);
 		}
-		if (i != toY)
+		if (i != toY)  // we created the two top corners already
 		{
 			model = glm::mat4(1.0f);
 			model = translate(model, glm::vec3(fromX + 0.25f, i + 0.75f, floorZ));
-			model = rotate(model, rotation.z + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / twoPi)), rotationZ);
-			chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-			model = rotate(model, rotation.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationX);
-			chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-			model = rotate(model, rotation.y + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationY);
+			model = rotate(model, rand() / (maxRandomNr / twoPi), rotationZ);
+			model = rotate(model, rand() / (maxRandomNr / (rand() / maxRandomNr <= chanceForMoreRot ? moreRot : maxRotation)), rotationX);
+			model = rotate(model, rotation.y + rand() / (maxRandomNr / (rand() / maxRandomNr <= chanceForMoreRot ? moreRot : maxRotation)), rotationY);
 			model = glm::scale(model, scale);
 
 			buildingOutlines.push_back(model);
 
 			model = glm::mat4(1.0f);
 			model = translate(model, glm::vec3(toX + 0.75f, i + 0.75, floorZ));
-			model = rotate(model, rotation.z + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / twoPi)), rotationZ);
-			chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-			model = rotate(model, rotation.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationX);
-			chance = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1.0f));
-			model = rotate(model, rotation.y + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / ((chance <= chanceForMoreRot) ? moreRot : maxRotation))), rotationY);
+			model = rotate(model, rand() / (maxRandomNr / twoPi), rotationZ);
+			model = rotate(model, rand() / (maxRandomNr / (rand() / maxRandomNr <= chanceForMoreRot ? moreRot : maxRotation)), rotationX);
+			model = rotate(model, rotation.y + rand() / (maxRandomNr / (rand() / maxRandomNr <= chanceForMoreRot ? moreRot : maxRotation)), rotationY);
 			model = glm::scale(model, scale);
 
 			buildingOutlines.push_back(model);
