@@ -60,7 +60,7 @@ public:
 
 private:
 	std::forward_list<Node*> closed; // maybe not needed, only for storing pointers for deleting
-	std::unordered_map<std::string, Node*> visitedNodes; // use generateID() as key
+	std::unordered_map<unsigned int, Node*> visitedNodes; // use generateID() as key
 	std::priority_queue<Node*, std::deque<Node*>, NodeCompare> open;
 	bool visited[MAP_WIDTH][MAP_HEIGHT]{false};
 
@@ -79,5 +79,5 @@ private:
 	float distanceToDestination(std::pair<int,int> coordinate) const;
 	void setNextNode();
 	void adjustParentNode(std::pair<int,int> coordinate);
-	std::string generateID(std::pair<int,int> coordinate) const;
+	unsigned int generateID(std::pair<int,int> coordinate) const;
 };

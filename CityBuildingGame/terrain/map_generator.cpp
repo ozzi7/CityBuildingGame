@@ -24,7 +24,7 @@ void MapGenerator::generateTerrain() const
 		"Generating perlin noise for terrain"));
 
 	noise_gen.GeneratePerlinNoise(heightmap, grid->gridHeight + 1, grid->gridWidth + 1, -HILL_HEIGHT / 2.0f,
-	                              HILL_HEIGHT / 2.0f, 6, PERSISTENCE);
+	                              HILL_HEIGHT / 2.0f, 6, PERSISTENCE_TERRAIN);
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 		"Flattening map to create valleys and plateaus"));
 	flattenMap(heightmap);

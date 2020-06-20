@@ -72,7 +72,7 @@ void Pathfinding::createNode(const std::pair<int,int> coordinate)
 {
 	if (!visited[coordinate.first][coordinate.second])
 	{
-		if (!grid->gridUnits[coordinate.second][coordinate.first].occupied ||
+		if (!grid->IsOccupied(coordinate.first, coordinate.second) ||
 			coordinate == destination->coordinate)
 		{
 			Node* node = new Node();
@@ -130,28 +130,30 @@ void Pathfinding::adjustParentNode(std::pair<int,int> coordinate)
 			// No need to check the node already has current as parent
 			if (node->parent != current)
 				// Change parent of current node to neighbor node, if neighbor is closer to start than current parent
-				if (node->parent->distanceToStart > current->distanceToStart)
+				if (node->parent->distanceToStart + 0.5f * grid->GetWalkingCost(node->parent->coordinate.first, node->parent->coordinate.second)
+					> current->distanceToStart + 0.5f * grid->GetWalkingCost(current->coordinate.first, current->coordinate.second))
+				{
 					node->parent = current;
+					node->distanceToStart = current->distanceToStart + (grid->GetWalkingCost(current->coordinate.first, current->coordinate.second) * 0.5f + 
+																		grid->GetWalkingCost(coordinate.first, coordinate.second) * 0.5f);
+					node->distanceTotal = node->distanceToStart + node->distanceToDestination;
+					
+					open.push(node);
 
+				}
 	}
 }
 
-std::string Pathfinding::generateID(std::pair<int, int> coordinate) const
+unsigned int Pathfinding::generateID(std::pair<int, int> coordinate) const
 {
-	return std::to_string(coordinate.first) + "/" + std::to_string(coordinate.second);
+	return (unsigned int)coordinate.first * 65500 + (unsigned int)coordinate.second;
 }
 
 Pathfinding::~Pathfinding()
 {
-	for (Node* node : closed)
-		delete node;
+	for (auto node : visitedNodes)
+		delete node.second;
 
-	while (!open.empty())
-	{
-		current = open.top();
-		open.pop();
-		delete current;
-	}
-
+	delete start;
 	delete destination;
 }
