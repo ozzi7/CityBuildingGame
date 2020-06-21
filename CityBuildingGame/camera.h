@@ -104,7 +104,7 @@ private:
 	std::pair<int, int> TopLeftVisible, TopRightVisible, BottomLeftVisible, BottomRightVisible;
 	glm::vec3 CursorPositionOnGrid;
 
-	// Gets exact game coordinate from a screen coordinate, can only be called from openGL thread
+	// Gets exact game coordinate from a screen coordinate, uses TerrainZBuffer
 	glm::vec3 PixelTo3DCoordinate(const glm::vec2 pixelCoordinates) const;
 
 	// Gets exact game coordinate from a screen coordinate and z buffer depth

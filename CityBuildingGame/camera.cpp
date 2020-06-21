@@ -292,7 +292,7 @@ void Camera::CalculateVisibleGrid()
 
 glm::vec3 Camera::PixelTo3DCoordinate(glm::vec2 pixelCoordinates) const
 {
-	float z;
+	float z = 0.0f;
 
 	glReadPixels((int)pixelCoordinates.x, (int)((float)ScreenHeight - pixelCoordinates.y), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
 
