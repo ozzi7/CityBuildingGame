@@ -51,6 +51,5 @@ private:
 	const float targetDistanceToProxy = 2.0f; // if higher the corners will be cut more, if lower then the speed up slow down is more visible
 
 	void updateProxyPosition(float aDistance);
-	void updateProxyPosition();
 	void updateGridUnit();
 };
