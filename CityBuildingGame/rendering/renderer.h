@@ -74,7 +74,8 @@ public:
 
 		/* resources */
 		instanced_model_wood = new InstancedModel(Path + "/../models/resources/wood/wood.dae");
-		instanced_model_wood_plank = new InstancedModel(Path + "/../models/resources/stone_brick/stone_brick.dae");
+		instanced_model_wood_plank = new InstancedModel(Path + "/../models/resources/stone_brick/stone_brick.fbx");
+		//instanced_model_wood_plank = new InstancedModel(Path + "/../models/resources/wood_plank/wood_plank.dae");
 
 		/* lumberjack init*/
 		mesh_lumby_walk_w_axe = new SkinnedMesh();

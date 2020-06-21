@@ -30,7 +30,7 @@ float ShadowCalculation()
     float shadow;
     float closestDepth;
 
-    float bias = 0.0004; // 0.005 -> detached shadows, 0.00005 -> shadow calculation inaccuracy/shadow acne
+    float bias = 0.0001; // 0.005 -> detached shadows, 0.00005 -> shadow calculation inaccuracy/shadow acne
 
     // perform perspective divide
     vec3 projCoords = FragPosLightSpace.xyz / FragPosLightSpace.w;
@@ -83,7 +83,6 @@ void main()
         texColor = texture(Texture2, TexCoords);
 	if (texColor.a < 0.5)
 		discard;
-
 
 	vec3 diffuse = light.diffuse * clamp(dot(Normal, light.direction),  0.0, 1.0); 
 
