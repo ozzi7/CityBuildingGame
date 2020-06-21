@@ -10,6 +10,7 @@ void MapGenerator::GenerateMap()
 	generateTerrain();
 	generateTrees();
 	generateGrass();
+	SaveToFile();
 }
 void MapGenerator::generateTerrain() const
 {
@@ -331,4 +332,30 @@ float MapGenerator::getMinValue(std::vector<std::vector<float>>& pHeightmap)
 float MapGenerator::getGaussianPDFValue(float mean, float var, float x)
 {
 	return 1 / std::sqrtf(2 * std::_Pi * var) * std::expf(-((x - mean) * (x - mean)) / (2 * var));
+}
+void MapGenerator::SaveToFile()
+{
+	std::string file_name("image.bmp");
+
+	bitmap_image image(grid->gridWidth, grid->gridHeight);
+
+	//if (!image)
+	//{
+	//	printf("test01() - Error - Failed to open '%s'\n", file_name.c_str());
+	//	return;
+	//}
+	float maxValue = getMaxValue(grid->terrain->heightmap);
+	float minValue = getMinValue(grid->terrain->heightmap);
+	for (int i = 0; i < grid->gridHeight; ++i)
+	{
+		for (int j = 0; j < grid->gridWidth; ++j)
+		{
+			image.set_pixel(j, i, int(255*((grid->terrain->heightmap[i][j]-minValue) / (maxValue-minValue))),
+				int(255 * ((grid->terrain->heightmap[i][j] - minValue) / (maxValue - minValue))),
+				int(255 * ((grid->terrain->heightmap[i][j] - minValue) / (maxValue - minValue))));
+		}
+	}
+
+	image.vertical_flip();
+	image.save_image(Path + "/../saved/terrain_heightmap.bmp");
 }

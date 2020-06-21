@@ -8,7 +8,6 @@
 #include <grid.h>
 #include <globals.h>
 
-#define max(x,y) ((x) > (y) ? (x) : (y))
 
 struct Node
 {

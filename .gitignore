@@ -314,3 +314,4 @@ CityBuildingGame/x64/Release/CityBuildingGame.vcxproj.FileListAbsolute.txt
 .vs/ProjectSettings.json
 .vs/slnx.sqlite
 .vs/VSWorkspaceState.json
+x64/saved/*
