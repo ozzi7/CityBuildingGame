@@ -8,34 +8,36 @@ MapGenerator::MapGenerator(Grid* aGrid)
 void MapGenerator::GenerateMap()
 {
 	generateTerrain();
+	SaveHeightmapToFile(grid->terrain->heightmap, "terrain_heightmap.bmp");
 	generateTrees();
 	generateGrass();
-	SaveToFile();
 }
 void MapGenerator::generateTerrain() const
 {
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
-		"Creating terrain..."));
+	grid->terrain->heightmap = std::vector<std::vector<float>>(
+		(long long)grid->gridHeight + 1, std::vector<float>((long long)grid->gridWidth + 1, 0));;
+	
+	if (!LoadHeightmapFromFile(grid->terrain->heightmap, "terrain_heightmap.bmp"))
+	{		
+		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
+			"Creating terrain..."));
 
-	NoiseGen noise_gen;
-	std::vector<std::vector<float>> heightmap = std::vector<std::vector<float>>(
-		(long long)grid->gridHeight + 1, std::vector<float>((long long)grid->gridWidth + 1, 0));
+		NoiseGen noise_gen;
 
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
-		"Generating perlin noise for terrain"));
+		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
+			"Generating perlin noise for terrain"));
 
-	noise_gen.GeneratePerlinNoise(heightmap, grid->gridHeight + 1, grid->gridWidth + 1, -HILL_HEIGHT / 2.0f,
-	                              HILL_HEIGHT / 2.0f, 6, PERSISTENCE_TERRAIN);
-	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
-		"Flattening map to create valleys and plateaus"));
-	flattenMap(heightmap);
-
-	grid->terrain->heightmap = heightmap;
-
+		noise_gen.GeneratePerlinNoise(grid->terrain->heightmap, grid->gridHeight + 1, grid->gridWidth + 1, -HILL_HEIGHT / 2.0f,
+			HILL_HEIGHT / 2.0f, 6, PERSISTENCE_TERRAIN);
+		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
+			"Flattening map to create valleys and plateaus"));
+		flattenMap(grid->terrain->heightmap);
+	}
+	
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 		"Creating geometry for the terrain"));
 	grid->terrain->CreateGeometry();
-
+	
 	grid->Init();
 }
 
@@ -333,29 +335,75 @@ float MapGenerator::getGaussianPDFValue(float mean, float var, float x)
 {
 	return 1 / std::sqrtf(2 * std::_Pi * var) * std::expf(-((x - mean) * (x - mean)) / (2 * var));
 }
-void MapGenerator::SaveToFile()
+void MapGenerator::SaveHeightmapToFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const
 {
-	std::string file_name("image.bmp");
+	/* Save bitmap */
+	bitmap_image image(grid->gridWidth+1, grid->gridHeight+1);
 
-	bitmap_image image(grid->gridWidth, grid->gridHeight);
-
-	//if (!image)
-	//{
-	//	printf("test01() - Error - Failed to open '%s'\n", file_name.c_str());
-	//	return;
-	//}
-	float maxValue = getMaxValue(grid->terrain->heightmap);
-	float minValue = getMinValue(grid->terrain->heightmap);
-	for (int i = 0; i < grid->gridHeight; ++i)
+	float maxValue = getMaxValue(pHeightmap);
+	float minValue = getMinValue(pHeightmap);
+	for (int i = 0; i < grid->gridHeight+1; ++i)
 	{
-		for (int j = 0; j < grid->gridWidth; ++j)
+		for (int j = 0; j < grid->gridWidth+1; ++j)
 		{
-			image.set_pixel(j, i, int(255*((grid->terrain->heightmap[i][j]-minValue) / (maxValue-minValue))),
+			image.set_pixel(j, i, int(255 * ((grid->terrain->heightmap[i][j] - minValue) / (maxValue - minValue))),
 				int(255 * ((grid->terrain->heightmap[i][j] - minValue) / (maxValue - minValue))),
 				int(255 * ((grid->terrain->heightmap[i][j] - minValue) / (maxValue - minValue))));
 		}
 	}
 
 	image.vertical_flip();
-	image.save_image(Path + "/../saved/terrain_heightmap.bmp");
+	image.save_image(Path + "/../saved/"+ filename);
+
+	/* Save additional map data in text file */
+	std::fstream file;
+	file.open(Path + "/../saved/" + "terrain_heightmap.txt", std::ios::out);
+	file << (maxValue - minValue);
+	file.close();
+}
+/// <summary>
+/// Try to load heightmap from file
+/// </summary>
+/// <returns>True if a heightmap could be loaded from file with appropriate dimensions</returns>
+bool MapGenerator::LoadHeightmapFromFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const
+{
+	/* Load height multiplier from text file*/
+	std::fstream file;
+	file.open(Path + "/../saved/" + "terrain_heightmap.txt", std::ios::in);
+	if(!file.is_open())
+	{
+		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
+			"Could not find heightmap data at " + Path + "/../saved/" + "terrain_heightmap.txt"));
+		return false;
+	}
+	float multiplier;
+	file >> multiplier;
+	file.close();
+	
+	bitmap_image image(Path + "/../saved/"+ filename);
+
+	if (!image)
+	{
+		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
+			"Could not load heightmap from " + Path + "/../saved/"+ filename));
+		return false;
+	}
+
+	if (image.width() != grid->gridWidth + 1 || image.height() != grid->gridHeight+1)
+	{
+		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
+			"Heightmap loaded from file has wrong dimensions"));
+		return false;
+	}
+
+	image.vertical_flip();
+	
+	for (int i = 0; i < grid->gridHeight+1; ++i)
+	{
+		for (int j = 0; j < grid->gridWidth+1; ++j)
+		{
+			pHeightmap[i][j] = image.get_pixel(j, i).red / 255.0f* multiplier;
+		}
+	}
+	return true;
 }

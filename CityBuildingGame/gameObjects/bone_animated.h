@@ -33,7 +33,7 @@ public:
 
 protected:
 	bool hasArrived = true;
-	float walkingSpeed = 0.006f;
+	float walkingSpeed = 0.006f; // initial walking speed, will increase/decrease over time to follow proxy
 	float proxySpeed = 0.006f; // change this to increase walking speed!
 
 private:
@@ -51,6 +51,5 @@ private:
 	const float targetDistanceToProxy = 2.0f; // if higher the corners will be cut more, if lower then the speed up slow down is more visible
 
 	void updateProxyPosition(float aDistance);
-	void updateProxyPosition();
 	void updateGridUnit();
 };

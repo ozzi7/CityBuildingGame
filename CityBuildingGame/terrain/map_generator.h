@@ -21,7 +21,8 @@ public:
 	MapGenerator(Grid* aGrid);
 
 	void GenerateMap();
-	void SaveToFile();
+	void SaveHeightmapToFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const;
+	bool LoadHeightmapFromFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const;
 	
 private:
 	Grid* grid;
