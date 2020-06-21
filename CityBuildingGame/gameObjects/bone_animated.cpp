@@ -8,7 +8,7 @@ BoneAnimated::BoneAnimated(glm::vec3 aPosition, glm::vec3 aScale, glm::vec3 aRot
 
 void BoneAnimated::UpdatePosition(Grid* grid)
 {
-	if (!proxyHasArrived) // TODO: technically this is incorrect when the proxy transitions over a unit border
+	if (!proxyHasArrived)
 		updateProxyPosition(proxySpeed*(1/grid->GetWalkingCost(wayPoints[proxyWPIdx].first, wayPoints[proxyWPIdx].second)));
 
 	if (!hasArrived)

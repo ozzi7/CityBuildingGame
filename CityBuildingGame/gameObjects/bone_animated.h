@@ -33,7 +33,7 @@ public:
 
 protected:
 	bool hasArrived = true;
-	float walkingSpeed = 0.006f;
+	float walkingSpeed = 0.006f; // initial walking speed, will increase/decrease over time to follow proxy
 	float proxySpeed = 0.006f; // change this to increase walking speed!
 
 private:

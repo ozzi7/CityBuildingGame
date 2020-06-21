@@ -37,8 +37,8 @@ extern bool MUSIC_ENABLED;
  ***********************************************/
 //extern unsigned int MAP_WIDTH;
 //extern unsigned int MAP_HEIGHT;
-const unsigned int MAP_WIDTH = 2000;
-const unsigned int MAP_HEIGHT = 1600;
+const unsigned int MAP_WIDTH = 200;
+const unsigned int MAP_HEIGHT = 100;
 
 /* vegetation generation */
 // the higher the tree persistence the higher the frequency of trees => easier to find all types of resources nearby
