@@ -7,21 +7,16 @@ PathfindingObject::PathfindingObject(Grid* aGrid, const std::pair<int,int> XYsta
 
 	start = new NodeObject();
 	start->coordinate = XYstart;
-	start->distanceToStart = 0;
+	start->distanceToStart = 0.0f;
 	visited[XYstart.first][XYstart.second] = true;
 }
 
 PathfindingObject::~PathfindingObject()
 {
-	for (NodeObject* node : closed)
-		delete node;
+	for (auto node : visitedNodes)
+		delete node.second;
 
-	while (!open.empty())
-	{
-		current = open.top();
-		open.pop();
-		delete current;
-	}
+	delete start;
 }
 
 void PathfindingObject::FindClosestTree()
@@ -162,14 +157,14 @@ void PathfindingObject::FindClosestStoneRequired()
 std::list<std::pair<int,int>> PathfindingObject::GetPath() const
 {
 	std::list<std::pair<int,int>> path;
-	NodeObject* currentPath = current;
 	if (objectFound)
 	{
-		path.push_front(currentPath->coordinate);
-		while (currentPath->parent != nullptr)
+		NodeObject* node = current;
+		path.push_front(node->coordinate);
+		while (node->parent != nullptr)
 		{
-			currentPath = currentPath->parent;
-			path.push_front(currentPath->coordinate);
+			node = node->parent;
+			path.push_front(node->coordinate);
 		}
 	}
 	return path;
@@ -262,14 +257,18 @@ void PathfindingObject::createNode(const std::pair<int,int> coordinate)
 		{
 			NodeObject* node = new NodeObject();
 			node->coordinate = coordinate;
-			node->distanceToStart = current->distanceToStart + 1;
+			node->distanceToStart = current->distanceToStart + (grid->GetWalkingCost(current->coordinate.first, current->coordinate.second) * 0.5f + 
+																grid->GetWalkingCost(coordinate.first, coordinate.second) * 0.5f);
 			node->parent = current;
 			open.push(node);
+			visitedNodes.insert({generateID(coordinate), node});
 		}
 		visited[coordinate.first][coordinate.second] = true;
 
 		checkObjectFound(coordinate);
 	}
+	else
+		adjustParentNode(coordinate);
 }
 
 void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
@@ -320,13 +319,13 @@ void PathfindingObject::checkObjectFound(std::pair<int,int> coordinate)
 				if (building != nullptr)
 				{
 					if (building->entranceX == coordinate.first && building->entranceY == coordinate.second) 
-					try {
-						Dwelling* dwelling = dynamic_cast<Dwelling*>(building);
-							if (dwelling != nullptr)
-								if (dwelling->FreeWorkerCapacity())
-									objectFound = true;
-					}
-					catch (const std::exception& e) {} // Not an exception. Expected behavior.
+						try {
+							Dwelling* dwelling = dynamic_cast<Dwelling*>(building);
+								if (dwelling != nullptr)
+									if (dwelling->FreeWorkerCapacity())
+										objectFound = true;
+						}
+						catch (const std::exception& e) {} // Not an exception. Expected behavior.
 				}
 			}
 			break;
@@ -420,10 +419,41 @@ void PathfindingObject::setNextNode()
 	{
 		current = open.top();
 		open.pop();
-		closed.push_front(current);
+		if (current->poppedFromOpen)
+			setNextNode();
+		else
+			current->poppedFromOpen = true;
 	}
 	else
 		unreachable = true;
+}
+
+void PathfindingObject::adjustParentNode(std::pair<int,int> coordinate)
+{
+	if (visitedNodes.find(generateID(coordinate)) != visitedNodes.end())
+	{
+		NodeObject* node = visitedNodes.at(generateID(coordinate));
+
+		if (node->parent != nullptr)
+			// No need to check the node already has current as parent
+			if (node->parent != current)
+				// Change parent of current node to neighbor node, if neighbor is closer to start than current parent
+				if (node->parent->distanceToStart + 0.5f * grid->GetWalkingCost(node->parent->coordinate.first, node->parent->coordinate.second)
+					> current->distanceToStart + 0.5f * grid->GetWalkingCost(current->coordinate.first, current->coordinate.second))
+				{
+					node->parent = current;
+					node->distanceToStart = current->distanceToStart + (grid->GetWalkingCost(current->coordinate.first, current->coordinate.second) * 0.5f + 
+																		grid->GetWalkingCost(coordinate.first, coordinate.second) * 0.5f);
+					
+					open.push(node);
+					
+				}
+	}
+}
+
+unsigned int PathfindingObject::generateID(std::pair<int, int> coordinate) const
+{
+	return (unsigned int)coordinate.first * 65500 + (unsigned int)coordinate.second;
 }
 
 Building* PathfindingObject::findBuildingReference(std::pair<int,int> coordinate) const

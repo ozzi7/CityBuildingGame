@@ -21,9 +21,9 @@ void Pathfinding::CalculatePath()
 	auto startTime = std::chrono::high_resolution_clock::now();
 
 	open.push(start);
+	setNextNode();
 	if (start->coordinate == destination->coordinate)
 		pathFound = true;
-	setNextNode();
 	
 	while (!pathFound && !unreachable)
 	{
@@ -57,12 +57,12 @@ std::list<std::pair<int,int>> Pathfinding::GetPath() const
 	std::list<std::pair<int, int>> path;
 	if (pathFound)
 	{
-		Node* currentPath = current;
-		path.push_front(currentPath->coordinate);
-		while (currentPath->parent != nullptr)
+		Node* node = current;
+		path.push_front(node->coordinate);
+		while (node->parent != nullptr)
 		{
-			currentPath = currentPath->parent;
-			path.push_front(currentPath->coordinate);
+			node = node->parent;
+			path.push_front(node->coordinate);
 		}
 	}
 	return path;
@@ -113,7 +113,10 @@ void Pathfinding::setNextNode()
 		{
 			current = open.top();
 			open.pop();
-			closed.push_front(current);
+			if (current->poppedFromOpen)
+				setNextNode();
+			else
+				current->poppedFromOpen = true;
 		}
 		else
 			unreachable = true;

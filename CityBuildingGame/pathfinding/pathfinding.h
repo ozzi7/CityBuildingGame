@@ -16,6 +16,7 @@ struct Node
 	float distanceToStart = 0.0f;
 	float distanceToDestination = 0.0f;
 	float distanceTotal = 0.0f;
+	bool poppedFromOpen = false;
 	Node* parent{};
 	std::pair<int,int> destination;
 };
@@ -59,7 +60,6 @@ public:
 	std::list<std::pair<int,int>> GetPath() const;
 
 private:
-	std::forward_list<Node*> closed; // maybe not needed, only for storing pointers for deleting
 	std::unordered_map<unsigned int, Node*> visitedNodes; // use generateID() as key
 	std::priority_queue<Node*, std::deque<Node*>, NodeCompare> open;
 	bool visited[MAP_WIDTH][MAP_HEIGHT]{false};

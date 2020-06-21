@@ -12,7 +12,8 @@ enum class ObjectType { edge, tree, idleWorker, idleBuilding, idleDwelling, unus
 struct NodeObject
 {
 	std::pair<int,int> coordinate;
-	int distanceToStart{};
+	float distanceToStart;
+	bool poppedFromOpen = false;
 	NodeObject* parent{};
 };
 
@@ -50,7 +51,7 @@ public:
 	std::list<std::pair<int,int>> GetPath() const;
 	GameObject* GetDestinationObject() const;
 private:
-	std::forward_list<NodeObject*> closed; // maybe not needed, only for storing pointers for deleting
+	std::unordered_map<unsigned int, NodeObject*> visitedNodes; // use generateID() as key
 	std::priority_queue<NodeObject*, std::deque<NodeObject*>, NodeCompareObject> open;
 	bool visited[MAP_WIDTH][MAP_HEIGHT]{false};
 
@@ -70,6 +71,8 @@ private:
 	void createNode(std::pair<int,int> coordinate);
 	void checkObjectFound(std::pair<int,int> coordinate);
 	void setNextNode();
+	void adjustParentNode(std::pair<int,int> coordinate);
+	unsigned int generateID(std::pair<int,int> coordinate) const;
 	
 	Building* findBuildingReference(std::pair<int,int> coordinate) const;
 	Building* checkBuildingReference(std::pair<int,int> coordinate) const;
