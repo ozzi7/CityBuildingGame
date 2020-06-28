@@ -39,7 +39,7 @@ private:
 	static float getMinValue(std::vector<std::vector<float>>& pHeightmap);
 	static float getMaxValue(std::vector<std::vector<float>>& pHeightmap);
 
-	void SaveHeightmapImage(std::vector<std::vector<float>>& pHeightmap, std::string filename) const;
+	void SaveHeightmapImage(std::vector<std::vector<float>>& pHeightmap) const;
 	void MapGenerator::SaveHeightmapToFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const;
 	bool MapGenerator::LoadHeightmapFromFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const;
 };

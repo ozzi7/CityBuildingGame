@@ -9,7 +9,7 @@ void MapGenerator::GenerateMap()
 {
 	generateTerrain();
 	SaveHeightmapToFile(grid->terrain->heightmap, "terrain_heightmap.bin");
-	SaveHeightmapImage(grid->terrain->heightmap, "terrain_heightmap.bmp");
+	SaveHeightmapImage(grid->terrain->heightmap);
 	generateTrees();
 	generateGrass();
 }
@@ -336,15 +336,18 @@ float MapGenerator::getGaussianPDFValue(float mean, float var, float x)
 {
 	return 1 / std::sqrtf(2 * std::_Pi * var) * std::expf(-((x - mean) * (x - mean)) / (2 * var));
 }
-void MapGenerator::SaveHeightmapImage(std::vector<std::vector<float>>& pHeightmap, std::string filename) const
+void MapGenerator::SaveHeightmapImage(std::vector<std::vector<float>>& pHeightmap) const
 {
 	/* Save bitmap to image for previews and data to text file */
 
 	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
-		"Saving heightmap bitmap to " + filename));
+		"Saving heightmap image to terrain_heightmap.bmp"));
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
+		"Saving black/white heightmap image to terrain_heightmap_bw.bmp"));
 	
 	bitmap_image image(grid->gridWidth+1, grid->gridHeight+1);
-
+	bitmap_image image_bw(grid->gridWidth + 1, grid->gridHeight + 1);
+	
 	float maxValue = getMaxValue(pHeightmap);
 	float minValue = getMinValue(pHeightmap);
 	float multiplier = maxValue - minValue;
@@ -404,11 +407,14 @@ void MapGenerator::SaveHeightmapImage(std::vector<std::vector<float>>& pHeightma
 			}
 
 			image.set_pixel(j, i, make_colour(first.red* (1 - factor) + second.red * factor, first.green * (1 - factor) + second.green * factor, first.blue * (1 - factor) + second.blue * factor));
+			image_bw.set_pixel(j, i, make_colour(height * 255, height * 255, height * 255));
 		}
 	}
 
 	image.vertical_flip();
-	image.save_image(Path + "/../saved/"+ filename);
+	image.save_image(Path + "/../saved/terrain_heightmap.bmp");
+	image_bw.vertical_flip();
+	image_bw.save_image(Path + "/../saved/terrain_heightmap_bw.bmp");
 }
 void MapGenerator::SaveHeightmapToFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const
 {
