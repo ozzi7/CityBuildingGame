@@ -14,6 +14,7 @@
 #include <pathfinding.h>
 #include <pathfinding_object.h>
 #include "bitmap_image.hpp"
+#include <file_handler.h>
 
 class MapGenerator
 {
@@ -21,9 +22,7 @@ public:
 	MapGenerator(Grid* aGrid);
 
 	void GenerateMap();
-	void SaveHeightmapToFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const;
-	bool LoadHeightmapFromFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const;
-	
+
 private:
 	Grid* grid;
 
@@ -39,4 +38,8 @@ private:
 	static float getGaussianPDFValue(float mean, float stddev, float x);
 	static float getMinValue(std::vector<std::vector<float>>& pHeightmap);
 	static float getMaxValue(std::vector<std::vector<float>>& pHeightmap);
+
+	void SaveHeightmapImage(std::vector<std::vector<float>>& pHeightmap, std::string filename) const;
+	void MapGenerator::SaveHeightmapToFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const;
+	bool MapGenerator::LoadHeightmapFromFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const;
 };

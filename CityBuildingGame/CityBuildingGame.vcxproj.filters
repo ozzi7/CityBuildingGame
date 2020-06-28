@@ -112,6 +112,7 @@
     <ClInclude Include="rendering\render_buffer.h" />
     <ClInclude Include="events\create_building_preview_event.h" />
     <ClInclude Include="bitmap_image.hpp" />
+    <ClInclude Include="file_handler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\mesh.frag" />

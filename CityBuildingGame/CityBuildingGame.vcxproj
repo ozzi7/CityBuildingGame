@@ -31,6 +31,7 @@
     <ClInclude Include="events\sound_event.h" />
     <ClInclude Include="events\sound_event_handler.h" />
     <ClInclude Include="events\sound_event_visitor.h" />
+    <ClInclude Include="file_handler.h" />
     <ClInclude Include="gameObjects\building.h" />
     <ClInclude Include="gameObjects\dwelling.h" />
     <ClInclude Include="gameObjects\euro_beech_2.h" />

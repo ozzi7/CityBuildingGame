@@ -8,7 +8,8 @@ MapGenerator::MapGenerator(Grid* aGrid)
 void MapGenerator::GenerateMap()
 {
 	generateTerrain();
-	SaveHeightmapToFile(grid->terrain->heightmap, "terrain_heightmap.bmp");
+	SaveHeightmapToFile(grid->terrain->heightmap, "terrain_heightmap.bin");
+	SaveHeightmapImage(grid->terrain->heightmap, "terrain_heightmap.bmp");
 	generateTrees();
 	generateGrass();
 }
@@ -17,7 +18,7 @@ void MapGenerator::generateTerrain() const
 	grid->terrain->heightmap = std::vector<std::vector<float>>(
 		(long long)grid->gridHeight + 1, std::vector<float>((long long)grid->gridWidth + 1, 0));;
 	
-	if (!LoadHeightmapFromFile(grid->terrain->heightmap, "terrain_heightmap.bmp"))
+	if (!LoadHeightmapFromFile(grid->terrain->heightmap, "terrain_heightmap.bin"))
 	{		
 		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
 			"Creating terrain..."));
@@ -335,31 +336,85 @@ float MapGenerator::getGaussianPDFValue(float mean, float var, float x)
 {
 	return 1 / std::sqrtf(2 * std::_Pi * var) * std::expf(-((x - mean) * (x - mean)) / (2 * var));
 }
-void MapGenerator::SaveHeightmapToFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const
+void MapGenerator::SaveHeightmapImage(std::vector<std::vector<float>>& pHeightmap, std::string filename) const
 {
-	/* Save bitmap */
+	/* Save bitmap to image for previews and data to text file */
+
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
+		"Saving heightmap bitmap to " + filename));
+	
 	bitmap_image image(grid->gridWidth+1, grid->gridHeight+1);
 
 	float maxValue = getMaxValue(pHeightmap);
 	float minValue = getMinValue(pHeightmap);
+	float multiplier = maxValue - minValue;
+
+	rgb_t deep = make_colour(0, 0, 128);
+	rgb_t shallow = make_colour(0, 0, 255);
+	rgb_t shore = make_colour(0, 128, 255);
+	rgb_t sand = make_colour(240, 240, 64);
+	rgb_t grass = make_colour(32, 160, 0);
+	rgb_t dirt = make_colour(224, 224, 0);
+	rgb_t rock = make_colour(128, 128, 128);
+	rgb_t snow = make_colour(255, 255, 255);
+	
 	for (int i = 0; i < grid->gridHeight+1; ++i)
 	{
 		for (int j = 0; j < grid->gridWidth+1; ++j)
 		{
-			image.set_pixel(j, i, int(255 * ((grid->terrain->heightmap[i][j] - minValue) / (maxValue - minValue))),
-				int(255 * ((grid->terrain->heightmap[i][j] - minValue) / (maxValue - minValue))),
-				int(255 * ((grid->terrain->heightmap[i][j] - minValue) / (maxValue - minValue))));
+			float height = (grid->terrain->heightmap[i][j] - minValue) / multiplier;
+			rgb_t first;
+			rgb_t second;
+			float factor;
+			
+			if (height < 0.375f)
+			{
+				factor = height / 0.375f;
+				first = deep; second = shallow;
+			}
+			else if(height < 0.5f)
+			{
+				factor = (height - 0.375f) / 0.125f;
+				first = shallow; second = shore;
+			}
+			else if(height < 0.53125f)
+			{
+				factor = (height - 0.5f) / 0.03125f;
+				first = shore; second = sand;
+			}
+			else if (height < 0.5625)
+			{
+				factor = (height - 0.53125f) / 0.03125f;
+				first = sand; second = grass;
+			}
+			else if (height < 0.6875)
+			{
+				factor = (height - 0.5625f) / 0.125f;
+				first = grass; second = dirt;
+			}
+			else if (height < 0.875f)
+			{
+				factor = (height - 0.6875) / 0.1875;
+				first = dirt; second = rock;
+			}
+			else
+			{
+				factor = (height - 0.875f) / 0.125f;
+				first = rock; second = snow;
+			}
+
+			image.set_pixel(j, i, make_colour(first.red* (1 - factor) + second.red * factor, first.green * (1 - factor) + second.green * factor, first.blue * (1 - factor) + second.blue * factor));
 		}
 	}
 
 	image.vertical_flip();
 	image.save_image(Path + "/../saved/"+ filename);
-
-	/* Save additional map data in text file */
-	std::fstream file;
-	file.open(Path + "/../saved/" + "terrain_heightmap.txt", std::ios::out);
-	file << (maxValue - minValue);
-	file.close();
+}
+void MapGenerator::SaveHeightmapToFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const
+{
+	loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
+		"Saving heightmap to file " + filename));
+	FileHandler::SaveToFile(pHeightmap, filename);
 }
 /// <summary>
 /// Try to load heightmap from file
@@ -367,43 +422,18 @@ void MapGenerator::SaveHeightmapToFile(std::vector<std::vector<float>>& pHeightm
 /// <returns>True if a heightmap could be loaded from file with appropriate dimensions</returns>
 bool MapGenerator::LoadHeightmapFromFile(std::vector<std::vector<float>>& pHeightmap, std::string filename) const
 {
-	/* Load height multiplier from text file*/
-	std::fstream file;
-	file.open(Path + "/../saved/" + "terrain_heightmap.txt", std::ios::in);
-	if(!file.is_open())
+	/* Load heightmap from file*/
+	std::vector<std::vector<float>> heightmap = std::vector<std::vector<float>>(
+		(long long)grid->gridHeight + 1, std::vector<float>((long long)grid->gridWidth + 1, 0));;
+
+	heightmap = FileHandler::LoadFromFile2D<float>(filename);
+
+	if (heightmap.size() != grid->gridHeight + 1 || heightmap[0].size() != grid->gridWidth + 1)
 	{
 		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
-			"Could not find heightmap data at " + Path + "/../saved/" + "terrain_heightmap.txt"));
+			"Loading heightmap from " + filename+ " unsuccessful (different dimensions?)"));
 		return false;
 	}
-	float multiplier;
-	file >> multiplier;
-	file.close();
-	
-	bitmap_image image(Path + "/../saved/"+ filename);
-
-	if (!image)
-	{
-		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
-			"Could not load heightmap from " + Path + "/../saved/"+ filename));
-		return false;
-	}
-
-	if (image.width() != grid->gridWidth + 1 || image.height() != grid->gridHeight+1)
-	{
-		loggingEventHandler->AddEvent(new LoggingEvent(LoggingLevel::INFO, std::this_thread::get_id(), GetTickCount64(),
-			"Heightmap loaded from file has wrong dimensions"));
-		return false;
-	}
-
-	image.vertical_flip();
-	
-	for (int i = 0; i < grid->gridHeight+1; ++i)
-	{
-		for (int j = 0; j < grid->gridWidth+1; ++j)
-		{
-			pHeightmap[i][j] = image.get_pixel(j, i).red / 255.0f* multiplier;
-		}
-	}
+	pHeightmap = heightmap;
 	return true;
 }
